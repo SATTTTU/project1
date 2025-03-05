@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { AppRootErrorBoundary, AuthRoot } from "../app/root";
 import { paths } from "../../../config/paths";
-import RegisterPage from "../../../modules/admin/auth/register/registerPage";
 
 export const adminRoutes = [
   {
@@ -13,12 +12,12 @@ export const adminRoutes = [
         element: <AuthRoot />,
         children: [
           {
-            path: paths.admin.register.path,
+            path: paths.admin.login.path,
             lazy: async () => {
-              const { RegisterPagee } = await import(
-                "../../../modules/admin/auth/register/registerPage"
-              );
-              return { Component: RegisterPage  };
+              const LoginPage = await import(
+                "../../../modules/admin/auth/components/registerPage/registerPage"
+              ).then((module) => module.default);
+              return { Component: LoginPage };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
