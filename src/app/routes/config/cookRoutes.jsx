@@ -55,6 +55,7 @@ export const cookRoutes = [
         },
         ErrorBoundary: AppRootErrorBoundary,
       },
+
       {
         path: paths.cook.withdraw.path,
         lazy: async () => {
