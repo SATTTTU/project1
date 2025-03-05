@@ -15,7 +15,7 @@ export const cookRoutes = [
             path: paths.cook.register.path,
             lazy: async () => {
               const { CookRegisterRoute } = await import(
-                "@/app/routes/cook/auth/register"
+               "../admin/auth/login"
               );
               return { Component: <CookRegisterRoute /> };
             },
