@@ -49,12 +49,12 @@ const Login = () => {
 		<div
   style={{ 
 	backgroundImage: `url(${Image})`,
-	backgroundSize: "cover",
-	backgroundPosition: "center",
-	backgroundRepeat: "no-repeat",
+	// backgroundSize: "cover",
+	// backgroundPosition: "center",
+	// backgroundRepeat: "no-repeat",
 	left: isSignUp ? "50%" : "0%",
   }}
-  className="absolute top-0 w-[400px] h-full text-white flex flex-col justify-center items-center transition-all duration-500"
+  className="absolute object-cover top-0 w-[400px] h-full text-white flex flex-col justify-center items-center transition-all duration-500"
   
 >
           <h1 className="text-2xl font-bold mb-3">{isSignUp ? "Hello, Friend!" : "Welcome Back!"}</h1>
