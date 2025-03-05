@@ -24,8 +24,10 @@ export const cookRoutes = [
           {
             path: paths.cook.login.path,
             lazy: async () => {
-              const { AdminLoginRoute } = await import("../admin/auth/login");
-              return { Component: <AdminLoginRoute /> };
+              const { Login } = await import(
+                "../../../modules/cook/counter/login/login"
+              );
+              return { Component: Login };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
