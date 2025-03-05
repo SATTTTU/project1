@@ -1,5 +1,3 @@
-export const ComponentTest=()=>{
-   return(
-    <h1>Hello world</h1>
-   )
-}
+export const ComponentTest = () => {
+  return <h1>Hello world</h1>;
+};

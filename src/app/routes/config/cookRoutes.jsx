@@ -14,10 +14,10 @@ export const cookRoutes = [
           {
             path: paths.cook.register.path,
             lazy: async () => {
-              const { CookRegisterRoute } = await import(
-                "@/app/routes/cook/auth/register"
+              const { RegisterPage } = await import(
+                "../../../modules/cook/counter/register/registerPage"
               );
-              return { Component: <CookRegisterRoute /> };
+              return { Component: RegisterPage };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
