@@ -1,10 +1,8 @@
+
 @import "tailwindcss";
 
-@plugin "tailwindcss-animate";
 
-@custom-variant dark (&:is(.dark *));
-
-:root {
+/* :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.13 0.028 261.692);
   --card: oklch(1 0 0);
@@ -121,4 +119,5 @@
   body {
     @apply bg-background text-foreground;
   }
-}
+} */
+
