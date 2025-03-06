@@ -1,6 +1,7 @@
 import { paths } from "../../../config/paths";
 import { AppRootErrorBoundary, UserRoot } from "../app/root";
 import { UserLoginRoute } from "../user/auth/login";
+import { HomePageRoute } from "../user/homepage/home";
 
 export const userRoutes = [
   {
@@ -22,6 +23,13 @@ export const userRoutes = [
           return { Component: UserLoginRoute };
         },
       },
+      {
+        path: paths.user.homePage.path,
+        lazy: async () => {
+          const { HomePageRoute } = await import("../user/homepage/home");
+          return { Component: HomePageRoute };
+        },
+      },
       // {
       //   path: paths.user.forgotPassword.path,
       //   lazy: async () => {
@@ -34,13 +42,6 @@ export const userRoutes = [
       //   lazy: async () => {
       //     const { ResetPassword } = await import("../pages/ResetPassword");
       //     return { Component: <ResetPassword /> };
-      //   },
-      // },
-      // {
-      //   path: paths.user.homePage.path,
-      //   lazy: async () => {
-      //     const { Home } = await import("../pages/Home");
-      //     return { Component: <Home /> };
       //   },
       // },
       // {

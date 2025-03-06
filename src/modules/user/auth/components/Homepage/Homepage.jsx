@@ -1,10 +1,12 @@
-import Image from "next/image"
-import { Link } from "react-router"
-// import { Search, ShoppingCart, User } from "lucide-react"
+// import Image from "next/image"
+import { Link } from "react-router-dom"
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
+// import Button from "../../../../../components/ui/button"
+
+import{ Input } from "@/components/ui/input"
+import {Badge} from "@/components/ui/badge"
+// import { Button } from "../../../../../components/ui/button";
+import { Button } from "@/components/ui/button";
 
 export default function Homepage() {
   return (
@@ -40,9 +42,9 @@ export default function Homepage() {
           <div className="flex items-center space-x-4">
             <Link href="/cart" className="relative">
               <ShoppingCart className="w-6 h-6 text-gray-700" />
-              <Badge className="absolute -top-2 -right-2 px-1.5 py-0.5 text-xs bg-red-500 text-white rounded-full">
+              {/* <Badge className="absolute -top-2 -right-2 px-1.5 py-0.5 text-xs bg-red-500 text-white rounded-full">
                 2
-              </Badge>
+              </Badge> */}
             </Link>
             <Link href="/profile">
               <div className="w-8 h-8 overflow-hidden bg-blue-500 rounded-full">
