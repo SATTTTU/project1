@@ -21,13 +21,13 @@ export const adminRoutes = [
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
-          
+
           {
             path: paths.admin.dashboard.path,
             lazy: async () => {
-              const {AdminDashboard} = await import(
+              const { AdminDashboard } = await import(
                 "../../../modules/admin/auth/components/homepage/admindashboard/dashboard"
-              )
+              );
               return { Component: AdminDashboard };
             },
             ErrorBoundary: AppRootErrorBoundary,
@@ -52,33 +52,33 @@ export const adminRoutes = [
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
-          // {
-          //   path: paths.admin.setting.path,
-          //   lazy: async () => {
-          //     const { SettingsCard } = await import(
-          //       "../../../modules/admin/auth/components/homepage/admindashboard/profile/settings"
-          //     );
-          //     return { Component: SettingsCard };
-          //   },
-          //   ErrorBoundary: AppRootErrorBoundary,
-          // },
+          {
+            path: "cook-profile/:id",
+            lazy: async () => {
+              const { CookProfile } = await import(
+                "../../../modules/admin/auth/components/cookSection/individualCookPage"
+              );
+              return { Component: CookProfile };
+            },
+            ErrorBoundary: AppRootErrorBoundary,
+          },
           {
             path: paths.admin.cookDetails.path,
             lazy: async () => {
-              const { AdminCookDetailsRoute } = await import(
-                "../admin/auth/login"
+              const { AdminCooksTable } = await import(
+                "../../../modules/admin/auth/components/cookSection/cookPage"
               );
-              return { Component: AdminCookDetailsRoute };
+              return { Component: AdminCooksTable };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
           {
             path: paths.admin.userDetails.path,
             lazy: async () => {
-              const { AdminUserDetailsRoute } = await import(
-                "../admin/auth/login"
+              const { DisplayUser } = await import(
+                "../../../modules/admin/auth/components/userSection/displayUser"
               );
-              return { Component: AdminUserDetailsRoute };
+              return { Component: DisplayUser };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },

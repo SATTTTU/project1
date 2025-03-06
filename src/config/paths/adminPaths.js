@@ -14,6 +14,11 @@ export const adminPaths = {
       getHref: (redirectTo) =>
         `/admin/resetPassword${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
     },
+    adminProfile: {
+      path: "/admin/cookDetails/adminprofile",
+      getHref: (redirectTo) =>
+        `/admin/resetPassword${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
+    },
     dashboard: {
       path: "/admin/dashboard",
       getHref: (redirectTo) =>
