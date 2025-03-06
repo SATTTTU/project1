@@ -15,9 +15,59 @@ export const cookRoutes = [
             path: paths.cook.register.path,
             lazy: async () => {
               const { RegisterPage } = await import(
-                "../../../modules/cook/counter/register/registerPage"
+                "../../../modules/cook/auth/register/registerPage"
               );
               return { Component: RegisterPage };
+            },
+            ErrorBoundary: AppRootErrorBoundary,
+          },
+          {
+            path: paths.cook.registerPage.path,
+            lazy: async () => {
+              const { firstRegisterPage } = await import(
+                "../../../modules/cook/auth/components/firstRegisterPage/firstRegisterPage"
+              );
+              return { Component: firstRegisterPage };
+            },
+            ErrorBoundary: AppRootErrorBoundary,
+          },
+          {
+            path: paths.cook.pendingPage.path,
+            lazy: async () => {
+              const { pendingPage } = await import(
+                "../../../modules/cook/auth/components/pendingPage/pendingPage"
+              );
+              return { Component: pendingPage };
+            },
+            ErrorBoundary: AppRootErrorBoundary,
+          },
+          {
+            path: paths.cook.emailVerification.path,
+            lazy: async () => {
+              const { EmailVerification } = await import(
+                "../../../modules/cook/auth/components/mailVerification/mailVerification"
+              );
+              return { Component: EmailVerification };
+            },
+            ErrorBoundary: AppRootErrorBoundary,
+          },
+          {
+            path: paths.cook.forgetPassword.path,
+            lazy: async () => {
+              const { ForgotPassword } = await import(
+                "../../../modules/cook/auth/components/forgetPassword/forgetPassword"
+              );
+              return { Component: ForgotPassword };
+            },
+            ErrorBoundary: AppRootErrorBoundary,
+          },
+          {
+            path: paths.cook.resetPassword.path,
+            lazy: async () => {
+              const { ResetPassword } = await import(
+                "../../../modules/cook/auth/components/resetPassword/resetPassword"
+              );
+              return { Component: ResetPassword };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
@@ -25,7 +75,7 @@ export const cookRoutes = [
             path: paths.cook.login.path,
             lazy: async () => {
               const { Login } = await import(
-                "../../../modules/cook/counter/login/login"
+                "../../../modules/cook/auth/login/login"
               );
               return { Component: Login };
             },
