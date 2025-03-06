@@ -1,7 +1,7 @@
 import { paths } from "../../../config/paths";
 import { AppRootErrorBoundary, UserRoot } from "../app/root";
 import { UserLoginRoute } from "../user/auth/login";
-import { HomePageRoute } from "../user/homepage/home";
+// import { HomePageRoute } from "../user/homepage/home";
 
 export const userRoutes = [
   {
@@ -26,24 +26,24 @@ export const userRoutes = [
       {
         path: paths.user.homePage.path,
         lazy: async () => {
-          const { HomePageRoute } = await import("../user/homepage/home");
-          return { Component: HomePageRoute };
+          const { Homepage } = await import("../../../modules/user/auth/components/Homepage/Homepage");
+          return { Component: Homepage };
         },
       },
-      // {
-      //   path: paths.user.forgotPassword.path,
-      //   lazy: async () => {
-      //     const { ForgotPassword } = await import("../user/auth/ForgotPassword");
-      //     return { Component: <ForgotPassword /> };
-      //   },
-      // },
-      // {
-      //   path: paths.user.resetPassword.path,
-      //   lazy: async () => {
-      //     const { ResetPassword } = await import("../pages/ResetPassword");
-      //     return { Component: <ResetPassword /> };
-      //   },
-      // },
+      {
+        path: paths.user.forgotPassword.path,
+        lazy: async () => {
+          const { ForgotPassword } = await import("../../../modules/user/auth/components/ForgetPassword/ForgetPassword");
+          return { Component: ForgotPassword };
+        },
+      },
+      {
+        path: paths.user.resetPassword.path,
+        lazy: async () => {
+          const { ResetPassword } = await import("../../../modules/user/auth/components/ResetPassword/ResetPassword");
+          return { Component: ResetPassword };
+        },
+      },
       // {
       //   path: paths.user.cart.path,
       //   lazy: async () => {

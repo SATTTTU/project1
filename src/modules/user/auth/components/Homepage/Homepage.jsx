@@ -1,28 +1,19 @@
-// import Image from "next/image"
+// import image from "next/image"
 import { Link } from "react-router-dom"
+import { AiOutlineShoppingCart } from "react-icons/ai";
+import { FaUserCircle } from "react-icons/fa";
+import { CiSearch } from "react-icons/ci";
+import Burger from "../../../../../assets/burger.jpg"
 
-// import Button from "../../../../../components/ui/button"
 
-import{ Input } from "@/components/ui/input"
-import {Badge} from "@/components/ui/badge"
-// import { Button } from "../../../../../components/ui/button";
-import { Button } from "@/components/ui/button";
-
-export default function Homepage() {
+export const Homepage=()=> {
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-white border-b">
+      <header className="sticky top-0 z-50 bg-white shadow">
         <div className="container flex items-center justify-between h-16 px-4 mx-auto">
           <Link href="/" className="flex items-center">
             <div className="relative w-6 h-6 mr-2">
-              <svg viewBox="0 0 24 24" fill="none" className="text-green-500">
-                <rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" strokeWidth="2" />
-                <path
-                  d="M9 10C9 9.44772 9.44772 9 10 9H14C14.5523 9 15 9.44772 15 10V15C15 15.5523 14.5523 16 14 16H10C9.44772 16 9 15.5523 9 15V10Z"
-                  fill="currentColor"
-                />
-              </svg>
+          {/* Logo  */}
             </div>
             <span className="text-xl font-bold text-green-500">KhanaBox</span>
           </Link>
@@ -41,14 +32,14 @@ export default function Homepage() {
 
           <div className="flex items-center space-x-4">
             <Link href="/cart" className="relative">
-              <ShoppingCart className="w-6 h-6 text-gray-700" />
+              <AiOutlineShoppingCart className="w-6 h-6 text-gray-700" />
               {/* <Badge className="absolute -top-2 -right-2 px-1.5 py-0.5 text-xs bg-red-500 text-white rounded-full">
                 2
               </Badge> */}
             </Link>
             <Link href="/profile">
-              <div className="w-8 h-8 overflow-hidden bg-blue-500 rounded-full">
-                <User className="w-full h-full p-1 text-white" />
+              <div className="w-8 h-8 overflow-hidden  rounded-full">
+                <FaUserCircle className="w-full h-full p-1 text-slate-800" />
               </div>
             </Link>
           </div>
@@ -56,21 +47,20 @@ export default function Homepage() {
       </header>
 
       <main className="container px-4 py-6 mx-auto">
-        {/* Deals Section */}
         <section className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
             <h2 className="text-xl font-bold">Up to -40% deals</h2>
             <div className="relative mt-2 md:mt-0 md:w-72">
-              <Input
+              <input
                 type="text"
                 placeholder="Search from menu..."
                 className="pl-10 pr-4 py-2 w-full border rounded-full"
               />
-              <Search className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
+              <CiSearch className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-2 mb-6">
+          {/* <div className="flex flex-wrap gap-2 mb-6">
             <Badge variant="outline" className="px-3 py-1 rounded-full">
               Vegan
             </Badge>
@@ -83,13 +73,13 @@ export default function Homepage() {
             <Badge variant="outline" className="px-3 py-1 rounded-full">
               Others
             </Badge>
-          </div>
+          </div> */}
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {/* Restaurant Card 1 */}
             <div className="overflow-hidden bg-white rounded-lg shadow-md">
               <div className="relative">
-                <Image
+                <image
                   src="/placeholder.svg?height=200&width=400"
                   alt="Chef Burgers"
                   width={400}
@@ -110,7 +100,7 @@ export default function Homepage() {
             {/* Restaurant Card 2 */}
             <div className="overflow-hidden bg-white rounded-lg shadow-md">
               <div className="relative">
-                <Image
+                <image
                   src="/placeholder.svg?height=200&width=400"
                   alt="Grand Al Café"
                   width={400}
@@ -131,7 +121,7 @@ export default function Homepage() {
             {/* Restaurant Card 3 */}
             <div className="overflow-hidden bg-white rounded-lg shadow-md">
               <div className="relative">
-                <Image
+                <image
                   src="/placeholder.svg?height=200&width=400"
                   alt="Buttered Café"
                   width={400}
@@ -153,13 +143,13 @@ export default function Homepage() {
 
         {/* Popular Categories */}
         <section className="mb-8">
-          <h2 className="mb-4 text-xl font-bold">Popular Categories 🍔</h2>
+          <h2 className="mb-4 text-2xl font-bold">Popular Categories 🍔</h2>
           <div className="grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-6">
             {categories.map((category, index) => (
               <Link href="#" key={index} className="flex flex-col items-center">
                 <div className="w-16 h-16 mb-2 overflow-hidden bg-gray-100 rounded-full sm:w-20 sm:h-20">
-                  <Image
-                    src={category.image || "/placeholder.svg"}
+                  <image
+                    src={category.image}
                     alt={category.name}
                     width={80}
                     height={80}
@@ -179,7 +169,7 @@ export default function Homepage() {
             {cooks.map((cook, index) => (
               <Link href="#" key={index} className="flex flex-col items-center">
                 <div className="w-16 h-16 mb-2 overflow-hidden bg-gray-100 rounded-full sm:w-20 sm:h-20">
-                  <Image
+                  <image
                     src={cook.image || "/placeholder.svg"}
                     alt={cook.name}
                     width={80}
@@ -201,7 +191,7 @@ export default function Homepage() {
               {popularItems.map((item, index) => (
                 <div key={index} className="overflow-hidden bg-white rounded-lg shadow-md">
                   <div className="relative">
-                    <Image
+                    <image
                       src={item.image || "/placeholder.svg"}
                       alt={item.name}
                       width={400}
@@ -212,7 +202,7 @@ export default function Homepage() {
                   <div className="p-3">
                     <h3 className="text-lg font-medium">{item.name}</h3>
                     <p className="mb-3 text-lg font-bold">${item.price}</p>
-                    <Button className="w-full bg-green-600 hover:bg-green-700">Order Now</Button>
+                    <button className="w-full bg-green-600 hover:bg-green-700">Order Now</button>
                   </div>
                 </div>
               ))}
@@ -250,7 +240,7 @@ export default function Homepage() {
 
 // Sample data
 const categories = [
-  { name: "Burgers & Fast", image: "/placeholder.svg?height=80&width=80" },
+  { name: "Burgers & Fast", image:{Burger} },
   { name: "Salads", image: "/placeholder.svg?height=80&width=80" },
   { name: "Pasta & Cousous", image: "/placeholder.svg?height=80&width=80" },
   { name: "Pizza", image: "/placeholder.svg?height=80&width=80" },
@@ -272,4 +262,3 @@ const popularItems = [
   { name: "Pancake", price: "11.99", image: "/placeholder.svg?height=200&width=400" },
   { name: "Crispy Sandwich", price: "13.99", image: "/placeholder.svg?height=200&width=400" },
 ]
-
