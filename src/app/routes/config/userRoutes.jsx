@@ -25,49 +25,49 @@ export const userRoutes = [
       {
         path: paths.user.forgotPassword.path,
         lazy: async () => {
-          const { ForgotPassword } = await import("../pages/ForgotPassword");
+          const { ForgotPassword } = await import("../user/auth/login");
           return { Component: ForgotPassword  };
         },
       },
       {
         path: paths.user.resetPassword.path,
         lazy: async () => {
-          const { ResetPassword } = await import("../pages/ResetPassword");
+          const { ResetPassword } = await import("../user/auth/login");
           return { Component: <ResetPassword /> };
         },
       },
       {
         path: paths.user.homePage.path,
         lazy: async () => {
-          const { Home } = await import("../pages/Home");
+          const { Home } = await import("../user/auth/login");
           return { Component: <Home /> };
         },
       },
       {
         path: paths.user.cart.path,
         lazy: async () => {
-          const { Cart } = await import("../pages/Cart");
+          const { Cart } = await import("../user/auth/login");
           return { Component: <Cart /> };
         },
       },
       {
         path: paths.user.checkout.path,
         lazy: async () => {
-          const { Checkout } = await import("../pages/Checkout");
+          const { Checkout } = await import("../user/auth/login");
           return { Component: <Checkout /> };
         },
       },
       {
         path: paths.user.profile.path,
         lazy: async () => {
-          const { Profile } = await import("../pages/Profile");
+          const { Profile } = await import("../user/auth/login");
           return { Component: <Profile /> };
         },
       },
       {
         path: paths.user.cookDetails.path,
         lazy: async () => {
-          const { CookDetails } = await import("../pages/CookDetails");
+          const { CookDetails } = await import("../user/auth/login");
           return { Component: <CookDetails /> };
         },
       },
