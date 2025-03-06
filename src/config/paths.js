@@ -8,6 +8,7 @@ export const paths={
         path:'/component-test',
         getHref:()=>'/component-text',
     },
+   
     auth:authPaths,
     cook:cookPaths,
     admin:adminPaths,

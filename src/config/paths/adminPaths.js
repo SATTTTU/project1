@@ -3,23 +3,14 @@ export const adminPaths = {
       path: "/admin",
       getHref: () => "/admin",
     },
-    register: {
-      path: "/admin/register",
-      getHref: (redirectTo) =>
-        `/admin/register${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
-    },
+   
     login: {
       path: "/admin/login",
       getHref: (redirectTo) =>
         `/admin/login${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
     },
-    forgotPassword: {
-      path: "/admin/forgotPassword",
-      getHref: (redirectTo) =>
-        `/admin/forgotPassword${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
-    },
     resetPassword: {
-      path: "/admin/resetPassword",
+      path: "/admin/dashboard/resetPassword",
       getHref: (redirectTo) =>
         `/admin/resetPassword${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
     },
@@ -28,6 +19,17 @@ export const adminPaths = {
       getHref: (redirectTo) =>
         `/admin/dashboard${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
     },
+    profile: {
+      path: "/admin/dashboard/profile",
+      getHref: (redirectTo) =>
+        `/admin/dashboard/profile${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
+    },
+    setting: {
+      path: "/admin/dashboard/setting",
+      getHref: (redirectTo) =>
+        `/admin/dashboard/setting${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
+    },
+    
     cookDetails: {
       path: "/admin/cookDetails",
       getHref: (redirectTo) =>

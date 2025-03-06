@@ -1,6 +1,7 @@
 
 @import "tailwindcss";
 
+/* @plugin "tailwindcss-animate";
 
 /* :root {
   --background: oklch(1 0 0);
@@ -119,5 +120,4 @@
   body {
     @apply bg-background text-foreground;
   }
-} */
-
+}
