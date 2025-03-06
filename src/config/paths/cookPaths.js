@@ -10,6 +10,41 @@ export const cookPaths = {
         redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
       }`,
   },
+  registerPage: {
+    path: "/cook/preregister",
+    getHref: (redirectTo) =>
+      `/cook/preregister${
+        redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+      }`,
+  },
+  pendingPage: {
+    path: "/cook/underReview",
+    getHref: (redirectTo) =>
+      `/cook/underReview${
+        redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+      }`,
+  },
+  emailVerification: {
+    path: "/cook/verification",
+    getHref: (redirectTo) =>
+      `/cook/verification${
+        redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+      }`,
+  },
+  forgetPassword: {
+    path: "/cook/forgetPassword",
+    getHref: (redirectTo) =>
+      `/cook/forgetPassword${
+        redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+      }`,
+  },
+  resetPassword: {
+    path: "/cook/resetPassword",
+    getHref: (redirectTo) =>
+      `/cook/resetPassword${
+        redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+      }`,
+  },
   login: {
     path: "/cook/login",
     getHref: (redirectTo) =>

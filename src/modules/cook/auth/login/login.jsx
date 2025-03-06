@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import authimage from "../../../../assets/auth.png";
+import authimage from "../../../../assets/background1.jpg";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 
@@ -27,7 +27,7 @@ export const Login = () => {
           className="flex w-full flex-col justify-center px-8 md:w-1/2 lg:px-16"
           style={{ left: isSignUp ? "100%" : "0%" }}
         >
-          <div className="mx-auto w-full max-w-md">
+          <div className="mx-auto w-full max-w-lg">
             <h1 className="mb-10 text-3xl font-bold text-[#4b6c1e]">
               Login as Cook
             </h1>
@@ -94,7 +94,10 @@ export const Login = () => {
                     Remember me
                   </label>
                 </div>
-                <Link className="text-sm text-[#4b6c1e] hover:underline">
+                <Link
+                  to="/cook/forgetPassword"
+                  className="text-sm text-[#4b6c1e] hover:underline"
+                >
                   Forgot Password?
                 </Link>
               </div>
@@ -122,13 +125,12 @@ export const Login = () => {
             </button>
           </div>
         </div>
-        <div className="relative w-1/2 flex">
+        <div className="relative flex w-1/2">
           <div className="absolute inset-0 bg-black/30 z-10"></div>
           <img
             src={authimage}
             alt="Delicious food plate"
             className="object-cover"
-            style={{ left: isSignUp ? "100%" : "0%" }}
           />
           <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-white p-12">
             <h2 className="text-4xl font-bold mb-4">Hello, Friends</h2>
@@ -136,9 +138,9 @@ export const Login = () => {
             <p className="text-center mb-8">Start journey with us</p>
             <Link
               className="bg-white text-black px-8 py-3 rounded hover:bg-gray-100 transition-colors"
-              onClick={() => setIsSignUp(!isSignUp)}
+              to="/cook/preregister"
             >
-              {isSignUp ? "Sign In" : "Sign Up"}
+              Sign Up
             </Link>
           </div>
         </div>
