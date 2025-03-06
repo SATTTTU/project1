@@ -11,11 +11,10 @@ import { Link, useLocation } from "react-router-dom";
   const location = useLocation();
 
   const menuItems = [
-    { to: "/", icon: <MdDashboard />, text: "Dashboard" },
-    { to: "/user", icon: <CiUser />, text: "User" },
-    { to: "/cook", icon: <FaCookie />, text: "Cook" },
+    { to: "/admin/dashboard", icon: <MdDashboard />, text: "Dashboard" },
+    { to: "/admin/userDetails", icon: <CiUser />, text: "User" },
+    { to: "/admin/cookDetails", icon: <FaCookie />, text: "Cook" },
     { to: "/payments", icon: <MdPayments />, text: "Payments" },
-    { to: "/orders", icon: <MdBorderStyle />, text: "Orders" },
     { to: "/reports", icon: <TbReportSearch />, text: "Reports" },
     { to: "/contact", icon: <IoIosContacts />, text: "Contact" },
   ];

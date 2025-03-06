@@ -25,7 +25,7 @@ export const userRoutes = [
         path: paths.user.forgotPassword.path,
         lazy: async () => {
           const { ForgotPassword } = await import("../pages/ForgotPassword");
-          return { Component: <ForgotPassword /> };
+          return { Component: ForgotPassword  };
         },
       },
       {
