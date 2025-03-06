@@ -1,52 +1,11 @@
-// import image from "next/image"
-import { Link } from "react-router-dom"
-import { AiOutlineShoppingCart } from "react-icons/ai";
-import { FaUserCircle } from "react-icons/fa";
-import { CiSearch } from "react-icons/ci";
-import Burger from "../../../../../assets/burger.jpg"
+// import { FaChevronRight } from "react-icons/fa"
+// import FoodCategories from "./food-categories"
+// import PopularDishes from "./popular-dishes"
+// import RecentOrders from "./recent-orders"
 
-
-export const Homepage=()=> {
+export const MainContent=({ onAddToOrder })=> {
   return (
-    <div className="min-h-screen bg-white">
-      <header className="sticky top-0 z-50 bg-white shadow">
-        <div className="container flex items-center justify-between h-16 px-4 mx-auto">
-          <Link href="/" className="flex items-center">
-            <div className="relative w-6 h-6 mr-2">
-          {/* Logo  */}
-            </div>
-            <span className="text-xl font-bold text-green-500">KhanaBox</span>
-          </Link>
-
-          <div className="hidden md:flex items-center space-x-4">
-            <Link href="#" className="text-sm font-medium text-gray-700">
-              Special Offers
-            </Link>
-            <Link href="#" className="px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full">
-              Orders
-            </Link>
-            <Link href="#" className="text-sm font-medium text-gray-700">
-              Track Order
-            </Link>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            <Link href="/cart" className="relative">
-              <AiOutlineShoppingCart className="w-6 h-6 text-gray-700" />
-              {/* <Badge className="absolute -top-2 -right-2 px-1.5 py-0.5 text-xs bg-red-500 text-white rounded-full">
-                2
-              </Badge> */}
-            </Link>
-            <Link href="/profile">
-              <div className="w-8 h-8 overflow-hidden  rounded-full">
-                <FaUserCircle className="w-full h-full p-1 text-slate-800" />
-              </div>
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      <main className="container px-4 py-6 mx-auto">
+ <main className="container px-4 py-6 mx-auto">
         <section className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
             <h2 className="text-xl font-bold">Up to -40% deals</h2>
@@ -79,8 +38,8 @@ export const Homepage=()=> {
             {/* Restaurant Card 1 */}
             <div className="overflow-hidden bg-white rounded-lg shadow-md">
               <div className="relative">
-                <image
-                  src="/placeholder.svg?height=200&width=400"
+                <img
+                  src="../../../assets/Group 8.jpg"
                   alt="Chef Burgers"
                   width={400}
                   height={200}
@@ -100,7 +59,7 @@ export const Homepage=()=> {
             {/* Restaurant Card 2 */}
             <div className="overflow-hidden bg-white rounded-lg shadow-md">
               <div className="relative">
-                <image
+                <img
                   src="/placeholder.svg?height=200&width=400"
                   alt="Grand Al Café"
                   width={400}
@@ -121,7 +80,7 @@ export const Homepage=()=> {
             {/* Restaurant Card 3 */}
             <div className="overflow-hidden bg-white rounded-lg shadow-md">
               <div className="relative">
-                <image
+                <img
                   src="/placeholder.svg?height=200&width=400"
                   alt="Buttered Café"
                   width={400}
@@ -148,8 +107,8 @@ export const Homepage=()=> {
             {categories.map((category, index) => (
               <Link href="#" key={index} className="flex flex-col items-center">
                 <div className="w-16 h-16 mb-2 overflow-hidden bg-gray-100 rounded-full sm:w-20 sm:h-20">
-                  <image
-                    src={category.image}
+                  <img
+                    src={category.img}
                     alt={category.name}
                     width={80}
                     height={80}
@@ -169,8 +128,8 @@ export const Homepage=()=> {
             {cooks.map((cook, index) => (
               <Link href="#" key={index} className="flex flex-col items-center">
                 <div className="w-16 h-16 mb-2 overflow-hidden bg-gray-100 rounded-full sm:w-20 sm:h-20">
-                  <image
-                    src={cook.image || "/placeholder.svg"}
+                  <img
+                    src={cook.img || "/placeholder.svg"}
                     alt={cook.name}
                     width={80}
                     height={80}
@@ -191,8 +150,8 @@ export const Homepage=()=> {
               {popularItems.map((item, index) => (
                 <div key={index} className="overflow-hidden bg-white rounded-lg shadow-md">
                   <div className="relative">
-                    <image
-                      src={item.image || "/placeholder.svg"}
+                    <img
+                      src={item.img || "/placeholder.svg"}
                       alt={item.name}
                       width={400}
                       height={200}
@@ -234,31 +193,6 @@ export const Homepage=()=> {
           </div>
         </section>
       </main>
-    </div>
   )
 }
 
-// Sample data
-const categories = [
-  { name: "Burgers & Fast", image:{Burger} },
-  { name: "Salads", image: "/placeholder.svg?height=80&width=80" },
-  { name: "Pasta & Cousous", image: "/placeholder.svg?height=80&width=80" },
-  { name: "Pizza", image: "/placeholder.svg?height=80&width=80" },
-  { name: "Breakfast", image: "/placeholder.svg?height=80&width=80" },
-  { name: "Soups", image: "/placeholder.svg?height=80&width=80" },
-]
-
-const cooks = [
-  { name: "Ram Singh", image: "/placeholder.svg?height=80&width=80" },
-  { name: "Sushma Singh", image: "/placeholder.svg?height=80&width=80" },
-  { name: "Arpita Thapa", image: "/placeholder.svg?height=80&width=80" },
-  { name: "Tawas Mom", image: "/placeholder.svg?height=80&width=80" },
-  { name: "Rupger Ki", image: "/placeholder.svg?height=80&width=80" },
-  { name: "Shaurma I", image: "/placeholder.svg?height=80&width=80" },
-]
-
-const popularItems = [
-  { name: "Cheese Burger", price: "11.88", image: "/placeholder.svg?height=200&width=400" },
-  { name: "Pancake", price: "11.99", image: "/placeholder.svg?height=200&width=400" },
-  { name: "Crispy Sandwich", price: "13.99", image: "/placeholder.svg?height=200&width=400" },
-]

@@ -1,3 +1,4 @@
+// import { Homepage } from "@/modules/user/auth/components/Dashboard/Homepage/Homepage";
 import { paths } from "../../../config/paths";
 import { AppRootErrorBoundary, UserRoot } from "../app/root";
 import { UserLoginRoute } from "../user/auth/login";
@@ -26,8 +27,10 @@ export const userRoutes = [
       {
         path: paths.user.homePage.path,
         lazy: async () => {
-          const { Homepage } = await import("../../../modules/user/auth/components/Homepage/Homepage");
-          return { Component: Homepage };
+          const { Homepage } = await import(
+						"../../../modules/user/auth/components/Dashboard/Homepage/Homepage"
+					);
+					return { Component: Homepage };
         },
       },
       {

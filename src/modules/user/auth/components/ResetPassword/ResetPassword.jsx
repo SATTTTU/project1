@@ -45,14 +45,14 @@ export const ResetPassword = () => {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
               required
             />
-               {/* <button
+                <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-73 -translate-x-44 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? <FaEye className="h-5 w-5 " /> :  <IoEyeOffSharp className="h-5 w-5 " />}
-              </button> */}
+                {showPassword ? <IoEyeOffSharp className="h-5 w-5 " />: <FaEye className="h-5 w-5 " />  }
+              </button>
           </div>
 
           <div>
@@ -74,7 +74,7 @@ export const ResetPassword = () => {
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? <FaEye className="h-5 w-5 " /> :  <IoEyeOffSharp className="h-5 w-5 " />}
+                {showPassword ? <IoEyeOffSharp className="h-5 w-5 " />: <FaEye className="h-5 w-5 " />  }
               </button>
             </div>
           </div>
@@ -83,7 +83,7 @@ export const ResetPassword = () => {
 
           <button
             type="submit"
-            className="w-full bg-green-800 text-white py-2 px-4 rounded-md hover:bg-green-900 transition-colors"
+            className="w-full bg-[#426B1F] text-white py-2 px-4 rounded-md hover:bg-green-900 transition-colors"
           >
             Reset password
           </button>
