@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Sidebar } from "../homepage/aside/aside";
+import { Sidebar } from "../Homepage/aside/aside";
 import { useNavigate } from "react-router-dom";
 import { Pagination } from "../../../../components/ui/pagination/pagination";
 const Input = ({ placeholder, value, onChange }) => (

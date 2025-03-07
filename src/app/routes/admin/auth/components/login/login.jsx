@@ -1,8 +1,6 @@
-import { AuthRoot } from "@/app/routes/app/root"
-import LoginPage from "../../../../../../modules/admin/components/registerPage/registerPage"
+import { AuthRoot } from "@/app/routes/app/root";
+import LoginPage from "../../../../../../modules/admin/Components/RegisterPage/RegisterPage";
 
-export const LoginRoute =()=>{
-    return(
-            <LoginPage/>
-    )
-}
+export const LoginRoute = () => {
+  return <LoginPage />;
+};

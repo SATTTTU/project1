@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { IoIosNotifications, IoMdSearch } from "react-icons/io";
 import { FaChartPie, FaUsers, FaCog } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
-import { ProfileCard } from "./profile/adminInformation";
+import { ProfileCard } from "./Profile/AdminInformation";
 import { Sidebar } from "../aside/aside";
 
 export const AdminDashboard = () => {
@@ -10,9 +10,21 @@ export const AdminDashboard = () => {
   const profileRef = useRef(null); // Ref for profile card
 
   const dashboardStats = [
-    { icon: <FaUsers className="text-blue-500 text-2xl" />, title: "Total Users", value: "1,254" },
-    { icon: <FaChartPie className="text-green-500 text-2xl" />, title: "Revenue", value: "$45,230" },
-    { icon: <FaCog className="text-purple-500 text-2xl" />, title: "Pending Tasks", value: "12" },
+    {
+      icon: <FaUsers className="text-blue-500 text-2xl" />,
+      title: "Total Users",
+      value: "1,254",
+    },
+    {
+      icon: <FaChartPie className="text-green-500 text-2xl" />,
+      title: "Revenue",
+      value: "$45,230",
+    },
+    {
+      icon: <FaCog className="text-purple-500 text-2xl" />,
+      title: "Pending Tasks",
+      value: "12",
+    },
   ];
 
   // Hide profile card when clicking outside
@@ -66,7 +78,9 @@ export const AdminDashboard = () => {
                 alt="Profile"
                 className="w-10 h-10 rounded-full object-cover border-2 border-gray-200"
               />
-              <span className="text-gray-700 font-medium hidden sm:block">Admin</span>
+              <span className="text-gray-700 font-medium hidden sm:block">
+                Admin
+              </span>
             </div>
           </div>
         </header>
@@ -85,8 +99,12 @@ export const AdminDashboard = () => {
                 <div className="flex items-center gap-4">
                   <div className="bg-gray-50 p-4 rounded-lg">{stat.icon}</div>
                   <div>
-                    <p className="text-gray-500 text-sm font-medium">{stat.title}</p>
-                    <h3 className="text-2xl font-bold text-gray-900 mt-1">{stat.value}</h3>
+                    <p className="text-gray-500 text-sm font-medium">
+                      {stat.title}
+                    </p>
+                    <h3 className="text-2xl font-bold text-gray-900 mt-1">
+                      {stat.value}
+                    </h3>
                   </div>
                 </div>
               </motion.div>

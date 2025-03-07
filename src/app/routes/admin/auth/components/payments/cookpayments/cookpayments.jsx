@@ -1,8 +1,6 @@
-import { AuthRoot } from "@/app/routes/app/root"
-import { CookPaymentDetails } from "../../../../../../../modules/admin/components/paymentSection/cookPaymentPage/cookPaymentpage"
+import { AuthRoot } from "@/app/routes/app/root";
+import { CookPaymentDetails } from "../../../../../../../modules/admin/Components/Paymentsection/CookPaymentPage/CookPayment";
 
-export const CookPaymentsRoute=()=>{
-    return(
-            <CookPaymentDetails/>
-    )
-}
+export const CookPaymentsRoute = () => {
+  return <CookPaymentDetails />;
+};

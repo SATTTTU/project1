@@ -1,14 +1,10 @@
 import { AuthRoot } from "@/app/routes/app/root";
-import { AdminCooksTable } from "../../../../../../modules/admin/components/cookSection/cookPage";
-import { CookProfile } from "../../../../../../modules/admin/components/cookSection/individualCookPage";
+import { AdminCooksTable } from "../../../../../../modules/admin/Components/Cooksection/Cookpage";
+import { CookProfile } from "../../../../../../modules/admin/Components/Cooksection/IndividualcookPage";
 
 export const CookPageRoute = () => {
-  return (
-      <AdminCooksTable />
-  );
+  return <AdminCooksTable />;
 };
-export const  CookPageProfileRoute = () => {
-    return (
-        <CookProfile />
-    );
-}
+export const CookPageProfileRoute = () => {
+  return <CookProfile />;
+};
