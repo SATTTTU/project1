@@ -1,20 +1,20 @@
-// src/components/ForgotPassword/ForgotPassword.js
 
 import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import ForgetImage from "../../../../../assets/forgetpassword.jpg";
+import ForgetImage from "../../../../../assets/UserImages/forgetpassword.jpg"
 import { forgotPasswordSchema } from "../../formik/schema/authschema";
+import { useNavigate } from "react-router-dom";
 
 export const ForgotPassword = () => {
-  // Formik setup
+  const navigate= useNavigate();
   const formik = useFormik({
     initialValues: {
       email: "",
     },
     validationSchema: toFormikValidationSchema(forgotPasswordSchema),
     onSubmit: (values) => {
+      navigate("/user/verification")
       console.log("Email submitted:", values.email);
-      // Handle form submission logic here
     },
   });
 
@@ -48,7 +48,6 @@ export const ForgotPassword = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
-              {/* Display validation error */}
               {formik.touched.email && formik.errors.email && (
                 <div className="text-red-500 text-sm mt-2">{formik.errors.email}</div>
               )}

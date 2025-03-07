@@ -1,32 +1,19 @@
 import { useState } from "react";
-import { useFormik } from "formik";
-import { toFormikValidationSchema } from "zod-formik-adapter";
-import { signInSchema, signUpSchema } from "../../../../../modules/user/auth/formik/schema/authSchema";
 import LoginSection from "./LoginSection";  
-import Image from "../../../../../assets/healthy.jpg";
+import Image from "../../../../../assets/UserImages/healthy.jpg";
+
 import RegisterForm from "./RegisterSection";
 
 const LoginForm = () => {
   const [isSignUp, setIsSignUp] = useState(false);
 
-  const formik = useFormik({
-    initialValues: {
-      name: "",
-      email: "",
-      password: "",
-      rememberMe: false,
-    },
-    validationSchema: toFormikValidationSchema(isSignUp ? signUpSchema : signInSchema), // Convert Zod to Formik schema
-    onSubmit: (values) => {
-      console.log("Form Submitted:", values);
-    },
-  });
+
 
   return (
     <div className="flex justify-center items-center w-screen h-screen bg-gray-100 px-2">
       <div className="relative w-full h-full bg-white shadow-lg rounded-lg overflow-hidden flex border border-gray-300">
-        <LoginSection formik={formik} setIsSignUp={setIsSignUp}/>
-		<RegisterForm formik={formik}/>
+        <LoginSection  setIsSignUp={setIsSignUp}/>
+		<RegisterForm />
 
         {/* Overlay Panel */}
         <div

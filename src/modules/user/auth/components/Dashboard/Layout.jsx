@@ -4,7 +4,7 @@ import { Sidebar } from "./Sidebar/Sidebar"
 import { Header } from "./Header/Header"
 import { MainContent } from "./Main/MainContent"
 
-export default function DashboardLayout() {
+export const Layout=()=> {
   const [balance] = useState(12000)
   const [orderItems, setOrderItems] = useState([])
 
@@ -20,7 +20,7 @@ export default function DashboardLayout() {
         <Header />
         <div className="flex-1 flex">
           <MainContent onAddToOrder={addToOrder} />
-          <Sidebar balance={balance} orderItems={orderItems} />
+          {/* <Sidebar balance={balance} orderItems={orderItems} /> */}
         </div>
       </div>
     </div>

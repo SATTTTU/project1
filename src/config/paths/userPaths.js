@@ -31,6 +31,20 @@ export const userPaths = {
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
+	emailVerification: {
+		path: "/user/verification",
+		getHref: (redirectTo) =>
+			`/user/verification${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
+	dashboard: {
+		path: "/user/dashboard",
+		getHref: (redirectTo) =>
+			`/user/dashboard${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
 	homePage: {
 		path: "/user/home",
 		getHref: (redirectTo) =>
