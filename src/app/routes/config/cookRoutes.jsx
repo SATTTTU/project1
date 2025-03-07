@@ -42,6 +42,46 @@ export const cookRoutes = [
             ErrorBoundary: AppRootErrorBoundary,
           },
           {
+            path: paths.cook.homepage.path,
+            lazy: async () => {
+              const { homepage } = await import(
+                "../../../modules/cook/components/homepage/homepage"
+              );
+              return { Component: homepage };
+            },
+            ErrorBoundary: AppRootErrorBoundary,
+          },
+          {
+            path: paths.cook.orderpage.path,
+            lazy: async () => {
+              const { OrderPage } = await import(
+                "../../../modules/cook/components/orderpage/orderPage"
+              );
+              return { Component: OrderPage };
+            },
+            ErrorBoundary: AppRootErrorBoundary,
+          },
+          {
+            path: paths.cook.cookProfile.path,
+            lazy: async () => {
+              const { cookProfile } = await import(
+                "../../../modules/cook/components/cookProfile/cookProfile"
+              );
+              return { Component: cookProfile };
+            },
+            ErrorBoundary: AppRootErrorBoundary,
+          },
+          {
+            path: paths.cook.earningsPage.path,
+            lazy: async () => {
+              const { EarningsPage } = await import(
+                "../../../modules/cook/components/earningsPage/earningsPage"
+              );
+              return { Component: EarningsPage };
+            },
+            ErrorBoundary: AppRootErrorBoundary,
+          },
+          {
             path: paths.cook.emailVerification.path,
             lazy: async () => {
               const { EmailVerification } = await import(

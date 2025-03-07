@@ -45,10 +45,40 @@ export const cookPaths = {
         redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
       }`,
   },
+
   login: {
     path: "/cook/login",
     getHref: (redirectTo) =>
       `/cook/login${
+        redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+      }`,
+  },
+  homepage: {
+    path: "/cook/homepage",
+    getHref: (redirectTo) =>
+      `/cook/homepage${
+        redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+      }`,
+  },
+  orderpage: {
+    path: "/cook/orderpage",
+    getHref: (redirectTo) =>
+      `/cook/orderpage${
+        redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+      }`,
+  },
+  cookProfile: {
+    path: "/cook/profile",
+    getHref: (redirectTo) =>
+      `/cook/profile${
+        redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+      }`,
+  },
+
+  earningsPage: {
+    path: "/cook/earnings",
+    getHref: (redirectTo) =>
+      `/cook/earnings${
         redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
       }`,
   },

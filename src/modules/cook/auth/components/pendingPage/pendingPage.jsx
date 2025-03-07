@@ -17,10 +17,17 @@ export const pendingPage = () => {
         </div>
 
         <h1 className="mb-4 text-2xl font-semibold text-gray-800 leading-tight">
-          Thank you — your account is under review.
+          Thank you! your application is under review.
         </h1>
 
-        <p className="text-lg text-gray-600">This will only take a few days.</p>
+        <p className="text-lg text-gray-600">
+          Your journey starts soon! Our team is checking your details, and we’ll
+          notify you shortly.{" "}
+        </p>
+        <div className="p-6"></div>
+        <button className="px-6 rounded bg-[#4b6c1e] py-3 text-white transition-colors hover:bg-[#3d5819]">
+          Return Home
+        </button>
       </div>
     </div>
   );
