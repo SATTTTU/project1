@@ -83,39 +83,39 @@ export const cookRoutes = [
           },
         ],
       },
-      {
-        path: paths.cook.profile.path,
-        lazy: async () => {
-          const { CookProfileRoute } = await import("../admin/auth/login");
-          return { Component: <CookProfileRoute /> };
-        },
-        ErrorBoundary: AppRootErrorBoundary,
-      },
-      {
-        path: paths.cook.notification.path,
-        lazy: async () => {
-          const { CookOrderRoute } = await import("../admin/auth/login");
-          return { Component: <CookOrderRoute /> };
-        },
-        ErrorBoundary: AppRootErrorBoundary,
-      },
-      {
-        path: paths.cook.order.path,
-        lazy: async () => {
-          const { CookEarningRoute } = await import("../admin/auth/login");
-          return { Component: <CookEarningRoute /> };
-        },
-        ErrorBoundary: AppRootErrorBoundary,
-      },
+      // {
+      //   path: paths.cook.profile.path,
+      //   lazy: async () => {
+      //     const { CookProfileRoute } = await import("../admin/auth/login");
+      //     return { Component: <CookProfileRoute /> };
+      //   },
+      //   ErrorBoundary: AppRootErrorBoundary,
+      // },
+      // {
+      //   path: paths.cook.notification.path,
+      //   lazy: async () => {
+      //     const { CookOrderRoute } = await import("../admin/auth/login");
+      //     return { Component: <CookOrderRoute /> };
+      //   },
+      //   ErrorBoundary: AppRootErrorBoundary,
+      // },
+      // {
+      //   path: paths.cook.order.path,
+      //   lazy: async () => {
+      //     const { CookEarningRoute } = await import("../admin/auth/login");
+      //     return { Component: <CookEarningRoute /> };
+      //   },
+      //   ErrorBoundary: AppRootErrorBoundary,
+      // },
 
-      {
-        path: paths.cook.withdraw.path,
-        lazy: async () => {
-          const { CookWithdrawRoute } = await import("../admin/auth/login");
-          return { Component: <CookWithdrawRoute /> };
-        },
-        ErrorBoundary: AppRootErrorBoundary,
-      },
+      // {
+      //   path: paths.cook.withdraw.path,
+      //   lazy: async () => {
+      //     const { CookWithdrawRoute } = await import("../admin/auth/login");
+      //     return { Component: <CookWithdrawRoute /> };
+      //   },
+      //   ErrorBoundary: AppRootErrorBoundary,
+      // },
     ],
   },
 ];

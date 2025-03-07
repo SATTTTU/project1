@@ -15,7 +15,7 @@ export const Sidebar = () => {
     { to: "/admin/dashboard", icon: <MdDashboard />, text: "Dashboard" },
     { to: "/admin/userDetails", icon: <CiUser />, text: "User" },
     { to: "/admin/cookDetails", icon: <FaCookie />, text: "Cook" },
-    { to: "/payments", icon: <MdPayments />, text: "Payments" },
+    { to: "/admin/paymentpage", icon: <MdPayments />, text: "Payments" },
     { to: "/reports", icon: <TbReportSearch />, text: "Reports" },
     { to: "/contact", icon: <IoIosContacts />, text: "Contact" },
   ];
@@ -50,7 +50,7 @@ export const Sidebar = () => {
         className={`fixed top-0 left-0 h-full w-64 bg-white shadow-xl z-50 transition-transform duration-300 transform ${showSidebar ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:relative md:flex flex-col border-r border-gray-200`}
       >
         <div className="px-6 py-6 border-b border-gray-200">
-          <h1 className="text-2xl font-bold text-gray-800 tracking-tight">FoodBox</h1>
+          <h1 className="text-2xl font-bold text-gray-800 tracking-tight">KhanaBox</h1>
         </div>
 
         <nav className="flex-grow px-4 py-6 space-y-1">

@@ -12,23 +12,15 @@ export const rootRoutes = [
     element: <Navigate to={paths.admin.root.path} />,
   },
 
-  {
-    path: paths.componentTest.path,
-    lazy: async () => {
-      const { ComponentTest } = await import(
-        "../../routes/admin/auth/componentTest"
-      );
-      return {Component: ComponentTest};
-    },
-  },
+  
 
   {
     path: "/",
     lazy: async () => {
-      const { ComponentTest } = await import(
-        "../../routes/admin/auth/componentTest"
+      const { HomePageRoute } = await import(
+        "../../routes/admin/auth/components/homepage/homepage"
       );
-      return { Component: ComponentTest };
+      return { Component: HomePageRoute };
     },
   },
 ];

@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import Label from '../../../../../components/ui/label/label'
-import Button from "../../../../../components/ui/button/Button";
-import Card from "../../../../../components/ui/card/Card";
-import Input from "../../../../../components/ui/input/input";
-
-
+import Label from "../../../../components/ui/label/label";
+import Button from "../../../../components/ui/button/Button";
+import Card from "../../../../components/ui/card/Card";
+import Input from "../../../../components/ui/input/input";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({

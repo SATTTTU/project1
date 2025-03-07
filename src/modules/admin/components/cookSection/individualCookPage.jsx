@@ -104,13 +104,13 @@ export const CookProfile = () => {
                   <div>
                     <p className="text-xs text-gray-500">Total Earnings</p>
                     <p className="text-lg font-semibold text-gray-800">
-                      ${cook.earnings?.total?.toLocaleString()}
+                      Rs{cook.earnings?.total?.toLocaleString()}
                     </p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-500">Monthly Average</p>
                     <p className="text-lg font-semibold text-gray-800">
-                      ${cook.earnings?.monthly?.toLocaleString()}
+                      Rs{cook.earnings?.monthly?.toLocaleString()}
                     </p>
                   </div>
                 </div>

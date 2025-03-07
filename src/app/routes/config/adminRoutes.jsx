@@ -14,79 +14,110 @@ export const adminRoutes = [
           {
             path: paths.admin.login.path,
             lazy: async () => {
-              const LoginPage = await import(
-                "../../../modules/admin/auth/components/registerPage/registerPage"
-              ).then((module) => module.default);
-              return { Component: LoginPage };
+              const { LoginRoute } = await import(
+                "../../routes/admin/auth/components/login/login"
+              );
+              return { Component: LoginRoute };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
-
           {
             path: paths.admin.dashboard.path,
             lazy: async () => {
-              const { AdminDashboard } = await import(
-                "../../../modules/admin/auth/components/homepage/admindashboard/dashboard"
+              const { HomePageRoute } = await import(
+                "../../routes/admin/auth/components/homepage/homepage"
               );
-              return { Component: AdminDashboard };
+              return { Component: HomePageRoute };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
           {
             path: paths.admin.resetPassword.path,
             lazy: async () => {
-              const { ResetPassword } = await import(
-                "../../../modules/admin/auth/components/resetPassword/resetPassword"
+              const { ResetPasswordRoute } = await import(
+                "../../routes/admin/auth/components/reset-password/resetpassword"
               );
-              return { Component: ResetPassword };
+              return { Component: ResetPasswordRoute };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
           {
             path: paths.admin.profile.path,
             lazy: async () => {
-              const { MyProfile } = await import(
-                "../../../modules/admin/auth/components/homepage/admindashboard/profile/adminInformationwithEdit"
+              const { AdminProfileRoute } = await import(
+                "../../routes/admin/auth/components/homepage/adminprofile/adminprofile"
               );
-              return { Component: MyProfile };
+              return { Component: AdminProfileRoute };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
           {
             path: "cook-profile/:id",
             lazy: async () => {
-              const { CookProfile } = await import(
-                "../../../modules/admin/auth/components/cookSection/individualCookPage"
+              const { CookPageProfileRoute } = await import(
+                "../../routes/admin/auth/components/cooksection/cookpage"
               );
-              return { Component: CookProfile };
+              return { Component: CookPageProfileRoute };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
           {
             path: paths.admin.cookDetails.path,
             lazy: async () => {
-              const { AdminCooksTable } = await import(
-                "../../../modules/admin/auth/components/cookSection/cookPage"
+              const { CookPageRoute } = await import(
+                "../../routes/admin/auth/components/cooksection/cookpage"
               );
-              return { Component: AdminCooksTable };
+              return { Component: CookPageRoute };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
           {
             path: paths.admin.userDetails.path,
             lazy: async () => {
-              const { DisplayUser } = await import(
-                "../../../modules/admin/auth/components/userSection/displayUser"
+              const { DisplayUserRoute } = await import(
+                "../../routes/admin/auth/components/displayuser/displayuser"
               );
-              return { Component: DisplayUser };
+              return { Component: DisplayUserRoute };
+            },
+            ErrorBoundary: AppRootErrorBoundary,
+          },
+          // {
+          //   path: paths.admin.logout.path,
+          //   lazy: async () => {
+          //     const { AdminLogoutRoute } = await import(
+          //       "../../routes/admin/auth/components/logout/logout"
+          //     );
+          //     return { Component: AdminLogoutRoute };
+          //   },
+          //   ErrorBoundary: AppRootErrorBoundary,
+          // },
+          {
+            path: paths.admin.paymentpage.path,
+            lazy: async () => {
+              const { PaymentsRoute } = await import(
+                "../../routes/admin/auth/components/payments/payments"
+              );
+              return { Component: PaymentsRoute };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
           {
-            path: paths.admin.logout.path,
+            path: paths.admin.userpaymentpage.path,
             lazy: async () => {
-              const { AdminLogoutRoute } = await import("../admin/auth/login");
-              return { Component: AdminLogoutRoute };
+              const { UserPaymentsRoute } = await import(
+                "../../routes/admin/auth/components/payments/userpayments/userpayment"
+              );
+              return { Component: UserPaymentsRoute };
+            },
+            ErrorBoundary: AppRootErrorBoundary,
+          },
+          {
+            path: paths.admin.cookpaymentpage.path,
+            lazy: async () => {
+              const { CookPaymentsRoute } = await import(
+                "../../routes/admin/auth/components/payments/cookpayments/cookpayments"
+              );
+              return { Component: CookPaymentsRoute };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },

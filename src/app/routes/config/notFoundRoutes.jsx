@@ -4,9 +4,9 @@ export const notFoundRoute = [
   {
     path: "*",
     lazy: async () => {
-      const { NotFoundRoute } = await import("../not-found");
+      const { NotFoundPage } = await import("../not-found");
       return {
-        Component: NotFoundRoute,
+        Component: NotFoundPage,
       };
     },
     ErrorBoundary: AppRootErrorBoundary,

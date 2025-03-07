@@ -19,6 +19,21 @@ export const adminPaths = {
       getHref: (redirectTo) =>
         `/admin/resetPassword${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
     },
+    paymentpage: {
+      path: "/admin/paymentpage",
+      getHref: (redirectTo) =>
+        `/admin/paymentpage${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
+    },
+    userpaymentpage: {
+      path: "/admin/user-payments",
+      getHref: (redirectTo) =>
+        `/admin/user-payments${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
+    },
+    cookpaymentpage: {
+      path: "/admin/cook-payments",
+      getHref: (redirectTo) =>
+        `/admin/cook-payments${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
+    },
     dashboard: {
       path: "/admin/dashboard",
       getHref: (redirectTo) =>

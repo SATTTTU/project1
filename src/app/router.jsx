@@ -7,11 +7,11 @@ import { userRoutes } from "./routes/config/userRoutes";
 
 const createAppRouter = () => {
   return createBrowserRouter([
-    ...adminRoutes, // पहिले admin routes
-    ...rootRoutes, // त्यसपछि root routes
+    ...adminRoutes, 
+    ...rootRoutes, 
     ...cookRoutes,
-    ...userRoutes, // अन्य routes
-    ...notFoundRoute, // अन्त्यमा 404 route
+    ...userRoutes, 
+    ...notFoundRoute,
   ]);
 };
 

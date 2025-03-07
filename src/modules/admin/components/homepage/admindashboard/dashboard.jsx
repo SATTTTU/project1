@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { IoIosNotifications, IoMdSearch } from "react-icons/io";
 import { FaChartPie, FaUsers, FaCog } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
@@ -7,12 +7,29 @@ import { Sidebar } from "../aside/aside";
 
 export const AdminDashboard = () => {
   const [showProfile, setShowProfile] = useState(false);
+  const profileRef = useRef(null); // Ref for profile card
 
   const dashboardStats = [
     { icon: <FaUsers className="text-blue-500 text-2xl" />, title: "Total Users", value: "1,254" },
     { icon: <FaChartPie className="text-green-500 text-2xl" />, title: "Revenue", value: "$45,230" },
     { icon: <FaCog className="text-purple-500 text-2xl" />, title: "Pending Tasks", value: "12" },
   ];
+
+  // Hide profile card when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setShowProfile(false);
+      }
+    };
+
+    if (showProfile) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showProfile]);
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -82,13 +99,14 @@ export const AdminDashboard = () => {
       <AnimatePresence>
         {showProfile && (
           <motion.div
+            ref={profileRef} // Attach the ref here
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.2 }}
             className="fixed top-16 right-4 z-50"
           >
-            <div className="bg-white shadow-xl rounded-xl  w-80">
+            <div className="bg-white shadow-xl rounded-xl w-80">
               <ProfileCard />
             </div>
           </motion.div>
