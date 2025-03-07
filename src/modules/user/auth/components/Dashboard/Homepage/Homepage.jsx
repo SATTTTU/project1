@@ -49,20 +49,19 @@ export const Homepage = () => {
 					</div>
 
 					<div className="flex items-center space-x-4">
-						<Link href="/cart" className="relative">
+						<Link to="/user/cart" className="relative">
 							<AiOutlineShoppingCart className="w-8 h-8 text-gray-700" />
 							<Badge className="absolute -top-3 -right-4   text-xs bg-red-500 text-white rounded-full">
 								2
 							</Badge>
 						</Link>
-							<div className="">
-								{/* <FaUserCircle className="w-full h-full p-1 text-slate-800" /> */}
-                <Profile/>
-							</div>
+						<div className="">
+							<Profile />
+						</div>
 					</div>
 				</div>
 			</header>
-
+	
 			<main className="container px-4 py-6 mx-auto">
 				<section className="mb-8">
 					<div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
@@ -196,7 +195,7 @@ export const Homepage = () => {
 
 				{/* Popular Cooks */}
 				<section className="p-6 mb-12 rounded-lg bg-white">
-					<h2 className="mb-6 text-2xl font-bold text-center text-blue-600">
+					<h2 className="mb-6 text-2xl font-bold text-center text-green-600">
 						Popular Cooks
 					</h2>
 
@@ -238,9 +237,9 @@ export const Homepage = () => {
 							pagination={{ clickable: true }}
 							autoplay={{ delay: 3000 }}
 							className="pb-30"
-              style={{
-                paddingBottom: "50px", // Space for pagination dots
-              }}
+							style={{
+								paddingBottom: "50px", // Space for pagination dots
+							}}
 						>
 							{popularItems.map((item, index) => (
 								<SwiperSlide key={index}>
@@ -265,10 +264,9 @@ export const Homepage = () => {
 								</SwiperSlide>
 							))}
 						</Swiper>
-            
 					</div>
 				</section>
-				<footer className="bg-white border-t border-gray-200 pt-12 pb-6">
+				<footer className="bg-gray-100 border-t border-gray-200 pt-12 pb-6">
 					<div className="container mx-auto px-4 md:px-8">
 						<div className="grid grid-cols-1 md:grid-cols-4 gap-8">
 							<div className="col-span-1">

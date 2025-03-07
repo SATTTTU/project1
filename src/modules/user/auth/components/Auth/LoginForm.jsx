@@ -15,7 +15,6 @@ const LoginForm = () => {
         <LoginSection  setIsSignUp={setIsSignUp}/>
 		<RegisterForm />
 
-        {/* Overlay Panel */}
         <div
           style={{
             backgroundImage: `url(${Image})`,

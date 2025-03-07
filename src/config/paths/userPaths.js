@@ -66,7 +66,7 @@ export const userPaths = {
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
-	profile: {
+	profileEdit: {
 		path: "/user/profile",
 		getHref: (redirectTo) =>
 			`/user/profile${

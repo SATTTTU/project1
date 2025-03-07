@@ -10,13 +10,14 @@ export const userRoutes = [
 		element: <UserRoot />,
 		ErrorBoundary: AppRootErrorBoundary,
 		children: [
-			// {
-			//   path: paths.user.register.path,
-			//   lazy: async () => {
-			//     const { Register } = await import("../user/auth/Register");
-			//     return { Component: <Register /> };
-			//   },
-			// },
+			{
+			  path: paths.user.register.path,
+			  lazy: async () => {
+			    const { UserLoginRoute } = await import("../../../modules/user/auth/components/Auth/LoginSection/");
+      
+			    return { Component: UserLoginRoute };
+			  },
+			},
 			{
 				path: paths.user.login.path,
 				lazy: async () => {
@@ -69,13 +70,13 @@ export const userRoutes = [
 					return { Component: Layout };
 				},
 			},
-			// {
-			//   path: paths.user.cart.path,
-			//   lazy: async () => {
-			//     const { Cart } = await import("../pages/Cart");
-			//     return { Component: <Cart /> };
-			//   },
-			// },
+			{
+			  path: paths.user.cart.path,
+			  lazy: async () => {
+			    const { Cart } = await import("../../../modules/user/auth/components/Cart/Cart");
+			    return { Component: Cart};
+			  },
+			},
 			// {
 			//   path: paths.user.checkout.path,
 			//   lazy: async () => {
@@ -83,11 +84,18 @@ export const userRoutes = [
 			//     return { Component: <Checkout /> };
 			//   },
 			// },
-			{
-			  path: paths.user.profile.path,
+			// {
+			//   path: paths.user.profile.path,
+			//   lazy: async () => {
+			//     const { Profile } = await import("../../../modules/user/auth/components/Profile/Profile");
+			//     return { Component: Profile };
+			//   },
+			// },
+      {
+			  path: paths.user.profileEdit.path,
 			  lazy: async () => {
-			    const { Profile } = await import("../../../modules/user/auth/components/Profile/Profile");
-			    return { Component: Profile };
+			    const { ProfileEdit } = await import("../../../modules/user/auth/components/Profile/ProfileEdit");
+			    return { Component: ProfileEdit };
 			  },
 			},
 			// {

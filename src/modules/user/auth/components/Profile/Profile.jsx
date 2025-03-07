@@ -30,32 +30,30 @@ export const Profile = () => {
 				onClick={toggleDropdown}
 				className="flex items-center space-x-2 focus:outline-none"
 			>
-				<div className="w-8 h-8 rounded-full overflow-hidden">
+				<div className="w-10 h-10 rounded-full overflow-hidden">
 					<FaUserCircle className="w-full h-full p-1 text-slate-800" />
 				</div>
 			</button>
 
 			{isOpen && (
-				<div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-lg py-2 z-50">
-y					<div className="px-4 py-3 border-b border-gray-100">
+				<div className="absolute right-0 mt-2 w-80 bg-gray-100 rounded-lg shadow-lg py-2 z-50">				<div className="px-4 py-3 border-b border-gray-100">
 						<div className="flex items-center space-x-3">
 							<div className="w-12 h-12 rounded-full overflow-hidden">
                             <FaUserCircle className="w-full h-full p-1 text-slate-800" />
 
 							</div>
 							<div>
-								<h3 className="text-sm font-semibold text-gray-800">
+								<h3 className="text-lg font-semibold text-gray-800">
 									Your name
 								</h3>
-								<p className="text-xs text-gray-500">yourname@gmail.com</p>
+								<p className=" text-gray-500">yourname@gmail.com</p>
 							</div>
 						</div>
 					</div>
 
-					{/* Menu Items */}
 					<div className="py-2">
 						<Link
-							href="/profile"
+							to="/user/profile"
 							className="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
 						>
 							<User className="w-4 h-4" />
@@ -63,7 +61,7 @@ y					<div className="px-4 py-3 border-b border-gray-100">
 						</Link>
 
 						<Link
-							href="/settings"
+							to="/settings"
 							className="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
 						>
 							<Settings className="w-4 h-4" />
