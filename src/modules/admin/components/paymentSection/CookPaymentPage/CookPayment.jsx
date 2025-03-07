@@ -2,16 +2,47 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ChevronRight, CreditCard, DollarSign, Users } from "lucide-react";
 import { Sidebar } from "../../Homepage/aside/aside";
-
+import { Table } from "../../../../../components/ui/tables/tables";
+Table
 export const CookPaymentDetails = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("This Month");
   const [filteredTransactions, setFilteredTransactions] = useState([]);
-  const [withdrawAmount, setWithdrawAmount] = useState("");
-  const [selectedCook, setSelectedCook] = useState(null);
+  const [withdrawRequests, setWithdrawRequests] = useState([
+    {
+      id: 1,
+      cookId: 1,
+      name: "Martha",
+      email: "marthaa@example.com",
+      image: "/api/placeholder/60/60",
+      amount: "1200.00",
+      requestDate: "Mar 5, 2025",
+      status: "Pending"
+    },
+    {
+      id: 2,
+      cookId: 3,
+      name: "Samuel",
+      email: "sam224@example.com",
+      image: "/api/placeholder/60/60",
+      amount: "850.50",
+      requestDate: "Mar 6, 2025",
+      status: "Pending"
+    },
+    {
+      id: 3,
+      cookId: 5,
+      name: "Cindy",
+      email: "cindy@example.com",
+      image: "/api/placeholder/60/60",
+      amount: "1750.00",
+      requestDate: "Mar 4, 2025",
+      status: "Pending"
+    }
+  ]);
 
   const stats = {
     totalCookPayout: "Rs.45,890.50",
-    pendingCookPayments: "3,750.00",
+    pendingCookPayments: "Rs.3,750.00",
     cookCount: "320",
   };
 
@@ -19,63 +50,34 @@ export const CookPaymentDetails = () => {
     {
       id: "#PAY-9001",
       date: "Mar 6, 2025",
-      description: "Payment to Chef A",
-      amount: "-Rs500.00",
+      cookId: 2,
+      description: "Payment to Chef Olivia",
+      amount: "-Rs.500.00",
       status: "Completed",
     },
     {
       id: "#PAY-8998",
       date: "Mar 5, 2025",
-      description: "Payment to Chef B",
-      amount: "-Rs320.50",
+      cookId: 4,
+      description: "Payment to Chef David",
+      amount: "-Rs.320.50",
       status: "Completed",
     },
     {
       id: "#PAY-8995",
       date: "Mar 4, 2025",
-      description: "Bonus to Chef C",
-      amount: "-Rs150.75",
+      cookId: 1,
+      description: "Bonus to Chef Martha",
+      amount: "-Rs.150.75",
       status: "Completed",
     },
     {
       id: "#PAY-8990",
       date: "Feb 28, 2025",
-      description: "Pending payment to Chef D",
-      amount: "-Rs800.00",
-      status: "Processing",
-    },
-  ];
-
-  const topCooks = [
-    {
-      id: 1,
-      name: "Martha",
-      email: "marthaa@example.com",
-      image: "/api/placeholder/60/60",
-    },
-    {
-      id: 2,
-      name: "Olivia",
-      email: "oliv62@example.com",
-      image: "/api/placeholder/60/60",
-    },
-    {
-      id: 3,
-      name: "Samuel",
-      email: "sam224@example.com",
-      image: "/api/placeholder/60/60",
-    },
-    {
-      id: 4,
-      name: "David",
-      email: "davidxc@example.com",
-      image: "/api/placeholder/60/60",
-    },
-    {
-      id: 5,
-      name: "Cindy",
-      email: "cindy@example.com",
-      image: "/api/placeholder/60/60",
+      cookId: 3,
+      description: "Payment to Chef Samuel",
+      amount: "-Rs.800.00",
+      status: "Completed",
     },
   ];
 
@@ -90,16 +92,70 @@ export const CookPaymentDetails = () => {
     setFilteredTransactions(filteredData);
   }, [selectedPeriod]);
 
-  const handleTransferNow = () => {
-    if (!withdrawAmount || !selectedCook) return;
-
-    // Here you would handle the actual transfer logic
-    alert(`Transferring Rs{withdrawAmount} to Rs{selectedCook.name}`);
-
-    // Reset form
-    setWithdrawAmount("");
-    setSelectedCook(null);
+  const handleApproveRequest = (requestId) => {
+    setWithdrawRequests(prev => 
+      prev.map(req => 
+        req.id === requestId 
+          ? {...req, status: "Processing"} 
+          : req
+      )
+    );
+    
+    // Add to transactions
+    const request = withdrawRequests.find(req => req.id === requestId);
+    if (request) {
+      const newTransaction = {
+        id: `#PAY-${9000 + Math.floor(Math.random() * 100)}`,
+        date: new Date().toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'}),
+        cookId: request.cookId,
+        description: `Payment to Chef ${request.name}`,
+        amount: `-Rs.${request.amount}`,
+        status: "Processing"
+      };
+      
+      setFilteredTransactions(prev => [newTransaction, ...prev]);
+    }
   };
+
+  const handleRejectRequest = (requestId) => {
+    setWithdrawRequests(prev => 
+      prev.map(req => 
+        req.id === requestId 
+          ? {...req, status: "Rejected"} 
+          : req
+      )
+    );
+  };
+
+  const transactionColumns = ["ID", "Date", "Chef", "Amount", "Status"];
+  
+  const renderTransactionRow = (transaction, index) => (
+    <tr key={index}>
+      <td className="px-6 py-4 text-sm text-gray-900">
+        {transaction.id}
+      </td>
+      <td className="px-6 py-4 text-sm text-gray-500">
+        {transaction.date}
+      </td>
+      <td className="px-6 py-4 text-sm text-gray-900">
+        <Link to={`/cook-profile/${transaction.cookId}`} className="text-blue-600 hover:underline">
+          {transaction.description.replace('Payment to ', '').replace('Bonus to ', '')}
+        </Link>
+      </td>
+      <td className="px-6 py-4 text-sm text-red-600">
+        {transaction.amount}
+      </td>
+      <td className="px-6 py-4 text-sm">
+        <span className={`px-2 py-1 rounded-md text-xs ${
+          transaction.status === "Completed" 
+            ? "bg-green-100 text-green-800" 
+            : "bg-blue-100 text-blue-800"
+        }`}>
+          {transaction.status}
+        </span>
+      </td>
+    </tr>
+  );
 
   return (
     <section className="flex h-screen bg-gray-50">
@@ -109,193 +165,135 @@ export const CookPaymentDetails = () => {
 
       <div className="md:w-4/5 p-6 overflow-auto">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">
-          Cook Payment Details
+          Cook Payment Management
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          {/* Left side - Transaction details */}
-          <div className="space-y-6">
-            <div className="flex items-center space-x-2 mb-6">
-              <span className="text-gray-500">Period:</span>
-              <select
-                className="bg-white border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
-                value={selectedPeriod}
-                onChange={(e) => setSelectedPeriod(e.target.value)}
-              >
-                <option>This Month</option>
-                <option>This Year</option>
-              </select>
-            </div>
-
-            <div className="grid grid-cols-1 gap-4">
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <h2 className="text-sm font-medium text-gray-500">
-                  Total Cook Payouts
-                </h2>
-                <p className="text-2xl font-bold text-gray-800">
-                  {stats.totalCookPayout}
-                </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+            <div className="flex items-center">
+              <div className="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
+                <DollarSign size={20} />
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <h2 className="text-sm font-medium text-gray-500">
-                  Pending Payments
-                </h2>
-                <p className="text-2xl font-bold text-gray-800">
-                  {stats.pendingCookPayments}
-                </p>
-              </div>
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <h2 className="text-sm font-medium text-gray-500">
-                  Total Cooks
-                </h2>
-                <p className="text-2xl font-bold text-gray-800">
-                  {stats.cookCount}
-                </p>
+              <div>
+                <h2 className="text-sm font-medium text-gray-500">Total Payouts</h2>
+                <p className="text-xl font-bold text-gray-800">{stats.totalCookPayout}</p>
               </div>
             </div>
           </div>
-
-          {/* Right side - Quick Transfer */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-gray-800">
-                Quick Transfer
-              </h2>
-              <p className="text-2xl font-bold">Rs56,772.38</p>
+          
+          <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+            <div className="flex items-center">
+              <div className="p-3 rounded-full bg-yellow-100 text-yellow-600 mr-4">
+                <CreditCard size={20} />
+              </div>
+              <div>
+                <h2 className="text-sm font-medium text-gray-500">Pending Payments</h2>
+                <p className="text-xl font-bold text-gray-800">{stats.pendingCookPayments}</p>
+              </div>
             </div>
-            <p className="text-gray-500 text-sm mb-6">
-              Select a cook to transfer payment
-            </p>
-
-            <div className="flex space-x-3 overflow-x-auto pb-4 mb-6">
-              {topCooks.map((cook) => (
-                <div
-                  key={cook.id}
-                  className={`flex flex-col items-center space-y-2 min-w-16 cursor-pointer p-2 rounded-lg Rs{selectedCook?.id === cook.id ? 'bg-blue-100 ring-2 ring-blue-500' : 'hover:bg-gray-100'}`}
-                  onClick={() => setSelectedCook(cook)}
-                >
-                  <div className="relative">
-                    <img
-                      src={cook.image}
-                      alt={cook.name}
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
-                    {selectedCook?.id === cook.id && (
-                      <div className="absolute -bottom-1 -right-1 bg-blue-500 text-white rounded-full p-1">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-3 w-3"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </div>
-                    )}
-                  </div>
-                  <span className="text-sm font-medium text-gray-900 truncate max-w-16">
-                    {cook.name}
-                  </span>
-                  <span className="text-xs text-gray-500 truncate max-w-16">
-                    {cook.email.substring(0, 8)}
-                  </span>
-                </div>
-              ))}
+          </div>
+          
+          <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+            <div className="flex items-center">
+              <div className="p-3 rounded-full bg-green-100 text-green-600 mr-4">
+                <Users size={20} />
+              </div>
+              <div>
+                <h2 className="text-sm font-medium text-gray-500">Total Cooks</h2>
+                <p className="text-xl font-bold text-gray-800">{stats.cookCount}</p>
+              </div>
             </div>
-
-            <div className="mb-6">
-              <label
-                htmlFor="amount"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Amount
-              </label>
-              <input
-                type="text"
-                id="amount"
-                value={withdrawAmount}
-                onChange={(e) => setWithdrawAmount(e.target.value)}
-                placeholder="Enter amount"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-
-            <button
-              onClick={handleTransferNow}
-              disabled={!withdrawAmount || !selectedCook}
-              className={`w-full py-3 px-4 rounded-md text-white font-medium Rs{
-                withdrawAmount && selectedCook ? 'bg-blue-500 hover:bg-blue-600' : 'bg-blue-300 cursor-not-allowed'
-              }`}
-            >
-              TRANSFER NOW
-            </button>
           </div>
         </div>
 
-        {/* Transaction History Table */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-lg font-medium text-gray-800">
-              Transaction History
-            </h3>
+        {/* Period Filter */}
+        <div className="flex justify-end mb-4">
+          <div className="flex items-center space-x-2">
+            <span className="text-gray-500">Period:</span>
+            <select
+              className="bg-white border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+              value={selectedPeriod}
+              onChange={(e) => setSelectedPeriod(e.target.value)}
+            >
+              <option>This Month</option>
+              <option>This Year</option>
+            </select>
           </div>
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  ID
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Date
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Description
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Amount
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Status
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {filteredTransactions.length > 0 ? (
-                filteredTransactions.map((transaction, index) => (
-                  <tr key={index}>
-                    <td className="px-6 py-4 text-sm text-gray-900">
-                      {transaction.id}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-500">
-                      {transaction.date}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-500">
-                      {transaction.description}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-red-600">
-                      {transaction.amount}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-500">
-                      {transaction.status}
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan="5"
-                    className="px-6 py-4 text-center text-sm text-gray-500"
-                  >
-                    No transactions found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+        </div>
+
+        {/* Withdrawal Requests Section */}
+        <div className="mb-6">
+          <h3 className="text-lg font-medium text-gray-800 mb-4">
+            Pending Withdrawal Requests
+          </h3>
+          
+          {withdrawRequests.length > 0 ? (
+            <div className="space-y-2">
+              {withdrawRequests.map((request) => (
+                <div 
+                  key={request.id} 
+                  className="bg-white p-4 rounded-lg border border-gray-100 flex items-center justify-between"
+                >
+                  <div className="flex items-center">
+                    <img 
+                      src={request.image} 
+                      alt={request.name} 
+                      className="w-10 h-10 rounded-full object-cover mr-4"
+                    />
+                    <div>
+                      <Link to={`/cook-profile/${request.cookId}`} className="text-blue-600 hover:underline font-medium">
+                        {request.name}
+                      </Link>
+                      <p className="text-sm text-gray-500">{request.email}</p>
+                      <p className="text-xs text-gray-400">Requested: {request.requestDate}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-4">
+                    <p className="font-medium">Rs.{request.amount}</p>
+                    {request.status === "Pending" ? (
+                      <div className="flex space-x-2">
+                        <button 
+                          onClick={() => handleApproveRequest(request.id)} 
+                          className="px-3 py-1 bg-green-100 text-green-700 rounded-md text-sm hover:bg-green-200"
+                        >
+                          Approve
+                        </button>
+                        <button 
+                          onClick={() => handleRejectRequest(request.id)} 
+                          className="px-3 py-1 bg-red-100 text-red-700 rounded-md text-sm hover:bg-red-200"
+                        >
+                          Reject
+                        </button>
+                      </div>
+                    ) : (
+                      <span className={`text-sm px-2 py-1 rounded-md ${
+                        request.status === "Processing" ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-700"
+                      }`}>
+                        {request.status}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="p-6 text-center text-gray-500 bg-white rounded-lg border border-gray-100">
+              No pending withdrawal requests
+            </div>
+          )}
+        </div>
+
+        {/* Transaction History Table */}
+        <div className="mb-6">
+          <h3 className="text-lg font-medium text-gray-800 mb-4">
+            Transaction History
+          </h3>
+          <Table 
+            columns={transactionColumns} 
+            data={filteredTransactions} 
+            renderRow={renderTransactionRow} 
+          />
         </div>
       </div>
     </section>

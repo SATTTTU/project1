@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { Sidebar } from "../Homepage/aside/aside";
 import { Pagination } from "../../../../components/ui/pagination/pagination";
+import { Table } from "../../../../components/ui/tables/tables";  // Importing the Table component
 
 const dummyUsers = [
   { id: 1, name: "John Doe", email: "john@example.com" },
@@ -41,6 +42,18 @@ export const DisplayUser = () => {
     return filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
   }, [currentPage, filteredUsers]);
 
+  // Define columns for the Table
+  const columns = ["ID", "Name", "Email"];
+
+  // Define the renderRow function for the Table
+  const renderRow = (user) => (
+    <tr key={user.id} className="text-center border odd:bg-gray-50 even:bg-white">
+      <td className="border p-3">{user.id}</td>
+      <td className="border p-3">{user.name}</td>
+      <td className="border p-3">{user.email}</td>
+    </tr>
+  );
+
   return (
     <section className="flex h-screen">
       <Sidebar />
@@ -54,35 +67,11 @@ export const DisplayUser = () => {
           className="p-3 border rounded-lg w-full mb-6 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <div className="bg-white p-6 shadow-md rounded-lg">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-gray-200 text-gray-700">
-                <th className="border p-3">ID</th>
-                <th className="border p-3">Name</th>
-                <th className="border p-3">Email</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentUsers.length > 0 ? (
-                currentUsers.map((user) => (
-                  <tr
-                    key={user.id}
-                    className="text-center border odd:bg-gray-50 even:bg-white"
-                  >
-                    <td className="border p-3">{user.id}</td>
-                    <td className="border p-3">{user.name}</td>
-                    <td className="border p-3">{user.email}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="3" className="text-center py-4 text-gray-500">
-                    No users found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+          <Table
+            columns={columns}
+            data={currentUsers}
+            renderRow={renderRow}
+          />
           {/* Pagination Component */}
           {totalPages > 1 && (
             <Pagination

@@ -5,16 +5,13 @@ import { Sidebar } from "../Homepage/aside/aside";
 export const PaymentPage = () => {
   return (
     <section className="flex h-screen">
-      {/* Sidebar */}
       <Sidebar />
 
-      {/* Main Content */}
       <div className="md:w-3/4 p-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">
           Payment Section
         </h1>
 
-        {/* Navigational Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <Link
             to="/admin/user-payments"

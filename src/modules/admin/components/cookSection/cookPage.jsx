@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Sidebar } from "../Homepage/aside/aside";
 import { useNavigate } from "react-router-dom";
 import { Pagination } from "../../../../components/ui/pagination/pagination";
+import { Table } from "../../../../components/ui/tables/tables"; // Importing the Table component
+
 const Input = ({ placeholder, value, onChange }) => (
   <input
     type="text"
@@ -117,6 +119,39 @@ export const AdminCooksTable = () => {
     currentPage * itemsPerPage
   );
 
+  // Define columns for the Table
+  const columns = ["Name", "Status", "Rating", "Products Sold", "Actions"];
+
+  // Define the renderRow function for the Table
+  const renderRow = ({ id, name, status, rating, productsSold }) => (
+    <tr key={id} className="border-b hover:bg-gray-100">
+      <td className="p-3">{name}</td>
+      <td className="p-3">
+        <span
+          className={`px-2 py-1 rounded-full text-xs ${
+            status === "Verified"
+              ? "bg-green-100 text-green-800"
+              : status === "Pending"
+              ? "bg-yellow-100 text-yellow-800"
+              : "bg-red-100 text-red-800"
+          }`}
+        >
+          {status}
+        </span>
+      </td>
+      <td className="p-3">{rating ? `${rating}%` : "No ratings"}</td>
+      <td className="p-3">{productsSold}</td>
+      <td className="p-3">
+        <button
+          onClick={() => navigate(`/admin/cook-profile/${id}`)}
+          className="text-blue-500 hover:underline"
+        >
+          Profile
+        </button>
+      </td>
+    </tr>
+  );
+
   return (
     <div className="flex h-screen">
       <Sidebar />
@@ -150,51 +185,13 @@ export const AdminCooksTable = () => {
             onChange={(e) => setRatingFilter(e.target.value)}
           />
         </div>
-        <table className="w-full border-collapse shadow-md rounded-lg overflow-hidden">
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="p-3">Name</th>
-              <th className="p-3">Status</th>
-              <th className="p-3">Rating</th>
-              <th className="p-3">Products Sold</th>
-              <th className="p-3">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedCooks.map(
-              ({ id, name, status, rating, productsSold }) => (
-                <tr key={id} className="border-b hover:bg-gray-100">
-                  <td className="p-3">{name}</td>
-                  <td className="p-3">
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs ${
-                        status === "Verified"
-                          ? "bg-green-100 text-green-800"
-                          : status === "Pending"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : "bg-red-100 text-red-800"
-                      }`}
-                    >
-                      {status}
-                    </span>
-                  </td>
-                  <td className="p-3">
-                    {rating ? `${rating}%` : "No ratings"}
-                  </td>
-                  <td className="p-3">{productsSold}</td>
-                  <td className="p-3">
-                    <button
-                      onClick={() => navigate(`/admin/cook-profile/${id}`)}
-                      className="text-blue-500 hover:underline"
-                    >
-                      Profile
-                    </button>
-                  </td>
-                </tr>
-              )
-            )}
-          </tbody>
-        </table>
+
+        {/* Using the Table component */}
+        <Table
+          columns={columns}
+          data={paginatedCooks}
+          renderRow={renderRow}
+        />
 
         <Pagination
           currentPage={currentPage}
