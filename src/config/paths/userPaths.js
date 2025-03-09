@@ -1,7 +1,7 @@
 export const userPaths = {
 	root: {
-		path: "/user",
-		getHref: () => "/user",
+		path: "/",
+		getHref: () => "/",
 	},
 
 	register: {
@@ -103,9 +103,30 @@ export const userPaths = {
 			}`,
 	},
 	cookDetails: {
-		path: "/user/home/cook/:id",
+		path: "/cook/:id",
 		getHref: (redirectTo) =>
-			`/user/home/cook/:id${
+			`/cook/:id${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
+	foodCategories: {
+		path: "/category/:id",
+		getHref: (redirectTo) =>
+			`/category/:id${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
+	foodDetails: {
+		path: "/food/:id",
+		getHref: (redirectTo) =>
+			`/food/:id${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
+	categoryFoodDetails:{
+		path: "/details/:id",
+		getHref: (redirectTo) =>
+			`/details/:id${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},

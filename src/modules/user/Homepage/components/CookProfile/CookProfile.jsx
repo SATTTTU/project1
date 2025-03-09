@@ -8,6 +8,7 @@ import { addToCart } from "../../../../../store/cart/cart"
 import { toast } from "react-toastify"
 import { Header } from "../Header"
 import Cook1 from "../../../../../assets/UserImages/cook/cook5.jpeg"
+// import Back from "../../../../../assets/UserImages/cookbackground.png"
 // Sample cook data - in a real app, this would come from an API
 const cooksData = [
   {
@@ -532,7 +533,7 @@ export const CookProfile = () => {
                       <p className="text-gray-600 text-sm mt-1">{dish.description}</p>
 
                       <div className="flex justify-between items-center mt-4">
-                        <span className="text-lg font-bold">${dish.price}</span>
+                        <span className="text-lg font-bold">Rs. {dish.price}</span>
                         <button
                           onClick={() => handleAddToCart(dish)}
                           className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"

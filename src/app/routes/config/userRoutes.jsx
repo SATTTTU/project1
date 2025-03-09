@@ -142,6 +142,33 @@ export const userRoutes = [
 							return { Component: CookProfile };
 						},
 					},
+					{
+						path: paths.user.foodCategories.path,
+						lazy: async () => {
+							const { CategoryPage } = await import(
+								"../../../modules/user/Homepage/components/Categories/CategoryPage"
+							);
+							return { Component: CategoryPage };
+						},
+					},
+					{
+						path: paths.user.foodDetails.path,
+						lazy: async () => {
+							const { FoodDetails } = await import(
+								"../../../modules/user/Homepage/components/FoodDetails/FoodDetails"
+							);
+							return { Component: FoodDetails };
+						},
+					},
+					{
+						path: paths.user.categoryFoodDetails.path,
+						lazy: async () => {
+							const { FoodDetails } = await import(
+								"../../../modules/user/Homepage/components/FoodDetails/FoodDetails"
+							);
+							return { Component: FoodDetails };
+						},
+					},
 				],
 			},
 		],
