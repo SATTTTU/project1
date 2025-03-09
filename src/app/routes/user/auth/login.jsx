@@ -1,10 +1,9 @@
-import LoginForm from "../../../../modules/user/auth/components/Form/LoginForm";
+import { AuthPage } from "../../../../modules/user/auth/components/Auth/LoginForm";
 
-export const UserLoginRoute = () => {
-    return (
-   <>
-   <LoginForm/>
-   </>
-    );
-  };
-  
+export const Auth = () => {
+	return (
+		<>
+			<AuthPage />
+		</>
+	);
+};

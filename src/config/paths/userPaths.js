@@ -3,6 +3,7 @@ export const userPaths = {
 		path: "/user",
 		getHref: () => "/user",
 	},
+
 	register: {
 		path: "/user/register",
 		getHref: (redirectTo) =>
@@ -31,6 +32,20 @@ export const userPaths = {
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
+	emailVerification: {
+		path: "/user/verification",
+		getHref: (redirectTo) =>
+			`/user/verification${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
+	dashboard: {
+		path: "/user/dashboard",
+		getHref: (redirectTo) =>
+			`/user/dashboard${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
 	homePage: {
 		path: "/user/home",
 		getHref: (redirectTo) =>
@@ -52,19 +67,65 @@ export const userPaths = {
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
-	profile: {
-		path: "/user/profile",
+	profileEdit: {
+		path: "/user/profileEdit",
 		getHref: (redirectTo) =>
-			`/user/profile${
+			`/user/profileEdit${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
+	profile: {
+		path: "/user/home/profile",
+		getHref: (redirectTo) =>
+			`/user/home/profile${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
+	orderHistory: {
+		path: "/user/home/order",
+		getHref: (redirectTo) =>
+			`/user/home/order${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
+	favourite: {
+		path: "/user/favourite",
+		getHref: (redirectTo) =>
+			`/user/favourite${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
+	address: {
+		path: "/user/addresses",
+		getHref: (redirectTo) =>
+			`/user/addresses${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
 	cookDetails: {
-		path: "/user/cookDetails",
+		path: "/user/home/cook/:id",
 		getHref: (redirectTo) =>
-			`/user/cookDetails${
+			`/user/home/cook/:id${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
+	// user: {
+	// 	profileEdit: {
+	// 	  path: "/user/home/profile",
+	// 	  getHref: (redirectTo) => `/user/home/profile${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
+	// 	},
+	// 	orderHistory: {
+	// 	  path: "/user/home/order",
+	// 	  getHref: () => "/user/home/order",
+	// 	},
+	// 	favorites: {
+	// 	  path: "/user/home/favorites",
+	// 	  getHref: () => "/user/home/favorites",
+	// 	},
+	// 	savedAddresses: {
+	// 	  path: "/user/home/saved-addresses",
+	// 	  getHref: () => "/user/home/saved-addresses",
+	// 	},
+	//   }
 };
   
