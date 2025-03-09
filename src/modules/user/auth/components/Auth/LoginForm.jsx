@@ -1,49 +1,31 @@
-import { useState } from "react";
-import LoginSection from "./LoginSection";  
-import Image from "../../../../../assets/UserImages/healthy.jpg";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { LoginSection } from "./LoginSection";
+import { RegisterSection } from "./RegisterSection";
 
-import RegisterForm from "./RegisterSection";
+export const AuthPage = () => {
+	const location = useLocation();
+	const navigate = useNavigate();
+	const [isSignUp, setIsSignUp] = useState(location.pathname === "/user/register");
 
-const LoginForm = () => {
-  const [isSignUp, setIsSignUp] = useState(false);
+	useEffect(() => {
+		setIsSignUp(location.pathname === "/user/register");
+	}, [location.pathname]);
 
-
-
-  return (
-    <div className="flex justify-center items-center w-screen h-screen bg-gray-100 px-2">
-      <div className="relative w-full h-full bg-white shadow-lg rounded-lg overflow-hidden flex border border-gray-300">
-        <LoginSection  setIsSignUp={setIsSignUp}/>
-		<RegisterForm />
-
-        <div
-          style={{
-            backgroundImage: `url(${Image})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            left: isSignUp ? "0%" : "50%",
-          }}
-          className="absolute inset-0 w-1/2 h-full text-white flex flex-col justify-center items-center transition-all duration-500"
-        >
-          <div className="absolute inset-0 bg-opacity-410"></div>
-          <div className="relative z-10 text-center px-8">
-            <h1 className="text-6xl font-bold mb-3">{isSignUp ? "Welcome Back!" : "Hello, Friends"}</h1>
-            <p className="text-center text-lg max-w-md mx-auto">
-              {isSignUp
-                ? "To keep connected with us, please sign in with your personal info."
-                : "Enter your Personal Details\nStart journey with us"}
-            </p>
-            <button
-              onClick={() => setIsSignUp(!isSignUp)}
-              className="mt-8 text-white bg-green-900 text-xl px-8 py-3 rounded-md transition-all"
-            >
-              {isSignUp ? "Sign In" : "Sign up"}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+	return (
+		<div className="relative w-full h-screen overflow-hidden">
+			<div
+				className={`flex w-[200%] h-full transition-transform duration-500 ease-in-out ${
+					isSignUp ? "-translate-x-1/2" : "translate-x-0"
+				}`}
+			>
+				<div className="w-1/2 flex-shrink-0">
+					<LoginSection setIsSignUp={() => navigate("/user/register")} />
+				</div>
+				<div className="w-1/2 flex-shrink-0">
+					<RegisterSection setIsSignUp={() => navigate("/user/login")} />
+				</div>
+			</div>
+		</div>
+	);
 };
-
-export default LoginForm;

@@ -56,7 +56,7 @@ export const ForgotPassword = () => {
             <div className="flex items-center justify-between">
               <button
                 type="submit"
-                className="bg-[#426B1F] cursor-pointer text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
+                className="bg-[#426B1F] cursor-pointer text-white px-6 py-2 rounded-lg hover:bg-[#426B1F] transition-colors"
               >
                 Send
               </button>

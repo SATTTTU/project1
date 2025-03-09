@@ -1,6 +1,6 @@
 export const InputField = ({ label, name, type, value, onChange, onBlur, error }) => (
     <div>
-      <label className="block text-sm text-gray-600 mb-1">{label}</label>
+      <label className="block text-sm  text-gray-600 mb-1">{label}</label>
       <input
         type={type}
         name={name}

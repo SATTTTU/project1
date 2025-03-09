@@ -17,7 +17,7 @@ export const ResetPassword = () => {
       return;
     }
 
-    if (oldPassword === newPassword) {
+    if (oldPassword ===newPassword) {
       setError("New password must be different from old password");
       return;
     }
