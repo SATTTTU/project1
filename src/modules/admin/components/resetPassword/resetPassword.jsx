@@ -17,7 +17,7 @@ export const ResetPassword = () => {
       setError("Please fill in all fields");
       return;
     }
-    
+
     if (newPassword !== confirmPassword) {
       setError("New passwords do not match");
       return;
@@ -36,7 +36,7 @@ export const ResetPassword = () => {
         oldPassword,
         newPassword,
       });
-      
+
       if (response.status === 200) {
         setSuccess(true);
         setOldPassword("");
@@ -52,7 +52,7 @@ export const ResetPassword = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.9 }}
@@ -61,7 +61,9 @@ export const ResetPassword = () => {
         <div className="mb-4">
           <div className="flex items-center space-x-2 mb-4">
             <FaLock className="text-blue-600" />
-            <h3 className="text-lg font-semibold text-gray-800">Reset Password</h3>
+            <h3 className="text-lg font-semibold text-gray-800">
+              Reset Password
+            </h3>
           </div>
 
           {success ? (
@@ -77,8 +79,8 @@ export const ResetPassword = () => {
           ) : (
             <form className="space-y-4">
               <div>
-                <label 
-                  htmlFor="oldPassword" 
+                <label
+                  htmlFor="oldPassword"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
                   Current Password
@@ -94,8 +96,8 @@ export const ResetPassword = () => {
               </div>
 
               <div>
-                <label 
-                  htmlFor="newPassword" 
+                <label
+                  htmlFor="newPassword"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
                   New Password
@@ -111,8 +113,8 @@ export const ResetPassword = () => {
               </div>
 
               <div>
-                <label 
-                  htmlFor="confirmPassword" 
+                <label
+                  htmlFor="confirmPassword"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
                   Confirm New Password
@@ -135,14 +137,14 @@ export const ResetPassword = () => {
 
               <div>
                 {loading ? (
-                  <button 
+                  <button
                     className="w-full bg-blue-600 text-white py-2 rounded-lg cursor-not-allowed opacity-50"
                     disabled
                   >
                     Resetting...
                   </button>
                 ) : (
-                  <button 
+                  <button
                     onClick={handleResetPassword}
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-all"
                   >
