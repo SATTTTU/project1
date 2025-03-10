@@ -155,52 +155,8 @@ export const AdminDashboard = () => {
             ))}
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Recent Orders */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">
-                  Recent Orders
-                </h2>
-                <Link
-                  to="/admin/orders"
-                  className="text-blue-500 text-sm hover:underline"
-                >
-                  View All
-                </Link>
-              </div>
-              <div className="space-y-4">
-                {recentOrders.map((order, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
-                  >
-                    <div>
-                      <span className="text-sm font-medium text-gray-900">
-                        {order.id}
-                      </span>
-                      <p className="text-sm text-gray-500">{order.customer}</p>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-sm font-medium text-gray-900">
-                        {order.amount}
-                      </span>
-                      <p
-                        className={`text-sm ${
-                          order.status === "Completed"
-                            ? "text-green-500"
-                            : order.status === "Processing"
-                            ? "text-blue-500"
-                            : "text-orange-500"
-                        }`}
-                      >
-                        {order.status}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
+          
 
             {/* Top Performing Cooks */}
             <div className="bg-white rounded-xl shadow-sm p-6">
