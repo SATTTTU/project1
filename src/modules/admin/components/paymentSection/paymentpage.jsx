@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Sidebar } from "../Homepage/aside/aside";
+import { Sidebar } from "../homepage/aside/aside";
 
 export const PaymentPage = () => {
   return (

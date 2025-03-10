@@ -8,7 +8,7 @@ import {
   DollarSign,
   Trash2,
 } from "react-feather";
-import { Sidebar } from "../Homepage/aside/aside";
+import { Sidebar } from "../homepage/aside/aside";
 import { cooksData } from "./Cookpage";
 
 export const CookProfile = () => {

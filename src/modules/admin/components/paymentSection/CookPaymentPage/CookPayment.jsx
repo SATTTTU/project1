@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ChevronRight, CreditCard, DollarSign, Users } from "lucide-react";
-import { Sidebar } from "../../Homepage/aside/aside";
+
 import { Table } from "../../../../../components/ui/tables/tables";
+import { Sidebar } from "../../homepage/aside/aside";
 Table
 export const CookPaymentDetails = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("This Month");
