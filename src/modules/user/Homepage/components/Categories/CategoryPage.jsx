@@ -22,12 +22,10 @@ export const CategoryPage = () => {
   const [addedToCart, setAddedToCart] = useState(null)
 
   useEffect(() => {
-    // Find the category by id
     const categoryData = categoriesData.find((c) => c.id === Number.parseInt(id))
     if (categoryData) {
       setCategory(categoryData)
 
-      // Filter items by category
       const categoryItems = allFoodItems.filter(
         (item) => item.category.toLowerCase() === categoryData.name.toLowerCase(),
       )
@@ -35,28 +33,23 @@ export const CategoryPage = () => {
       setFilteredItems(categoryItems)
     }
 
-    // Scroll to top when component mounts
     window.scrollTo(0, 0)
   }, [id])
 
-  // Apply filters and sorting
   useEffect(() => {
     if (!items.length) return
 
     let result = [...items]
 
-    // Apply price filter
     result = result.filter((item) => {
       const price = Number.parseFloat(item.price)
       return price >= priceRange[0] && price <= priceRange[1]
     })
 
-    // Apply rating filter
     if (ratingFilter > 0) {
       result = result.filter((item) => item.rating >= ratingFilter)
     }
 
-    // Apply sorting
     switch (sortOption) {
       case "price-low-high":
         result.sort((a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price))
@@ -67,7 +60,6 @@ export const CategoryPage = () => {
       case "rating":
         result.sort((a, b) => b.rating - a.rating)
         break
-      // For "recommended" we keep the original order
       default:
         break
     }
@@ -148,7 +140,6 @@ export const CategoryPage = () => {
           </div>
         </div>
 
-        {/* Filter and Sort Controls */}
         <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center">
           <button
             className="mb-4 md:mb-0 flex items-center px-4 py-2 bg-white border rounded-lg shadow-sm hover:bg-gray-50"
@@ -173,7 +164,6 @@ export const CategoryPage = () => {
           </div>
         </div>
 
-        {/* Filter Panel */}
         {isFilterOpen && (
           <div className="bg-white rounded-lg shadow-md p-6 mb-8">
             <h3 className="font-bold text-lg mb-4">Filters</h3>
