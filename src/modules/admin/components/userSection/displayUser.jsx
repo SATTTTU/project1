@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Sidebar } from "../Homepage/aside/aside";
+import { Sidebar } from "../homepage/aside/aside";
 import { Pagination } from "../../../../components/ui/pagination/pagination";
 import { Table } from "../../../../components/ui/tables/tables"; // Importing the Table component
 

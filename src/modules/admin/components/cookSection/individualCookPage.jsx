@@ -8,8 +8,8 @@ import {
   DollarSign,
   Trash2,
 } from "react-feather";
-import { Sidebar } from "../Homepage/aside/aside";
-import { cooksData } from "./Cookpage";
+import { Sidebar } from "../homepage/aside/aside";
+import { cooksData } from "./cookPage";
 
 export const CookProfile = () => {
   const { id } = useParams();

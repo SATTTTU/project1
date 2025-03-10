@@ -2,13 +2,13 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { FcGoogle } from "react-icons/fc";
-import { signInSchema } from "../../../../../modules/user/auth/formik/schema/authSchema";
 import { Link } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import Image from "../../../../../assets/UserImages/login.jpg";
 
 import { InputField } from "./InputField";
+import { signInSchema } from "../../formik/schema/authschema";
 
 export const LoginSection = ({ setIsSignUp }) => {
 	const navigate = useNavigate();
