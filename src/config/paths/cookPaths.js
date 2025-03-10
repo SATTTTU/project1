@@ -67,6 +67,20 @@ export const cookPaths = {
         redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
       }`,
   },
+  menupage: {
+    path: "/cook/menu",
+    getHref: (redirectTo) =>
+      `/cook/menu${
+        redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+      }`,
+  },
+  historyPage: {
+    path: "/cook/history",
+    getHref: (redirectTo) =>
+      `/cook/history${
+        redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+      }`,
+  },
   cookProfile: {
     path: "/cook/profile",
     getHref: (redirectTo) =>

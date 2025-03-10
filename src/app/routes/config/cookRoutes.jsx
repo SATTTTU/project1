@@ -121,6 +121,26 @@ export const cookRoutes = [
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
+          {
+            path: paths.cook.menupage.path,
+            lazy: async () => {
+              const { MenuPage } = await import(
+                "../../../modules/cook/components/menuPage/menuPage"
+              );
+              return { Component: MenuPage };
+            },
+            ErrorBoundary: AppRootErrorBoundary,
+          },
+          {
+            path: paths.cook.historyPage.path,
+            lazy: async () => {
+              const { historyPage } = await import(
+                "../../../modules/cook/components/historyPage/historyPage"
+              );
+              return { Component: historyPage };
+            },
+            ErrorBoundary: AppRootErrorBoundary,
+          },
         ],
       },
       // {
