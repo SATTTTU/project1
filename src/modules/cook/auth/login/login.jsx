@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import authimage from "../../../../assets/background1.jpg";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 
 export const Login = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -13,6 +14,7 @@ export const Login = () => {
     rememberMe: false,
   });
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // **Zod Schema for Validation**
   const formSchema = z.object({
@@ -27,6 +29,11 @@ export const Login = () => {
       ...prevData,
       [name]: type === "checkbox" ? checked : value,
     }));
+
+    // Clear error for this field when user types
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
   };
 
   // **Validation Function**
@@ -50,10 +57,29 @@ export const Login = () => {
   // **Handle Submit**
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!validate()) return; // Stop if validation fails
+    setIsSubmitting(true);
+
+    if (!validate()) {
+      setIsSubmitting(false);
+      return; // Stop if validation fails
+    }
 
     console.log("Form Submitted:", formData);
-    // Add API call or navigation logic here
+
+    // Simulate API call
+    setTimeout(() => {
+      setIsSubmitting(false);
+      // If login is successful, navigate to homepage
+      navigate("/cook/Homepage");
+    }, 1000);
+
+    // In a real app, you would do:
+    // loginUser(formData)
+    //   .then(() => navigate("/cook/Homepage"))
+    //   .catch(err => {
+    //     setErrors({ general: "Login failed. Please check your credentials." });
+    //     setIsSubmitting(false);
+    //   });
   };
 
   return (
@@ -64,6 +90,12 @@ export const Login = () => {
             <h1 className="mb-10 text-3xl font-bold text-[#4b6c1e]">
               Login as Cook
             </h1>
+
+            {errors.general && (
+              <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
+                {errors.general}
+              </div>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Email Field */}
@@ -78,7 +110,9 @@ export const Login = () => {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="example@gmail.com"
-                  className="w-full rounded border border-gray-300 px-4 py-3 focus:border-[#4b6c1e] focus:outline-none"
+                  className={`w-full rounded border ${
+                    errors.email ? "border-red-500" : "border-gray-300"
+                  } px-4 py-3 focus:border-[#4b6c1e] focus:outline-none`}
                 />
                 {errors.email && (
                   <p className="text-red-500 text-sm">{errors.email}</p>
@@ -101,7 +135,9 @@ export const Login = () => {
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="••••••••"
-                    className="w-full rounded border border-gray-300 px-4 py-3 focus:border-[#4b6c1e] focus:outline-none"
+                    className={`w-full rounded border ${
+                      errors.password ? "border-red-500" : "border-gray-300"
+                    } px-4 py-3 focus:border-[#4b6c1e] focus:outline-none`}
                   />
                   <button
                     type="button"
@@ -147,13 +183,13 @@ export const Login = () => {
               </div>
 
               {/* Submit Button */}
-              <Link
-                to="/cook/Homepage"
+              <button
                 type="submit"
-                className="w-full p-10 rounded cursor-pointer bg-[#4b6c1e] py-3 text-white transition-colors hover:bg-[#3d5819]"
+                disabled={isSubmitting}
+                className="w-full rounded cursor-pointer bg-[#4b6c1e] py-3 text-white transition-colors hover:bg-[#3d5819] disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
-                Log in
-              </Link>
+                {isSubmitting ? "Logging in..." : "Log in"}
+              </button>
             </form>
 
             {/* OR Divider */}
@@ -168,19 +204,19 @@ export const Login = () => {
               type="button"
               className="flex w-full items-center cursor-pointer justify-center rounded border border-gray-300 bg-white py-3 text-gray-700 transition-colors hover:bg-gray-50"
             >
-              <FcGoogle size={20} />
+              <FcGoogle size={20} className="mr-2" />
               Continue with Google
             </button>
           </div>
         </div>
 
         {/* Background Image & Sign-Up Section */}
-        <div className="relative flex w-1/2">
+        <div className="relative hidden md:flex w-1/2">
           <div className="absolute inset-0 bg-black/30 z-10"></div>
           <img
             src={authimage}
             alt="Delicious food plate"
-            className="object-cover"
+            className="object-cover w-full"
           />
           <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-white p-12">
             <h2 className="text-4xl font-bold mb-4">Hello, Friends</h2>
