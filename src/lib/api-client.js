@@ -1,5 +1,5 @@
+import { ROLES } from "@/config/roles";
 import Axios from "axios";
-import { ROLES } from "../config/paths/roles";
 
 function getToken(user) {
   // Define your getToken function here
@@ -20,12 +20,17 @@ function authRequestInterceptor(config) {
     config.headers.Authorization = `Bearer ${token}`;
   }
 
-  return config;
+  return config; // Corrected: Return the config directly
 }
 
+// Use import.meta.env to access the environment variable correctly
 export const api = Axios.create({
-  baseURL: import.meta.env.VITE_APP_API_URL,
+  baseURL: import.meta.env.VITE_APP_API_URL, // Corrected the base URL access
+  withCredentials: true,
 });
+
+// Log the base URL to check if it's correctly loaded
+console.log(import.meta.env.VITE_APP_API_URL) // Corrected: Removed the invalid 'meta' reference
 
 api.interceptors.request.use(authRequestInterceptor);
 

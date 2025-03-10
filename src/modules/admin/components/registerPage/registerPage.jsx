@@ -3,45 +3,34 @@ import Label from "../../../../components/ui/label/label";
 import Button from "../../../../components/ui/button/Button";
 import Card from "../../../../components/ui/card/Card";
 import Input from "../../../../components/ui/input/input";
+import { useAdminRegisterFormik } from "../../auth/formik/useAdminlogin";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
-const LoginPage = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
+const AdminLoginPage = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const { formik, isLoading } = useAdminRegisterFormik({
+    mutationConfig: {
+      onSuccess: (data) => {
+        console.log("Admin Login Successful:", data);
+        // Redirect to the Admin Dashboard or Home page
+      },
+      onError: (error) => {
+        console.error("Login failed:", error);
+        // Handle login error
+      },
+    },
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted", formData);
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <Card className="w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-4">Admin Login</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="name">Name</Label>
-            <Input
-              id="name"
-              name="name"
-              type="text"
-              placeholder="Enter your name"
-              value={formData.name}
-              onChange={handleInputChange}
-              required
-              className="w-full"
-            />
-          </div>
-
+        <form onSubmit={formik.handleSubmit} className="space-y-4">
+          {/* Email Input */}
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -49,15 +38,50 @@ const LoginPage = () => {
               name="email"
               type="email"
               placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleInputChange}
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               required
               className="w-full"
             />
+            {formik.touched.email && formik.errors.email && (
+              <div className="text-red-500 text-sm">{formik.errors.email}</div>
+            )}
           </div>
 
-          <Button type="submit" className="w-full">
-            Login
+          {/* Password Input */}
+          <div className="space-y-2 relative">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter your password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              required
+              className="w-full"
+            />
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className="absolute right-3 top-12 transform -translate-y-1/2 text-gray-500"
+            >
+              {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+            </button>
+            {formik.touched.password && formik.errors.password && (
+              <div className="text-red-500 text-sm">{formik.errors.password}</div>
+            )}
+          </div>
+
+          {/* Login Button */}
+          <Button
+            type="submit"
+            disabled={isLoading || formik.isSubmitting || !formik.isValid}
+            className="w-full"
+          >
+            {isLoading ? "Logging In..." : "Login"}
           </Button>
         </form>
       </Card>
@@ -65,4 +89,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default AdminLoginPage;
