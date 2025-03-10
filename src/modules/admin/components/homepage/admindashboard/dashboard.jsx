@@ -9,7 +9,8 @@ import {
   FaClipboardList,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
-import { ProfileCard } from "./Profile/AdminInformation";
+import { ProfileCard } from "./profile/adminInformation";
+
 import { Sidebar } from "../aside/aside";
 import { Link } from "react-router-dom";
 

@@ -3,10 +3,11 @@ import { useState } from "react";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { InputField } from "./InputField";
 import { FcGoogle } from "react-icons/fc";
-import { signUpSchema } from "../../../../../modules/user/auth/formik/schema/authSchema";
+
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import Image from "../../../../../assets/UserImages/login.jpg";
 import { Link, useNavigate } from "react-router-dom";
+import { signUpSchema } from "../../formik/schema/authschema";
 
 export const RegisterSection = ({ setIsSignUp }) => {
   const navigate = useNavigate();

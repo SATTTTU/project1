@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ChevronRight, CreditCard, DollarSign, Users } from "lucide-react";
-import { Sidebar } from "../../Homepage/aside/aside";
+
 import { Table } from "../../../../../components/ui/tables/tables";
 import { WithdrawalRequestMessage } from "@/components/ui/withdrawalrequest/withdrawalrequest";
 
@@ -120,9 +120,7 @@ export const CookPaymentDetails = () => {
 
   const handleReject = (id) => {
     setWithdrawRequests((prev) =>
-      prev.map((req) =>
-        req.id === id ? { ...req, status: "rejected" } : req
-      )
+      prev.map((req) => (req.id === id ? { ...req, status: "rejected" } : req))
     );
   };
 
@@ -276,4 +274,3 @@ export const CookPaymentDetails = () => {
     </section>
   );
 };
-
