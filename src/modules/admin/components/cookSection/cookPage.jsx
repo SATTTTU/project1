@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Sidebar } from "../Homepage/aside/aside";
 import { useNavigate } from "react-router-dom";
 import { Pagination } from "../../../../components/ui/pagination/pagination";
-import { Table } from "../../../../components/ui/tables/tables"; // Importing the Table component
+import { Table } from "../../../../components/ui/tables/tables";
 
 const Input = ({ placeholder, value, onChange }) => (
   <input
@@ -80,6 +80,26 @@ const cooksData = [
   },
 ];
 
+// Helper function to render star ratings
+const renderStarRating = (rating) => {
+  if (rating === null) return "No ratings";
+
+  const totalStars = 5;
+  const filledStars = Math.round(rating / 20); // Convert percentage to stars (e.g., 40% = 2 stars)
+  const emptyStars = totalStars - filledStars;
+
+  return (
+    <div className="flex justify-center">
+      {[...Array(filledStars)].map((_, index) => (
+        <span key={`filled-${index}`} className="text-yellow-500">★</span>
+      ))}
+      {[...Array(emptyStars)].map((_, index) => (
+        <span key={`empty-${index}`} className="text-gray-300">☆</span>
+      ))}
+    </div>
+  );
+};
+
 export const AdminCooksTable = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
@@ -92,9 +112,9 @@ export const AdminCooksTable = () => {
 
   const ratingRanges = {
     "no-rating": (cook) => cook.rating === null,
-    low: (cook) => cook.rating < 50,
-    medium: (cook) => cook.rating >= 50 && cook.rating < 75,
-    high: (cook) => cook.rating >= 75,
+    low: (cook) => cook.rating !== null && cook.rating < 40, // Less than 2 stars (<40%)
+    medium: (cook) => cook.rating >= 40 && cook.rating < 80, // 2 to 4 stars (40% to <80%)
+    high: (cook) => cook.rating >= 80, // 4+ stars (80%+)
   };
 
   const filteredCooks = cooksData
@@ -119,16 +139,24 @@ export const AdminCooksTable = () => {
     currentPage * itemsPerPage
   );
 
-  // Define columns for the Table
-  const columns = ["Name", "Status", "Rating", "Products Sold", "Actions"];
+  // Define columns for the Table with explicit widths for alignment
+  const columns = [
+    { header: "Name", width: "25%", align: "left" },
+    { header: "Status", width: "20%", align: "center" },
+    { header: "Rating", width: "20%", align: "center" },
+    { header: "Products Sold", width: "20%", align: "center" },
+    { header: "Actions", width: "15%", align: "center" },
+  ];
 
-  // Define the renderRow function for the Table
+  // Define the renderRow function with aligned cells and star ratings
   const renderRow = ({ id, name, status, rating, productsSold }) => (
     <tr key={id} className="border-b hover:bg-gray-100">
-      <td className="p-3">{name}</td>
-      <td className="p-3">
+      <td className="p-3 text-left align-middle" style={{ width: "25%" }}>
+        {name}
+      </td>
+      <td className="p-3 text-center align-middle" style={{ width: "20%" }}>
         <span
-          className={`px-2 py-1 rounded-full text-xs ${
+          className={`inline-block px-2 py-1 rounded-full text-xs whitespace-nowrap ${
             status === "Verified"
               ? "bg-green-100 text-green-800"
               : status === "Pending"
@@ -139,9 +167,13 @@ export const AdminCooksTable = () => {
           {status}
         </span>
       </td>
-      <td className="p-3">{rating ? `${rating}%` : "No ratings"}</td>
-      <td className="p-3">{productsSold}</td>
-      <td className="p-3">
+      <td className="p-3 text-center align-middle" style={{ width: "20%" }}>
+        {renderStarRating(rating)}
+      </td>
+      <td className="p-3 text-center align-middle" style={{ width: "20%" }}>
+        {productsSold}
+      </td>
+      <td className="p-3 text-center align-middle" style={{ width: "15%" }}>
         <button
           onClick={() => navigate(`/admin/cook-profile/${id}`)}
           className="text-blue-500 hover:underline"
@@ -177,21 +209,35 @@ export const AdminCooksTable = () => {
             options={[
               { label: "All Ratings", value: "all" },
               { label: "No Rating", value: "no-rating" },
-              { label: "Low (<50%)", value: "low" },
-              { label: "Medium (50-75%)", value: "medium" },
-              { label: "High (75%+)", value: "high" },
+              { label: "Less than 2 stars", value: "low" },
+              { label: "2 to 4 stars", value: "medium" },
+              { label: "4+ stars", value: "high" },
             ]}
             value={ratingFilter}
             onChange={(e) => setRatingFilter(e.target.value)}
           />
         </div>
 
-        {/* Using the Table component */}
-        <Table
-          columns={columns}
-          data={paginatedCooks}
-          renderRow={renderRow}
-        />
+        <div className="overflow-x-auto">
+          <table className="min-w-full table-fixed border-collapse">
+            <thead>
+              <tr className="bg-gray-200">
+                {columns.map((col) => (
+                  <th
+                    key={col.header}
+                    className={`p-3 font-semibold text-gray-700 ${
+                      col.align === "center" ? "text-center" : "text-left"
+                    } align-middle`}
+                    style={{ width: col.width }}
+                  >
+                    {col.header}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>{paginatedCooks.map((cook) => renderRow(cook))}</tbody>
+          </table>
+        </div>
 
         <Pagination
           currentPage={currentPage}
