@@ -7,14 +7,8 @@ import Logo from "../../../../assets/logo.jpg";
 import { Profile } from "../../auth/components/Profile/Profile";
 
 export const Header = () => {
-	// const navigate = useNavigate();
-	// const [totalQuantity, setTotalQuantity] = useState(0);
 	const carts = useSelector((store) => store.cart.items);
-	// useEffect(() => {
-	// 	let total = 0;
-	// 	carts.forEach((item) => (total += item.quantity));
-	// 	setTotalQuantity(total);
-	// }, [carts]);
+	
 
 	const getTotalCartItems = () => {
 		return carts.reduce((total, item) => total + item.quantity, 0);

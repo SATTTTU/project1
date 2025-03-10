@@ -125,7 +125,7 @@ export const Cart = () => {
         <div className="bg-white shadow-sm">
           <div className="container mx-auto px-4 py-3">
             <div className="flex items-center justify-between">
-              <Link to="/" className="flex items-center">
+              <Link to="/user/home" className="flex items-center">
                 <img src={Logo || "/placeholder.svg"} alt="KhanaBox" className="h-10 w-10 mr-2" />
                 <span className="text-xl font-bold text-green-600">KhanaBox</span>
               </Link>
@@ -182,7 +182,7 @@ export const Cart = () => {
       <div className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            <Link to="/user/hom" className="flex items-center">
+            <Link to="/user/home" className="flex items-center">
               <img src={Logo || "/placeholder.svg"} alt="KhanaBox" className="h-10 w-10 mr-2" />
               <span className="text-3xl font-bold text-green-600">KhanaBox</span>
             </Link>

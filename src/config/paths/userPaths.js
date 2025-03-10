@@ -1,7 +1,7 @@
 export const userPaths = {
 	root: {
-		path: "/user",
-		getHref: () => "/user",
+		path: "/",
+		getHref: () => "/",
 	},
 
 	register: {
@@ -103,29 +103,47 @@ export const userPaths = {
 			}`,
 	},
 	cookDetails: {
-		path: "/user/home/cook/:id",
+		path: "/cook/:id",
 		getHref: (redirectTo) =>
-			`/user/home/cook/:id${
+			`/cook/:id${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
-	// user: {
-	// 	profileEdit: {
-	// 	  path: "/user/home/profile",
-	// 	  getHref: (redirectTo) => `/user/home/profile${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
-	// 	},
-	// 	orderHistory: {
-	// 	  path: "/user/home/order",
-	// 	  getHref: () => "/user/home/order",
-	// 	},
-	// 	favorites: {
-	// 	  path: "/user/home/favorites",
-	// 	  getHref: () => "/user/home/favorites",
-	// 	},
-	// 	savedAddresses: {
-	// 	  path: "/user/home/saved-addresses",
-	// 	  getHref: () => "/user/home/saved-addresses",
-	// 	},
-	//   }
+	foodCategories: {
+		path: "/category/:id",
+		getHref: (redirectTo) =>
+			`/category/:id${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
+	foodDetails: {
+		path: "/food/:id",
+		getHref: (redirectTo) =>
+			`/food/:id${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
+	categoryFoodDetails:{
+		path: "/details/:id",
+		getHref: (redirectTo) =>
+			`/details/:id${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
+	mainPage:{
+		path: "/mainpage",
+		getHref: (redirectTo) =>
+			`/mainpage${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
+	about:{
+		path: "/about",
+		getHref: (redirectTo) =>
+			`/about${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
+
 };
   
