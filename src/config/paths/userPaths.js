@@ -130,23 +130,20 @@ export const userPaths = {
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
-	// user: {
-	// 	profileEdit: {
-	// 	  path: "/user/home/profile",
-	// 	  getHref: (redirectTo) => `/user/home/profile${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
-	// 	},
-	// 	orderHistory: {
-	// 	  path: "/user/home/order",
-	// 	  getHref: () => "/user/home/order",
-	// 	},
-	// 	favorites: {
-	// 	  path: "/user/home/favorites",
-	// 	  getHref: () => "/user/home/favorites",
-	// 	},
-	// 	savedAddresses: {
-	// 	  path: "/user/home/saved-addresses",
-	// 	  getHref: () => "/user/home/saved-addresses",
-	// 	},
-	//   }
+	mainPage:{
+		path: "/mainpage",
+		getHref: (redirectTo) =>
+			`/mainpage${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
+	about:{
+		path: "/about",
+		getHref: (redirectTo) =>
+			`/about${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
+
 };
   

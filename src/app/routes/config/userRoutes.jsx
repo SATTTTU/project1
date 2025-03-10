@@ -169,6 +169,24 @@ export const userRoutes = [
 							return { Component: FoodDetails };
 						},
 					},
+					{
+						path: paths.user.mainPage.path,
+						lazy: async () => {
+							const { HomePage } = await import(
+								"../../../modules/user/LandingPage/HomePage"
+							);
+							return { Component: HomePage };
+						},
+					},
+					{
+						path: paths.user.about.path,
+						lazy: async () => {
+							const { About } = await import(
+								"../../../modules/user/LandingPage/components/About"
+							);
+							return { Component: About };
+						},
+					},
 				],
 			},
 		],

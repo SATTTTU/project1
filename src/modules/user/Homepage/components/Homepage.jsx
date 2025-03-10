@@ -17,7 +17,7 @@ import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
 import { useSelector, useDispatch } from "react-redux"
-import { Header } from "./header" // Import the Header component
+import { Header } from "./header" 
 import { addToCart } from "../../../../store/cart/cart"
 import { FiStar, FiClock, FiSearch } from "react-icons/fi"
 import { Footer } from "./Footer"
