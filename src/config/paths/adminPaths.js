@@ -34,6 +34,11 @@ export const adminPaths = {
       getHref: (redirectTo) =>
         `/admin/cook-payments${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
     },
+    reports: {
+      path: "/admin/reports",
+      getHref: (redirectTo) =>
+        `/admin/reports${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
+    },
     dashboard: {
       path: "/admin/dashboard",
       getHref: (redirectTo) =>

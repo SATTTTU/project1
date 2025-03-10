@@ -16,7 +16,7 @@ export const Sidebar = () => {
     { to: "/admin/userDetails", icon: <CiUser />, text: "User" },
     { to: "/admin/cookDetails", icon: <FaCookie />, text: "Cook" },
     { to: "/admin/paymentpage", icon: <MdPayments />, text: "Payments" },
-    { to: "/reports", icon: <TbReportSearch />, text: "Reports" },
+    { to: "/admin/reports", icon: <TbReportSearch />, text: "Reports" },
     { to: "/contact", icon: <IoIosContacts />, text: "Contact" },
   ];
 

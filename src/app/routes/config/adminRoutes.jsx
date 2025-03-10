@@ -52,6 +52,16 @@ export const adminRoutes = [
             ErrorBoundary: AppRootErrorBoundary,
           },
           {
+            path: paths.admin.reports.path,
+            lazy: async () => {
+              const { ReportsRoute } = await import(
+                "../../routes/admin/auth/components/messagepage/report"
+              );
+              return { Component: ReportsRoute };
+            },
+            ErrorBoundary: AppRootErrorBoundary,
+          },
+          {
             path: "cook-profile/:id",
             lazy: async () => {
               const { CookPageProfileRoute } = await import(
