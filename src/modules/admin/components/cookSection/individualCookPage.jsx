@@ -9,7 +9,7 @@ import {
   Trash2,
 } from "react-feather";
 import { Sidebar } from "../homepage/aside/aside";
-import { cooksData } from "./Cookpage";
+import { cooksData } from "./cookPage";
 
 export const CookProfile = () => {
   const { id } = useParams();
