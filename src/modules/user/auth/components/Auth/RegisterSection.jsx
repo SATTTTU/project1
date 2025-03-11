@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUserRegisterFormik } from "../../formik/useRegister";
 import { useState } from "react";
 
-export const RegisterSection = ({ setIsSignUp }) => {
+export const RegisterSection = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const { formik, isRegistering } = useUserRegisterFormik({

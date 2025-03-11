@@ -105,8 +105,8 @@ export const AdminCooksTable = () => {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [ratingFilter, setRatingFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("name");
-  const [sortOrder, setSortOrder] = useState("asc");
+  const [sortBy] = useState("name");
+  const [sortOrder] = useState("asc");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 

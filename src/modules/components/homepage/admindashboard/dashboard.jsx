@@ -8,7 +8,7 @@ import {
   FaMoneyBillWave,
   FaClipboardList,
 } from "react-icons/fa";
-import {  AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ProfileCard } from "./profile/adminInformation";
 
 import { Sidebar } from "../aside/aside";
@@ -49,7 +49,26 @@ export const AdminDashboard = () => {
     },
   ];
 
-
+  const recentOrders = [
+    {
+      id: "#ORD-7829",
+      customer: "Rahul Sharma",
+      amount: "₹450",
+      status: "Completed",
+    },
+    {
+      id: "#ORD-7830",
+      customer: "Priya Patel",
+      amount: "₹780",
+      status: "Processing",
+    },
+    {
+      id: "#ORD-7831",
+      customer: "Amit Kumar",
+      amount: "₹290",
+      status: "Pending",
+    },
+  ];
 
   const topCooks = [
     { name: "Meera's Kitchen", rating: 4.8, orders: 156, earnings: "₹25,400" },

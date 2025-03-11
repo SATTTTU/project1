@@ -3,19 +3,19 @@ import Label from "../../../../components/ui/label/label";
 import Button from "../../../../components/ui/button/Button";
 import Card from "../../../../components/ui/card/Card";
 import Input from "../../../../components/ui/input/input";
-import { useAdminRegisterFormik } from "../../auth/formik/useAdminlogin";
+import { useAdminRegisterFormik } from "../../auth/formik/useAdminRegister";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
-const AdminLoginPage = () => {
+const AdminRegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { formik, isLoading } = useAdminRegisterFormik({
     mutationConfig: {
       onSuccess: (data) => {
-        console.log("Admin Login Successful:", data);
+        console.log("Admin Registration Successful:", data);
       },
       onError: (error) => {
-        console.error("Login failed:", error);
+        console.error("Registration failed:", error);
       },
     },
   });
@@ -27,8 +27,26 @@ const AdminLoginPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <Card className="w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-4">Admin Login</h2>
+        <h2 className="text-2xl font-bold text-center mb-4">Admin Sign Up</h2>
         <form onSubmit={formik.handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="name">Full Name</Label>
+            <Input
+              id="name"
+              name="name"
+              type="text"
+              placeholder="Enter your full name"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              required
+              className="w-full"
+            />
+            {formik.touched.name && formik.errors.name && (
+              <div className="text-red-500 text-sm">{formik.errors.name}</div>
+            )}
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -77,21 +95,17 @@ const AdminLoginPage = () => {
             disabled={isLoading || formik.isSubmitting || !formik.isValid}
             className="w-full cursor-pointer"
           >
-            {isLoading ? "Logging In..." : "Login"}
+            {isLoading ? "Signing Up..." : "Sign Up"}
           </Button>
         </form>
 
         <div className="text-center mt-4">
-          <Link to="/forgot-password" className="text-blue-500 hover:underline">Forgot Password?</Link>
-        </div>
-
-        <div className="text-center mt-2">
-          <span className="text-gray-600">Don't have an account? </span>
-          <Link to="/signup" className="text-blue-500 hover:underline">Sign Up</Link>
+          <span className="text-gray-600">Already have an account? </span>
+          <Link to="/login" className="text-blue-500 hover:underline">Login</Link>
         </div>
       </Card>
     </div>
   );
 };
 
-export default AdminLoginPage;
+export default AdminRegisterPage;

@@ -3,7 +3,11 @@ export const adminPaths = {
       path: "/admin",
       getHref: () => "/admin",
     },
-   
+    register: {
+      path: "/admin/register",
+      getHref: (redirectTo) =>
+        `/admin/register${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
+    },
     login: {
       path: "/admin/login",
       getHref: (redirectTo) =>
@@ -59,6 +63,11 @@ export const adminPaths = {
       path: "/admin/cookDetails",
       getHref: (redirectTo) =>
         `/admin/cookDetails${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
+    },
+     cookProfile : {
+      path: "/admin/cookDetails/:id", // Changed to match the route path
+      getHref: (id, redirectTo) =>
+        `/admin/cookDetails/${id}${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
     },
     paymentsettingroute: {
       path: "/admin/payment-setting",
