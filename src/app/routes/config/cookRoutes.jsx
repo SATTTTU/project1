@@ -44,19 +44,15 @@ export const cookRoutes = [
           {
             path: paths.cook.homepage.path,
             lazy: async () => {
-              const { homepage } = await import(
-                "../../../modules/cook/components/homepage/homepage"
-              );
-              return { Component: homepage };
+              const { Homepage } = await import("../cook/homepage/homepage");
+              return { Component: Homepage };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
           {
             path: paths.cook.orderpage.path,
             lazy: async () => {
-              const { OrderPage } = await import(
-                "../../../modules/cook/components/orderpage/orderPage"
-              );
+              const { OrderPage } = await import("../cook/order/order");
               return { Component: OrderPage };
             },
             ErrorBoundary: AppRootErrorBoundary,
@@ -64,10 +60,8 @@ export const cookRoutes = [
           {
             path: paths.cook.cookProfile.path,
             lazy: async () => {
-              const { cookProfile } = await import(
-                "../../../modules/cook/components/cookProfile/cookProfile"
-              );
-              return { Component: cookProfile };
+              const { ProfileRoute } = await import("../cook/profile/profile");
+              return { Component: ProfileRoute };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
@@ -75,7 +69,7 @@ export const cookRoutes = [
             path: paths.cook.earningsPage.path,
             lazy: async () => {
               const { EarningsPage } = await import(
-                "../../../modules/cook/components/earningsPage/earningsPage"
+                "../cook/earnings/earnings"
               );
               return { Component: EarningsPage };
             },
@@ -124,9 +118,7 @@ export const cookRoutes = [
           {
             path: paths.cook.menupage.path,
             lazy: async () => {
-              const { MenuPage } = await import(
-                "../../../modules/cook/components/menuPage/menuPage"
-              );
+              const { MenuPage } = await import("../cook/menu/menu");
               return { Component: MenuPage };
             },
             ErrorBoundary: AppRootErrorBoundary,
@@ -134,10 +126,8 @@ export const cookRoutes = [
           {
             path: paths.cook.historyPage.path,
             lazy: async () => {
-              const { historyPage } = await import(
-                "../../../modules/cook/components/historyPage/historyPage"
-              );
-              return { Component: historyPage };
+              const { HistoryPage } = await import("../cook/history/history");
+              return { Component: HistoryPage };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
