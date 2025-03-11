@@ -1,0 +1,5 @@
+services:
+  webserver:
+    image: nginx
+    volumes:
+      - ./dist:/usr/share/nginx/html/

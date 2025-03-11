@@ -6,7 +6,7 @@ export const userRoutes = [
 	{
 		path: paths.user.root.path,
 		element: <Outlet />,
-		ErrorBoundary: AppRootErrorBoundary,
+		// ErrorBoundary: AppRootErrorBoundary,
 		children: [
 			{
 				element: <AuthRoot />,
@@ -47,6 +47,15 @@ export const userRoutes = [
 								"../../../modules/user/auth/components/ForgetPassword/ForgetPassword"
 							);
 							return { Component: ForgotPassword };
+						},
+					},
+					{
+						path: paths.user.changePassword.path,
+						lazy: async () => {
+							const { ChangePassword } = await import(
+								"../../../modules/user/auth/components/ChangePassword/ChangePassword"
+							);
+							return { Component: ChangePassword };
 						},
 					},
 					{
@@ -101,6 +110,15 @@ export const userRoutes = [
 							return { Component: Profile };
 						},
 					},
+					{
+						path: paths.user.authPage.path,
+						lazy: async () => {
+							const { Home } = await import(
+								"../../../modules/user/LandingPage/components/Home"
+							);
+							return { Component: Home };
+						},
+					},
 					// {
 					// 	path: paths.user.orderHistory.path,
 					// 	lazy: async () => {
@@ -140,6 +158,51 @@ export const userRoutes = [
 								"../../../modules/user/Homepage/components/CookProfile/CookProfile"
 							);
 							return { Component: CookProfile };
+						},
+					},
+					{
+						path: paths.user.foodCategories.path,
+						lazy: async () => {
+							const { CategoryPage } = await import(
+								"../../../modules/user/Homepage/components/Categories/CategoryPage"
+							);
+							return { Component: CategoryPage };
+						},
+					},
+					{
+						path: paths.user.foodDetails.path,
+						lazy: async () => {
+							const { FoodDetails } = await import(
+								"../../../modules/user/Homepage/components/FoodDetails/FoodDetails"
+							);
+							return { Component: FoodDetails };
+						},
+					},
+					{
+						path: paths.user.categoryFoodDetails.path,
+						lazy: async () => {
+							const { FoodDetails } = await import(
+								"../../../modules/user/Homepage/components/FoodDetails/FoodDetails"
+							);
+							return { Component: FoodDetails };
+						},
+					},
+					{
+						path: paths.user.mainPage.path,
+						lazy: async () => {
+							const { HomePage } = await import(
+								"../../../modules/user/LandingPage/HomePage"
+							);
+							return { Component: HomePage };
+						},
+					},
+					{
+						path: paths.user.about.path,
+						lazy: async () => {
+							const { About } = await import(
+								"../../../modules/user/LandingPage/components/About"
+							);
+							return { Component: About };
 						},
 					},
 				],

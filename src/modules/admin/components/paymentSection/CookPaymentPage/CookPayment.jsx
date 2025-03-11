@@ -3,42 +3,42 @@ import { Link } from "react-router-dom";
 import { ChevronRight, CreditCard, DollarSign, Users } from "lucide-react";
 
 import { Table } from "../../../../../components/ui/tables/tables";
-import { Sidebar } from "../../homepage/aside/aside";
-Table
+import { WithdrawalRequestMessage } from "@/components/ui/withdrawalrequest/withdrawalrequest";
+
 export const CookPaymentDetails = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("This Month");
   const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [withdrawRequests, setWithdrawRequests] = useState([
     {
-      id: 1,
+      id: "1",
       cookId: 1,
-      name: "Martha",
+      amount: 1200.0,
+      user: "Martha",
       email: "marthaa@example.com",
       image: "/api/placeholder/60/60",
-      amount: "1200.00",
-      requestDate: "Mar 5, 2025",
-      status: "Pending"
+      date: "Mar 5, 2025",
+      status: "pending",
     },
     {
-      id: 2,
+      id: "2",
       cookId: 3,
-      name: "Samuel",
+      amount: 850.5,
+      user: "Samuel",
       email: "sam224@example.com",
       image: "/api/placeholder/60/60",
-      amount: "850.50",
-      requestDate: "Mar 6, 2025",
-      status: "Pending"
+      date: "Mar 6, 2025",
+      status: "pending",
     },
     {
-      id: 3,
+      id: "3",
       cookId: 5,
-      name: "Cindy",
+      amount: 1750.0,
+      user: "Cindy",
       email: "cindy@example.com",
       image: "/api/placeholder/60/60",
-      amount: "1750.00",
-      requestDate: "Mar 4, 2025",
-      status: "Pending"
-    }
+      date: "Mar 4, 2025",
+      status: "pending",
+    },
   ]);
 
   const stats = {
@@ -93,65 +93,66 @@ export const CookPaymentDetails = () => {
     setFilteredTransactions(filteredData);
   }, [selectedPeriod]);
 
-  const handleApproveRequest = (requestId) => {
-    setWithdrawRequests(prev => 
-      prev.map(req => 
-        req.id === requestId 
-          ? {...req, status: "Processing"} 
-          : req
+  const handleApprove = (id) => {
+    setWithdrawRequests((prev) =>
+      prev.map((req) =>
+        req.id === id ? { ...req, status: "processing" } : req
       )
     );
-    
-    // Add to transactions
-    const request = withdrawRequests.find(req => req.id === requestId);
+
+    const request = withdrawRequests.find((req) => req.id === id);
     if (request) {
       const newTransaction = {
         id: `#PAY-${9000 + Math.floor(Math.random() * 100)}`,
-        date: new Date().toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'}),
+        date: new Date().toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        }),
         cookId: request.cookId,
-        description: `Payment to Chef ${request.name}`,
-        amount: `-Rs.${request.amount}`,
-        status: "Processing"
+        description: `Payment to Chef ${request.user}`,
+        amount: `-Rs.${request.amount.toFixed(2)}`,
+        status: "Processing",
       };
-      
-      setFilteredTransactions(prev => [newTransaction, ...prev]);
+      setFilteredTransactions((prev) => [newTransaction, ...prev]);
     }
   };
 
-  const handleRejectRequest = (requestId) => {
-    setWithdrawRequests(prev => 
-      prev.map(req => 
-        req.id === requestId 
-          ? {...req, status: "Rejected"} 
-          : req
-      )
+  const handleReject = (id) => {
+    setWithdrawRequests((prev) =>
+      prev.map((req) => (req.id === id ? { ...req, status: "rejected" } : req))
     );
   };
 
+  const handleArchive = (id) => {
+    setWithdrawRequests((prev) => prev.filter((req) => req.id !== id));
+  };
+
   const transactionColumns = ["ID", "Date", "Chef", "Amount", "Status"];
-  
+
   const renderTransactionRow = (transaction, index) => (
     <tr key={index}>
+      <td className="px-6 py-4 text-sm text-gray-900">{transaction.id}</td>
+      <td className="px-6 py-4 text-sm text-gray-500">{transaction.date}</td>
       <td className="px-6 py-4 text-sm text-gray-900">
-        {transaction.id}
-      </td>
-      <td className="px-6 py-4 text-sm text-gray-500">
-        {transaction.date}
-      </td>
-      <td className="px-6 py-4 text-sm text-gray-900">
-        <Link to={`/cook-profile/${transaction.cookId}`} className="text-blue-600 hover:underline">
-          {transaction.description.replace('Payment to ', '').replace('Bonus to ', '')}
+        <Link
+          to={`/cook-profile/${transaction.cookId}`}
+          className="text-blue-600 hover:underline"
+        >
+          {transaction.description
+            .replace("Payment to ", "")
+            .replace("Bonus to ", "")}
         </Link>
       </td>
-      <td className="px-6 py-4 text-sm text-red-600">
-        {transaction.amount}
-      </td>
+      <td className="px-6 py-4 text-sm text-red-600">{transaction.amount}</td>
       <td className="px-6 py-4 text-sm">
-        <span className={`px-2 py-1 rounded-md text-xs ${
-          transaction.status === "Completed" 
-            ? "bg-green-100 text-green-800" 
-            : "bg-blue-100 text-blue-800"
-        }`}>
+        <span
+          className={`px-2 py-1 rounded-md text-xs ${
+            transaction.status === "Completed"
+              ? "bg-green-100 text-green-800"
+              : "bg-blue-100 text-blue-800"
+          }`}
+        >
           {transaction.status}
         </span>
       </td>
@@ -176,38 +177,49 @@ export const CookPaymentDetails = () => {
                 <DollarSign size={20} />
               </div>
               <div>
-                <h2 className="text-sm font-medium text-gray-500">Total Payouts</h2>
-                <p className="text-xl font-bold text-gray-800">{stats.totalCookPayout}</p>
+                <h2 className="text-sm font-medium text-gray-500">
+                  Total Payouts
+                </h2>
+                <p className="text-xl font-bold text-gray-800">
+                  {stats.totalCookPayout}
+                </p>
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center">
               <div className="p-3 rounded-full bg-yellow-100 text-yellow-600 mr-4">
                 <CreditCard size={20} />
               </div>
               <div>
-                <h2 className="text-sm font-medium text-gray-500">Pending Payments</h2>
-                <p className="text-xl font-bold text-gray-800">{stats.pendingCookPayments}</p>
+                <h2 className="text-sm font-medium text-gray-500">
+                  Pending Payments
+                </h2>
+                <p className="text-xl font-bold text-gray-800">
+                  {stats.pendingCookPayments}
+                </p>
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center">
               <div className="p-3 rounded-full bg-green-100 text-green-600 mr-4">
                 <Users size={20} />
               </div>
               <div>
-                <h2 className="text-sm font-medium text-gray-500">Total Cooks</h2>
-                <p className="text-xl font-bold text-gray-800">{stats.cookCount}</p>
+                <h2 className="text-sm font-medium text-gray-500">
+                  Total Cooks
+                </h2>
+                <p className="text-xl font-bold text-gray-800">
+                  {stats.cookCount}
+                </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Period Filter */}
         <div className="flex justify-end mb-4">
           <div className="flex items-center space-x-2">
             <span className="text-gray-500">Period:</span>
@@ -227,55 +239,17 @@ export const CookPaymentDetails = () => {
           <h3 className="text-lg font-medium text-gray-800 mb-4">
             Pending Withdrawal Requests
           </h3>
-          
+
           {withdrawRequests.length > 0 ? (
-            <div className="space-y-2">
+            <div className="space-y-4">
               {withdrawRequests.map((request) => (
-                <div 
-                  key={request.id} 
-                  className="bg-white p-4 rounded-lg border border-gray-100 flex items-center justify-between"
-                >
-                  <div className="flex items-center">
-                    <img 
-                      src={request.image} 
-                      alt={request.name} 
-                      className="w-10 h-10 rounded-full object-cover mr-4"
-                    />
-                    <div>
-                      <Link to={`/cook-profile/${request.cookId}`} className="text-blue-600 hover:underline font-medium">
-                        {request.name}
-                      </Link>
-                      <p className="text-sm text-gray-500">{request.email}</p>
-                      <p className="text-xs text-gray-400">Requested: {request.requestDate}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-4">
-                    <p className="font-medium">Rs.{request.amount}</p>
-                    {request.status === "Pending" ? (
-                      <div className="flex space-x-2">
-                        <button 
-                          onClick={() => handleApproveRequest(request.id)} 
-                          className="px-3 py-1 bg-green-100 text-green-700 rounded-md text-sm hover:bg-green-200"
-                        >
-                          Approve
-                        </button>
-                        <button 
-                          onClick={() => handleRejectRequest(request.id)} 
-                          className="px-3 py-1 bg-red-100 text-red-700 rounded-md text-sm hover:bg-red-200"
-                        >
-                          Reject
-                        </button>
-                      </div>
-                    ) : (
-                      <span className={`text-sm px-2 py-1 rounded-md ${
-                        request.status === "Processing" ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-700"
-                      }`}>
-                        {request.status}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                <WithdrawalRequestMessage
+                  key={request.id}
+                  request={request}
+                  onApprove={handleApprove}
+                  onReject={handleReject}
+                  onArchive={handleArchive}
+                />
               ))}
             </div>
           ) : (
@@ -290,10 +264,10 @@ export const CookPaymentDetails = () => {
           <h3 className="text-lg font-medium text-gray-800 mb-4">
             Transaction History
           </h3>
-          <Table 
-            columns={transactionColumns} 
-            data={filteredTransactions} 
-            renderRow={renderTransactionRow} 
+          <Table
+            columns={transactionColumns}
+            data={filteredTransactions}
+            renderRow={renderTransactionRow}
           />
         </div>
       </div>
