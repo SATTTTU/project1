@@ -91,16 +91,16 @@ export const adminRoutes = [
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
-          // {
-          //   path: paths.admin.logout.path,
-          //   lazy: async () => {
-          //     const { AdminLogoutRoute } = await import(
-          //       "../../routes/admin/auth/components/logout/logout"
-          //     );
-          //     return { Component: AdminLogoutRoute };
-          //   },
-          //   ErrorBoundary: AppRootErrorBoundary,
-          // },
+          {
+            path: paths.admin.paymentsettingroute.path,
+            lazy: async () => {
+              const { PaymentSettingRoutes } = await import(
+                "../../routes/admin/auth/components/payments/settingspay/settings"
+              );
+              return { Component: PaymentSettingRoutes };
+            },
+            ErrorBoundary: AppRootErrorBoundary,
+          },
           {
             path: paths.admin.paymentpage.path,
             lazy: async () => {

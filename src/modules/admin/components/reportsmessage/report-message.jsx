@@ -295,6 +295,7 @@ export const MessagesPage = () => {
             <ConversationHeader
               message={selectedMessage}
               toggleSidebar={() => setSidebarCollapsed(true)}
+              onBack={() => setSelectedMessage(null)}
             />
             <Conversation
               conversation={conversations[selectedMessage.id]}
