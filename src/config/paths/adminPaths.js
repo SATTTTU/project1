@@ -14,7 +14,7 @@ export const adminPaths = {
         `/admin/login${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
     },
     resetPassword: {
-      path: "/admin/dashboard/resetPassword",
+      path: "/admin/resetPassword",
       getHref: (redirectTo) =>
         `/admin/resetPassword${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
     },

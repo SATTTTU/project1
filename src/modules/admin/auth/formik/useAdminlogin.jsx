@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
-import { useAdminRegister } from "../api/adminlogin";
 import { signInSchema } from "../schema/adminformSchema";
+import { useAdminRegister } from "../api/adminlogin";
 
 export const useAdminRegisterFormik = () => {
   const { mutateAsync, isLoading, isError, error, isSuccess } = useAdminRegister();

@@ -3,7 +3,6 @@ import { FaUser, FaCog, FaSignOutAlt, FaBell } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { SettingsCard } from "./settings";
-
 export const ProfileCard = () => {
   const [notificationsAllowed, setNotificationsAllowed] = useState(true);
   const [showSettings, setShowSettings] = useState(false);

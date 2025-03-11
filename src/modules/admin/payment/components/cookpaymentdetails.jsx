@@ -7,6 +7,7 @@ import { WithdrawalRequestMessage } from '@/components/ui/withdrawalrequest/with
 import { StatCard } from './statcard';
 import { PeriodSelector } from './periodselector';
 import { usePaymentData } from '../hooks/usePaymentData';
+import { Sidebar } from '@/components/ui/admin/aside/aside';
 
 export const CookPaymentDetails = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('This Month');
@@ -47,6 +48,9 @@ export const CookPaymentDetails = () => {
   return (
     <>
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Cook Payment Management</h1>
+      <div>
+        {/* <Sidebar/> */}
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <StatCard
           title="Total Payouts"

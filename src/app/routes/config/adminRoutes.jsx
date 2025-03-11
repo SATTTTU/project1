@@ -43,7 +43,7 @@ export const adminRoutes = [
             path: paths.admin.resetPassword.path,
             lazy: async () => {
               const { ResetPasswordRoute } = await import(
-                "../../routes/admin/auth/components/reset-password/resetpassword"
+                "../../routes/admin/auth/reset-password"
               );
               return { Component: ResetPasswordRoute };
             },
@@ -52,20 +52,20 @@ export const adminRoutes = [
           {
             path: paths.admin.profile.path,
             lazy: async () => {
-              const { AdminProfileRoute } = await import(
-                "../../routes/admin/auth/components/homepage/adminprofile/adminprofile"
+              const { MyProfileRoute } = await import(
+                "../../routes/admin/profile/editProfile"
               );
-              return { Component: AdminProfileRoute };
+              return { Component: MyProfileRoute };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
           {
             path: paths.admin.reports.path,
             lazy: async () => {
-              const { ReportsRoute } = await import(
-                "../../routes/admin/auth/components/messagepage/report"
+              const { MessagesPageRoute } = await import(
+                "../../routes/admin/reports/reports"
               );
-              return { Component: ReportsRoute };
+              return { Component: MessagesPageRoute };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
@@ -102,10 +102,10 @@ export const adminRoutes = [
           {
             path: paths.admin.paymentsettingroute.path,
             lazy: async () => {
-              const { PaymentSettingRoutes } = await import(
-                "../../routes/admin/auth/components/payments/settingspay/settings"
+              const { PaymentSettingsRoute } = await import(
+                "../../routes/admin/payment/paymentsetting"
               );
-              return { Component: PaymentSettingRoutes };
+              return { Component: PaymentSettingsRoute };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },

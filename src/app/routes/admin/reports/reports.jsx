@@ -1,11 +1,10 @@
 import { useState, useMemo } from "react";
 import { Menu, MessageSquare } from "lucide-react";
-import { SidebarHeader } from "@/components/ui/report-ui/sidebarheader";
-import { Tabs } from "@/components/ui/report-ui/tabs";
-import { MessageList } from "@/components/ui/report-ui/messagelist";
-import { ConversationHeader } from "@/components/ui/report-ui/conversationheader";
-import { Conversation } from "@/components/ui/report-ui/conversation";
-
+import { Conversation } from "@/modules/admin/reports/components/conversation";
+import { ConversationHeader } from "@/modules/admin/reports/components/conversationheader";
+import { MessageList } from "@/modules/admin/reports/components/messagelist";
+import { Tabs } from "@/modules/admin/reports/components/tabs";
+import { SidebarHeader } from "@/modules/admin/reports/components/sidebarheader";
 const messagesData = {
   all: [
     {
@@ -227,7 +226,7 @@ const conversations = {
   ],
 };
 
-export const MessagesPage = () => {
+export const MessagesPageRoute = () => {
   const [selectedTab, setSelectedTab] = useState("all");
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);

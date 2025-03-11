@@ -2,10 +2,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, CreditCard, DollarSign, Users } from 'lucide-react';
-import { StatCard } from '@/components/StatCard';
-import { PeriodSelector } from '@/components/PeriodSelector';
 import { Table } from '@/components/ui/tables/tables';
 import { usePaymentData } from '../hooks/usePaymentData';
+import { StatCard } from './statcard';
+import { PeriodSelector } from './periodselector';
 export const UserPaymentDetails = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('This Month');
   const { filteredTransactions, filteredStats, stats } = usePaymentData('user', selectedPeriod);

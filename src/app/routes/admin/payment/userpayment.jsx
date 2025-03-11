@@ -1,4 +1,4 @@
-import { UserPaymentDetails } from "@/modules/components/paymentSection/userPaymentpage/userpayemnt"
+import { UserPaymentDetails } from "@/modules/admin/payment/components/userpaymentdetails"
 
 export const UserPaymentRoute = () => {
     return(

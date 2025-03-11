@@ -45,7 +45,7 @@ import { Link } from "react-router-dom";
             <Link to='/admin/dashboard/profile' className="w-full flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-all">
               <FaUser /> <span>Change Profile</span>
             </Link>
-            <Link to='/admin/dashboard/resetpassword' className="w-full flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-all">
+            <Link to='/admin/resetpassword' className="w-full flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-all">
               <FaLock /> <span>Change Password</span>
             </Link>
           </div>
