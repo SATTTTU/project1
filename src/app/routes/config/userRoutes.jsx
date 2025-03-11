@@ -50,6 +50,15 @@ export const userRoutes = [
 						},
 					},
 					{
+						path: paths.user.changePassword.path,
+						lazy: async () => {
+							const { ChangePassword } = await import(
+								"../../../modules/user/auth/components/ChangePassword/ChangePassword"
+							);
+							return { Component: ChangePassword };
+						},
+					},
+					{
 						path: paths.user.resetPassword.path,
 						lazy: async () => {
 							const { ResetPassword } = await import(
@@ -99,6 +108,15 @@ export const userRoutes = [
 								"../../../modules/user/Homepage/components/Profile"
 							);
 							return { Component: Profile };
+						},
+					},
+					{
+						path: paths.user.authPage.path,
+						lazy: async () => {
+							const { Home } = await import(
+								"../../../modules/user/LandingPage/components/Home"
+							);
+							return { Component: Home };
 						},
 					},
 					// {
