@@ -29,12 +29,14 @@ export const RegisterPage = () => {
     if (files && files[0]) {
       setFormData({ ...formData, [name]: files[0] });
     }
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
   };
 
   const handleDrop = (e, fieldName) => {
     e.preventDefault();
     e.stopPropagation();
-
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       setFormData({ ...formData, [fieldName]: e.dataTransfer.files[0] });
     }
@@ -200,7 +202,7 @@ export const RegisterPage = () => {
 
           {/* Step 1: Upload personal documents */}
           {step === 1 && (
-            <div className="space-y-4">
+            <div className="space-y-4 cursor-grab">
               <fieldset>
                 <legend className="text-lg font-bold mb-4">
                   Upload your photo and documents
@@ -244,7 +246,7 @@ export const RegisterPage = () => {
 
           {/* Step 2: Upload certificate and experience */}
           {step === 2 && (
-            <div className="space-y-4">
+            <div className="space-y-4 cursor-grab">
               <fieldset>
                 <legend className="text-lg font-bold mb-4">
                   Upload your cooking certificate and share your experience
@@ -292,7 +294,7 @@ export const RegisterPage = () => {
 
           {/* Step 3: Terms and conditions */}
           {step === 3 && (
-            <div className="space-y-4">
+            <div className="space-y-4 cursor-pointer">
               {/* Preview uploaded documents */}
               <div className="mb-6">
                 <h3 className="text-lg font-semibold mb-3">
@@ -307,7 +309,7 @@ export const RegisterPage = () => {
                   ].map(
                     (field) =>
                       formData[field] && (
-                        <div key={field} className="border rounded-md p-2">
+                        <div key={field} className="shadow-lg rounded-md p-2">
                           <p className="text-xs text-gray-500 mb-1">
                             {field === "passwordsizephoto" && "Photo"}
                             {field === "citizenshipFront" &&

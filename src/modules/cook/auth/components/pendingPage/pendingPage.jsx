@@ -1,5 +1,6 @@
 import React from "react";
 import profile from "../../../../../assets/cookimage.png";
+import { Link } from "react-router-dom";
 export const pendingPage = () => {
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -25,9 +26,12 @@ export const pendingPage = () => {
           notify you shortly.{" "}
         </p>
         <div className="p-6"></div>
-        <button className="px-6 rounded bg-[#4b6c1e] py-3 text-white transition-colors hover:bg-[#3d5819]">
+        <Link
+          to={"/"}
+          className="px-6 rounded bg-[#4b6c1e] py-3 text-white transition-colors hover:bg-[#3d5819]"
+        >
           Return Home
-        </button>
+        </Link>
       </div>
     </div>
   );

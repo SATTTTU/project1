@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaEnvelope, FaUser } from "react-icons/fa";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import { z } from 'zod';
+import { z } from "zod";
 import authimage from "../../../../../assets/background1.jpg";
 
 export const firstRegisterPage = () => {

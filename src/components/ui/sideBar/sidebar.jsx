@@ -46,7 +46,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       } fixed inset-y-0 z-10 w-64 bg-white transition-all duration-300 ease-in-out md:static md:translate-x-0 left-2`}
     >
       <div className="flex h-full flex-col p-4">
-        <nav className="space-y-8">
+        <nav className="">
           <Link
             to={"/cook/homepage"}
             onClick={() => handleItemClick("/cook/homepage")}
