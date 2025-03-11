@@ -32,6 +32,13 @@ export const userPaths = {
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
+	changePassword: {
+		path: "/user/changepassword",
+		getHref: (redirectTo) =>
+			`/user/changepassword${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
 	emailVerification: {
 		path: "/user/verification",
 		getHref: (redirectTo) =>
@@ -134,6 +141,13 @@ export const userPaths = {
 		path: "/mainpage",
 		getHref: (redirectTo) =>
 			`/mainpage${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
+	authPage:{
+		path: "/authpage",
+		getHref: (redirectTo) =>
+			`/authpage${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},

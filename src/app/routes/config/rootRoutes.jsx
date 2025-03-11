@@ -11,16 +11,28 @@ export const rootRoutes = [
     path: "/admin",
     element: <Navigate to={paths.admin.root.path} />,
   },
-
+  {
+    path: "/user",
+    element: <Navigate to={paths.user.root.path} />,
+  },
   
 
+  // {
+  //   path: "/",
+  //   lazy: async () => {
+  //     const { HomePageRoute } = await import(
+  //       "../../routes/admin/auth/components/homepage/homepage"
+  //     );
+  //     return { Component: HomePageRoute };
+  //   },
+  // },
   {
     path: "/",
     lazy: async () => {
-      const { HomePageRoute } = await import(
-        "../../routes/admin/auth/components/homepage/homepage"
+      const { HomePageRoutes } = await import(
+        "../../routes/user/home/layout"
       );
-      return { Component: HomePageRoute };
+      return { Component: HomePageRoutes };
     },
   },
 ];
