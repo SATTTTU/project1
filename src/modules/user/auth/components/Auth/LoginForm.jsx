@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { LoginSection } from "./LoginSection";
-import { RegisterSection } from "./RegisterSection";
+import { LoginSection } from "../Login/LoginSection";
+import { RegisterSection } from "../Register/RegisterSection";
 
 export const AuthPage = () => {
 	const location = useLocation();

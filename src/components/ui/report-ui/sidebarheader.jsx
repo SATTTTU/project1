@@ -2,7 +2,7 @@ import { Search, X  } from "react-feather";
 import { useNavigate } from "react-router-dom";
 import { FaBackward } from "react-icons/fa";
 
-export const SidebarHeader = ({ searchQuery, setSearchQuery, toggleSidebar, totalNewMessages }) => {
+export const SidebarHeader = ({ searchQuery, setSearchQuery, totalNewMessages }) => {
   const navigate = useNavigate();
 
   const handleBack = () => {
