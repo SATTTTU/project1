@@ -1,20 +1,19 @@
 import { useFormik } from "formik";
-import { signUpSchema } from "@/modules/user/auth/formik/schema/authschema";
+import { signInSchema } from "../schema/adminformSchema";
 import { useAdminRegister } from "../api/adminlogin";
 
-export const useAdminRegisterFormik = (config = {}) => {
+export const useAdminRegisterFormik = () => {
   const { mutateAsync, isLoading, isError, error, isSuccess } = useAdminRegister();
 
   const formik = useFormik({
     initialValues: {
-      name: "",
       email: "",
       password: "",
     },
     validate: (values) => {
       try {
         // Validate using Zod schema
-        signUpSchema.parse(values);
+        signInSchema.parse(values);
         return {}; // No errors
       } catch (err) {
         // Convert Zod errors to Formik errors

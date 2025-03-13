@@ -5,6 +5,7 @@ import Card from "../../../../components/ui/card/Card";
 import Input from "../../../../components/ui/input/input";
 import { useAdminRegisterFormik } from "../../auth/formik/useAdminlogin";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 const AdminLoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,11 +13,9 @@ const AdminLoginPage = () => {
     mutationConfig: {
       onSuccess: (data) => {
         console.log("Admin Login Successful:", data);
-        // Redirect to the Admin Dashboard or Home page
       },
       onError: (error) => {
         console.error("Login failed:", error);
-        // Handle login error
       },
     },
   });
@@ -30,7 +29,6 @@ const AdminLoginPage = () => {
       <Card className="w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-4">Admin Login</h2>
         <form onSubmit={formik.handleSubmit} className="space-y-4">
-          {/* Email Input */}
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -49,7 +47,6 @@ const AdminLoginPage = () => {
             )}
           </div>
 
-          {/* Password Input */}
           <div className="space-y-2 relative">
             <Label htmlFor="password">Password</Label>
             <Input
@@ -75,15 +72,23 @@ const AdminLoginPage = () => {
             )}
           </div>
 
-          {/* Login Button */}
           <Button
             type="submit"
             disabled={isLoading || formik.isSubmitting || !formik.isValid}
-            className="w-full"
+            className="w-full cursor-pointer"
           >
             {isLoading ? "Logging In..." : "Login"}
           </Button>
         </form>
+
+        <div className="text-center mt-4">
+          <Link to="/forgot-password" className="text-blue-500 hover:underline">Forgot Password?</Link>
+        </div>
+
+        <div className="text-center mt-2">
+          <span className="text-gray-600">Don't have an account? </span>
+          <Link to="/signup" className="text-blue-500 hover:underline">Sign Up</Link>
+        </div>
       </Card>
     </div>
   );
