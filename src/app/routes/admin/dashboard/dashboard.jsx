@@ -1,49 +1,64 @@
 // pages/AdminDashboardRoute.js
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { IoIosNotifications, IoMdSearch } from "react-icons/io";
 import { FaUsers, FaUtensils, FaMoneyBillWave, FaClipboardList } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
 import { Sidebar } from "@/components/ui/admin/aside/aside";
-import { ProfileCard } from "@/modules/components/homepage/admindashboard/profile/adminInformation";
 import { StatsCard } from "@/modules/admin/dashboard/components/statscard";
 import { TopCooksList } from "@/modules/admin/dashboard/components/top-cooks";
 import { ProfileAvatar } from "@/modules/admin/dashboard/components/avatar";
+import { ProfileCard } from "@/modules/admin/editProfile/components/profilecard";
 
+// Custom hook to detect clicks outside a specified element
+const useOutsideClick = (ref, callback) => {
+  const handleClick = useCallback(
+    (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        callback();
+      }
+    },
+    [ref, callback]
+  );
 
-export const AdminDashboardRoute = () => {
+  React.useEffect(() => {
+    document.addEventListener("mousedown", handleClick);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+    };
+  }, [handleClick]);
+};
+
+export const AdminDashboardRoute = React.memo(() => {
   const [showProfile, setShowProfile] = useState(false);
   const profileRef = useRef(null);
 
-  const dashboardStats = [
-    { icon: <FaUsers className="text-blue-500 text-2xl" />, title: "Total Users", value: "1,254", increase: "+12.5%", timeFrame: "this month" },
-    { icon: <FaUtensils className="text-green-500 text-2xl" />, title: "Active Cooks", value: "328", increase: "+8.2%", timeFrame: "this month" },
-    { icon: <FaMoneyBillWave className="text-purple-500 text-2xl" />, title: "Total Revenue", value: "₹45,230", increase: "+15.3%", timeFrame: "this month" },
-    { icon: <FaClipboardList className="text-orange-500 text-2xl" />, title: "Total Orders", value: "856", increase: "+10.7%", timeFrame: "today" },
-  ];
+  const dashboardStats = React.useMemo(
+    () => [
+      { icon: <FaUsers className="text-blue-500 text-2xl" />, title: "Total Users", value: "1,254", increase: "+12.5%", timeFrame: "this month" },
+      { icon: <FaUtensils className="text-green-500 text-2xl" />, title: "Active Cooks", value: "328", increase: "+8.2%", timeFrame: "this month" },
+      { icon: <FaMoneyBillWave className="text-purple-500 text-2xl" />, title: "Total Revenue", value: "₹45,230", increase: "+15.3%", timeFrame: "this month" },
+      { icon: <FaClipboardList className="text-orange-500 text-2xl" />, title: "Total Orders", value: "856", increase: "+10.7%", timeFrame: "today" },
+    ],
+    []
+  );
 
-  const topCooks = [
-    { name: "Meera's Kitchen", rating: 4.8, orders: 156, earnings: "₹25,400" },
-    { name: "Spice Garden", rating: 4.7, orders: 142, earnings: "₹22,800" },
-    { name: "Home Flavours", rating: 4.6, orders: 128, earnings: "₹20,500" },
-  ];
+  const topCooks = React.useMemo(
+    () => [
+      { name: "Meera's Kitchen", rating: 4.8, orders: 156, earnings: "₹25,400" },
+      { name: "Spice Garden", rating: 4.7, orders: 142, earnings: "₹22,800" },
+      { name: "Home Flavours", rating: 4.6, orders: 128, earnings: "₹20,500" },
+    ],
+    []
+  );
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (profileRef.current && !profileRef.current.contains(event.target)) {
-        setShowProfile(false);
-      }
-    };
+  const toggleProfile = useCallback(() => {
+    setShowProfile((prev) => !prev);
+  }, []);
 
-    if (showProfile) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showProfile]);
+  useOutsideClick(profileRef, () => setShowProfile(false));
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-100 font-sans">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="bg-white shadow-sm p-4 flex items-center justify-between">
@@ -53,12 +68,20 @@ export const AdminDashboardRoute = () => {
               placeholder="Search..."
               className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
-            <IoMdSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
+            <IoMdSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-2xl" />
           </div>
 
           <div className="flex items-center gap-6 ml-4">
-            <IoIosNotifications className="text-2xl text-gray-600 hover:text-blue-500 transition" />
-            <ProfileAvatar onClick={() => setShowProfile(!showProfile)} />
+          <div className="relative">
+      <a href="/admin/notifications" className="relative">
+        <IoIosNotifications className="text-2xl text-gray-600 hover:text-green-500 transition" />
+        
+          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center">
+            2
+          </span>
+      </a>
+    </div>
+            <ProfileAvatar onClick={toggleProfile} />
           </div>
         </header>
 
@@ -91,4 +114,4 @@ export const AdminDashboardRoute = () => {
       </div>
     </div>
   );
-};
+});

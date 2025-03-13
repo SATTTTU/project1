@@ -49,7 +49,7 @@ export const ProfileCard = () => {
               whileHover={{ scale: 1.1 }}
               className="text-gray-400 group-hover:text-blue-600"
             >
-              →
+              
             </motion.span>
           </Link>
 
@@ -68,7 +68,7 @@ export const ProfileCard = () => {
               whileHover={{ scale: 1.1 }}
               className="text-gray-400 group-hover:text-blue-600"
             >
-              →
+              
             </motion.span>
           </div>
 

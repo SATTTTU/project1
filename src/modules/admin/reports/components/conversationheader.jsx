@@ -1,22 +1,21 @@
-import { Menu, ArrowLeft } from "react-feather";
-import { useNavigate } from "react-router-dom";
+"use client"
+
+import { Menu, ArrowLeft } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
 export const ConversationHeader = ({ message, toggleSidebar }) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   return (
     <div className="p-4 border-b border-gray-200 bg-white z-10 flex items-center">
       {/* Back Arrow */}
-      <button
-        className="p-2 rounded-full hover:bg-gray-100 text-gray-500 mr-2"
-        onClick={() => navigate(-1)}
-      >
+      <button className="p-2 rounded-full hover:bg-gray-100 text-gray-500 mr-2" onClick={() => navigate(-1)}>
         <ArrowLeft size={18} />
       </button>
 
       <div className="relative">
         <img
-          src={message.avatar}
+          src={message.avatar || "/placeholder.svg"}
           alt={message.sender}
           className="w-10 h-10 rounded-full object-cover border border-gray-200"
         />
@@ -30,28 +29,22 @@ export const ConversationHeader = ({ message, toggleSidebar }) => {
         <div className="flex items-center">
           <span
             className={`text-xs ${
-              message.role === "Cook"
-                ? "bg-amber-100 text-amber-800"
-                : "bg-purple-100 text-purple-800"
+              message.role === "Cook" ? "bg-amber-100 text-amber-800" : "bg-purple-100 text-purple-800"
             } px-2 py-0.5 rounded-full`}
           >
             {message.role}
           </span>
           <span className="mx-2 text-xs text-gray-500">•</span>
-          <span className="text-xs text-gray-500">
-            {message.online ? "Online" : "Last seen: " + message.time}
-          </span>
+          <span className="text-xs text-gray-500">{message.online ? "Online" : "Last seen: " + message.time}</span>
         </div>
       </div>
 
       <div className="ml-auto flex space-x-2">
-        <button
-          className="p-2 rounded-full hover:bg-gray-100 text-gray-500 md:hidden"
-          onClick={toggleSidebar}
-        >
+        <button className="p-2 rounded-full hover:bg-gray-100 text-gray-500 md:hidden" onClick={toggleSidebar}>
           <Menu size={18} />
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
+

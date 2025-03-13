@@ -25,7 +25,7 @@ const CookRow = ({ cook, navigate }) => {
       <td className="p-3 text-center align-middle">
         <button
           onClick={() => navigate(`/admin/cookDetails/${id}`)}
-          className="text-blue-500 hover:underline"
+          className="text-blue-500 hover:underline cursor-pointer"
         >
           Profile
         </button>

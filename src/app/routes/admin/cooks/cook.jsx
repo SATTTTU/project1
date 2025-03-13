@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Sidebar } from "@/modules/admin/components/homepage/aside/aside";
-import CookFilters from "@/modules/admin/cook/components/cookFilter";
-import CookTable from "@/modules/admin/cook/components/cookTable";
-import { cookData } from "@/modules/admin/cook/components/data";
+import { Link, useNavigate } from "react-router-dom";
+import CookFilters from "@/modules/admin/cook/components/cookFilter"; // Assuming you have this component
+import CookTable from "@/modules/admin/cook/components/cookTable"; // Assuming you have this component
+import { cookData } from "@/modules/admin/cook/components/data"; // Assuming you have this data
 import Pagination from "@/components/ui/pagination/pagination";
+import { FaArrowLeft } from "react-icons/fa";
+import { Sidebar } from "@/components/ui/admin/aside/aside";
 
 export const CooksRoute = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ export const CooksRoute = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
+  // Filter cooks based on search, status, and rating
   const filteredCooks = cookData
     .filter(({ name }) => name.toLowerCase().includes(search.toLowerCase()))
     .filter(({ status }) => statusFilter === "all" ? true : status === statusFilter)
@@ -32,9 +34,14 @@ export const CooksRoute = () => {
   );
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-gray-100">
       <Sidebar />
-      <div className="p-6 bg-white rounded-lg shadow-lg w-full max-w-5xl">
+      <div className="p-6 bg-white rounded-lg  w-full max-w-5xl">
+      <Link to="/admin/dashboard"
+                          className="mr-2 p-1 rounded-full hover:bg-gray-100 text-gray-500 cursor-pointer"
+                        >
+                          <FaArrowLeft size={20} />
+                        </Link>
         <h2 className="text-xl font-semibold mb-6">All Cooks</h2>
         <CookFilters
           search={search}

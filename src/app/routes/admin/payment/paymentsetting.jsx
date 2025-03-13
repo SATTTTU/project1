@@ -4,10 +4,11 @@ import { Sidebar } from "@/components/ui/admin/aside/aside";
 import PaymentSummary from "@/modules/admin/payment/components/paymentSummary";
 import PaymentGatewayCard from "@/modules/admin/payment/components/paymentgateway";
 import TabNavigation from "@/modules/admin/payment/components/tabNavigation";
+import { FaArrowLeft } from "react-icons/fa";
+import { Link } from "react-router-dom";
 export const PaymentSettingsRoute = () => {
   const [activeTab, setActiveTab] = useState("gateways");
 
-  // Payment Options Data
   const paymentOptions = [
     {
       name: "eSewa",
@@ -52,6 +53,11 @@ export const PaymentSettingsRoute = () => {
       <div className="md:w-4/5 overflow-auto">
         <div className="bg-white p-6 border-b">
           <div className="flex justify-between items-center">
+          <Link to="/admin/dashboard"
+                          className="mr-2 p-1 rounded-full hover:bg-gray-100 text-gray-500 cursor-pointer"
+                        >
+                          <FaArrowLeft size={20} />
+                        </Link>
             <h1 className="text-2xl font-semibold text-gray-800">Payment Gateway Management</h1>
             <div>
               <button className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 mr-2">

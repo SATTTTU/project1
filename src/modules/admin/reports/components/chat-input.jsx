@@ -1,6 +1,8 @@
-import  { ChevronRight, Clock } from"react-feather";
+"use client"
 
- export const ChatInput = ({ replyText, setReplyText }) => (
+import { ChevronRight, Clock } from "lucide-react"
+
+export const ChatInput = ({ replyText, setReplyText }) => (
   <div className="border-t border-gray-200 p-4 bg-white">
     <div className="max-w-3xl mx-auto">
       <div className="flex items-end">
@@ -14,7 +16,9 @@ import  { ChevronRight, Clock } from"react-feather";
           ></textarea>
         </div>
         <button
-          className={`ml-3 p-3 rounded-full bg-blue-500 text-white shadow-sm transition-all ${replyText.trim() ? "opacity-100" : "opacity-50"}`}
+          className={`ml-3 p-3 rounded-full bg-blue-500 text-white shadow-sm transition-all ${
+            replyText.trim() ? "opacity-100" : "opacity-50"
+          }`}
           disabled={!replyText.trim()}
         >
           <ChevronRight size={20} />
@@ -28,4 +32,5 @@ import  { ChevronRight, Clock } from"react-feather";
       </div>
     </div>
   </div>
-);
+)
+

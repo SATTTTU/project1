@@ -1,132 +1,385 @@
-import React from "react";
-import { CheckCircle, AlertCircle, Mail, Phone, DollarSign, Trash2 } from "react-feather";
+import { Calendar } from "lucide-react";
+import React, { useState } from "react";
+import { 
+  CheckCircle, 
+  AlertCircle, 
+  Mail, 
+  Phone, 
+  DollarSign, 
+  Trash2, 
+  ArrowLeft, 
+  MapPin, 
+  Briefcase, 
+  Award, 
+  Star, 
+  FileText, 
+  Eye,
+  Video,
+  ExternalLink
+} from "react-feather";
 
-const CookProfileDetails = ({ cook, navigate }) => {
-  console.log("CookProfileDetails rendering with:", cook);
+const CookProfileDetails = ({ cook, navigate, onStatusChange }) => {
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [showDocumentModal, setShowDocumentModal] = useState(null);
   
-  // Safety check
   if (!cook) {
-    return <div className="p-4 bg-red-100 rounded">No cook data provided</div>;
+    return (
+      <div className="p-4 bg-red-100 rounded flex items-center">
+        <AlertCircle size={18} className="mr-2 text-red-600" />
+        <span>No cook data provided</span>
+      </div>
+    );
   }
+
+  const handleDeleteCook = () => {
+    console.log("Deleting cook:", cook.id);
+    setShowConfirmDelete(false);
+    // In real app, make API call to delete cook
+    navigate("/admin/cookDetails");
+  };
+
+  const handleProvideMoney = () => {
+    console.log("Providing money to cook:", cook.id);
+    // In real app, show payment form or redirect to payment page
+  };
   
-  const handleVerifyCook = (cookId) => {
-    console.log("Verifying cook:", cookId);
+  const handleVerifyStatus = (newStatus) => {
+    console.log(`Changing status to ${newStatus} for cook:`, cook.id);
+    onStatusChange?.(cook.id, newStatus);
+  };
+  
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }).format(date);
   };
 
-  const handleDeleteCook = (cookId) => {
-    console.log("Deleting cook:", cookId);
-    navigate("/admin/cookDetails"); // Redirect back to cooks list
-  };
-
-  // Safe accessor function
-  const safeGet = (obj, path, fallback = "N/A") => {
-    try {
-      const result = path.split('.').reduce((o, p) => o?.[p], obj);
-      return result !== undefined && result !== null ? result : fallback;
-    } catch (e) {
-      console.error(`Error accessing ${path}:`, e);
-      return fallback;
-    }
+  const statusColor = {
+    "Verified": "green",
+    "Pending": "yellow",
+    "Unverified": "red"
   };
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100">
+      <button 
+        onClick={() => navigate(-1)} 
+        className="flex items-center text-gray-600 hover:text-gray-800 mb-4"
+      >
+        <ArrowLeft size={18} className="mr-2" /> Back to Cooks
+      </button>
+      
+      {/* Profile Header with Actions */}
+      <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 mb-6">
         <div className="p-6">
           <div className="flex items-start justify-between">
             <div className="flex items-center">
-              {safeGet(cook, 'image') ? (
-                <img
-                  src={cook.image}
-                  alt={safeGet(cook, 'name')}
-                  className="w-14 h-14 rounded-full object-cover mr-4"
-                  onError={(e) => {
-                    console.log("Image failed to load");
-                    e.target.src = "https://via.placeholder.com/56"; // Fallback image
-                  }}
-                />
-              ) : (
-                <div className="w-14 h-14 rounded-full bg-gray-200 mr-4 flex items-center justify-center">
-                  <span className="text-gray-500">No img</span>
-                </div>
-              )}
+              <img
+                src={cook.image || "https://via.placeholder.com/150"}
+                alt={cook.name}
+                className="w-20 h-20 rounded-full object-cover mr-4 border-2 border-gray-200"
+              />
               <div>
-                <h3 className="font-semibold text-lg text-gray-800">{safeGet(cook, 'name')}</h3>
+                <h2 className="font-bold text-xl text-gray-800">{cook.name}</h2>
                 <div className="flex items-center mt-1">
                   <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      safeGet(cook, 'status') === "Verified"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-yellow-100 text-yellow-800"
-                    }`}
+                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-${statusColor[cook.status] || "gray"}-100 text-${statusColor[cook.status] || "gray"}-800`}
                   >
-                    {safeGet(cook, 'status') === "Verified" ? (
+                    {cook.status === "Verified" ? (
                       <CheckCircle size={14} className="mr-1" />
                     ) : (
                       <AlertCircle size={14} className="mr-1" />
                     )}
-                    {safeGet(cook, 'status')}
+                    {cook.status}
                   </span>
+                  
+                  {cook.rating > 0 && (
+                    <div className="flex items-center text-yellow-500 ml-3">
+                      <Star size={14} className="mr-1" />
+                      <span className="text-sm font-medium">{cook.averageRating}</span>
+                      <span className="text-xs text-gray-500 ml-1">({cook.totalReviews} reviews)</span>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="flex items-center mt-2 text-gray-500 text-sm">
+                  <Calendar size={14} className="mr-1" />
+                  <span>Joined {formatDate(cook.joinedDate)}</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Contact Information */}
-          <div className="mt-4 space-y-2">
-            <div className="flex items-center text-sm text-gray-600">
-              <Mail size={16} className="mr-2 text-gray-400" />
-              <span>{safeGet(cook, 'email')}</span>
-            </div>
-            <div className="flex items-center text-sm text-gray-600">
-              <Phone size={16} className="mr-2 text-gray-400" />
-              <span>{safeGet(cook, 'phone')}</span>
-            </div>
-          </div>
-
-          {/* Earnings Section */}
-          <div className="mt-5 p-4 bg-gray-50 rounded-lg">
-            <h4 className="text-sm font-medium text-gray-700 flex items-center mb-3">
-              <DollarSign size={16} className="mr-1 text-gray-500" /> Earnings
-            </h4>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-xs text-gray-500">Total Earnings</p>
-                <p className="text-lg font-semibold text-gray-800">
-                  Rs{safeGet(cook, 'earnings.total', 0).toLocaleString()}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Monthly Average</p>
-                <p className="text-lg font-semibold text-gray-800">
-                  Rs{safeGet(cook, 'earnings.monthly', 0).toLocaleString()}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div className="mt-6 flex justify-between">
-            {safeGet(cook, 'status') !== "Verified" && (
+          {/* Action Buttons - Moved to top */}
+          <div className="mt-6 border-t pt-6">
+            <h3 className="text-lg font-semibold text-gray-800 flex items-center mb-4">
+              <ExternalLink size={18} className="mr-2 text-blue-500" /> Quick Actions
+            </h3>
+            
+            <div className="flex flex-wrap gap-3">
+              {cook.status === "Verified" && (
+                <button
+                  onClick={handleProvideMoney}
+                  className="flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  <DollarSign size={16} className="mr-2" /> Provide Money
+                </button>
+              )}
+              
+              {cook.status === "Pending" && (
+                <button
+                  onClick={() => handleVerifyStatus("Verified")}
+                  className="flex items-center px-4 py-2 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                >
+                  <CheckCircle size={16} className="mr-2" /> Approve Cook
+                </button>
+              )}
+              
+              {cook.status !== "Unverified" && (
+                <button
+                  onClick={() => handleVerifyStatus("Unverified")}
+                  className="flex items-center px-4 py-2 bg-yellow-100 text-yellow-600 font-medium rounded-md hover:bg-yellow-200 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+                >
+                  <AlertCircle size={16} className="mr-2" /> Suspend Cook
+                </button>
+              )}
+              
               <button
-                onClick={() => handleVerifyCook(safeGet(cook, 'id'))}
-                className="flex items-center px-3 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                onClick={() => setShowConfirmDelete(true)}
+                className="flex items-center px-4 py-2 bg-red-100 text-red-600 font-medium rounded-md hover:bg-red-200 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
               >
-                <CheckCircle size={16} className="mr-1" /> Verify
+                <Trash2 size={16} className="mr-2" /> Delete Cook
               </button>
-            )}
-            <button
-              onClick={() => handleDeleteCook(safeGet(cook, 'id'))}
-              className="flex items-center px-3 py-2 bg-red-100 text-red-600 text-sm font-medium rounded-md hover:bg-red-200 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-            >
-              <Trash2 size={16} className="mr-1" /> Delete
-            </button>
+            </div>
+          </div>
+
+          {/* Basic Info */}
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <div className="flex items-center text-sm text-gray-600">
+                <Mail size={16} className="mr-2 text-gray-400" />
+                <span>{cook.email}</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <Phone size={16} className="mr-2 text-gray-400" />
+                <span>{cook.phone}</span>
+              </div>
+              <div className="flex items-start text-sm text-gray-600">
+                <MapPin size={16} className="mr-2 mt-0.5 text-gray-400 flex-shrink-0" />
+                <span>{cook.address}</span>
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <div className="flex items-center text-sm text-gray-600">
+                <Briefcase size={16} className="mr-2 text-gray-400" />
+                <span>Experience: {cook.experience}</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <Award size={16} className="mr-2 text-gray-400" />
+                <span>Specialties: {cook.specialties.join(", ")}</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600">
+                <FileText size={16} className="mr-2 text-gray-400" />
+                <span>Certifications: {cook.certifications?.length ? cook.certifications.join(", ") : "None"}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <pre className="mt-4 p-4 bg-gray-100 rounded overflow-auto hidden">
-        {JSON.stringify(cook, null, 2)} {/* Hidden debug info */}
-      </pre>
+      
+      {/* Earnings Section */}
+      <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 mb-6">
+        <div className="p-6">
+          <h3 className="text-lg font-semibold text-gray-800 flex items-center mb-4">
+            <DollarSign size={18} className="mr-2 text-blue-500" /> Earnings & Performance
+          </h3>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="p-4 bg-blue-50 rounded-lg">
+              <p className="text-xs text-gray-500">Total Earnings</p>
+              <p className="text-lg font-semibold text-gray-800">Rs{cook.earnings?.total.toLocaleString() || 0}</p>
+            </div>
+            <div className="p-4 bg-green-50 rounded-lg">
+              <p className="text-xs text-gray-500">Monthly Average</p>
+              <p className="text-lg font-semibold text-gray-800">Rs{cook.earnings?.monthly.toLocaleString() || 0}</p>
+            </div>
+            <div className="p-4 bg-purple-50 rounded-lg">
+              <p className="text-xs text-gray-500">Products Sold</p>
+              <p className="text-lg font-semibold text-gray-800">{cook.productsSold.toLocaleString() || 0}</p>
+            </div>
+            <div className="p-4 bg-yellow-50 rounded-lg">
+              <p className="text-xs text-gray-500">Customer Rating</p>
+              <p className="text-lg font-semibold text-gray-800 flex items-center">
+                {cook.averageRating > 0 ? (
+                  <>
+                    {cook.averageRating}
+                    <Star size={16} className="ml-1 text-yellow-500" />
+                  </>
+                ) : (
+                  "N/A"
+                )}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Documents Section */}
+      <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 mb-6">
+        <div className="p-6">
+          <h3 className="text-lg font-semibold text-gray-800 flex items-center mb-4">
+            <FileText size={18} className="mr-2 text-blue-500" /> Verification Documents
+          </h3>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {cook.documents?.passportPhoto && (
+              <div className="border rounded-lg overflow-hidden">
+                <div className="p-2 bg-gray-50 border-b">
+                  <p className="text-xs text-gray-500">Passport Size Photo</p>
+                </div>
+                <div className="relative group">
+                  <img 
+                    src={cook.documents.passportPhoto || "https://via.placeholder.com/100"} 
+                    alt="Passport" 
+                    className="w-full h-32 object-cover" 
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                    <button 
+                      onClick={() => setShowDocumentModal("passportPhoto")}
+                      className="p-2 bg-white rounded-full"
+                    >
+                      <Eye size={18} className="text-gray-800" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {cook.documents?.citizenshipFront && (
+              <div className="border rounded-lg overflow-hidden">
+                <div className="p-2 bg-gray-50 border-b">
+                  <p className="text-xs text-gray-500">Citizenship Front</p>
+                </div>
+                <div className="relative group">
+                  <img 
+                    src={cook.documents.citizenshipFront || "https://via.placeholder.com/100"} 
+                    alt="Citizenship Front" 
+                    className="w-full h-32 object-cover" 
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                    <button 
+                      onClick={() => setShowDocumentModal("citizenshipFront")}
+                      className="p-2 bg-white rounded-full"
+                    >
+                      <Eye size={18} className="text-gray-800" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {cook.documents?.citizenshipBack && (
+              <div className="border rounded-lg overflow-hidden">
+                <div className="p-2 bg-gray-50 border-b">
+                  <p className="text-xs text-gray-500">Citizenship Back</p>
+                </div>
+                <div className="relative group">
+                  <img 
+                    src={cook.documents.citizenshipBack || "https://via.placeholder.com/100"} 
+                    alt="Citizenship Back" 
+                    className="w-full h-32 object-cover" 
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                    <button 
+                      onClick={() => setShowDocumentModal("citizenshipBack")}
+                      className="p-2 bg-white rounded-full"
+                    >
+                      <Eye size={18} className="text-gray-800" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Video Section */}
+      {cook.video && (
+        <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 mb-6">
+          <div className="p-6">
+            <h3 className="text-lg font-semibold text-gray-800 flex items-center mb-4">
+              <Video size={18} className="mr-2 text-blue-500" /> Introduction Video
+            </h3>
+            <div className="aspect-w-16 aspect-h-9">
+              <video controls className="w-full rounded-lg">
+                <source src={cook.video} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Delete Confirmation Modal */}
+      {showConfirmDelete && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full">
+            <h3 className="text-lg font-bold text-gray-900 mb-4">Confirm Delete</h3>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to delete this cook? This action cannot be undone.
+            </p>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => setShowConfirmDelete(false)}
+                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteCook}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Document Modal */}
+      {showDocumentModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-4 max-w-3xl w-full">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-bold text-gray-900">
+                {showDocumentModal === "passportPhoto" && "Passport Size Photo"}
+                {showDocumentModal === "citizenshipFront" && "Citizenship Front"}
+                {showDocumentModal === "citizenshipBack" && "Citizenship Back"}
+              </h3>
+              <button
+                onClick={() => setShowDocumentModal(null)}
+                className="text-gray-400 hover:text-gray-500"
+              >
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="flex justify-center">
+              <img
+                src={cook.documents?.[showDocumentModal] || "https://via.placeholder.com/400"}
+                alt={showDocumentModal}
+                className="max-h-screen object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

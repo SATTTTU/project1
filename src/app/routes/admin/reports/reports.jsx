@@ -1,17 +1,21 @@
-import { useState, useMemo } from "react";
-import { Menu, MessageSquare } from "lucide-react";
-import { Conversation } from "@/modules/admin/reports/components/conversation";
-import { ConversationHeader } from "@/modules/admin/reports/components/conversationheader";
-import { MessageList } from "@/modules/admin/reports/components/messagelist";
-import { Tabs } from "@/modules/admin/reports/components/tabs";
-import { SidebarHeader } from "@/modules/admin/reports/components/sidebarheader";
+"use client"
+
+import { useState, useMemo } from "react"
+import { Menu, MessageSquare } from "lucide-react"
+import { Conversation } from "@/modules/admin/reports/components/conversation"
+import { ConversationHeader } from "@/modules/admin/reports/components/conversationheader"
+import { MessageList } from "@/modules/admin/reports/components/messagelist"
+import { SidebarHeader } from "@/modules/admin/reports/components/sidebarheader"
+import { Tabs } from "@/modules/admin/reports/components/tabs"
+
+// Sample data - you would typically fetch this from an API
 const messagesData = {
   all: [
     {
       id: 1,
       sender: "Cook A",
       role: "Cook",
-      avatar: "/api/placeholder/40/40",
+      avatar: "/placeholder.svg?height=40&width=40",
       text: "My withdrawal request is pending.",
       time: "10:25 AM",
       unread: true,
@@ -21,7 +25,7 @@ const messagesData = {
       id: 2,
       sender: "Customer X",
       role: "Customer",
-      avatar: "/api/placeholder/40/40",
+      avatar: "/placeholder.svg?height=40&width=40",
       text: "Where is my order? I've been waiting for over an hour now.",
       time: "9:42 AM",
       unread: true,
@@ -31,7 +35,7 @@ const messagesData = {
       id: 3,
       sender: "Cook B",
       role: "Cook",
-      avatar: "/api/placeholder/40/40",
+      avatar: "/placeholder.svg?height=40&width=40",
       text: "How do I update bank details? The current ones are outdated.",
       time: "Yesterday",
       unread: false,
@@ -41,7 +45,7 @@ const messagesData = {
       id: 4,
       sender: "Customer Y",
       role: "Customer",
-      avatar: "/api/placeholder/40/40",
+      avatar: "/placeholder.svg?height=40&width=40",
       text: "Food was cold on arrival. I would like a refund please.",
       time: "Yesterday",
       unread: false,
@@ -51,7 +55,7 @@ const messagesData = {
       id: 5,
       sender: "Cook C",
       role: "Cook",
-      avatar: "/api/placeholder/40/40",
+      avatar: "/placeholder.svg?height=40&width=40",
       text: "Can I get an extension on my delivery time?",
       time: "2 days ago",
       unread: false,
@@ -61,7 +65,7 @@ const messagesData = {
       id: 6,
       sender: "Customer Z",
       role: "Customer",
-      avatar: "/api/placeholder/40/40",
+      avatar: "/placeholder.svg?height=40&width=40",
       text: "I'd like to place a large catering order for next week.",
       time: "3 days ago",
       unread: false,
@@ -73,7 +77,7 @@ const messagesData = {
       id: 1,
       sender: "Cook A",
       role: "Cook",
-      avatar: "/api/placeholder/40/40",
+      avatar: "/placeholder.svg?height=40&width=40",
       text: "My withdrawal request is pending.",
       time: "10:25 AM",
       unread: true,
@@ -83,7 +87,7 @@ const messagesData = {
       id: 3,
       sender: "Cook B",
       role: "Cook",
-      avatar: "/api/placeholder/40/40",
+      avatar: "/placeholder.svg?height=40&width=40",
       text: "How do I update bank details? The current ones are outdated.",
       time: "Yesterday",
       unread: false,
@@ -93,7 +97,7 @@ const messagesData = {
       id: 5,
       sender: "Cook C",
       role: "Cook",
-      avatar: "/api/placeholder/40/40",
+      avatar: "/placeholder.svg?height=40&width=40",
       text: "Can I get an extension on my delivery time?",
       time: "2 days ago",
       unread: false,
@@ -105,7 +109,7 @@ const messagesData = {
       id: 2,
       sender: "Customer X",
       role: "Customer",
-      avatar: "/api/placeholder/40/40",
+      avatar: "/placeholder.svg?height=40&width=40",
       text: "Where is my order? I've been waiting for over an hour now.",
       time: "9:42 AM",
       unread: true,
@@ -115,7 +119,7 @@ const messagesData = {
       id: 4,
       sender: "Customer Y",
       role: "Customer",
-      avatar: "/api/placeholder/40/40",
+      avatar: "/placeholder.svg?height=40&width=40",
       text: "Food was cold on arrival. I would like a refund please.",
       time: "Yesterday",
       unread: false,
@@ -125,14 +129,14 @@ const messagesData = {
       id: 6,
       sender: "Customer Z",
       role: "Customer",
-      avatar: "/api/placeholder/40/40",
+      avatar: "/placeholder.svg?height=40&width=40",
       text: "I'd like to place a large catering order for next week.",
       time: "3 days ago",
       unread: false,
       online: true,
     },
   ],
-};
+}
 
 const conversations = {
   1: [
@@ -224,31 +228,42 @@ const conversations = {
       time: "3 days ago",
     },
   ],
-};
+}
 
 export const MessagesPageRoute = () => {
-  const [selectedTab, setSelectedTab] = useState("all");
-  const [selectedMessage, setSelectedMessage] = useState(null);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [replyText, setReplyText] = useState("");
+  const [selectedTab, setSelectedTab] = useState("all")
+  const [selectedMessage, setSelectedMessage] = useState(null)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [replyText, setReplyText] = useState("")
 
+  // Memoize filtered messages to avoid unnecessary recalculations
   const filteredMessages = useMemo(() => {
     return messagesData[selectedTab].filter(
       (msg) =>
         msg.sender.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        msg.text.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [searchQuery, selectedTab]);
+        msg.text.toLowerCase().includes(searchQuery.toLowerCase()),
+    )
+  }, [searchQuery, selectedTab])
 
   const messagesCount = {
     all: messagesData.all.length,
     cooks: messagesData.cooks.length,
     customers: messagesData.customers.length,
-  };
-  const totalNewMessages = messagesData[selectedTab].filter(
-    (msg) => msg.unread
-  ).length;
+  }
+
+  const totalNewMessages = messagesData[selectedTab].filter((msg) => msg.unread).length
+
+  // Handle sending a message
+  const handleSendMessage = () => {
+    if (!replyText.trim() || !selectedMessage) return
+
+    // In a real app, you would send this to your API
+    console.log(`Sending message to ${selectedMessage.sender}: ${replyText}`)
+
+    // Clear the input after sending
+    setReplyText("")
+  }
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -291,11 +306,7 @@ export const MessagesPageRoute = () => {
       <div className="flex-1 flex flex-col h-full bg-white overflow-hidden">
         {selectedMessage ? (
           <>
-            <ConversationHeader
-              message={selectedMessage}
-              toggleSidebar={() => setSidebarCollapsed(true)}
-              onBack={() => setSelectedMessage(null)}
-            />
+            <ConversationHeader message={selectedMessage} toggleSidebar={() => setSidebarCollapsed(false)} />
             <Conversation
               conversation={conversations[selectedMessage.id]}
               message={selectedMessage}
@@ -308,20 +319,17 @@ export const MessagesPageRoute = () => {
             <div className="rounded-full bg-blue-100 p-4 mb-4">
               <MessageSquare size={32} className="text-blue-500" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">
-              Your Messages
-            </h2>
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">Your Messages</h2>
             <p className="text-gray-500 max-w-md mb-4">
-              Select a conversation from the list to view and respond to
-              messages from cooks and customers.
+              Select a conversation from the list to view and respond to messages from cooks and customers.
             </p>
             <p className="text-sm text-gray-400">
-              {messagesData.all.filter((msg) => msg.unread).length} unread
-              messages
+              {messagesData.all.filter((msg) => msg.unread).length} unread messages
             </p>
           </div>
         )}
       </div>
     </div>
-  );
-};
+  )
+}
+

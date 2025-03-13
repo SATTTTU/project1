@@ -3,6 +3,8 @@ import { Sidebar } from "@/components/ui/admin/aside/aside";
 import Pagination from "@/components/ui/pagination/pagination";
 import { User } from "@/modules/admin/users/components/users";
 import { Table } from "@/components/ui/tables/tables";
+import { Link } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
 
 const dummyUsers = [
   { id: 1, name: "John Doe", email: "john@example.com" },
@@ -20,7 +22,13 @@ const dummyUsers = [
 export const DisplayUserRoute = () => {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const usersPerPage = 5;
+  const rowsPerPage = 5; // Fixed rows per page
+
+  // Debounced Search
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+    setCurrentPage(1); // Reset to first page on search
+  };
 
   // Memoized filtered users
   const filteredUsers = useMemo(
@@ -33,13 +41,13 @@ export const DisplayUserRoute = () => {
 
   // Total Pages Calculation
   const totalPages = useMemo(
-    () => Math.ceil(filteredUsers.length / usersPerPage),
+    () => Math.ceil(filteredUsers.length / rowsPerPage),
     [filteredUsers.length]
   );
 
   const currentUsers = useMemo(() => {
-    const indexOfLastUser = currentPage * usersPerPage;
-    const indexOfFirstUser = indexOfLastUser - usersPerPage;
+    const indexOfLastUser = currentPage * rowsPerPage;
+    const indexOfFirstUser = indexOfLastUser - rowsPerPage;
     return filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
   }, [currentPage, filteredUsers]);
 
@@ -50,15 +58,21 @@ export const DisplayUserRoute = () => {
   const renderRow = (user) => <User key={user.id} user={user} />;
 
   return (
-    <section className="flex h-screen">
+    <section className="flex h-screen font-sans bg-gray-100">
       <Sidebar />
       <div className="p-6 w-full">
-        <h1 className="text-3xl font-bold mb-6">User List</h1>
+        <Link
+          to="/admin/dashboard"
+          className="mr-2 p-1 rounded-full hover:bg-gray-100 text-gray-500 cursor-pointer"
+        >
+          <FaArrowLeft size={20} />
+        </Link>
+        <h1 className="text-3xl font-bold mb-6 text-gray-900">User List</h1>
         <input
           type="text"
           placeholder="Search users..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={handleSearchChange}
           className="p-3 border rounded-lg w-full mb-6 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <div className="bg-white p-6 shadow-md rounded-lg">
