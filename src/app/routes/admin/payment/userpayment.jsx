@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { ChevronRight, CreditCard, DollarSign, Users } from "lucide-react";
+import { ChevronRight, CreditCard, DollarSign, Users, Settings } from "lucide-react";
 import { Table } from "@/components/ui/tables/tables";
 
 import { TransactionRow } from "@/modules/admin/payment/components/userpaymentdetails";
@@ -27,11 +27,12 @@ export const UserPaymentRoute = () => {
         
         {/* Header with Period Selector */}
         <div className="flex justify-between items-center p-4 bg-white rounded-xl shadow-md">
-          <Link to="/admin/dashboard"
-                                    className="mr-2 p-1 rounded-full hover:bg-gray-100 text-gray-500 cursor-pointer"
-                                  >
-                                    <FaArrowLeft size={20} />
-                                  </Link>
+          <Link 
+            to="/admin/dashboard" 
+            className="mr-2 p-1 rounded-full hover:bg-gray-100 text-gray-500 cursor-pointer"
+          >
+            <FaArrowLeft size={20} />
+          </Link>
           <h1 className="text-3xl font-semibold text-gray-800">User Payment Details</h1>
           <PeriodSelector
             selectedPeriod={selectedPeriod}
@@ -40,8 +41,8 @@ export const UserPaymentRoute = () => {
           />
         </div>
 
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Stats Section with added Payment Settings Card */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard
             title={`User Revenue (${selectedPeriod})`}
             value={filteredStats.revenue}
@@ -63,6 +64,22 @@ export const UserPaymentRoute = () => {
             icon={<Users size={24} className="text-blue-600" />}
             color="blue"
           />
+          
+          {/* Payment Settings Configuration Card */}
+          <Link to="/admin/payment-setting" className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border-l-4 border-purple-500">
+            <div className="p-6 flex flex-col h-full justify-between">
+              <div className="flex justify-between items-start">
+                <h3 className="text-lg font-semibold text-gray-800">Payment Settings</h3>
+                <Settings size={24} className="text-purple-600" />
+              </div>
+              <div className="mt-4">
+                <p className="text-gray-600 text-sm">Configure payment gateways, commissions, and transaction settings</p>
+                <div className="flex items-center mt-4 text-purple-600 text-sm font-medium">
+                  Configure Settings <ChevronRight size={16} className="ml-1" />
+                </div>
+              </div>
+            </div>
+          </Link>
         </div>
 
         {/* Transactions Table */}

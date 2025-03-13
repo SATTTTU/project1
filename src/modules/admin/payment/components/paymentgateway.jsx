@@ -1,5 +1,6 @@
 import React from "react";
 import { CreditCard, Shield, Settings, ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const PaymentGatewayCard = ({ option }) => {
   return (
@@ -31,14 +32,14 @@ const PaymentGatewayCard = ({ option }) => {
         </div>
         
         <div className="mt-4 flex justify-between pt-4 border-t">
-          <button className="text-sm text-gray-600 hover:text-gray-800 flex items-center">
+          <Link className="text-sm text-gray-600 hover:text-gray-800 flex items-center">
             <Settings size={16} className="mr-1" />
             Configure
-          </button>
-          <button className="text-sm text-blue-600 hover:text-blue-800 flex items-center">
+          </Link>
+          <Link className="text-sm text-blue-600 hover:text-blue-800 flex items-center">
             View Details
             <ChevronRight size={16} className="ml-1" />
-          </button>
+          </Link>
         </div>
       </div>
     </div>

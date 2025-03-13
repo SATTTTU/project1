@@ -30,32 +30,39 @@ const useOutsideClick = (ref, callback) => {
 
 export const AdminDashboardRoute = React.memo(() => {
   const [showProfile, setShowProfile] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
   const profileRef = useRef(null);
+  const notificationRef = useRef(null);
 
-  const dashboardStats = React.useMemo(
-    () => [
-      { icon: <FaUsers className="text-blue-500 text-2xl" />, title: "Total Users", value: "1,254", increase: "+12.5%", timeFrame: "this month" },
-      { icon: <FaUtensils className="text-green-500 text-2xl" />, title: "Active Cooks", value: "328", increase: "+8.2%", timeFrame: "this month" },
-      { icon: <FaMoneyBillWave className="text-purple-500 text-2xl" />, title: "Total Revenue", value: "₹45,230", increase: "+15.3%", timeFrame: "this month" },
-      { icon: <FaClipboardList className="text-orange-500 text-2xl" />, title: "Total Orders", value: "856", increase: "+10.7%", timeFrame: "today" },
-    ],
-    []
-  );
+  const dashboardStats = React.useMemo(() => [
+    { icon: <FaUsers className="text-blue-500 text-2xl" />, title: "Total Users", value: "1,254", increase: "+12.5%", timeFrame: "this month" },
+    { icon: <FaUtensils className="text-green-500 text-2xl" />, title: "Active Cooks", value: "328", increase: "+8.2%", timeFrame: "this month" },
+    { icon: <FaMoneyBillWave className="text-purple-500 text-2xl" />, title: "Total Revenue", value: "₹45,230", increase: "+15.3%", timeFrame: "this month" },
+    { icon: <FaClipboardList className="text-orange-500 text-2xl" />, title: "Total Orders", value: "856", increase: "+10.7%", timeFrame: "today" },
+  ], []);
 
-  const topCooks = React.useMemo(
-    () => [
-      { name: "Meera's Kitchen", rating: 4.8, orders: 156, earnings: "₹25,400" },
-      { name: "Spice Garden", rating: 4.7, orders: 142, earnings: "₹22,800" },
-      { name: "Home Flavours", rating: 4.6, orders: 128, earnings: "₹20,500" },
-    ],
-    []
-  );
+  const topCooks = React.useMemo(() => [
+    { name: "Meera's Kitchen", rating: 4.8, orders: 156, earnings: "₹25,400" },
+    { name: "Spice Garden", rating: 4.7, orders: 142, earnings: "₹22,800" },
+    { name: "Home Flavours", rating: 4.6, orders: 128, earnings: "₹20,500" },
+  ], []);
+
+  const notifications = [
+    { id: 1, message: "New order placed by customer #1023" },
+    { id: 2, message: "Cook #45 has updated the menu" },
+    { id: 3, message: "Driver #12 reported a delivery issue" },
+  ];
 
   const toggleProfile = useCallback(() => {
     setShowProfile((prev) => !prev);
   }, []);
 
+  const toggleNotifications = useCallback(() => {
+    setShowNotifications((prev) => !prev);
+  }, []);
+
   useOutsideClick(profileRef, () => setShowProfile(false));
+  useOutsideClick(notificationRef, () => setShowNotifications(false));
 
   return (
     <div className="flex h-screen bg-gray-100 font-sans">
@@ -72,15 +79,32 @@ export const AdminDashboardRoute = React.memo(() => {
           </div>
 
           <div className="flex items-center gap-6 ml-4">
-          <div className="relative">
-      <a href="/admin/notifications" className="relative">
-        <IoIosNotifications className="text-2xl text-gray-600 hover:text-green-500 transition" />
-        
-          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center">
-            2
-          </span>
-      </a>
-    </div>
+            <div className="relative">
+              <button onClick={toggleNotifications} className="relative">
+                <IoIosNotifications className="text-2xl text-gray-600 hover:text-green-500 transition" />
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                  {notifications.length}
+                </span>
+              </button>
+
+              {showNotifications && (
+                <motion.div
+                  ref={notificationRef}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4"
+                >
+                  <h2 className="text-lg font-semibold mb-2">Notifications</h2>
+                  {notifications.map((notification) => (
+                    <div key={notification.id} className="p-2 hover:bg-gray-100 rounded-md cursor-pointer">
+                      {notification.message}
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+            </div>
             <ProfileAvatar onClick={toggleProfile} />
           </div>
         </header>
@@ -91,26 +115,8 @@ export const AdminDashboardRoute = React.memo(() => {
               <StatsCard key={index} {...stat} delay={index} />
             ))}
           </div>
-
           <TopCooksList cooks={topCooks} />
         </main>
-
-        <AnimatePresence>
-          {showProfile && (
-            <motion.div
-              ref={profileRef}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-              className="fixed top-16 right-4 z-50"
-            >
-              <div className="bg-white shadow-xl rounded-xl w-80">
-                <ProfileCard />
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
     </div>
   );

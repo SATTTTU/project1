@@ -54,7 +54,7 @@ export const adminPaths = {
         `/admin/dashboard/profile${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
     },
     setting: {
-      path: "/admin/dashboard/setting",
+      path: "/admin/setting",
       getHref: (redirectTo) =>
         `/admin/dashboard/setting${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
     },

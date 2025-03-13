@@ -17,8 +17,12 @@ export const CooksRoute = () => {
 
   // Filter cooks based on search, status, and rating
   const filteredCooks = cookData
-    .filter(({ name }) => name.toLowerCase().includes(search.toLowerCase()))
-    .filter(({ status }) => statusFilter === "all" ? true : status === statusFilter)
+    .filter(({ name }) =>
+      name.toLowerCase().includes(search.toLowerCase())
+    )
+    .filter(({ status }) =>
+      statusFilter === "all" ? true : status === statusFilter
+    )
     .filter(({ rating }) =>
       ratingFilter === "all" ? true :
       ratingFilter === "no-rating" ? rating === null :
@@ -34,30 +38,36 @@ export const CooksRoute = () => {
   );
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <section className="flex h-screen font-sans bg-gray-100">
       <Sidebar />
-      <div className="p-6 bg-white rounded-lg  w-full max-w-5xl">
-      <Link to="/admin/dashboard"
-                          className="mr-2 p-1 rounded-full hover:bg-gray-100 text-gray-500 cursor-pointer"
-                        >
-                          <FaArrowLeft size={20} />
-                        </Link>
-        <h2 className="text-xl font-semibold mb-6">All Cooks</h2>
-        <CookFilters
-          search={search}
-          setSearch={setSearch}
-          statusFilter={statusFilter}
-          setStatusFilter={setStatusFilter}
-          ratingFilter={ratingFilter}
-          setRatingFilter={setRatingFilter}
-        />
-        <CookTable cooks={paginatedCooks} navigate={navigate} />
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
+      <div className="p-6 w-full">
+        <Link
+          to="/admin/dashboard"
+          className="mr-2 p-1 rounded-full hover:bg-gray-100 text-gray-500 cursor-pointer"
+        >
+          <FaArrowLeft size={20} />
+        </Link>
+        <h1 className="text-3xl font-bold mb-6 text-gray-900">All Cooks</h1>
+       
+        <div className="bg-white p-6 shadow-md rounded-lg">
+          <CookFilters
+            search={search}
+            setSearch={setSearch}
+            statusFilter={statusFilter}
+            setStatusFilter={setStatusFilter}
+            ratingFilter={ratingFilter}
+            setRatingFilter={setRatingFilter}
+          />
+          <CookTable cooks={paginatedCooks} navigate={navigate} />
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          )}
+        </div>
       </div>
-    </div>
+    </section>
   );
 };

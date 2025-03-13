@@ -60,12 +60,12 @@ export const PaymentSettingsRoute = () => {
                         </Link>
             <h1 className="text-2xl font-semibold text-gray-800">Payment Gateway Management</h1>
             <div>
-              <button className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 mr-2">
+              <Link className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 mr-2">
                 Add New Gateway
-              </button>
-              <button className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-300">
+              </Link>
+              <Link className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-300">
                 View Transaction Logs
-              </button>
+              </Link>
             </div>
           </div>
         </div>
