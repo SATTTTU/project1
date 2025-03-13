@@ -101,22 +101,7 @@ export const LoginSection = () => {
 						</button>
 					</p>
 
-					{/* <div className="relative my-6">
-						<div className="absolute inset-0 flex items-center">
-							<div className="w-full border-t border-gray-300"></div>
-						</div>
-						<div className="relative flex justify-center text-sm">
-							<span className="px-2 bg-white text-gray-500">OR</span>
-						</div>
-					</div>
-
-					<button
-						type="button"
-						className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-md py-2 hover:bg-gray-50 transition"
-					>
-						<FcGoogle className="text-xl" />
-						<span className="text-gray-600">Continue with Google</span>
-					</button> */}
+			
 				</form>
 			</div>
 

@@ -53,13 +53,13 @@ export const userPaths = {
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
-	homePage: {
-		path: "/user/home",
-		getHref: (redirectTo) =>
-			`/user/home${
-				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
-			}`,
-	},
+	// homePage: {
+	// 	path: "/user/home",
+	// 	getHref: (redirectTo) =>
+	// 		`/user/home${
+	// 			redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+	// 		}`,
+	// },
 	cart: {
 		path: "/user/cart",
 		getHref: (redirectTo) =>

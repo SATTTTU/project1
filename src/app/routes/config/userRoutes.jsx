@@ -192,41 +192,5 @@ export const userRoutes = [
 		],
 		
 	},
-	// {
-	// 	path: paths.user.profileEdit.path,
-	// 	lazy: async () => {
-	// 	  const { Layout } = await import("../../../modules/user/Homepage/components/Layout")
-	// 	  return { Component: Layout }
-	// 	},
-	// 	children: [
-	// 	  {
-	// 		path: "",
-	// 		lazy: async () => {
-	// 		  const ProfileEdit = await import("../../../modules/user/Homepage/components/Profile")
-	// 		  return { Component: ProfileEdit }
-	// 		},
-	// 	  },
-	// 	  {
-	// 		path: "order",
-	// 		lazy: async () => {
-	// 		  const{ OrderHistory} = await import("../../../modules/user/Homepage/components/OrderHistory")
-	// 		  return { Component: OrderHistory }
-	// 		},
-	// 	  },
-	// 	  {
-	// 		path: "favorites",
-	// 		lazy: async () => {
-	// 		  const Favorites = await import("../../../modules/user/Homepage/components/Favorites")
-	// 		  return { Component: Favorites.default }
-	// 		},
-	// 	  },
-	// 	  {
-	// 		path: "saved-addresses",
-	// 		lazy: async () => {
-	// 		  const SavedAddresses = await import("../../../modules/user/Homepage/components/SavedAddresses")
-	// 		  return { Component: SavedAddresses.default }
-	// 		},
-	// 	  },
-	// 	],
-	//   },
+
 ];
