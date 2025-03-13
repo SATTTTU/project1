@@ -6,7 +6,7 @@ import { IoIosContacts } from "react-icons/io";
 import { TbReportSearch } from "react-icons/tb";
 import { FiLogOut, FiMenu } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
-import logo from "../../../../assets/logo.jpg"
+import logo from "../../../../assets/logo.jpg";
 
 export const Sidebar = () => {
   const location = useLocation();
@@ -35,7 +35,7 @@ export const Sidebar = () => {
       {/* Mobile Toggle Button */}
       <button
         onClick={handleToggleSidebar}
-        className="md:hidden fixed top-4 right-4 bg-green-600 text-white p-2 rounded-full shadow-lg z-50 transition-all hover:bg-green-700"
+        className="md:hidden fixed top-7 left-2 bg-green-600 text-white p-2 rounded-full shadow-lg z-50 transition-all hover:bg-green-700"
       >
         <FiMenu className="text-xl" />
       </button>
@@ -49,7 +49,7 @@ export const Sidebar = () => {
         {/* Header */}
         <Link to="/user/home" className="flex items-center p-6">
           <div className="h-12 w-12 flex items-center justify-center">
-           <img src={logo } alt="" />
+            <img src={logo} alt="Logo" />
           </div>
           <span className="text-3xl font-bold text-green-600">KhajaBox</span>
         </Link>
@@ -88,20 +88,16 @@ const SidebarLink = ({ to, icon, text, active = false, onClick }) => {
     <Link
       to={to}
       onClick={onClick}
-      className={`
-        flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 group
-        ${
-          active
-            ? "bg-green-50 text-green-600 shadow-sm"
-            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-        }
-      `}
+      className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 group ${
+        active
+          ? "bg-green-50 text-green-600 shadow-sm"
+          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+      }`}
     >
       <span
-        className={`
-          text-lg transition-colors
-          ${active ? "text-green-600" : "text-gray-400 group-hover:text-gray-600"}
-        `}
+        className={`text-lg transition-colors ${
+          active ? "text-green-600" : "text-gray-400 group-hover:text-gray-600"
+        }`}
       >
         {icon}
       </span>
