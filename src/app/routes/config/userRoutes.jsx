@@ -16,7 +16,7 @@ export const userRoutes = [
 						path: paths.user.register.path,
 						lazy: async () => {
 							const { RegisterSection } = await import(
-								"../../../modules/user/auth/components/Auth/RegisterSection"
+								"../../../modules/user/auth/components/Register/RegisterSection"
 							);
 
 							return { Component: RegisterSection };
@@ -26,20 +26,12 @@ export const userRoutes = [
 						path: paths.user.login.path,
 						lazy: async () => {
 							const { LoginSection } = await import(
-								"../../../modules/user/auth/components/Auth/LoginSection"
+								"../../../modules/user/auth/components/Login/LoginSection"
 							);
 							return { Component: LoginSection };
 						},
 					},
-					{
-						path: paths.user.homePage.path,
-						lazy: async () => {
-							const { Homepage } = await import(
-								"../../../modules/user/Homepage/components/Homepage"
-							);
-							return { Component: Homepage };
-						},
-					},
+			
 					{
 						path: paths.user.forgotPassword.path,
 						lazy: async () => {
@@ -79,17 +71,17 @@ export const userRoutes = [
 					{
 						path: paths.user.dashboard.path,
 						lazy: async () => {
-							const { Layout } = await import(
-								"../../../modules/user/Homepage/components/Layout"
+							const { Homepage } = await import(
+								"../user/dashboard/Homepage"
 							);
-							return { Component: Layout };
+							return { Component: Homepage };
 						},
 					},
 					{
 						path: paths.user.cart.path,
 						lazy: async () => {
 							const { Cart } = await import(
-								"../../../modules/user/Homepage/components/Cart/Cart"
+								"../../routes/user/cart/cart"
 							);
 							return { Component: Cart };
 						},
@@ -104,10 +96,10 @@ export const userRoutes = [
 					{
 						path: paths.user.profile.path,
 						lazy: async () => {
-							const { Profile } = await import(
-								"../../../modules/user/Homepage/components/Profile"
+							const { ProfilePage } = await import(
+								"../../../modules/user/Homepage/component/ProfilePage"
 							);
-							return { Component: Profile };
+							return { Component: ProfilePage };
 						},
 					},
 					{
@@ -119,43 +111,35 @@ export const userRoutes = [
 							return { Component: Home };
 						},
 					},
-					// {
-					// 	path: paths.user.orderHistory.path,
-					// 	lazy: async () => {
-					// 		const { OrderHistory } = await import(
-					// 			"../../../modules/user/auth/components/Dashboard/OrderHistory/OrderHistory"
-					// 		);
-					// 		return { Component: OrderHistory };
-					// 	},
-					// },
-					//   {
-					// 	path: paths.user.favourite.path,
-					// 	lazy: async () => {
-					// 	  const { Profile } = await import("../../../modules/user/auth/components/Profile/Profile");
-					// 	  return { Component: Profile };
-					// 	},
-					//   },
-					//   {
-					// 	path: paths.user.address.path,
-					// 	lazy: async () => {
-					// 	  const { Profile } = await import("../../../modules/user/auth/components/Profile/Profile");
-					// 	  return { Component: Profile };
-					// 	},
-					//   },
-					// {
-					// 	path: paths.user.profileEdit.path,
-					// 	lazy: async () => {
-					// 		const { ProfileEdit } = await import(
-					// 			"../../../modules/user/auth/components/Profile/ProfileEdit"
-					// 		);
-					// 		return { Component: ProfileEdit };
-					// 	},
-					// },
+					{
+						path: paths.user.orderHistory.path,
+						lazy: async () => {
+							const { ProfilePage } = await import(
+								"../../../modules/user/Homepage/component/ProfilePage"
+							);
+							return { Component: ProfilePage };
+						},
+					},
+					  {
+						path: paths.user.favourite.path,
+						lazy: async () => {
+						  const { ProfilePage } = await import("../../../modules/user/Homepage/component/ProfilePage");
+						  return { Component: ProfilePage };
+						},
+					  },
+					  {
+						path: paths.user.setting.path,
+						lazy: async () => {
+						  const { ProfilePage } = await import("../../../modules/user/Homepage/component/ProfilePage");
+						  return { Component: ProfilePage };
+						},
+					  },
+				
 					{
 						path: paths.user.cookDetails.path,
 						lazy: async () => {
 							const { CookProfile } = await import(
-								"../../../modules/user/Homepage/components/CookProfile/CookProfile"
+								"../../routes/user/cooks/cooks"
 							);
 							return { Component: CookProfile };
 						},
@@ -164,7 +148,7 @@ export const userRoutes = [
 						path: paths.user.foodCategories.path,
 						lazy: async () => {
 							const { CategoryPage } = await import(
-								"../../../modules/user/Homepage/components/Categories/CategoryPage"
+								"../../routes/user/categories/categories"
 							);
 							return { Component: CategoryPage };
 						},
@@ -173,7 +157,7 @@ export const userRoutes = [
 						path: paths.user.foodDetails.path,
 						lazy: async () => {
 							const { FoodDetails } = await import(
-								"../../../modules/user/Homepage/components/FoodDetails/FoodDetails"
+								"../user/menu/foodDetails"
 							);
 							return { Component: FoodDetails };
 						},
@@ -181,19 +165,17 @@ export const userRoutes = [
 					{
 						path: paths.user.categoryFoodDetails.path,
 						lazy: async () => {
-							const { FoodDetails } = await import(
-								"../../../modules/user/Homepage/components/FoodDetails/FoodDetails"
+							const { FoodDetailsPage } = await import(
+								"../../../modules/user/CategoriesSection/components/FoodDetailsPage"
 							);
-							return { Component: FoodDetails };
+							return { Component: FoodDetailsPage };
 						},
 					},
 					{
 						path: paths.user.mainPage.path,
 						lazy: async () => {
-							const { HomePage } = await import(
-								"../../../modules/user/LandingPage/HomePage"
-							);
-							return { Component: HomePage };
+							const { Layout } = await import("../user/home/layout");
+							return { Component: Layout };
 						},
 					},
 					{
@@ -210,41 +192,41 @@ export const userRoutes = [
 		],
 		
 	},
-	{
-		path: paths.user.profileEdit.path,
-		lazy: async () => {
-		  const { Layout } = await import("../../../modules/user/Homepage/components/Layout")
-		  return { Component: Layout }
-		},
-		children: [
-		  {
-			path: "",
-			lazy: async () => {
-			  const ProfileEdit = await import("../../../modules/user/Homepage/components/Profile")
-			  return { Component: ProfileEdit }
-			},
-		  },
-		  {
-			path: "order",
-			lazy: async () => {
-			  const{ OrderHistory} = await import("../../../modules/user/Homepage/components/OrderHistory")
-			  return { Component: OrderHistory }
-			},
-		  },
-		  {
-			path: "favorites",
-			lazy: async () => {
-			  const Favorites = await import("../../../modules/user/Homepage/components/Favorites")
-			  return { Component: Favorites.default }
-			},
-		  },
-		  {
-			path: "saved-addresses",
-			lazy: async () => {
-			  const SavedAddresses = await import("../../../modules/user/Homepage/components/SavedAddresses")
-			  return { Component: SavedAddresses.default }
-			},
-		  },
-		],
-	  },
+	// {
+	// 	path: paths.user.profileEdit.path,
+	// 	lazy: async () => {
+	// 	  const { Layout } = await import("../../../modules/user/Homepage/components/Layout")
+	// 	  return { Component: Layout }
+	// 	},
+	// 	children: [
+	// 	  {
+	// 		path: "",
+	// 		lazy: async () => {
+	// 		  const ProfileEdit = await import("../../../modules/user/Homepage/components/Profile")
+	// 		  return { Component: ProfileEdit }
+	// 		},
+	// 	  },
+	// 	  {
+	// 		path: "order",
+	// 		lazy: async () => {
+	// 		  const{ OrderHistory} = await import("../../../modules/user/Homepage/components/OrderHistory")
+	// 		  return { Component: OrderHistory }
+	// 		},
+	// 	  },
+	// 	  {
+	// 		path: "favorites",
+	// 		lazy: async () => {
+	// 		  const Favorites = await import("../../../modules/user/Homepage/components/Favorites")
+	// 		  return { Component: Favorites.default }
+	// 		},
+	// 	  },
+	// 	  {
+	// 		path: "saved-addresses",
+	// 		lazy: async () => {
+	// 		  const SavedAddresses = await import("../../../modules/user/Homepage/components/SavedAddresses")
+	// 		  return { Component: SavedAddresses.default }
+	// 		},
+	// 	  },
+	// 	],
+	//   },
 ];

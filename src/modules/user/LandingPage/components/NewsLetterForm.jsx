@@ -21,7 +21,7 @@ export const NewsletterForm=()=> {
         setIsSuccess(false)
       }, 3000)
     } catch (err) {
-      setError("Failed to subscribe. Please try again.")
+      setError("Failed to subscribe. Please try again.",err)
     } finally {
       setIsSubmitting(false)
     }
@@ -41,7 +41,7 @@ export const NewsletterForm=()=> {
         />
         <button
           type="submit"
-          className={`bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md transition-colors ${
+          className={`bg-[#426B1F] hover:bg-[#426B1F] text-white px-4 py-2 rounded-md transition-colors ${
             isSubmitting ? "opacity-70 cursor-not-allowed" : ""
           }`}
           disabled={isSubmitting}
