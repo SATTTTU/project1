@@ -11,4 +11,67 @@ body {
 }
 
 
+.testimonial-swiper {
+  padding: 30px 50px !important;
+  position: relative;
+  margin-bottom: 40px !important; 
+}
+
+.equal-height-slides .swiper-slide {
+  height: auto !important;
+  display: flex;
+}
+
+.equal-height-slides .swiper-slide > div {
+  width: 100%;
+  height: 100%;
+}
+
+.testimonial-pagination {
+  position: relative;
+  bottom: -20px !important; /* Move pagination down */
+  width: 100%;
+  text-align: center;
+  z-index: 10;
+}
+
+.testimonial-pagination .swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background: #ff9800;
+  opacity: 0.5;
+  margin: 0 5px;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.testimonial-pagination .swiper-pagination-bullet-active {
+  opacity: 1;
+  background: #ff9800;
+  width: 12px;
+  height: 12px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .testimonial-swiper {
+    padding: 30px 40px !important;
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    width: 35px !important;
+    height: 35px !important;
+  }
+
+  .swiper-button-prev::after,
+  .swiper-button-next::after {
+    font-size: 14px !important;
+  }
+
+  .testimonial-pagination {
+    bottom: -15px !important;
+  }
+}
 

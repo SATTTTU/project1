@@ -6,7 +6,8 @@ import { Sidebar } from "@/components/ui/admin/aside/aside";
 import { StatsCard } from "@/modules/admin/dashboard/components/statscard";
 import { TopCooksList } from "@/modules/admin/dashboard/components/top-cooks";
 import { ProfileAvatar } from "@/modules/admin/dashboard/components/avatar";
-import { ProfileCard } from "@/modules/admin/components/homepage/admindashboard/profile/adminInformation";
+import { Link } from "react-router-dom";
+import { ProfileCard } from "@/modules/admin/editProfile/components/profilecard";
 
 // Custom hook to detect clicks outside a specified element
 const useOutsideClick = (ref, callback) => {
@@ -78,12 +79,12 @@ export const AdminDashboardRoute = React.memo(() => {
 
           <div className="flex items-center gap-6 ml-4">
             <div className="relative">
-              <button onClick={toggleNotifications} className="relative">
+              <Link onClick={toggleNotifications} className="relative">
                 <IoIosNotifications className="text-2xl text-gray-600 hover:text-green-500 transition" />
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center">
                   {notifications.length}
                 </span>
-              </button>
+              </Link>
 
               <AnimatePresence>
                 {showNotifications && (
