@@ -11,7 +11,6 @@ export const userRoutes = [
 			{
 				element: <AuthRoot />,
 				children: [
-				
 					{
 						path: paths.user.register.path,
 						lazy: async () => {
@@ -31,15 +30,7 @@ export const userRoutes = [
 							return { Component: LoginSection };
 						},
 					},
-					// {
-					// 	path: paths.user.homePage.path,
-					// 	lazy: async () => {
-					// 		const { Homepage } = await import(
-					// 			"../../../modules/user/Homepage/components/Homepage"
-					// 		);
-					// 		return { Component: Homepage };
-					// 	},
-					// },
+
 					{
 						path: paths.user.forgotPassword.path,
 						lazy: async () => {
@@ -79,18 +70,14 @@ export const userRoutes = [
 					{
 						path: paths.user.dashboard.path,
 						lazy: async () => {
-							const { Homepage } = await import(
-								"../user/dashboard/Homepage"
-							);
+							const { Homepage } = await import("../user/dashboard/Homepage");
 							return { Component: Homepage };
 						},
 					},
 					{
 						path: paths.user.cart.path,
 						lazy: async () => {
-							const { Cart } = await import(
-								"../../routes/user/cart/cart"
-							);
+							const { Cart } = await import("../../routes/user/cart/cart");
 							return { Component: Cart };
 						},
 					},
@@ -111,6 +98,15 @@ export const userRoutes = [
 						},
 					},
 					{
+						path: paths.user.profileContent.path,
+						lazy: async () => {
+							const { ProfileContent } = await import(
+								"../../../modules/user/Profile/components/ProfileContent"
+							);
+							return { Component: ProfileContent };
+						},
+					},
+					{
 						path: paths.user.authPage.path,
 						lazy: async () => {
 							const { Home } = await import(
@@ -122,27 +118,31 @@ export const userRoutes = [
 					{
 						path: paths.user.orderHistory.path,
 						lazy: async () => {
+							const { OrdersContent } = await import(
+								"../../../modules/user/Profile/components/OrdersContent"
+							);
+							return { Component: OrdersContent };
+						},
+					},
+					{
+						path: paths.user.favourite.path,
+						lazy: async () => {
+							const { WishlistContent } = await import(
+								"../../../modules/user/Profile/components/WishlistContent"
+							);
+							return { Component: WishlistContent };
+						},
+					},
+					{
+						path: paths.user.setting.path,
+						lazy: async () => {
 							const { ProfilePage } = await import(
-								"../../../modules/user/Homepage/component/ProfilePage"
+								"../../../modules/user/Profile/components/SettingContent"
 							);
 							return { Component: ProfilePage };
 						},
 					},
-					  {
-						path: paths.user.favourite.path,
-						lazy: async () => {
-						  const { ProfilePage } = await import("../../../modules/user/Homepage/component/ProfilePage");
-						  return { Component: ProfilePage };
-						},
-					  },
-					  {
-						path: paths.user.setting.path,
-						lazy: async () => {
-						  const { ProfilePage } = await import("../../../modules/user/Homepage/component/ProfilePage");
-						  return { Component: ProfilePage };
-						},
-					  },
-				
+
 					{
 						path: paths.user.cookDetails.path,
 						lazy: async () => {
@@ -164,9 +164,7 @@ export const userRoutes = [
 					{
 						path: paths.user.foodDetails.path,
 						lazy: async () => {
-							const { FoodDetails } = await import(
-								"../user/menu/foodDetails"
-							);
+							const { FoodDetails } = await import("../user/menu/foodDetails");
 							return { Component: FoodDetails };
 						},
 					},
@@ -200,7 +198,5 @@ export const userRoutes = [
 				],
 			},
 		],
-		
 	},
-
 ];

@@ -1,8 +1,10 @@
-import { Header } from "@/modules/user/Homepage/component/Header";
+import { Header } from "@/modules/user/Profile/components/Header";
 import MobileMenuToggle from "@/modules/user/Profile/components/MenuToggle";
-import OrdersContent from "@/modules/user/Profile/components/OrdersContent";
-import ProfileContent from "@/modules/user/Profile/components/ProfileContent";
+import { OrdersContent } from "@/modules/user/Profile/components/OrdersContent";
+import { ProfileContent } from "@/modules/user/Profile/components/ProfileContent";
+// import { ProfileContent } from "@/modules/user/Profile/components/ProfileContent";
 import { ProfileSidebar } from "@/modules/user/Profile/components/ProfileSidebar";
+import WishlistContent from "@/modules/user/Profile/components/WishlistContent";
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -29,9 +31,9 @@ export const ProfilePage = () => {
 
   useEffect(() => {
     const path = location.pathname.split("/").pop();
-    if (path === "profile" || path === "") {
+    if (path === "/user/profile" || path === "") {
       setActiveTab("profile");
-    } else if (path === "orders") {
+    } else if (path === "/user/orders") {
       setActiveTab("orders");
     } else if (path === "wishlist") {
       setActiveTab("wishlist");
@@ -46,9 +48,9 @@ export const ProfilePage = () => {
 
   const renderContent = () => {
     switch (activeTab) {
-      case "profile":
-        return <ProfileContent />;
-      case "orders":
+      case "/user/profile":
+        return <ProfileContent/>;
+      case "/user/orders":
         return <OrdersContent />;
       case "wishlist":
         return <WishlistContent />;
