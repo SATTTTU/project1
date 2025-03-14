@@ -1,67 +1,44 @@
-// components/CertificateExperienceStep.jsx
-import React from "react";
-import FileUpload from "./fileupload";
+// utils/validation.js
 
-const CertificateExperienceStep = ({
-  formData,
-  handleInputChange,
-  fileHandlingProps,
-  prevStep,
-  nextStep,
-}) => {
-  return (
-    <form onSubmit={nextStep}>
-      <div className="space-y-6">
-        <h2 className="text-xl font-semibold">Professional Qualifications</h2>
-        <p className="text-gray-600 mb-6">
-          Please upload your certificates and share your cooking experience.
-        </p>
+export const validateStep = (step, formData) => {
+  const errors = {};
 
-        <FileUpload
-          label="Certificate"
-          name="certificate"
-          accept=".pdf,.jpg,.jpeg,.png"
-          file={formData.certificate}
-          {...fileHandlingProps}
-        />
+  switch (step) {
+    case 1:
+      // Validate Document Upload Step
+      if (!formData.passwordsizephoto) {
+        errors.passwordsizephoto = "Passport size photo is required";
+      }
+      if (!formData.citizenshipFront) {
+        errors.citizenshipFront = "Citizenship front side is required";
+      }
+      if (!formData.citizenshipBack) {
+        errors.citizenshipBack = "Citizenship back side is required";
+      }
+      break;
 
-        <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-2">
-            Experience (in years)
-          </label>
-          <textarea
-            name="experience"
-            value={formData.experience}
-            onChange={handleInputChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#4b6c1e] focus:border-[#4b6c1e]"
-            rows="4"
-            placeholder="Describe your cooking experience..."
-          ></textarea>
-          {fileHandlingProps.errors.experience && (
-            <p className="text-red-500 text-sm mt-1">
-              {fileHandlingProps.errors.experience}
-            </p>
-          )}
-        </div>
+    case 2:
+      // Validate Certificate and Experience Step
+      if (!formData.certificate) {
+        errors.certificate = "Certificate is required";
+      }
+      if (!formData.experience || formData.experience.trim() === "") {
+        errors.experience = "Experience details are required";
+      } else if (formData.experience.length < 50) {
+        errors.experience = "Please provide more details about your experience (minimum 50 characters)";
+      }
+      break;
 
-        <div className="flex justify-between mt-8">
-          <button
-            type="button"
-            onClick={prevStep}
-            className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            Back
-          </button>
-          <button
-            type="submit"
-            className="bg-[#4b6c1e] text-white px-6 py-2 rounded-lg hover:bg-[#3a5417] transition-colors"
-          >
-            Continue
-          </button>
-        </div>
-      </div>
-    </form>
-  );
+    case 3:
+      // Validate Terms and Conditions Step
+      if (!formData.termsAccepted) {
+        errors.termsAccepted = "You must accept the terms and conditions to continue";
+      }
+      break;
+
+    default:
+      break;
+  }
+
+  return errors;
 };
-
-export default CertificateExperienceStep;
