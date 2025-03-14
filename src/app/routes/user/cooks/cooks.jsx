@@ -4,14 +4,14 @@ import { FiArrowLeft } from "react-icons/fi"
 import { toast } from "react-toastify"
 import { useDispatch } from "react-redux"
 import { addToCart } from "../../../../store/cart/cart"
-import { cooksData } from "../../../../modules/user/Homepage/component/Data"
-import { LoadingSkeleton } from "@/modules/user/CookSection/components/LoadingSkeleton"
-import { Header } from "@/modules/user/CookSection/components/Header"
-import { CookProfileHeader } from "@/modules/user/CookSection/components/CookProfileHeader"
-import { CookTabs } from "@/modules/user/CookSection/components/CookTabs"
-import { CookCategories } from "@/modules/user/CookSection/components/CookCategories"
-import { AboutTab } from "@/modules/user/CookSection/components/AboutTab"
-import { CookReviews } from "@/modules/user/CookSection/components/CookReviews"
+import { cooksData } from "../../../../modules/user/Homepage/component/data";
+import { LoadingSkeleton } from "@/modules/user/CookSection/components/loadingSkeleton";
+import { Header } from "@/modules/user/CookSection/components/header";
+import { CookProfileHeader } from "@/modules/user/CookSection/components/cookProfileHeader";
+import { CookTabs } from "@/modules/user/CookSection/components/cookTabs";
+import { CookCategories } from "@/modules/user/CookSection/components/cookCategories";
+import { AboutTab } from "@/modules/user/CookSection/components/aboutTab";
+import { CookReviews } from "@/modules/user/CookSection/components/cookReviews";
 
 
 export const CookProfile = () => {

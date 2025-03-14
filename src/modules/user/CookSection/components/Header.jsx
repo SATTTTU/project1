@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 
 import Logo from "../../../../assets/logo.jpg";
-import { Profile } from "../../Homepage/component/Profile";
+import { Profile } from "../../Homepage/component/profile";
 
 export const Header = () => {
     const carts = useSelector((store) => store.cart.items);

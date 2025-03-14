@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import Image from "../../../../../assets/UserImages/login.jpg";
+import Image from "../../../../assets/login.jpg";
 import { InputField } from "@/components/ui/inputfield/inputField";
-import { signInSchema } from "../../formik/schema/authschema";
+import { signInSchema } from "../formik/schema/authschema";
 
 export const LoginSection = () => {
 	const navigate = useNavigate();

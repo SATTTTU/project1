@@ -1,5 +1,5 @@
 
-import { Header } from "./Header"
+import { Header } from "./header";
 
 
 export const LoadingSkeleton = () => {

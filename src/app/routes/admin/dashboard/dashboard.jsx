@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback } from "react";
 import { IoIosNotifications, IoMdSearch } from "react-icons/io";
 import { FaUsers, FaUtensils, FaMoneyBillWave, FaClipboardList } from "react-icons/fa";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { Sidebar } from "@/components/ui/admin/aside/aside";
 import { StatsCard } from "@/modules/admin/dashboard/components/statscard";
 import { TopCooksList } from "@/modules/admin/dashboard/components/top-cooks";

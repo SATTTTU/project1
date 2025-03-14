@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FiArrowLeft } from "react-icons/fi";
 import { BiCategory } from "react-icons/bi";
-import { DishCard } from "./DishCard";
+import { DishCard } from "./dishCard";
 
 export const CookCategories = ({ cook, onAddToCart }) => {
 	const [selectedCategory, setSelectedCategory] = useState(null);

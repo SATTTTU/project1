@@ -1,34 +1,33 @@
-import  { EmptyOrder } from "./EmptyOrder";
-import { OrderItem } from "./OrderItem";
-
-export const OrdersContent = () => {
+import  { EmptyOrder } from "./emptyOrder";
+import { OrderItem } from "./orderItem";
+ const OrdersContent = () => {
 	const orders = [
 		{
 			id: "ORD-12345",
 			date: "March 10, 2025",
-			total: "$45.97",
+			total: "Rs.497",
 			status: "Delivered",
 			items: [
-				{ name: "Cheese Burger", quantity: 2, price: "$23.76" },
-				{ name: "Crispy Sandwich", quantity: 1, price: "$13.99" },
+				{ name: "Cheese Burger", quantity: 2, price: "Rs. 23.76" },
+				{ name: "Crispy Sandwich", quantity: 1, price: "Rs. 13.99" },
 			],
 		},
 		{
 			id: "ORD-12344",
 			date: "March 5, 2025",
-			total: "$32.98",
+			total: "Rs. 3298",
 			status: "Delivered",
 			items: [
-				{ name: "Veggie Bowl", quantity: 1, price: "$10.99" },
-				{ name: "Pancake", quantity: 1, price: "$11.99" },
+				{ name: "Veggie Bowl", quantity: 1, price: "Rs.10.99" },
+				{ name: "Pancake", quantity: 1, price: "Rs.11.99" },
 			],
 		},
 		{
 			id: "ORD-12343",
 			date: "February 28, 2025",
-			total: "$15.99",
+			total: "Rs.15.99",
 			status: "Delivered",
-			items: [{ name: "Steak Sandwich", quantity: 1, price: "$15.99" }],
+			items: [{ name: "Steak Sandwich", quantity: 1, price: "Rs.15.99" }],
 		},
 	];
 
@@ -48,3 +47,4 @@ export const OrdersContent = () => {
 		</div>
 	);
 };
+export default OrdersContent;

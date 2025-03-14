@@ -1,4 +1,5 @@
-// tabs/SettingsContent.jsx
+import ToggleSetting from "./toggleSetting";
+
 const SettingsContent = () => {
     return (
       <div>
@@ -23,7 +24,7 @@ const SettingsContent = () => {
             </div>
           </div>
   
-          <PasswordChangeForm />
+          {/* <PasswordChangeForm /> */}
   
           <div className="bg-gray-50 p-6 rounded-lg">
             <h3 className="text-lg font-medium mb-4">Privacy Settings</h3>

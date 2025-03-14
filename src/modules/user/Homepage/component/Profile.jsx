@@ -1,5 +1,4 @@
 import { FaUserCircle } from "react-icons/fa";
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { User, Settings, Bell, LogOut } from "lucide-react";

@@ -1,8 +1,8 @@
 
 import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import ForgetImage from "../../../../../assets/UserImages/forgetpassword.jpg"
-import { forgotPasswordSchema } from "../../formik/schema/authschema";
+import ForgetImage from "../../../../assets/forgetPasswordimg.png"
+import { forgotPasswordSchema } from "../formik/schema/authschema";
 import { useNavigate } from "react-router-dom";
 
 export const ForgotPassword = () => {

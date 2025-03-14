@@ -3,15 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../../../store/cart/cart";
-import { Header } from "@/modules/user/Homepage/component/Header";
-import { Footer } from "@/modules/user/Homepage/component/Footer";
-import { SearchBar } from "@/modules/user/Homepage/component/SearchBar";
-import { PromotedRestaurants } from "@/modules/user/Homepage/component/FilterBadges";
-import { CategorySection } from "@/modules/user/Homepage/component/CategoriesSection";
-import { PopularItems } from "@/modules/user/Homepage/component/PopularItemsSection";
-import { categories, cooks, popularItems} from "../../../../modules/user/Homepage/component/Data"
-import { FilterBadges } from "@/modules/user/Homepage/component/FilterBadges";
-import { PopularCooks } from "@/modules/user/Homepage/component/PopularCooks";
+import { Header } from "@/modules/user/Homepage/component/header";
+import { Footer } from "@/modules/user/Homepage/component/footer";
+import { SearchBar } from "@/modules/user/Homepage/component/searchBar";
+import { PromotedRestaurants } from "@/modules/user/Homepage/component/filterBadges";
+import { CategorySection } from "@/modules/user/Homepage/component/categoriesSection";
+import { PopularItems } from "@/modules/user/Homepage/component/popularItemsSection";
+import {
+	categories,
+	cooks,
+	popularItems,
+} from "../../../../modules/user/Homepage/component/data";
+import { FilterBadges } from "@/modules/user/Homepage/component/filterBadges";
+import { PopularCooks } from "@/modules/user/Homepage/component/popularCooks";
 export const Homepage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();

@@ -1,8 +1,8 @@
 import React from 'react'
-import DescriptionTab from './DescriptionTab'
-import IngredientsTab from './IngredientsTab'
-import NutritionTab from './NutritionTab'
-import ReviewsTab from './ReviewsTab'
+import DescriptionTab from './descriptionTab'
+import IngredientsTab from './ingredientsTab'
+import NutritionTab from './nutritionTab'
+import ReviewsTab from './reviewsTab'
 
 const FoodTabs = ({ food, activeTab, setActiveTab }) => {
   return (

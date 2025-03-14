@@ -1,8 +1,8 @@
 import { InputField } from "@/components/ui/inputfield/inputField";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import Image from "../../../../../assets/UserImages/login.jpg";
+import Image from "../../../../assets/UserImages/login.jpg";
 import { Link, useNavigate } from "react-router-dom";
-import { useUserRegisterFormik } from "../../formik/useRegister";
+import { useUserRegisterFormik } from "../formik/useRegister";
 import { useState } from "react";
 
 export const RegisterSection = () => {
