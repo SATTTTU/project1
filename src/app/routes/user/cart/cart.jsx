@@ -68,12 +68,10 @@ export const Cart = () => {
     dispatch(clearCart());
   };
 
-  // Empty cart view
   if (cartItems.length === 0 && checkoutStep === "cart") {
     return <EmptyCart/>;
   }
 
-  // Order confirmation view
   if (checkoutStep === "confirmation") {
     return <OrderConfirmation />;
   }
@@ -113,7 +111,6 @@ export const Cart = () => {
             )}
           </div>
 
-          {/* Order Summary */}
           <div className="lg:w-1/3">
             <OrderSummary
               cartItems={cartItems}

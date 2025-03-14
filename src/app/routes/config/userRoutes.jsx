@@ -97,7 +97,7 @@ export const userRoutes = [
 						path: paths.user.profile.path,
 						lazy: async () => {
 							const { ProfilePage } = await import(
-								"../../../modules/user/Homepage/component/ProfilePage"
+								"../user/userprofile/profile"
 							);
 							return { Component: ProfilePage };
 						},

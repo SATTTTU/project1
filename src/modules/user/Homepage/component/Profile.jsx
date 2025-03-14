@@ -56,7 +56,6 @@ export const Profile = () => {
 					<div className="py-2">
 						<Link
 							to="/user/profile"
-							// onClick={()=> navigate("/user/profileEdit")}/
 							className="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
 						>
 							<User className="w-4 h-4" />
