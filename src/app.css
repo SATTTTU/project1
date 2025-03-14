@@ -14,7 +14,7 @@ body {
 .testimonial-swiper {
   padding: 30px 50px !important;
   position: relative;
-  margin-bottom: 40px !important; /* Add more space at the bottom */
+  margin-bottom: 40px !important; 
 }
 
 .equal-height-slides .swiper-slide {

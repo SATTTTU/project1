@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { FaUser, FaCog, FaSignOutAlt, FaBell } from "react-icons/fa";
+import { FaUser, FaCog, FaSignOutAlt, FaBell, FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { SettingsCard } from "./settings";
+
 export const ProfileCard = () => {
   const [notificationsAllowed, setNotificationsAllowed] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
@@ -45,12 +46,6 @@ export const ProfileCard = () => {
                 My Profile
               </span>
             </div>
-            <motion.span 
-              whileHover={{ scale: 1.1 }}
-              className="text-gray-400 group-hover:text-blue-600"
-            >
-              
-            </motion.span>
           </Link>
 
           {/* Toggle Settings View */}
@@ -64,12 +59,6 @@ export const ProfileCard = () => {
                 Settings
               </span>
             </div>
-            <motion.span 
-              whileHover={{ scale: 1.1 }}
-              className="text-gray-400 group-hover:text-blue-600"
-            >
-              
-            </motion.span>
           </div>
 
           <div className="group flex items-center justify-between px-4 py-3 hover:bg-blue-50 rounded-lg transition-colors">
@@ -105,7 +94,13 @@ export const ProfileCard = () => {
 
       {/* Show Settings Card if clicked */}
       {showSettings && (
-        <div className="absolute top-0 left-0 w-full h-full bg-white shadow-lg rounded-3xl">
+        <div className="absolute top-0 left-0 w-full h-full bg-white shadow-lg rounded-3xl p-4 relative">
+          <button
+            onClick={() => setShowSettings(false)}
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors"
+          >
+            <FaTimes className="text-xl" />
+          </button>
           <SettingsCard onClose={() => setShowSettings(false)} />
         </div>
       )}
