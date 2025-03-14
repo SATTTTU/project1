@@ -1,6 +1,5 @@
-// tabs/WishlistContent.jsx
-import WishlistItem from "./wishlist/WishlistItem";
-import EmptyWishlistState from "./wishlist/EmptyWishlistState";
+import EmptyWishlistState from "./EmptyWishlist";
+import WishlistItem from "./WishlistItem";
 
 const WishlistContent = () => {
   const wishlistItems = [

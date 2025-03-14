@@ -1,4 +1,3 @@
-// tabs/wishlist/EmptyWishlistState.jsx
 import { Link } from "react-router-dom";
 import { FiHeart } from "react-icons/fi";
 
