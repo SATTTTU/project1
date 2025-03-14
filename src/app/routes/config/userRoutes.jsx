@@ -31,15 +31,15 @@ export const userRoutes = [
 							return { Component: LoginSection };
 						},
 					},
-					{
-						path: paths.user.homePage.path,
-						lazy: async () => {
-							const { Homepage } = await import(
-								"../../../modules/user/Homepage/components/Homepage"
-							);
-							return { Component: Homepage };
-						},
-					},
+					// {
+					// 	path: paths.user.homePage.path,
+					// 	lazy: async () => {
+					// 		const { Homepage } = await import(
+					// 			"../../../modules/user/Homepage/components/Homepage"
+					// 		);
+					// 		return { Component: Homepage };
+					// 	},
+					// },
 					{
 						path: paths.user.forgotPassword.path,
 						lazy: async () => {
@@ -179,15 +179,15 @@ export const userRoutes = [
 							return { Component: FoodDetailsPage };
 						},
 					},
-					{
-						path: paths.user.mainPage.path,
-						lazy: async () => {
-							const { HomePage } = await import(
-								"../../../modules/user/LandingPage/HomePage"
-							);
-							return { Component: HomePage };
-						},
-					},
+					// {
+					// 	path: paths.user.mainPage.path,
+					// 	lazy: async () => {
+					// 		const { HomePage } = await import(
+					// 			"../../../modules/user/LandingPage/HomePage"
+					// 		);
+					// 		return { Component: HomePage };
+					// 	},
+					// },
 					{
 						path: paths.user.about.path,
 						lazy: async () => {
