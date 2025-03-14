@@ -88,8 +88,8 @@ export const cookRoutes = [
           {
             path: paths.cook.forgetPassword.path,
             lazy: async () => {
-              const { ForgotPassword } = await import(
-                "../../../modules/cook/auth/components/forgetPassword/forgetPassword"
+              const { ForgotPassword} = await import(
+                "../cook/auth/forgetpassword"
               );
               return { Component: ForgotPassword };
             },
