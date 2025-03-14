@@ -18,7 +18,6 @@ export const Sidebar = () => {
     { to: "/admin/cookDetails", icon: <FaCookie />, text: "Cooks" },
     { to: "/admin/paymentpage", icon: <MdPayments />, text: "Payments" },
     { to: "/admin/reports", icon: <TbReportSearch />, text: "Reports" },
-    { to: "/contact", icon: <IoIosContacts />, text: "Contact" },
   ];
 
   const handleLogout = () => {

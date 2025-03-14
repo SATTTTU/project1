@@ -6,8 +6,8 @@ import { Sidebar } from "@/components/ui/admin/aside/aside";
 import { StatsCard } from "@/modules/admin/dashboard/components/statscard";
 import { TopCooksList } from "@/modules/admin/dashboard/components/top-cooks";
 import { ProfileAvatar } from "@/modules/admin/dashboard/components/avatar";
-import { ProfileCard } from "@/modules/admin/components/homepage/admindashboard/profile/adminInformation";
 import { Link } from "react-router-dom";
+import { ProfileCard } from "@/modules/admin/editProfile/components/profilecard";
 
 // Custom hook to detect clicks outside a specified element
 const useOutsideClick = (ref, callback) => {
