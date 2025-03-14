@@ -1,22 +1,19 @@
 import { useFormik } from "formik";
-import { signUpSchema } from "@/modules/user/auth/formik/schema/authschema";
-import { useAdminRegister } from "../api/adminlogin";
+import { forgotPasswordSchema } from "../schema/adminformSchema";
+import { useAdminForgotPassword } from "../api/forgot-Password";
 
-export const useAdminRegisterFormik = ( ) => {
-  const { mutateAsync, isLoading, isError, error, isSuccess } = useAdminRegister();
+export const useAdminForgotPasswordFormik = () => {
+  const { mutateAsync, isLoading, isError, error, isSuccess } = useAdminForgotPassword();
 
   const formik = useFormik({
     initialValues: {
       email: "",
-      password: "",
     },
     validate: (values) => {
       try {
-        // Validate using Zod schema
-        signUpSchema.parse(values);
+        forgotPasswordSchema.parse(values);
         return {}; // No errors
       } catch (err) {
-        // Convert Zod errors to Formik errors
         const errors = {};
         err.errors.forEach((issue) => {
           errors[issue.path[0]] = issue.message;
@@ -27,7 +24,7 @@ export const useAdminRegisterFormik = ( ) => {
     validateOnBlur: true,
     onSubmit: async (values) => {
       try {
-        await mutateAsync(values);
+        await mutateAsync(values); // Trigger forgot password API
         formik.resetForm();
       } catch (err) {
         console.error(err);

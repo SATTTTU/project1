@@ -14,8 +14,8 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: 'https://khajabox-backend.dev.tai.com.np', 
-        changeOrigin: false,
-        secure: false,
+        changeOrigin: true,
+        secure: true,
         rewrite: (path) => path.replace(/^\/api/, ''), 
       }
     }
