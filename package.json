@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -15,6 +15,7 @@
     "@tailwindcss/vite": "^4.0.9",
     "@tanstack/react-query": "^5.66.11",
     "axios": "^1.8.1",
+    "cors": "^2.8.5",
     "formik": "^2.4.6",
     "framer-motion": "^12.4.10",
     "lucide-react": "^0.477.0",

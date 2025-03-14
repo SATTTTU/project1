@@ -57,7 +57,7 @@ export const adminRoutes = [
               );
               return { Component: MyProfileRoute };
             },
-            ErrorBoundary: AppRootErrorBoundary,
+            // ErrorBoundary: AppRootErrorBoundary,
           },
           {
             path: paths.admin.reports.path,
@@ -136,6 +136,16 @@ export const adminRoutes = [
                 "../../routes/admin/payment/cookpayment"
               );
               return { Component: CookPaymentRoute };
+            },
+            ErrorBoundary: AppRootErrorBoundary,
+          },
+          {
+            path: paths.admin.forgotpassword.path,
+            lazy: async () => {
+              const { ForgotPasswordRoute } = await import(
+                "../../routes/admin/auth/forgot-password"
+              );
+              return { Component: ForgotPasswordRoute };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },

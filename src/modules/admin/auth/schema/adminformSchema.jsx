@@ -19,3 +19,7 @@ export const resetPasswordSchema = z.object({
   message: "Passwords do not match",
   path: ["confirmPassword"], // The error will be associated with confirmPassword
 });
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email("Invalid email format"),
+});
