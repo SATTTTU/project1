@@ -29,10 +29,10 @@ export const rootRoutes = [
   {
     path: "/",
     lazy: async () => {
-      const { HomePageRoutes } = await import(
-        "../../routes/user/home/layout"
+      const { Layout } = await import(
+        "../user/home/layout"
       );
-      return { Component: HomePageRoutes };
+      return { Component: Layout };
     },
   },
 ];

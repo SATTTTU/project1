@@ -29,10 +29,7 @@ export const About = () => {
 							We saw a gap in the market where people wanted high-quality meals
 							but didn’t always have time to cook or visit a restaurant. With
 							busy schedules, work commitments, and family responsibilities,
-							ordering food should be easy and reliable. That’s where we come
-							in! By combining technology, top-notch chefs, and fresh
-							ingredients, we created KhajaBox, a cloud kitchen that delivers
-							restaurant-style meals at affordable prices.
+							ordering food should be easy and reliable.
 						</p>
 					</div>
 				</div>

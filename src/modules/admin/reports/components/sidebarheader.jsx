@@ -4,8 +4,8 @@ import { Search } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { FaArrowLeft } from "react-icons/fa"
 
-export const SidebarHeader = ({ searchQuery, setSearchQuery, toggleSidebar, totalNewMessages }) => {
-  const navigate = useNavigate()
+export const SidebarHeader = ({ searchQuery, setSearchQuery, totalNewMessages }) => {
+  const navigate = useNavigate();
 
   const handleBack = () => {
     navigate("/admin/dashboard") // Change this path to your desired destination

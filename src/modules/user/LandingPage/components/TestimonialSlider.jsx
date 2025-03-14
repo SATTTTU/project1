@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { Star } from "lucide-react"
 import { Swiper, SwiperSlide } from "swiper/react"
@@ -7,12 +5,21 @@ import "swiper/css"
 import "swiper/css/pagination"
 import "swiper/css/navigation"
 import { Pagination, Navigation, Autoplay } from "swiper/modules"
+import Customer1 from "../../../../assets/UserImages/person1.jpg"
+import Customer2 from "../../../../assets/UserImages/person2.jpg"
+import Customer3 from "../../../../assets/UserImages/person3.jpg"
+import Customer4 from "../../../../assets/UserImages/person3.jpg"
+
+import Customer5 from "../../../../assets/UserImages/person3.jpg"
+
+
+
 
 const testimonials = [
   {
     id: 1,
     name: "Sarah Johnson",
-    image: "/placeholder.svg?height=80&width=80",
+    image:Customer1,
     rating: 5,
     testimonialCount: 120,
     text: "The positive impact was undoubtedly the efficiency of the service. The speed moved me to tears. The delivery was fast and the food was up to the usual McDonald's standard – hot and satisfying.",
@@ -20,7 +27,7 @@ const testimonials = [
   {
     id: 2,
     name: "Michael Chen",
-    image: "/placeholder.svg?height=80&width=80",
+    image: Customer2,
     rating: 5,
     testimonialCount: 245,
     text: "The positive impact was undoubtedly the efficiency of the service. The speed moved me to tears. The delivery was fast and the food was up to the usual McDonald's standard – hot and satisfying.",
@@ -28,7 +35,7 @@ const testimonials = [
   {
     id: 3,
     name: "Emily Rodriguez",
-    image: "/placeholder.svg?height=80&width=80",
+    image: Customer3,
     rating: 5,
     testimonialCount: 189,
     text: "The positive impact was undoubtedly the efficiency of the service. The speed moved me to tears. The delivery was fast and the food was up to the usual McDonald's standard – hot and satisfying.",
@@ -36,7 +43,7 @@ const testimonials = [
   {
     id: 4,
     name: "David Wilson",
-    image: "/placeholder.svg?height=80&width=80",
+    image: Customer5,
     rating: 5,
     testimonialCount: 156,
     text: "Fresh, organic produce that tastes amazing! The delivery is always on time and the quality is consistently excellent. I've recommended KhanaBox to all my friends.",
@@ -44,7 +51,7 @@ const testimonials = [
   {
     id: 5,
     name: "Priya Patel",
-    image: "/placeholder.svg?height=80&width=80",
+    image: Customer4,
     rating: 5,
     testimonialCount: 210,
     text: "I love that I can support local farmers while getting premium organic food. The subscription service is flexible and the mobile app makes ordering so convenient.",
@@ -134,10 +141,10 @@ export const TestimonialSlider = () => {
             </Swiper>
           )}
 
-          <div className="swiper-button-prev !absolute !left-0 !top-1/2 !-translate-y-1/2 !z-10 !bg-orange-500 !w-10 !h-10 !rounded-full !flex !items-center !justify-center !text-white after:!text-lg after:!content-['prev'] hover:!bg-orange-600 !shadow-md"></div>
-          <div className="swiper-button-next !absolute !right-0 !top-1/2 !-translate-y-1/2 !z-10 !bg-orange-500 !w-10 !h-10 !rounded-full !flex !items-center !justify-center !text-white after:!text-lg after:!content-['next'] hover:!bg-orange-600 !shadow-md"></div>
+          <div className="swiper-button-prev !absolute !left-0 !top-1/2 !-translate-y-1/2 !z-10 !bg-[#426B1F] !w-10 !h-10 !rounded-full !flex !items-center !justify-center !text-white after:!text-lg after:!content-['prev']  !shadow-md"></div>
+          <div className="swiper-button-next !absolute !right-0 !top-1/2 !-translate-y-1/2 !z-10 !bg-[#426B1F] !w-10 !h-10 !rounded-full !flex !items-center !justify-center !text-white after:!text-lg after:!content-['next']  !shadow-md"></div>
 
-          <div className="testimonial-pagination mt-12 flex justify-center"></div>
+          <div className="testimonial-pagination mx-auto space-x-4  mt-16 flex justify-center"></div>
         </div>
       </div>
     </section>
