@@ -1,116 +1,111 @@
+// components/TermsConditionsStep.jsx
 import React from "react";
-import { Link } from "react-router-dom";
-import { FiLoader, FiFile } from "react-icons/fi";
 
-const TermsConditionsStep = ({ 
-  formData, 
-  handleInputChange, 
+const TermsConditionsStep = ({
+  formData,
+  handleInputChange,
   errors,
   isLoading,
   prevStep,
-  nextStep 
+  nextStep,
 }) => {
   return (
-    <div className="space-y-4 cursor-pointer">
-      {/* Preview uploaded documents */}
-      <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-3">
-          Uploaded Documents
-        </h3>
-        <div className="grid grid-cols-2 gap-3">
-          {[
-            "passwordsizephoto",
-            "citizenshipFront",
-            "citizenshipBack",
-            "certificate",
-          ].map(
-            (field) =>
-              formData[field] && (
-                <div key={field} className="shadow-lg rounded-md p-2">
-                  <p className="text-xs text-gray-500 mb-1">
-                    {field === "passwordsizephoto" && "Photo"}
-                    {field === "citizenshipFront" &&
-                      "Citizenship (Front)"}
-                    {field === "citizenshipBack" &&
-                      "Citizenship (Back)"}
-                    {field === "certificate" && "Certificate"}
-                  </p>
-                  <div className="bg-gray-100 rounded flex items-center justify-center p-2">
-                    <FiFile className="text-[#4b6c1e] mr-1" />
-                    <span className="text-xs truncate">
-                      {formData[field].name}
-                    </span>
-                  </div>
-                </div>
-              )
-          )}
-        </div>
-      </div>
+    <form onSubmit={nextStep}>
+      <div className="space-y-6">
+        <h2 className="text-xl font-semibold">Terms and Conditions</h2>
+        <p className="text-gray-600 mb-6">
+          Please read and accept our terms and conditions to continue.
+        </p>
 
-      <fieldset className="mb-6">
-        <legend className="text-lg font-bold mb-2">
-          Terms and Conditions
-        </legend>
-        <div className="bg-gray-50 p-4 rounded-lg mb-4 max-h-60 overflow-y-auto">
-          <p className="text-gray-600 text-sm">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Nullam auctor, nisl eget ultricies tincidunt, nisl nisl
-            aliquam nisl, eget ultricies nisl nisl eget nisl.
-            <br />
-            <br />
-            Nullam auctor, nisl eget ultricies tincidunt, nisl nisl
-            aliquam nisl, eget ultricies nisl nisl eget nisl.
+        <div className="bg-gray-50 p-4 rounded-md h-64 overflow-y-auto text-sm mb-4 border border-gray-200">
+          <h3 className="font-semibold mb-2">Terms of Service</h3>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+            auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget
+            aliquam nisl nisl eget nisl. Nullam auctor, nisl eget ultricies
+            tincidunt, nisl nisl aliquam nisl, eget aliquam nisl nisl eget nisl.
+          </p>
+          <h3 className="font-semibold mt-4 mb-2">Privacy Policy</h3>
+          <p>
+            Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam
+            nisl, eget aliquam nisl nisl eget nisl. Lorem ipsum dolor sit amet,
+            consectetur adipiscing elit. Nullam auctor, nisl eget ultricies
+            tincidunt, nisl nisl aliquam nisl, eget aliquam nisl nisl eget nisl.
+          </p>
+          <h3 className="font-semibold mt-4 mb-2">Cook's Responsibilities</h3>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+            auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget
+            aliquam nisl nisl eget nisl. Nullam auctor, nisl eget ultricies
+            tincidunt, nisl nisl aliquam nisl, eget aliquam nisl nisl eget nisl.
           </p>
         </div>
-        <div className="flex items-center space-x-2">
+
+        <div className="flex items-start mb-4">
           <input
             type="checkbox"
             id="termsAccepted"
             name="termsAccepted"
             checked={formData.termsAccepted}
             onChange={handleInputChange}
+            className="mt-1"
           />
-          <label
-            htmlFor="termsAccepted"
-            className="text-sm font-medium"
-          >
-            I agree to the terms and conditions
+          <label htmlFor="termsAccepted" className="ml-2 text-sm">
+            I have read and agree to the terms and conditions, privacy policy,
+            and cook's responsibilities outlined above.
           </label>
         </div>
         {errors.termsAccepted && (
-          <p className="text-red-500 text-sm mt-1">
+          <p className="text-red-500 text-sm">
             {errors.termsAccepted}
           </p>
         )}
-      </fieldset>
 
-      <div className="flex justify-between pt-4">
-        <button
-          type="button"
-          onClick={prevStep}
-          className="px-6 py-2 border border-[#4b6c1e] text-[#4b6c1e] rounded"
-        >
-          Previous
-        </button>
-        {!isLoading ? (
-          <Link
-            to="/cook/underreview"
-            onClick={nextStep}
-            className="px-6 rounded bg-[#4b6c1e] cursor-pointer py-3 text-white transition-colors hover:bg-[#3d5819] flex items-center"
-          >
-            Submit
-          </Link>
-        ) : (
+        <div className="flex justify-between mt-8">
           <button
-            disabled
-            className="px-6 rounded bg-[#4b6c1e] cursor-wait py-3 text-white transition-colors hover:bg-[#3d5819] flex items-center"
+            type="button"
+            onClick={prevStep}
+            className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            disabled={isLoading}
           >
-            <FiLoader className="mr-2 h-5 w-5 animate-spin" />
-            Submitting...
+            Back
           </button>
-        )}
+          <button
+            type="submit"
+            className="bg-[#4b6c1e] text-white px-6 py-2 rounded-lg hover:bg-[#3a5417] transition-colors flex items-center"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <svg
+                  className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Submitting...
+              </>
+            ) : (
+              "Submit"
+            )}
+          </button>
+        </div>
       </div>
-    </div>
+    </form>
   );
 };
 

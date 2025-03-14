@@ -1,43 +1,51 @@
+// components/DocumentUploadStep.jsx
 import React from "react";
-import FileUploadField from "./FileUploadField";
-import NavigationButtons from "./NavigationButtons";
+import FileUpload from "./fileupload";
 
-const DocumentUploadStep = ({ formData, fileHandlingProps, prevStep, nextStep }) => {
+
+const DocumentUploadStep = ({ formData, fileHandlingProps, nextStep }) => {
   return (
-    <div className="space-y-4 cursor-grab">
-      <fieldset>
-        <legend className="text-lg font-bold mb-4">
-          Upload your photo and documents
-        </legend>
-        <FileUploadField
-          name="passwordsizephoto"
-          label="Password size photo"
-          required
-          formData={formData}
-          fileHandlingProps={fileHandlingProps}
-        />
-        <FileUploadField
-          name="citizenshipFront"
-          label="Citizenship Front"
-          required
-          formData={formData}
-          fileHandlingProps={fileHandlingProps}
-        />
-        <FileUploadField
-          name="citizenshipBack"
-          label="Citizenship Back"
-          required
-          formData={formData}
-          fileHandlingProps={fileHandlingProps}
-        />
-      </fieldset>
+    <form onSubmit={nextStep}>
+      <div className="space-y-6">
+        <h2 className="text-xl font-semibold">Upload Personal Documents</h2>
+        <p className="text-gray-600 mb-6">
+          Please upload your passport-sized photo and citizenship documents.
+        </p>
 
-      <NavigationButtons 
-        prevStep={prevStep} 
-        nextStep={nextStep}
-        isPrevDisabled={true}
-      />
-    </div>
+        <FileUpload
+          label="Passport Size Photo"
+          name="passwordsizephoto"
+          accept="image/*"
+          file={formData.passwordsizephoto}
+          {...fileHandlingProps}
+        />
+
+        <FileUpload
+          label="Citizenship Front"
+          name="citizenshipFront"
+          accept="image/*"
+          file={formData.citizenshipFront}
+          {...fileHandlingProps}
+        />
+
+        <FileUpload
+          label="Citizenship Back"
+          name="citizenshipBack"
+          accept="image/*"
+          file={formData.citizenshipBack}
+          {...fileHandlingProps}
+        />
+
+        <div className="flex justify-end mt-8">
+          <button
+            type="submit"
+            className="bg-[#4b6c1e] text-white px-6 py-2 rounded-lg hover:bg-[#3a5417] transition-colors"
+          >
+            Continue
+          </button>
+        </div>
+      </div>
+    </form>
   );
 };
 

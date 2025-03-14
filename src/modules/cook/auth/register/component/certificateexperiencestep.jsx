@@ -1,44 +1,66 @@
+// components/CertificateExperienceStep.jsx
 import React from "react";
-import FileUploadField from "./FileUploadField";
-import NavigationButtons from "./NavigationButtons";
+import FileUpload from "./fileupload";
 
-const CertificateExperienceStep = ({ 
-  formData, 
-  handleInputChange, 
+const CertificateExperienceStep = ({
+  formData,
+  handleInputChange,
   fileHandlingProps,
   prevStep,
-  nextStep 
+  nextStep,
 }) => {
   return (
-    <div className="space-y-4 cursor-grab">
-      <fieldset>
-        <legend className="text-lg font-bold mb-4">
-          Upload your cooking certificate and share your experience
-        </legend>
-        <FileUploadField
+    <form onSubmit={nextStep}>
+      <div className="space-y-6">
+        <h2 className="text-xl font-semibold">Professional Qualifications</h2>
+        <p className="text-gray-600 mb-6">
+          Please upload your certificates and share your cooking experience.
+        </p>
+
+        <FileUpload
+          label="Certificate"
           name="certificate"
-          label="Certificate (if available)"
-          formData={formData}
-          fileHandlingProps={fileHandlingProps}
+          accept=".pdf,.jpg,.jpeg,.png"
+          file={formData.certificate}
+          {...fileHandlingProps}
         />
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Past Experience
+          <label className="block text-gray-700 font-medium mb-2">
+            Experience (in years)
           </label>
           <textarea
             name="experience"
-            rows="4"
             value={formData.experience}
             onChange={handleInputChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#4b6c1e] focus:border-[#4b6c1e]"
+            rows="4"
             placeholder="Describe your cooking experience..."
-            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#4b6c1e]"
-          />
+          ></textarea>
+          {fileHandlingProps.errors.experience && (
+            <p className="text-red-500 text-sm mt-1">
+              {fileHandlingProps.errors.experience}
+            </p>
+          )}
         </div>
-      </fieldset>
 
-      <NavigationButtons prevStep={prevStep} nextStep={nextStep} />
-    </div>
+        <div className="flex justify-between mt-8">
+          <button
+            type="button"
+            onClick={prevStep}
+            className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            Back
+          </button>
+          <button
+            type="submit"
+            className="bg-[#4b6c1e] text-white px-6 py-2 rounded-lg hover:bg-[#3a5417] transition-colors"
+          >
+            Continue
+          </button>
+        </div>
+      </div>
+    </form>
   );
 };
 

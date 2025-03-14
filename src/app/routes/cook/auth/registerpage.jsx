@@ -1,14 +1,14 @@
 // RegisterPage.jsx
+import AuthImageSection from "@/modules/cook/auth/firstregisterpage/component/authimagesection";
+import AuthSidebar from "@/modules/cook/auth/register/component/authsidebar";
+import CertificateExperienceStep from "@/modules/cook/auth/register/component/certificateexperiencestep";
+import DocumentUploadStep from "@/modules/cook/auth/register/component/documentuploadstep";
+import StepperHeader from "@/modules/cook/auth/register/component/stepperheader";
+import TermsConditionsStep from "@/modules/cook/auth/register/component/termsconditionstep";
+import { validateStep } from "@/modules/cook/auth/register/component/validation";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { FiLoader } from "react-icons/fi";
-import authimage from "../../../../assets/background1.jpg";
-import StepperHeader from "./components/StepperHeader";
-import AuthSidebar from "./components/AuthSidebar";
-import DocumentUploadStep from "./components/DocumentUploadStep";
-import CertificateExperienceStep from "./components/CertificateExperienceStep";
-import TermsConditionsStep from "./components/TermsConditionsStep";
-import { validateStep } from "./validation/registrationValidation";
+
 
 export const RegisterPage = () => {
   const [step, setStep] = useState(1);
@@ -23,6 +23,7 @@ export const RegisterPage = () => {
     termsAccepted: false,
   });
   const [errors, setErrors] = useState({});
+  
   const fileInputRefs = {
     passwordsizephoto: useRef(),
     citizenshipFront: useRef(),
@@ -34,9 +35,7 @@ export const RegisterPage = () => {
     const { name, files } = e.target;
     if (files && files[0]) {
       setFormData({ ...formData, [name]: files[0] });
-    }
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }));
+      clearError(name);
     }
   };
 
@@ -45,6 +44,7 @@ export const RegisterPage = () => {
     e.stopPropagation();
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       setFormData({ ...formData, [fieldName]: e.dataTransfer.files[0] });
+      clearError(fieldName);
     }
   };
 
@@ -60,8 +60,14 @@ export const RegisterPage = () => {
     }
   };
 
-  const handleValidateStep = (currentStep) => {
-    const newErrors = validateStep(currentStep, formData);
+  const clearError = (fieldName) => {
+    if (errors[fieldName]) {
+      setErrors((prev) => ({ ...prev, [fieldName]: undefined }));
+    }
+  };
+
+  const handleValidateCurrentStep = () => {
+    const newErrors = validateStep(step, formData);
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -69,7 +75,7 @@ export const RegisterPage = () => {
   const nextStep = (e) => {
     if (e) e.preventDefault();
 
-    if (!handleValidateStep(step)) return;
+    if (!handleValidateCurrentStep()) return;
 
     if (step === 3) {
       setIsLoading(true);
@@ -93,9 +99,7 @@ export const RegisterPage = () => {
       ...formData,
       [name]: type === "checkbox" ? checked : value,
     });
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }));
-    }
+    clearError(name);
   };
 
   const fileHandlingProps = {
@@ -110,7 +114,7 @@ export const RegisterPage = () => {
   return (
     <div className="flex h-screen w-full overflow-hidden">
       {/* Left side - Image with overlay */}
-      <AuthSidebar image={authimage} />
+      <AuthSidebar image={AuthImageSection} />
 
       {/* Right side - Form */}
       <div className="w-full md:w-1/2 flex flex-col py-8 overflow-y-auto">

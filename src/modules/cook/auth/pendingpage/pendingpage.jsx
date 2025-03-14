@@ -1,5 +1,5 @@
 import React from "react";
-import profile from "../../../../../assets/cookimage.png";
+import profile from "../../../../assets/cookimage.png";
 import { Link } from "react-router-dom";
 export const pendingPage = () => {
   return (
