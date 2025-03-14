@@ -1,4 +1,4 @@
-import { CartItem } from "./CartItem";
+import { CartItem } from "./cartitem";
 
 export const CartItems = ({ items, onQuantityChange, onRemoveItem }) => {
   return (

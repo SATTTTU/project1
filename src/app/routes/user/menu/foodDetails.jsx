@@ -4,12 +4,12 @@ import { FiArrowLeft } from "react-icons/fi"
 import { useDispatch } from "react-redux"
 import { addToCart } from "../../../../store/cart/cart"
 import { toast } from "react-toastify"
-import { foodItemsData } from "../../../../modules/user/FoodSection/components/Data";
-import { Header } from "@/modules/user/FoodSection/components/Header"
-import FoodImageSection from "@/modules/user/FoodSection/components/FoodImageSection"
-import FoodInfoSection from "@/modules/user/FoodSection/components/FoodInfo"
-import FoodTabs from "@/modules/user/FoodSection/components/FoodTabs"
-import RelatedItems from "@/modules/user/FoodSection/components/RelatedItem"
+import { foodItemsData } from "../../../../modules/user/FoodSection/components/data";
+import { Header } from "@/modules/user/FoodSection/components/header"
+import FoodImageSection from "@/modules/user/FoodSection/components/foodImageSection"
+import FoodInfoSection from "@/modules/user/FoodSection/components/foodInfo"
+import FoodTabs from "@/modules/user/FoodSection/components/foodTabs"
+import RelatedItems from "@/modules/user/FoodSection/components/relatedItem"
 
 export const FoodDetails = () => {
   const { id } = useParams()

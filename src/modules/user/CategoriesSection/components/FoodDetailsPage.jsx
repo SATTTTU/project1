@@ -3,8 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { addToCart } from '../../../../store/cart/cart';
-import { allFoodItems } from '@/modules/user/CategoriesSection/components/Data';
-import { Navbar } from '@/modules/user/CategoriesSection/components/Navbar';
+import { allFoodItems } from "@/modules/user/CategoriesSection/components/data";
+import { Navbar } from "@/modules/user/CategoriesSection/components/navbar";
 
 export const FoodDetailsPage = () => {
   const { id } = useParams();

@@ -1,6 +1,5 @@
 import { BiLogoGmail } from "react-icons/bi";
-import Verify from "../../../../../assets/UserImages/verify.jpeg";
-import { Link } from "react-router-dom";
+import Verify from "../../../../assets/UserImages/verify.jpeg";
 
 export const Verification = () => {
 	return (
