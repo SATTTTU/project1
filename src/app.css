@@ -2,12 +2,19 @@
 
 /* 426B1F */
 
+/* global.css */
+body {
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+}
 
 
 .testimonial-swiper {
   padding: 30px 50px !important;
   position: relative;
-  margin-bottom: 40px !important; /* Add more space at the bottom */
+  margin-bottom: 40px !important; 
 }
 
 .equal-height-slides .swiper-slide {

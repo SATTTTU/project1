@@ -53,13 +53,13 @@ export const userPaths = {
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
-	homePage: {
-		path: "/user/home",
-		getHref: (redirectTo) =>
-			`/user/home${
-				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
-			}`,
-	},
+	// homePage: {
+	// 	path: "/user/home",
+	// 	getHref: (redirectTo) =>
+	// 		`/user/home${
+	// 			redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+	// 		}`,
+	// },
 	cart: {
 		path: "/user/cart",
 		getHref: (redirectTo) =>
@@ -82,16 +82,16 @@ export const userPaths = {
 			}`,
 	},
 	profile: {
-		path: "/user/home/profile",
+		path: "/user/profile",
 		getHref: (redirectTo) =>
-			`/user/home/profile${
+			`/user/profile${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
 	orderHistory: {
-		path: "/user/home/order",
+		path: "/user/orders",
 		getHref: (redirectTo) =>
-			`/user/home/order${
+			`/user/orders${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
@@ -102,10 +102,10 @@ export const userPaths = {
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
-	address: {
-		path: "/user/addresses",
+	setting: {
+		path: "/user/setting",
 		getHref: (redirectTo) =>
-			`/user/addresses${
+			`/user/setting${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
@@ -130,34 +130,32 @@ export const userPaths = {
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
-	categoryFoodDetails:{
+	categoryFoodDetails: {
 		path: "/details/:id",
 		getHref: (redirectTo) =>
 			`/details/:id${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
-	mainPage:{
+	mainPage: {
 		path: "/mainpage",
 		getHref: (redirectTo) =>
 			`/mainpage${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
-	authPage:{
+	authPage: {
 		path: "/authpage",
 		getHref: (redirectTo) =>
 			`/authpage${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
-	about:{
+	about: {
 		path: "/about",
 		getHref: (redirectTo) =>
 			`/about${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
-
 };
-  
