@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { Header } from "./header"
+import { Header } from "./Header"
 import MainImage from "../../../../assets/Main.jpg"
 
 
