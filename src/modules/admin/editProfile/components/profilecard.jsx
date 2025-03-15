@@ -1,12 +1,60 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaUser, FaCog, FaSignOutAlt, FaBell, FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { SettingsCard } from "./settings";
+import { useAdminProfile } from "../api/getprofile";
+import ConfirmModal from "@/components/ui/admin/confirmmodel/confirmmodel";
+import { useAdminLogout } from "../../dashboard/api/logout";
 
 export const ProfileCard = () => {
   const [notificationsAllowed, setNotificationsAllowed] = useState(true);
+   const [showLogoutModal, setShowLogoutModal] = useState(false);
+ 
   const [showSettings, setShowSettings] = useState(false);
+  const [profileData, setProfileData] = useState({
+    name: "Your Name",
+    email: "yourname@gmail.com",
+    avatar: "/api/placeholder/80/80",
+    isOnline: true
+  });
+const { mutateAsync: logout } = useAdminLogout();
+  const handleLogout = async () => {
+    try {
+      await logout();
+      localStorage.removeItem("adminToken"); // Remove token
+      window.location.href = "/admin/login"; // Redirect
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
+  };
+
+  const { 
+    mutateAsync: fetchProfileData, 
+    isLoading, 
+    error, 
+    isError 
+  } = useAdminProfile();
+
+  useEffect(() => {
+    const loadProfileData = async () => {
+      try {
+        const data = await fetchProfileData();
+        if (data) {
+          setProfileData({
+            name: data.name || "Your Name",
+            email: data.email || "yourname@gmail.com",
+            avatar: data.avatarUrl || "/api/placeholder/80/80",
+            isOnline: data.isOnline !== undefined ? data.isOnline : true
+          });
+        }
+      } catch (err) {
+        console.error("Failed to load profile data:", err);
+      }
+    };
+
+    loadProfileData();
+  }, [fetchProfileData]);
 
   return (
     <motion.div 
@@ -17,20 +65,38 @@ export const ProfileCard = () => {
     >
       {/* Profile Header */}
       <div className="bg-gradient-to-r from-green-500 to-green-700 text-white p-6">
-        <div className="flex items-center space-x-4">
-          <div className="relative">
-            <img
-              src="/api/placeholder/80/80"
-              alt="Profile"
-              className="w-20 h-20 rounded-full border-4 border-white shadow-lg"
-            />
-            <span className="absolute bottom-0 right-0 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></span>
+        {isLoading ? (
+          <div className="flex justify-center items-center h-32">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
           </div>
-          <div>
-            <h2 className="text-xl font-bold">Your Name</h2>
-            <p className="text-sm opacity-80">yourname@gmail.com</p>
+        ) : isError ? (
+          <div className="text-center py-4">
+            <p className="text-sm">Failed to load profile</p>
+            <button 
+              onClick={() => fetchProfileData()}
+              className="mt-2 px-3 py-1 bg-white text-green-600 rounded-lg text-xs"
+            >
+              Retry
+            </button>
           </div>
-        </div>
+        ) : (
+          <div className="flex items-center space-x-4">
+            <div className="relative">
+              <img
+                src={profileData.avatar}
+                alt="Profile"
+                className="w-20 h-20 rounded-full border-4 border-white shadow-lg object-cover"
+              />
+              {profileData.isOnline && (
+                <span className="absolute bottom-0 right-0 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></span>
+              )}
+            </div>
+            <div>
+              <h2 className="text-xl font-bold">{profileData.name}</h2>
+              <p className="text-sm opacity-80">{profileData.email}</p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Menu Items */}
@@ -84,7 +150,8 @@ export const ProfileCard = () => {
         {/* Logout Button */}
         <div className="mt-4 pt-4 border-t">
           <button 
-            className="w-full flex items-center justify-center text-red-500 hover:bg-red-50 py-3 rounded-lg transition-colors group"
+          onClick={()=>setShowLogoutModal(true)}
+            className="w-full  cursor-pointer flex items-center justify-center text-red-500 hover:bg-red-50 py-3 rounded-lg transition-colors group"
           >
             <FaSignOutAlt className="mr-2 group-hover:rotate-6 transition-transform" />
             Log Out
@@ -103,6 +170,17 @@ export const ProfileCard = () => {
           </button>
           <SettingsCard onClose={() => setShowSettings(false)} />
         </div>
+      )}
+      {showLogoutModal && (
+        <ConfirmModal
+          title="Logout Confirmation"
+          message="Are you sure you want to log out?"
+          confirmLabel="Logout"
+          cancelLabel="Cancel"
+          onCancel={() => setShowLogoutModal(false)}
+          onConfirm={handleLogout}
+          confirmColor="bg-red-600 hover:bg-red-700"
+        />
       )}
     </motion.div>
   );
