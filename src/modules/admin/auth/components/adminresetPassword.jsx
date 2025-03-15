@@ -3,12 +3,12 @@ import Label from "../../../../components/ui/label/Label";
 import Button from "../../../../components/ui/button/Button";
 import Input from "../../../../components/ui/input/Input";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { useAdminResetPassword } from "../api/create-newPassword";
+import { useAdminForgotPasswordFormik } from "../formik/useForgotPassword";
 
 const ResetPasswordForm = () => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const { formik, isLoading } = useAdminResetPassword();
+  const { formik, isLoading } = useAdminForgotPasswordFormik();
 
   return (
     <form onSubmit={formik?.handleSubmit} className="space-y-4">

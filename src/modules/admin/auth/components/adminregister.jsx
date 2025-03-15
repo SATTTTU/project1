@@ -4,7 +4,7 @@ import Button from "../../../../components/ui/button/Button";
 import Input from "../../../../components/ui/input/input";
 
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { useAdminRegisterFormik } from "../formik/useAdminlogin";
+import { useAdminRegisterFormik } from "../formik/useAdminregister";
 
 const AdminRegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);

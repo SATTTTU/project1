@@ -1,13 +1,11 @@
-// useAdminProfileEditFormik.js
 import { useFormik } from "formik";
-import { useAdminProfileEdit } from "../api/editprofile";
+import { toFormikValidationSchema } from "zod-formik-adapter";
 import { profileEditSchema } from "../schema/editprofile";
-
-
+import { useAdminProfileEdit } from "../api/editprofile";
 
 export const useAdminProfileEditFormik = () => {
-  const { mutateAsync, isLoading, isError, error, isSuccess } = useAdminProfileEdit();
-  
+  const { mutateAsync, isLoading } = useAdminProfileEdit();
+
   const formik = useFormik({
     initialValues: {
       name: "John Doe",
@@ -16,22 +14,16 @@ export const useAdminProfileEditFormik = () => {
       image: "/api/placeholder/200/200",
       isEditing: false,
     },
-    validationSchema: profileEditSchema, // Or your existing schema
-    onSubmit: async (values) => {
+    validationSchema: toFormikValidationSchema(profileEditSchema),
+    onSubmit: async (values, helpers) => {
       try {
         await mutateAsync(values);
-        formik.setFieldValue("isEditing", false);
+        // No need to reset the form here as it will lose the current values
       } catch (err) {
-        console.error("Error submitting form:", err);
+        helpers.setErrors({ submit: err?.response?.data?.message || "An error occurred" });
       }
     },
   });
-  
-  return {
-    formik,
-    isLoading,
-    isError,
-    error,
-    isSuccess,
-  };
+
+  return { formik, isLoading };
 };

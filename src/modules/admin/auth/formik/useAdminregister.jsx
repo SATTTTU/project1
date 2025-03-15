@@ -1,35 +1,27 @@
 import { useFormik } from "formik";
+import { toFormikValidationSchema } from "zod-formik-adapter";
 import { signUpSchema } from "@/modules/user/auth/formik/schema/authschema";
-import { useAdminRegister } from "../api/adminlogin";
+import { useAdminRegister } from "../api/adminregister";
 
-export const useAdminRegisterFormik = ( ) => {
+export const useAdminRegisterFormik = () => {
   const { mutateAsync, isLoading, isError, error, isSuccess } = useAdminRegister();
 
   const formik = useFormik({
     initialValues: {
+      name: "",
       email: "",
       password: "",
     },
-    validate: (values) => {
-      try {
-        // Validate using Zod schema
-        signUpSchema.parse(values);
-        return {}; // No errors
-      } catch (err) {
-        // Convert Zod errors to Formik errors
-        const errors = {};
-        err.errors.forEach((issue) => {
-          errors[issue.path[0]] = issue.message;
-        });
-        return errors;
-      }
-    },
-    validateOnBlur: true,
-    onSubmit: async (values) => {
+    validationSchema: toFormikValidationSchema(signUpSchema), // Use Zod schema adapter for Formik validation
+    onSubmit: async (values, helpers) => {
       try {
         await mutateAsync(values);
-        formik.resetForm();
+        formik.resetForm(); // Reset form after successful submission
       } catch (err) {
+        // Handle errors by setting form errors
+        helpers.setErrors({
+          submit: err?.response?.data?.message || "An error occurred during registration.",
+        });
         console.error(err);
       }
     },

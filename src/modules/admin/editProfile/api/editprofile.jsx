@@ -3,8 +3,8 @@ import { useMutation } from "@tanstack/react-query";
 
 // Admin Profile Edit API
 const editAdminProfile = async (adminData) => {
-  const response = await api.put("/api/admin/profile", adminData); // Assuming this is the endpoint for profile edit
-  return response.data; // Return response data
+  const response = await api.put("/api/admins/update-profile", adminData);
+  return response.data;
 };
 
 export const useAdminProfileEdit = ({ mutationConfig } = {}) => {

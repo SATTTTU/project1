@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 
 // Register API
 const loginAdmin = async (adminData) => {
-  const response = await api.post("/api/login", adminData);
+  const response = await api.post("/api/admins/login", adminData);
   return response.data; // Return response data
 };
 

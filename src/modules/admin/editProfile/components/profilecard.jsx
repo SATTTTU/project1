@@ -16,7 +16,7 @@ export const ProfileCard = () => {
       className="w-72 bg-white shadow-2xl rounded-3xl border-2 border-gray-100 overflow-hidden relative"
     >
       {/* Profile Header */}
-      <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6">
+      <div className="bg-gradient-to-r from-green-500 to-green-700 text-white p-6">
         <div className="flex items-center space-x-4">
           <div className="relative">
             <img
@@ -38,11 +38,11 @@ export const ProfileCard = () => {
         <nav className="space-y-2">
           <Link 
             to='/admin/dashboard/profile' 
-            className="group flex items-center justify-between px-4 py-3 hover:bg-blue-50 rounded-lg transition-colors"
+            className="group flex items-center justify-between px-4 py-3 hover:bg-green-50 rounded-lg transition-colors"
           >
             <div className="flex items-center space-x-3">
-              <FaUser className="text-gray-500 group-hover:text-blue-600 transition-colors" />
-              <span className="text-gray-700 group-hover:text-blue-600 transition-colors">
+              <FaUser className="text-gray-500 group-hover:text-green-600 transition-colors" />
+              <span className="text-gray-700 group-hover:text-green-600 transition-colors">
                 My Profile
               </span>
             </div>
@@ -51,20 +51,20 @@ export const ProfileCard = () => {
           {/* Toggle Settings View */}
           <div 
             onClick={() => setShowSettings(true)} 
-            className="group flex items-center justify-between px-4 py-3 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
+            className="group flex items-center justify-between px-4 py-3 hover:bg-green-50 rounded-lg transition-colors cursor-pointer"
           >
             <div className="flex items-center space-x-3">
-              <FaCog className="text-gray-500 group-hover:text-blue-600 transition-colors" />
-              <span className="text-gray-700 group-hover:text-blue-600 transition-colors">
+              <FaCog className="text-gray-500 group-hover:text-green-600 transition-colors" />
+              <span className="text-gray-700 group-hover:text-green-600 transition-colors">
                 Settings
               </span>
             </div>
           </div>
 
-          <div className="group flex items-center justify-between px-4 py-3 hover:bg-blue-50 rounded-lg transition-colors">
+          <div className="group flex items-center justify-between px-4 py-3 hover:bg-green-50 rounded-lg transition-colors">
             <div className="flex items-center space-x-3">
-              <FaBell className="text-gray-500 group-hover:text-blue-600 transition-colors" />
-              <span className="text-gray-700 group-hover:text-blue-600 transition-colors">
+              <FaBell className="text-gray-500 group-hover:text-green-600 transition-colors" />
+              <span className="text-gray-700 group-hover:text-green-600 transition-colors">
                 Notifications
               </span>
             </div>

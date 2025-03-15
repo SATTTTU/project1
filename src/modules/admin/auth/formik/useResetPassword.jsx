@@ -1,9 +1,9 @@
 import { useFormik } from "formik";
-import { resetPasswordSchema } from "../schema/adminformSchema";
+import { toFormikValidationSchema } from "zod-formik-adapter";
 import { useAdminResetPassword } from "../api/create-newPassword";
+import { resetPasswordSchema } from "../schema/adminformSchema";
 
 export const useResetPasswordFormik = () => {
-  // Use your custom hook to get the mutation
   const { mutateAsync, isLoading, isError, error, isSuccess } = useAdminResetPassword();
 
   const formik = useFormik({
@@ -12,29 +12,17 @@ export const useResetPasswordFormik = () => {
       newPassword: "",
       confirmPassword: "",
     },
-    validate: (values) => {
-      try {
-        resetPasswordSchema.parse(values);
-        return {}; // No errors
-      } catch (err) {
-        const errors = {};
-        if (err.errors) {
-          err.errors.forEach((issue) => {
-            errors[issue.path[0]] = issue.message;
-          });
-        } else {
-          console.error("Unexpected error during validation:", err);
-        }
-        return errors;
-      }
-    },
-    validateOnBlur: true,
-    onSubmit: async (values, { resetForm }) => {
+    validationSchema: toFormikValidationSchema(resetPasswordSchema), 
+    onSubmit: async (values, { resetForm, setErrors }) => {
       try {
         await mutateAsync(values);
         alert("Password reset successful!");
-        resetForm();
+        resetForm(); 
       } catch (err) {
+        // Handle errors
+        setErrors({
+          submit: err?.response?.data?.message || "An error occurred while resetting the password.",
+        });
         console.error("Password reset error:", err);
       }
     },

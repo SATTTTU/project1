@@ -57,7 +57,7 @@ export const adminRoutes = [
               );
               return { Component: MyProfileRoute };
             },
-            // ErrorBoundary: AppRootErrorBoundary,
+            ErrorBoundary: AppRootErrorBoundary,
           },
           {
             path: paths.admin.reports.path,

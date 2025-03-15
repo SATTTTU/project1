@@ -10,7 +10,7 @@ export const ForgotPasswordRoute = () => {
         <h2 className="text-2xl font-bold text-center mb-4">Forgot Password</h2>
         <ForgotPasswordForm />
         <div className="text-center mt-4">
-          <Link to="/login" className="text-blue-500 hover:underline">
+          <Link to="/admin/login" className="text-blue-500 hover:underline">
             Back to Login
           </Link>
         </div>

@@ -1,10 +1,31 @@
 import { api } from "@/lib/api-client";
 import { useMutation } from "@tanstack/react-query";
 
-// Register API
+// Register API with better error handling
 const registerAdmin = async (adminData) => {
-  const response = await api.post("/api/register", adminData);
-  return response.data; // Return response data
+  try {
+    const response = await api.post("/api/admins/register", adminData);
+    return response.data;
+  } catch (error) {
+    // Extract validation messages from the response
+    if (error.response) {
+      // If the server returned a response with an error status
+      const { status, data } = error.response;
+      console.log("Error response", status, data);
+      
+      if (status === 422) {
+        // For validation errors, throw the error messages
+        throw {
+          status,
+          message: data.message || "Validation failed",
+          errors: data.errors || {},  // This should contain field-specific errors
+        };
+      }
+    }
+    
+    // For other errors, just rethrow
+    throw error;
+  }
 };
 
 export const useAdminRegister = ({ mutationConfig } = {}) => {
@@ -15,9 +36,11 @@ export const useAdminRegister = ({ mutationConfig } = {}) => {
 
   return {
     mutateAsync: mutation.mutateAsync,
-    isLoading: mutation.isLoading, // Fixed the loading state
+    isLoading: mutation.isLoading,
     error: mutation.error,
     isError: mutation.isError,
     isSuccess: mutation.isSuccess,
+    // Add a helper to get validation errors
+    validationErrors: mutation.error?.errors || {},
   };
 };
