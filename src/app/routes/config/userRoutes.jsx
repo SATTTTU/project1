@@ -1,6 +1,11 @@
 import { paths } from "../../../config/paths";
 import { AppRootErrorBoundary, AuthRoot, UserRoot } from "../app/root";
 import { Outlet } from "react-router-dom";
+import ProfileLayout from "../user/userprofile/profile";
+import { ProfileContent } from "@/modules/user/Profile/components/profileContent";
+import WishlistContent from "@/modules/user/Profile/components/wishlistContent";
+import SettingsContent from "@/modules/user/Profile/components/settingContent";
+import OrdersContent from "@/modules/user/Profile/components/ordersContent";
 
 export const userRoutes = [
 	{
@@ -15,7 +20,7 @@ export const userRoutes = [
 						path: paths.user.register.path,
 						lazy: async () => {
 							const { RegisterSection } = await import(
-								"../../../modules/user/auth/components/Register/RegisterSection"
+								"../../../modules/user/auth/components/userRegister"
 							);
 
 							return { Component: RegisterSection };
@@ -25,7 +30,7 @@ export const userRoutes = [
 						path: paths.user.login.path,
 						lazy: async () => {
 							const { LoginSection } = await import(
-								"../../../modules/user/auth/components/Login/LoginSection"
+								"../../../modules/user/auth/components/userLogin"
 							);
 							return { Component: LoginSection };
 						},
@@ -35,7 +40,7 @@ export const userRoutes = [
 						path: paths.user.forgotPassword.path,
 						lazy: async () => {
 							const { ForgotPassword } = await import(
-								"../../../modules/user/auth/components/ForgetPassword/ForgetPassword"
+								"../../../modules/user/auth/components/forgetPassword"
 							);
 							return { Component: ForgotPassword };
 						},
@@ -44,7 +49,7 @@ export const userRoutes = [
 						path: paths.user.changePassword.path,
 						lazy: async () => {
 							const { ChangePassword } = await import(
-								"../../../modules/user/auth/components/ChangePassword/ChangePassword"
+								"../../../modules/user/auth/components/changePassword"
 							);
 							return { Component: ChangePassword };
 						},
@@ -53,7 +58,7 @@ export const userRoutes = [
 						path: paths.user.resetPassword.path,
 						lazy: async () => {
 							const { ResetPassword } = await import(
-								"../../../modules/user/auth/components/ResetPassword/ResetPassword"
+								"../../../modules/user/auth/components/resetpassword"
 							);
 							return { Component: ResetPassword };
 						},
@@ -62,7 +67,7 @@ export const userRoutes = [
 						path: paths.user.emailVerification.path,
 						lazy: async () => {
 							const { Verification } = await import(
-								"../../../modules/user/auth/components/EmailVerification/Verification"
+								"../../../modules/user/auth/components/verification"
 							);
 							return { Component: Verification };
 						},
@@ -70,7 +75,7 @@ export const userRoutes = [
 					{
 						path: paths.user.dashboard.path,
 						lazy: async () => {
-							const { Homepage } = await import("../user/dashboard/Homepage");
+							const { Homepage } = await import("../user/dashboard/homepage");
 							return { Component: Homepage };
 						},
 					},
@@ -81,13 +86,7 @@ export const userRoutes = [
 							return { Component: Cart };
 						},
 					},
-					// {
-					//   path: paths.user.checkout.path,
-					//   lazy: async () => {
-					//     const { Checkout } = await import("../pages/Checkout");
-					//     return { Component: <Checkout /> };
-					//   },
-					// },
+
 					{
 						path: paths.user.profile.path,
 						lazy: async () => {
@@ -101,7 +100,7 @@ export const userRoutes = [
 						path: paths.user.profileContent.path,
 						lazy: async () => {
 							const { ProfileContent } = await import(
-								"../../../modules/user/Profile/components/ProfileContent"
+								"../../../modules/user/Profile/components/profileContent"
 							);
 							return { Component: ProfileContent };
 						},
@@ -110,7 +109,7 @@ export const userRoutes = [
 						path: paths.user.authPage.path,
 						lazy: async () => {
 							const { Home } = await import(
-								"../../../modules/user/LandingPage/components/Home"
+								"../../../modules/user/LandingPage/components/home"
 							);
 							return { Component: Home };
 						},
@@ -119,25 +118,25 @@ export const userRoutes = [
 						path: paths.user.orderHistory.path,
 						lazy: async () => {
 							const { OrdersContent } = await import(
-								"../../../modules/user/Profile/components/OrdersContent"
+								"../../../modules/user/Profile/components/ordersContent"
 							);
 							return { Component: OrdersContent };
 						},
 					},
-					{
-						path: paths.user.favourite.path,
-						lazy: async () => {
-							const { WishlistContent } = await import(
-								"../../../modules/user/Profile/components/WishlistContent"
-							);
-							return { Component: WishlistContent };
-						},
-					},
+					// {
+					// 	path: paths.user.favourite.path,
+					// 	lazy: async () => {
+					// 		const { WishlistContent } = await import(
+					// 			"../../../modules/user/Profile/components/WishlistContent"
+					// 		);
+					// 		return { Component: WishlistContent };
+					// 	},
+					// },
 					{
 						path: paths.user.setting.path,
 						lazy: async () => {
 							const { ProfilePage } = await import(
-								"../../../modules/user/Profile/components/SettingContent"
+								"../../../modules/user/Profile/components/settingContent"
 							);
 							return { Component: ProfilePage };
 						},
@@ -172,7 +171,7 @@ export const userRoutes = [
 						path: paths.user.categoryFoodDetails.path,
 						lazy: async () => {
 							const { FoodDetailsPage } = await import(
-								"../../../modules/user/CategoriesSection/components/FoodDetailsPage"
+								"../../../modules/user/CategoriesSection/components/foodDetailsPage"
 							);
 							return { Component: FoodDetailsPage };
 						},
@@ -190,10 +189,20 @@ export const userRoutes = [
 						path: paths.user.about.path,
 						lazy: async () => {
 							const { About } = await import(
-								"../../../modules/user/LandingPage/components/About"
+								"../../../modules/user/LandingPage/components/about"
 							);
 							return { Component: About };
 						},
+					},
+					{
+						path: "/profile",
+						element: <ProfileLayout />,
+						children: [
+							{ path: "", element: <ProfileContent /> },
+							{ path: "order", element: <OrdersContent /> },
+							{ path: "wishlist", element: <WishlistContent /> },
+							{ path: "settings", element: <SettingsContent /> },
+						],
 					},
 				],
 			},

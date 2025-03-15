@@ -5,7 +5,7 @@ export const ProfileContent = () => {
 
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 				<div className="bg-gray-50 p-6 rounded-lg">
-					<h3 className="text-lg font-medium mb-4">Personal Information</h3>
+					<h3 className="text-lg font-medium mb-4">Personall Information</h3>
 
 					<div className="space-y-4">
 						<div>
@@ -14,7 +14,7 @@ export const ProfileContent = () => {
 							</label>
 							<input
 								type="text"
-								defaultValue="John Doe"
+								defaultValue="Enter your name"
 								className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
 							/>
 						</div>
@@ -25,7 +25,7 @@ export const ProfileContent = () => {
 							</label>
 							<input
 								type="email"
-								defaultValue="john.doe@example.com"
+								defaultValue="indra@example.com"
 								className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
 							/>
 						</div>
@@ -80,7 +80,6 @@ export const ProfileContent = () => {
 								</label>
 								<input
 									type="text"
-									defaultValue="London"
 									className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
 								/>
 							</div>

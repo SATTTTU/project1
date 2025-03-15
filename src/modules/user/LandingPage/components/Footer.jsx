@@ -1,7 +1,7 @@
 import React from 'react'
 import Logo from "../../../../assets/logo.jpg"
 import { Link } from 'react-router-dom'
-import { NewsletterForm } from './NewsLetterForm'
+import { NewsletterForm } from './newsLetterForm'
 
 export const Footer = () => {
   return (

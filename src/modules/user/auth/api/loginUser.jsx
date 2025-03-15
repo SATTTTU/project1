@@ -1,16 +1,15 @@
 import { api } from "@/lib/api-client";
 import { useMutation } from "@tanstack/react-query";
- // Import your configured Axios instance
 
-// API function to register a user
-const registerUser = async (userData) => {
-   api.post("/api/register", userData);
+const loginUser = async (userData) => {
+   const response = api.post("/api/login", userData);
+   return response.data;
   // No need to extract .data since your interceptor already returns response.data
 };
 
-export const useUserRegister = ({ mutationConfig } = {}) => {
+export const useUserLogin = ({ mutationConfig } = {}) => {
   const mutation = useMutation({
-    mutationFn: registerUser,
+    mutationFn: loginUser,
     ...mutationConfig,
   });
 

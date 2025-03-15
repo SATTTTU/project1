@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { AxiosError } from "axios";
 import { signUpSchema } from "./schema/authschema";
-import { useUserRegister } from "../api/register";
+import { useUserRegister } from "../api/registerUser";
 
 export const useUserRegisterFormik = (config = {}) => {
   const { mutateAsync, isLoading: isRegistering } = useUserRegister({
@@ -25,9 +25,9 @@ export const useUserRegisterFormik = (config = {}) => {
         helpers.resetForm();
         console.log("Registration successful:", result);
         
-        // Let the component handle redirect if needed
         if (config?.mutationConfig?.onSuccess) {
           config.mutationConfig.onSuccess(result);
+          
         }
       } catch (err) {
         console.error("Registration error:", err);
@@ -40,7 +40,6 @@ export const useUserRegisterFormik = (config = {}) => {
           helpers.setErrors({ submit: "An unexpected error occurred" });
         }
         
-        // Let the component handle error if needed
         if (config?.mutationConfig?.onError) {
           config.mutationConfig.onError(err);
         }

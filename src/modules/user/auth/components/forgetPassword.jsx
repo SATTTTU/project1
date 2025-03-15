@@ -1,8 +1,8 @@
 
 import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import ForgetImage from "../../../../../assets/UserImages/forgetpassword.jpg"
-import { forgotPasswordSchema } from "../../formik/schema/authschema";
+import ForgetImage from "../../../../assets/forgetPasswordimg.png"
+import { forgotPasswordSchema } from "../formik/schema/authschema";
 import { useNavigate } from "react-router-dom";
 
 export const ForgotPassword = () => {
@@ -20,7 +20,7 @@ export const ForgotPassword = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl shadow-xl max-w-3xl w-full p-8 flex">
+      <div className="bg-white rounded-3xl shadow-2xl max-w-3xl w-full p-8 flex">
         <div className="flex-1 hidden md:block">
           <img
             src={ForgetImage}
@@ -56,7 +56,7 @@ export const ForgotPassword = () => {
             <div className="flex items-center justify-between">
               <button
                 type="submit"
-                className="bg-[#426B1F] cursor-pointer text-white px-6 py-2 rounded-lg hover:bg-[#426B1F] transition-colors"
+                className="bg-[#426B1F] cursor-pointer text-white px-6 py-2 lg:px-8 lg:py-3 rounded-lg hover:bg-[#426B1F] transition-colors"
               >
                 Send
               </button>

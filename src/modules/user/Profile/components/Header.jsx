@@ -81,15 +81,15 @@ export const Header = () => {
                                     </div>
 
                                     <Link
-                                        to="/user/profile"
+                                        to="/profile"
                                         className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     >
                                         <AiOutlineUser className="mr-2 text-gray-500" />
-                                        Your Profiles
+                                        Your Profile
                                     </Link>
 
                                     <Link
-                                        to="/user/orders"
+                                        to="/profile/order"
                                         className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     >
                                         <AiOutlineShoppingCart className="mr-2 text-gray-500" />
@@ -97,7 +97,7 @@ export const Header = () => {
                                     </Link>
 
                                     <Link
-                                        to="/user/favourite"
+                                        to="/profile/wishlist"
                                         className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     >
                                         <AiOutlineHeart className="mr-2 text-gray-500" />
@@ -105,7 +105,7 @@ export const Header = () => {
                                     </Link>
 
                                     <Link
-                                        to="/user/setting"
+                                        to="/profile/settings"
                                         className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     >
                                         <CiSettings className="mr-2 text-gray-500" />

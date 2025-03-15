@@ -1,22 +1,21 @@
 import { InputField } from "@/components/ui/inputfield/inputField";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import Image from "../../../../../assets/UserImages/login.jpg";
-import { Link, useNavigate } from "react-router-dom";
-import { useUserRegisterFormik } from "../../formik/useRegister";
+import Image from "../../../../assets/UserImages/login.jpg";
+import { Link} from "react-router-dom";
+import { useUserRegisterFormik } from "../formik/useRegister";
 import { useState } from "react";
 
 export const RegisterSection = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const { formik, isRegistering } = useUserRegisterFormik({
     mutationConfig: {
       onSuccess: (data) => {
         console.log("Registration successful:", data);
-        navigate("/user/login"); // Redirect to login page after successful registration
+        // navigate("/user/login"); 
       },
       onError: (error) => {
         console.error("Registration failed:", error);
-        // Error is handled inside formik hook
       },
     },
   });
@@ -44,7 +43,7 @@ export const RegisterSection = () => {
           </p>
           <Link
             to="/user/login"
-            className="bg-white text-black px-8 text-xl py-3 rounded hover:bg-gray-100 transition"
+            className="bg-white hover:bg-[#426B1F] text-black hover:text-white px-8 text-xl py-3 rounded  transition"
           >
             Sign in
           </Link>
@@ -53,7 +52,7 @@ export const RegisterSection = () => {
 
       <div className="flex flex-col justify-center items-center w-full md:w-1/2 mt-20 p-8">
         <form onSubmit={formik.handleSubmit} className="w-full max-w-md">
-          <h1 className="text-4xl lg:text-5xl font-bold text-[#426B1F] mb-6 ">
+          <h1 className="text-3xl lg:text-4xl font-bold text-[#426B1F] mb-6 ">
             Create Account
           </h1>
 

@@ -1,5 +1,5 @@
-import { LoginSection } from "@/modules/user/auth/components/Login/LoginSection";
-import { RegisterSection } from "@/modules/user/auth/components/Register/RegisterSection";
+import { LoginSection } from "@/modules/user/auth/components/userLogin";
+import { RegisterSection } from "@/modules/user/auth/components/userRegister";
 
 export const Auth = () => {
 	return (
