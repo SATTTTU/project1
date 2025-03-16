@@ -1,19 +1,22 @@
-"use client"
-
-import { useState, useRef, useEffect } from "react"
-import { Link } from "react-router-dom"
-import { AiOutlineShoppingCart, AiOutlineUser, AiOutlineLogout, AiOutlineHeart } from "react-icons/ai"
-import { FaUserCircle } from "react-icons/fa"
-import { CiSettings } from "react-icons/ci"
-import { useSelector } from "react-redux"
-import Logo from "../../../../assets/logo.jpg"
+import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
+import {
+	AiOutlineShoppingCart,
+	AiOutlineUser,
+	AiOutlineLogout,
+	AiOutlineHeart,
+} from "react-icons/ai";
+import { FaUserCircle, FaUser } from "react-icons/fa";
+import { CiSettings } from "react-icons/ci";
+import { useSelector } from "react-redux";
+import Logo from "../../../../assets/logo.jpg";
 
 export const Header = () => {
-  const cartItems = useSelector((store) => store.cart.items)
-  const [showProfileMenu, setShowProfileMenu] = useState(false)
-  const profileRef = useRef(null)
+	const cartItems = useSelector((store) => store.cart.items);
+	const [showProfileMenu, setShowProfileMenu] = useState(false);
+	const profileRef = useRef(null);
 
-  const getTotalCartItems = () => {
+	const getTotalCartItems = () => {
 		return cartItems.reduce((total, item) => total + item.quantity, 0);
 	};
 
@@ -40,13 +43,10 @@ export const Header = () => {
 				<div className="flex items-center justify-between">
 					<Link to="/user/dashboard" className="flex items-center">
 						<img src={Logo} alt="KhanaBox" className="h-10 w-10 mr-2" />
-						<span className="text-2xl font-bold text-green-600">KhanaBox</span>
+						<span className="text-2xl font-bold text-[#426B1F]">KhanaBox</span>
 					</Link>
 
 					<div className="flex items-center space-x-4">
-						{/* <button className="px-4 py-1.5 bg-green-600 text-white rounded-full text-sm hover:bg-green-700 transition-colors">
-							Special Offers
-						</button> */}
 						<button className="px-4 py-1.5 border border-gray-300 rounded-full text-sm hover:bg-gray-50 transition-colors">
 							Track Order
 						</button>
@@ -55,7 +55,7 @@ export const Header = () => {
 							to="/user/cart"
 							className="relative p-1 hover:bg-gray-100 rounded-full transition-colors"
 						>
-							<AiOutlineShoppingCart className="text-2xl" />
+							<AiOutlineShoppingCart className="text-3xl text-[#426B1F]" />
 							{getTotalCartItems() > 0 && (
 								<span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
 									{getTotalCartItems()}
@@ -68,13 +68,16 @@ export const Header = () => {
 								onClick={toggleProfileMenu}
 								className="p-1 hover:bg-gray-100 rounded-full transition-colors"
 							>
-								<FaUserCircle className="text-2xl text-gray-600" />
+								<FaUserCircle className="text-3xl text-[#426B1F]" />
 							</button>
 
 							{showProfileMenu && (
-								<div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border">
-									<div className="px-4 py-3 border-b">
-										<p className="text-sm font-medium text-gray-900">
+								<div className="absolute right-0 lg:p-2 mt-2 w-48 bg-white rounded-md shadow-xl py-1 z-50 border border-slate-200">
+									<div className="px-4 flex flex-col items-center justify-center py-3 border-b border-slate-200">
+										<p className="text-sm  font-medium text-gray-900">
+											<FaUserCircle className="text-3xl text-[#426B1F]" />
+										</p>
+										<p className="text-sm  font-medium text-gray-900">
 											Your Profile
 										</p>
 										<p className="text-xs text-gray-500 truncate">
@@ -84,43 +87,43 @@ export const Header = () => {
 
 									<Link
 										to="/profile"
-										className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+										className="flex items-center px-4 py-2 text-sm text-gray-900 hover:bg-gray-200 rounded-sm"
 									>
-										<AiOutlineUser className="mr-2 text-gray-500" />
+										<FaUserCircle className="mr-3 h-5 w-5 " />
 										Your Profile
 									</Link>
 
 									<Link
 										to="/profile/order"
-										className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+										className="flex items-center px-4 py-2 text-sm text-gray-900 hover:bg-gray-200 rounded-sm"
 									>
-										<AiOutlineShoppingCart className="mr-2 text-gray-500" />
+										<AiOutlineShoppingCart className="mr-3 h-5 w-5 " />
 										Your Orders
 									</Link>
 
 									<Link
 										to="/profile/wishlist"
-										className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+										className="flex items-center px-4 py-2 text-sm text-gray-900 hover:bg-gray-200 rounded-sm"
 									>
-										<AiOutlineHeart className="mr-2 text-gray-500" />
+										<AiOutlineHeart className="mr-3 h-5 w-5 " />
 										Wishlist
 									</Link>
 
 									<Link
 										to="/profile/settings"
-										className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+										className="flex items-center px-4 py-2 text-sm text-gray-900 hover:bg-gray-200 rounded-sm"
 									>
-										<CiSettings className="mr-2 text-gray-500" />
+										<CiSettings className="mr-3 h-5 w-5 " />
 										Settings
 									</Link>
 
-									<div className="border-t my-1"></div>
+									<div className="border-t border-slate-200 my-1"></div>
 
 									<Link
 										to="/"
-										className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+										className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-200 rounded-sm"
 									>
-										<AiOutlineLogout className="mr-2" />
+										<AiOutlineLogout className="mr-3 h-5 w-5" />
 										Sign out
 									</Link>
 								</div>
@@ -131,5 +134,4 @@ export const Header = () => {
 			</div>
 		</div>
 	);
-}
-
+};

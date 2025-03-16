@@ -11,7 +11,7 @@ export const ProfileSidebar = ({ activeTab, setActiveTab, handleLogout }) => {
   ];
 
   return (
-    <div className="w-full md:w-1/4 bg-gray-100 p-4">
+    <div className="w-full md:w-1/4 bg-gray-100 p-2 lg:h-screen">
       <ul className="space-y-4">
         {menuItems.map((item) => (
           <li key={item.path}>
@@ -34,7 +34,7 @@ export const ProfileSidebar = ({ activeTab, setActiveTab, handleLogout }) => {
 
       <button
         onClick={handleLogout}
-        className="w-full mt-6 text-left p-2  text-white rounded-md"
+        className="w-full mt-6 text-left p-2   rounded-md"
       >
         Logout
       </button>
