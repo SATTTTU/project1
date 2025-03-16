@@ -10,11 +10,14 @@ import { FaUserCircle, FaUser } from "react-icons/fa";
 import { CiSettings } from "react-icons/ci";
 import { useSelector } from "react-redux";
 import Logo from "../../../../assets/logo.jpg";
+import { useProfile } from "../../Profile/api/getProfile";
 
 export const Header = () => {
 	const cartItems = useSelector((store) => store.cart.items);
 	const [showProfileMenu, setShowProfileMenu] = useState(false);
 	const profileRef = useRef(null);
+	const { data: user } = useProfile();
+	console.log(user)
 
 	const getTotalCartItems = () => {
 		return cartItems.reduce((total, item) => total + item.quantity, 0);
@@ -75,13 +78,14 @@ export const Header = () => {
 								<div className="absolute right-0 lg:p-2 mt-2 w-48 bg-white rounded-md shadow-xl py-1 z-50 border border-slate-200">
 									<div className="px-4 flex flex-col items-center justify-center py-3 border-b border-slate-200">
 										<p className="text-sm  font-medium text-gray-900">
-											<FaUserCircle className="text-3xl text-[#426B1F]" />
+											{user.image_url}
+											{/* <FaUserCircle className="text-3xl text-[#426B1F]" /> */}
 										</p>
 										<p className="text-sm  font-medium text-gray-900">
-											Your Profile
+											{user?.name}
 										</p>
 										<p className="text-xs text-gray-500 truncate">
-											name@example.com
+										{user.email}
 										</p>
 									</div>
 

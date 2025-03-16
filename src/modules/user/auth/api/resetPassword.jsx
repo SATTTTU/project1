@@ -1,14 +1,14 @@
 import { api } from "@/lib/api-client";
 import { useMutation } from "@tanstack/react-query";
 
-const forgotPassword = async (userData) => {
-   const response = await api.post("/api/password/forgot", userData);
-   return response.data;
+const resetPassword = async (userData) => {
+  const response = await api.post("/api/password/reset", userData);
+  return response.data;
 };
 
-export const useForgotPassword = ({ mutationConfig } = {}) => {
+export const useResetPassword = ({ mutationConfig } = {}) => {
   const mutation = useMutation({
-    mutationFn: forgotPassword,
+    mutationFn: resetPassword,
     ...mutationConfig,
   });
 

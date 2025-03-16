@@ -22,16 +22,19 @@ export const forgotPasswordSchema = z.object({
 
 export const resetPasswordSchema = z
   .object({
-    oldPassword: z.string().min(6, "Old password must be at least 6 characters"),
     newPassword: z
       .string()
-      .min(6, "New password must be at least 6 characters")
-      .refine((val) => val !== z.input(resetPasswordSchema).oldPassword, {
-        message: "New password must be different from old password",
-      }),
+      .min(8, "Password must be at least 8 characters")
+      .regex(/[A-Z]/, "Must include at least one uppercase letter")
+      .regex(/[a-z]/, "Must include at least one lowercase letter")
+      .regex(/[0-9]/, "Must include at least one number")
+      .regex(/[@$!%*?&]/, "Must include at least one special character"),
+    confirmPassword: z.string(),
   })
-  // .required();
-
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords must match",
+    path: ["confirmPassword"],
+  });
 export const changePasswordSchema = z
 	.object({
 		currentPassword: z.string().min(8, "Current password is required"),

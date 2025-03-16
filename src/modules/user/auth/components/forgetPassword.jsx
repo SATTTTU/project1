@@ -3,7 +3,7 @@ import { useForgotPasswordFormik } from "../../../../modules/user/auth/formik/fo
 
 export const ForgotPasswordForm = () => {
   
-  const formik = useForgotPasswordFormik();
+  const {formik} = useForgotPasswordFormik();
 
   return (
     <>
