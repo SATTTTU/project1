@@ -45,7 +45,8 @@ export const UserList = ({ search = "", currentPage = 1, rowsPerPage = 5, onPage
 
   // Loading and error states
   if (isLoading) return <p>Loading users...</p>;
-  if (error) return <p>Error loading users: {error.message}</p>;
+  if (error)
+    return <p>Error loading users: {error.message}</p>;
 
   return (
     <>

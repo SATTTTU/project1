@@ -8,6 +8,7 @@ import { Link, useLocation } from "react-router-dom";
 import logo from "../../../../assets/logo.jpg";
 import ConfirmModal from "../confirmmodel/confirmmodel";
 import { useAdminLogout } from "@/modules/admin/dashboard/api/logout";
+import { toast } from "react-toastify";
 export const Sidebar = () => {
   const location = useLocation();
   const [showSidebar, setShowSidebar] = useState(false);
@@ -24,10 +25,12 @@ export const Sidebar = () => {
   const handleLogout = async () => {  
     try {
       await logout();
-      localStorage.removeItem("adminToken"); // Remove token
+      localStorage.removeItem("adminToken"); 
+      toast.success("logout sucessfull")
       window.location.href = "/admin/login"; // Redirect
     } catch (error) {
-      console.error("Logout failed", error);
+      console.log("logout fsiled",error)
+      toast.error("Logout failed", error);
     }
   };
 

@@ -2,6 +2,7 @@ import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { useAdminResetPassword } from "../api/create-newPassword";
 import { resetPasswordSchema } from "../schema/adminformSchema";
+import { toast } from "react-toastify";
 
 export const useResetPasswordFormik = () => {
   const { mutateAsync, isLoading, isError, error, isSuccess } = useAdminResetPassword();
@@ -16,7 +17,7 @@ export const useResetPasswordFormik = () => {
     onSubmit: async (values, { resetForm, setErrors }) => {
       try {
         await mutateAsync(values);
-        alert("Password reset successful!");
+        toast.success("Sucessfully reset password")
         resetForm(); 
       } catch (err) {
         // Handle errors
@@ -24,6 +25,7 @@ export const useResetPasswordFormik = () => {
           submit: err?.response?.data?.message || "An error occurred while resetting the password.",
         });
         console.error("Password reset error:", err);
+        toast.error("Password reset error")
       }
     },
   });

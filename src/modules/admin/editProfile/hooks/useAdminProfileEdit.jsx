@@ -4,6 +4,7 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 import { profileEditSchema } from "../schema/editprofile";
 import { useAdminProfile } from "../api/getprofile"; // Adjust the import path
 import { useAdminProfileEdit } from "../api/editprofile";
+import { toast } from "react-toastify";
 
 export const useAdminProfileEditFormik = () => {
   const { mutateAsync: editProfile, isLoading: isEditing } = useAdminProfileEdit();
@@ -42,8 +43,11 @@ export const useAdminProfileEditFormik = () => {
     onSubmit: async (values, helpers) => {
       try {
         await editProfile(values);
+        toast.success("Suceessfully updated profile")
+        
       } catch (err) {
         helpers.setErrors({ submit: err?.response?.data?.message || "An error occurred" });
+        toast.error("SOmething went wrong")
       }
     },
   });

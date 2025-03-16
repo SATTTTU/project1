@@ -2,6 +2,7 @@ import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { signUpSchema } from "@/modules/user/auth/formik/schema/authschema";
 import { useAdminRegister } from "../api/adminregister";
+import { toast } from "react-toastify";
 
 export const useAdminRegisterFormik = () => {
   const { mutateAsync, isLoading, isError, error, isSuccess } = useAdminRegister();
@@ -17,12 +18,13 @@ export const useAdminRegisterFormik = () => {
       try {
         await mutateAsync(values);
         formik.resetForm(); // Reset form after successful submission
+        toast.success("Sucessfully registered");
       } catch (err) {
         // Handle errors by setting form errors
         helpers.setErrors({
           submit: err?.response?.data?.message || "An error occurred during registration.",
         });
-        console.error(err);
+        toast.error("something went wrong",error)
       }
     },
   });

@@ -11,7 +11,7 @@ import AdminRegisterForm from "@/modules/admin/auth/components/adminregister";
         <AdminRegisterForm />
         <div className="text-center mt-4">
           <span className="text-gray-600">Already have an account? </span>
-          <Link to="/admin/login" className="text-blue-500 hover:underline">
+          <Link to="/admin/login" className="text-green-500 hover:underline">
             Login
           </Link>
         </div>
