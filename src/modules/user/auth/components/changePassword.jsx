@@ -1,9 +1,9 @@
 import { PasswordInput } from "@/components/ui/passwordfield/passwordField";
-import { useChangePasswordFormik } from "../../../../modules/user/auth/formik/changeFormik";
 import { useState } from "react";
+import { UsechangePasswordFormik } from "../formik/changeFormik";
 
 export const ChangePasswordForm = () => {
-	const { formik } = useChangePasswordFormik();
+	const { formik } = UsechangePasswordFormik();
 	const [showCurrentPassword, setShowCurrentPassword] = useState(false);
 	const [showNewPassword, setShowNewPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -13,8 +13,8 @@ export const ChangePasswordForm = () => {
 		<form onSubmit={formik.handleSubmit} className="space-y-3">
 			<PasswordInput
 				label="Current Password"
-				name="currentPassword"
-				value={formik.values.currentPassword}
+				name="oldpassword"
+				value={formik.values.oldpassword}
 				onChange={formik.handleChange}
 				showPassword={showCurrentPassword}
 				toggleShowPassword={() => setShowCurrentPassword(!showCurrentPassword)}
@@ -26,8 +26,8 @@ export const ChangePasswordForm = () => {
 
 			<PasswordInput
 				label="New Password"
-				name="newPassword"
-				value={formik.values.newPassword}
+				name="newpassword"
+				value={formik.values.newpassword}
 				onChange={formik.handleChange}
 				showPassword={showNewPassword}
 				toggleShowPassword={() => setShowNewPassword(!showNewPassword)}
@@ -38,14 +38,14 @@ export const ChangePasswordForm = () => {
 
 			<PasswordInput
 				label="Confirm New Password"
-				name="confirmPassword"
-				value={formik.values.confirmPassword}
+				name="confirmpassword"
+				value={formik.values.confirmpassword}
 				onChange={formik.handleChange}
 				showPassword={showConfirmPassword}
 				toggleShowPassword={() => setShowConfirmPassword(!showConfirmPassword)}
 			/>
-			{formik.errors.confirmPassword && (
-				<p className="text-red-500 text-sm">{formik.errors.confirmPassword}</p>
+			{formik.errors.confirmpassword && (
+				<p className="text-red-500 text-sm">{formik.errors.confirmpassword}</p>
 			)}
 
 			<button

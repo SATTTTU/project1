@@ -1,34 +1,46 @@
 import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { useProfile } from "../api/getProfile";
 import { useUpdateProfile } from "../api/updateProfile";
+import { useNavigate } from "react-router-dom";
 import { profileSchema } from "./schema/updateSchema";
-// import { useGetProfile } from "@/api/getProfile"; // 🔹 Fetch user profile
 
 export const useProfileFormik = () => {
-  const { data: user } = useProfile(); // Fetch user profile
-  const { mutateAsync: updateProfile} = useUpdateProfile(); // Mutation for updating profile
+  const navigate = useNavigate();
+  const { mutateAsync, isLoading } = useUpdateProfile();
 
-  return useFormik({
+  const formik = useFormik({
     initialValues: {
-      name: user?.name || "",
-      email: user?.email || "",
-      phone: user?.phone || "",
-      image_url: user?.image_url || "",
+      name: "",
+      email: "",
+      phone: "",
+      image: null, // ✅ Set as null initially
     },
-    enableReinitialize: true, // Ensures form updates when API data loads
     validationSchema: toFormikValidationSchema(profileSchema),
-    onSubmit: async (values, { setSubmitting }) => {
+    validateOnBlur: true,
+    onSubmit: async (values, { setSubmitting, setErrors }) => {
       try {
-        console.log("Updating Profile:", values);
-        await updateProfile(values); // 🔹 Correct API call
-        alert("Profile updated successfully!");
+        const formData = new FormData();
+        formData.append("name", values.name);
+        formData.append("email", values.email);
+        formData.append("phone", values.phone);
+
+        // ✅ Ensure image is a File before appending
+        if (values.image instanceof File) {
+          formData.append("image", values.image);
+        } else {
+          setErrors({ image: "Please select a valid image file." });
+          return;
+        }
+
+        await mutateAsync(formData);
+        navigate("/user/profile");
       } catch (error) {
-        console.error("Update error:", error);
-        alert("Failed to update profile.");
+        setErrors(error.response?.data || { name: "Update failed" });
       } finally {
         setSubmitting(false);
       }
     },
   });
+
+  return { formik, isLoading };
 };

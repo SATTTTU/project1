@@ -11,10 +11,8 @@ export const useLoginFormik = (config ={}) => {
      const { mutateAsync, isLoading:isLoggingIn  } = useUserLogin({
         mutationConfig: {
             onSuccess: (data) => {
-                // Store token in localStorage
                 localStorage.setItem("authToken", data.token);
                 
-                // Set default Authorization header for future API requests
                 api.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
                 
                 navigate("/user/dashboard");

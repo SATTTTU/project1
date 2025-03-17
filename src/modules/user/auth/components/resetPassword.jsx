@@ -18,18 +18,28 @@ export const ResetPasswordForm = () => {
 			<p className="text-gray-400">
 				Choose a strong password that you’ll use across all our services.
 			</p>
-
+			<div>
+        <label className="block text-sm font-medium">Email</label>
+        <input
+          type="email"
+          name="email"
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          className="w-full px-4 py-2 border rounded-md"
+        />
+        {formik.errors.email && <p className="text-red-500">{formik.errors.email}</p>}
+      </div>
 			<div className="space-y-2 relative">
-				<Label htmlFor="newPassword">New Password</Label>
+				<Label htmlFor="password">New Password</Label>
 				<Input
-					id="newPassword"
-					name="newPassword"
+					id="password"
+					name="password"
 					type={showNewPassword ? "text" : "password"}
 					placeholder="Enter new password"
-					value={formik.values.newPassword}
+					value={formik.values.password}
 					onChange={formik.handleChange}
 					onBlur={formik.handleBlur}
-					className={`w-full ${formik.touched.newPassword && formik.errors.newPassword ? "border-red-500" : ""}`}
+					className={`w-full ${formik.touched.password && formik.errors.password ? "border-red-500" : ""}`}
 				/>
 				<button
 					type="button"
@@ -38,22 +48,22 @@ export const ResetPasswordForm = () => {
 				>
 					{showNewPassword ? <IoEyeOffSharp size={20} /> : <FaEye size={20} />}
 				</button>
-				{formik.touched.newPassword && formik.errors.newPassword && (
-					<div className="text-red-500 text-sm">{formik.errors.newPassword}</div>
+				{formik.touched.password && formik.errors.password && (
+					<div className="text-red-500 text-sm">{formik.errors.password}</div>
 				)}
 			</div>
 
 			<div className="space-y-2 relative">
-				<Label htmlFor="confirmPassword">Confirm Password</Label>
+				<Label htmlFor="password_confirmation">Confirm Password</Label>
 				<Input
-					id="confirmPassword"
-					name="confirmPassword"
+					id="password_confirmation"
+					name="password_confirmation"
 					type={showConfirmPassword ? "text" : "password"}
 					placeholder="Confirm new password"
-					value={formik.values.confirmPassword}
+					value={formik.values.password_confirmation}
 					onChange={formik.handleChange}
 					onBlur={formik.handleBlur}
-					className={`w-full ${formik.touched.confirmPassword && formik.errors.confirmPassword ? "border-red-500" : ""}`}
+					className={`w-full ${formik.touched.password_confirmation && formik.errors.password_confirmation ? "border-red-500" : ""}`}
 				/>
 				<button
 					type="button"
@@ -62,12 +72,11 @@ export const ResetPasswordForm = () => {
 				>
 					{showConfirmPassword ? <IoEyeOffSharp size={20} /> : <FaEye size={20} />}
 				</button>
-				{formik.touched.confirmPassword && formik.errors.confirmPassword && (
-					<div className="text-red-500 text-sm">{formik.errors.confirmPassword}</div>
+				{formik.touched.password_confirmation && formik.errors.password_confirmation && (
+					<div className="text-red-500 text-sm">{formik.errors.password_confirmation}</div>
 				)}
 			</div>
 
-			{/* Submit Button */}
 			<button
 				type="submit"
 				className="w-full bg-[#426B1F] text-white py-2 px-4 rounded-md hover:bg-green-900 transition-colors"

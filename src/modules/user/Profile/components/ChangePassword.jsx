@@ -1,40 +1,59 @@
-// components/PasswordChangeForm.jsx
-const PasswordChangeForm = () => {
-    return (
-      <div className="bg-gray-50 p-6 rounded-lg">
-        <h3 className="text-lg font-medium mb-4">Change Password</h3>
+import { PasswordInput } from "@/components/ui/passwordfield/passwordField";
+import { useState } from "react";
+import { UsechangePasswordFormik } from "../../auth/formik/changeFormik";
+
+export const ChangePassword = () => {
+  const { formik } = UsechangePasswordFormik();
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
-            <input
-              type="password"
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            />
-          </div>
-  
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
-            <input
-              type="password"
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            />
-          </div>
-  
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
-            <input
-              type="password"
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            />
-          </div>
-        </div>
-  
-        <button className="mt-6 px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
-          Update Password
-        </button>
-      </div>
-    );
-  };
-  
-  export default PasswordChangeForm;
+  return (
+    <form onSubmit={formik.handleSubmit} className="space-y-3">
+      <PasswordInput
+        label="Current Password"
+        name="oldpassword"
+        value={formik.values.oldpassword}
+        onChange={formik.handleChange}
+        showPassword={showCurrentPassword}
+        toggleShowPassword={() => setShowCurrentPassword(!showCurrentPassword)}
+      />
+    
+      {formik.errors.currentPassword && (
+        <p className="text-red-500 text-sm">{formik.errors.currentPassword}</p>
+      )}
+
+      <PasswordInput
+        label="New Password"
+        name="newpassword"
+        value={formik.values.newpassword}
+        onChange={formik.handleChange}
+        showPassword={showNewPassword}
+        toggleShowPassword={() => setShowNewPassword(!showNewPassword)}
+      />
+      {formik.errors.newPassword && (
+        <p className="text-red-500 text-sm">{formik.errors.newPassword}</p>
+      )}
+
+      <PasswordInput
+        label="Confirm New Password"
+        name="confirmpassword"
+        value={formik.values.confirmpassword}
+        onChange={formik.handleChange}
+        showPassword={showConfirmPassword}
+        toggleShowPassword={() => setShowConfirmPassword(!showConfirmPassword)}
+      />
+      {formik.errors.confirmpassword && (
+        <p className="text-red-500 text-sm">{formik.errors.confirmpassword}</p>
+      )}
+
+      <button
+        type="submit"
+        className="w-full bg-[#426B1F] text-white py-2 rounded-md hover:bg-green-900"
+      >
+        Change Password
+      </button>
+    </form>
+  );
+};
