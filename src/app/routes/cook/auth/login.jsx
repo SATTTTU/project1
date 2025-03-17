@@ -1,8 +1,9 @@
 // LoginPage.jsx - Main container component
 import React  from "react";
 import authimage from "../../../../assets/background1.jpg";
-import { LoginForm } from "@/modules/cook/auth/login/components/loginform";
-import { AuthSidebar } from "@/modules/cook/auth/login/components/authsidebar";
+import { LoginForm } from "@/modules/cook/auth/components/loginpage";
+import AuthSidebar from "@/components/ui/cookui/cooksidebar/cooksidebar";
+
 
 
 export const Login = () => {

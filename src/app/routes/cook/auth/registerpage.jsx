@@ -1,5 +1,5 @@
 // RegisterPage.jsx
-import AuthImageSection from "@/modules/cook/auth/firstregisterpage/component/authimagesection";
+import AuthImageSection from "../../../../assets/auth.png";
 import AuthSidebar from "@/modules/cook/auth/register/component/authsidebar";
 import CertificateExperienceStep from "@/modules/cook/auth/register/component/certificateexperiencestep";
 import DocumentUploadStep from "@/modules/cook/auth/register/component/documentuploadstep";

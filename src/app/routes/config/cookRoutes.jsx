@@ -23,20 +23,20 @@ export const cookRoutes = [
           {
             path: paths.cook.registerPage.path,
             lazy: async () => {
-              const { FirstRegisterPageRoute } = await import(
+              const { FirstRegisterPage } = await import(
                 "../cook/auth/firstregisterpage"
               );
-              return { Component: FirstRegisterPageRoute };
+              return { Component: FirstRegisterPage };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
           {
             path: paths.cook.pendingPage.path,
             lazy: async () => {
-              const { pendingPage } = await import(
-                "../../../modules/cook/auth/pendingpage/pendingpage"
+              const { PendingPageroute } = await import(
+                "../cook/auth/pendingpage"
               );
-              return { Component: pendingPage };
+              return { Component: PendingPageroute };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
@@ -78,9 +78,9 @@ export const cookRoutes = [
             path: paths.cook.emailVerification.path,
             lazy: async () => {
               const { EmailVerify } = await import(
-                "../cook/register/emailverify"
+                "../cook/auth/verification"
               );
-              return { Component: EmailVerify };
+              return { Component: EmailVerify};
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
