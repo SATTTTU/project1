@@ -7,19 +7,19 @@ import { useResetPasswordFormik } from "../formik/useResetPassword";
 
 const ResetPasswordForm = () => {
   const [showPassword, setShowPassword] = useState(false);
-
   const { formik, isLoading } = useResetPasswordFormik();
+
   return (
     <form onSubmit={formik?.handleSubmit} className="space-y-4">
-      {/* Current Password Field */}
+      {/* Old Password Field */}
       <div className="space-y-2 relative">
-        <Label htmlFor="currentPassword">Current Password</Label>
+        <Label htmlFor="oldpassword">Current Password</Label>
         <Input
-          id="currentPassword"
-          name="currentPassword"
+          id="oldpassword"
+          name="oldpassword"
           type={showPassword ? "text" : "password"}
           placeholder="Enter your current password"
-          value={formik?.values.currentPassword}
+          value={formik?.values.oldpassword}
           onChange={formik?.handleChange}
           onBlur={formik?.handleBlur}
           required
@@ -32,20 +32,20 @@ const ResetPasswordForm = () => {
         >
           {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
         </button>
-        {formik?.touched.currentPassword && formik.errors.currentPassword && (
-          <div className="text-red-500 text-sm">{formik.errors.currentPassword}</div>
+        {formik?.touched.oldpassword && formik.errors.oldpassword && (
+          <div className="text-red-500 text-sm">{formik.errors.oldpassword}</div>
         )}
       </div>
 
       {/* New Password Field */}
       <div className="space-y-2 relative">
-        <Label htmlFor="newPassword">New Password</Label>
+        <Label htmlFor="newpassword">New Password</Label>
         <Input
-          id="newPassword"
-          name="newPassword"
+          id="newpassword"
+          name="newpassword"
           type={showPassword ? "text" : "password"}
           placeholder="Enter new password"
-          value={formik?.values.newPassword}
+          value={formik?.values.newpassword}
           onChange={formik?.handleChange}
           onBlur={formik?.handleBlur}
           required
@@ -58,27 +58,27 @@ const ResetPasswordForm = () => {
         >
           {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
         </button>
-        {formik?.touched.newPassword && formik.errors.newPassword && (
-          <div className="text-red-500 text-sm">{formik.errors.newPassword}</div>
+        {formik?.touched.newpassword && formik.errors.newpassword && (
+          <div className="text-red-500 text-sm">{formik.errors.newpassword}</div>
         )}
       </div>
 
       {/* Confirm Password Field */}
       <div className="space-y-2 relative">
-        <Label htmlFor="confirmPassword">Confirm Password</Label>
+        <Label htmlFor="confirmpassword">Confirm Password</Label>
         <Input
-          id="confirmPassword"
-          name="confirmPassword"
+          id="confirmpassword"
+          name="confirmpassword"
           type={showPassword ? "text" : "password"}
           placeholder="Confirm new password"
-          value={formik?.values.confirmPassword}
+          value={formik?.values.confirmpassword}
           onChange={formik?.handleChange}
           onBlur={formik?.handleBlur}
           required
           className="w-full"
         />
-        {formik?.touched.confirmPassword && formik.errors.confirmPassword && (
-          <div className="text-red-500 text-sm">{formik.errors.confirmPassword}</div>
+        {formik?.touched.confirmpassword && formik.errors.confirmpassword && (
+          <div className="text-red-500 text-sm">{formik.errors.confirmpassword}</div>
         )}
       </div>
 

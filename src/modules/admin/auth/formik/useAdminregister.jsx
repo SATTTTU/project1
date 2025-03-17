@@ -20,23 +20,26 @@ export const useAdminRegisterFormik = () => {
     validationSchema: toFormikValidationSchema(signUpSchema), // Use Zod schema adapter for Formik validation
     onSubmit: async (values, helpers) => {
       try {
-        await mutateAsync(values);
-        formik.resetForm(); // Reset form after successful submission
-        toast.success("Successfully registered");
+        const response = await mutateAsync(values); // Trigger registration API
 
-        // Set success state to true to show the success component
-        setIsRegistrationSuccess(true);
+        // Display success message from the server response
+        toast.success(response?.message || "Successfully registered.");
+        
+        formik.resetForm(); // Reset form after successful submission
+        setIsRegistrationSuccess(true); // Set success state
 
       } catch (err) {
-        const errorMessage = err?.response?.data?.message || "An error occurred during registration.";
-        helpers.setErrors({
-          submit: errorMessage,
-        });
+        // Extract error message from the server response
+        const errorMessage =
+          err?.response?.data?.message ||
+          (err?.response?.data?.errors
+            ? Object.values(err.response.data.errors).flat().join(", ")
+            : "An error occurred during registration.");
 
-        // Display error toast with the error message
+        // Set Formik errors and show toast error
+        helpers.setErrors({ submit: errorMessage });
         toast.error(errorMessage);
 
-        // Optionally log the error for debugging
         console.error("Registration Error:", err);
       }
     },

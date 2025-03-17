@@ -15,10 +15,14 @@ export const MyProfile = () => {
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      // Store the file object for validation purposes
+      formik.setFieldValue("originalFile", file);
+      
       const reader = new FileReader();
       reader.onload = () => {
-        setImage(reader.result);
-        formik.setFieldValue("image", reader.result);
+        const base64String = reader.result;
+        setImage(base64String);
+        formik.setFieldValue("image", base64String);
       };
       reader.readAsDataURL(file);
     }

@@ -12,20 +12,20 @@ export const signUpSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-export const adminResetPasswordSchema = z.object({
-  
-  // Current Password Field
-  currentPassword: z.string().min(6, "Current password must be at least 6 characters"),
+export const adminResetPasswordSchema = z
+  .object({
+    // Old Password Field (Renamed from currentPassword)
+    oldpassword: z.string().min(6, "Current password must be at least 6 characters"),
 
-  // New Password Field
-  newPassword: z.string().min(6, "Password must be at least 6 characters"),
+    // New Password Field
+    newpassword: z.string().min(6, "Password must be at least 6 characters"),
 
-  // Confirm Password Field
-  confirmPassword: z.string().min(6, "Password must be at least 6 characters"),
-})
-  .refine((data) => data.newPassword === data.confirmPassword, {
+    // Confirm Password Field
+    confirmpassword: z.string().min(6, "Password must be at least 6 characters"),
+  })
+  .refine((data) => data.newpassword === data.confirmpassword, {
     message: "Passwords do not match",
-    path: ["confirmPassword"], 
+    path: ["confirmpassword"], // Ensure validation applies to the correct field
   });
 
 

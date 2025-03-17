@@ -7,8 +7,7 @@ import { useState } from "react";
 
 export const useAdminForgotPasswordFormik = () => {
   const { mutateAsync, isLoading, isError, error, isSuccess } = useAdminForgotPassword();
-    const [isRegistrationSuccess, setIsRegistrationSuccess] = useState(false);
-  
+  const [isRegistrationSuccess, setIsRegistrationSuccess] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -17,17 +16,24 @@ export const useAdminForgotPasswordFormik = () => {
     validationSchema: toFormikValidationSchema(forgotPasswordSchema), // Use Zod validation schema with Formik
     onSubmit: async (values, helpers) => {
       try {
-        await mutateAsync(values); // Trigger forgot password API
-        formik.resetForm();
-        toast.success("Sucessfully sent") // Reset form after successful submission
+        const response = await mutateAsync(values); // Trigger forgot password API
+        
+        // Display success message from the server response
+        toast.success(response?.message || "Password reset request sent successfully.");
+        formik.resetForm(); // Reset form after successful submission
         setIsRegistrationSuccess(true);
-
       } catch (err) {
-        // Handle error and set form error
-        helpers.setErrors({
-          submit: err?.response?.data?.message || "An error occurred while requesting a password reset.",
-        });
-      toast.error("something went wrong")      }
+        // Extract error message from the server response
+        const errorMessage =
+          err?.response?.data?.message ||
+          (err?.response?.data?.errors
+            ? Object.values(err.response.data.errors).flat().join(", ")
+            : "An error occurred while requesting a password reset.");
+
+        // Set formik errors and show toast error
+        helpers.setErrors({ submit: errorMessage });
+        toast.error(errorMessage);
+      }
     },
   });
 
@@ -37,6 +43,6 @@ export const useAdminForgotPasswordFormik = () => {
     isError,
     error,
     isSuccess,
-    isRegistrationSuccess
+    isRegistrationSuccess,
   };
 };

@@ -7,24 +7,24 @@ import { useNavigate } from "react-router-dom";
 
 export const useAdminLoginFormik = () => {
   const { mutateAsync, isLoading, isError, error, isSuccess } = useAdminLogin();
-  const navigate =useNavigate();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
-    
     validationSchema: toFormikValidationSchema(signInSchema), // Use zod-formik-adapter for validation
     onSubmit: async (values, helpers) => {
       try {
         await mutateAsync(values);
-        toast.success("Login sucessfully ")
+        toast.success("Login successfully");
         formik.resetForm();
-        navigate('/admin/dashboard')
+        navigate('/admin/dashboard');
       } catch (err) {
-        helpers.setErrors({ submit: err?.response?.data?.message || "An error occurred" });
-        toast.error("Something went wrong")
+        const errorMessage = err?.response?.data?.message || "An error occurred";
+        helpers.setErrors({ submit: errorMessage });
+        toast.error(errorMessage); 
       }
     },
   });

@@ -9,29 +9,34 @@ export const useResetPasswordFormik = () => {
 
   const formik = useFormik({
     initialValues: {
-      currentPassword: "", // Renamed to match the field in the schema
-      newPassword: "",
-      confirmPassword: "",
+      oldpassword: "", // Updated to match backend expectation
+      newpassword: "",
+      confirmpassword: "",
     },
     validationSchema: toFormikValidationSchema(adminResetPasswordSchema), // Uses Zod validation schema
     onSubmit: async (values, { resetForm, setErrors }) => {
       try {
-        // Ensure the form values have the correct field names: currentPassword, newPassword, confirmPassword
-        await mutateAsync({
-          currentPassword: values.currentPassword,
-          newPassword: values.newPassword,
-          confirmPassword: values.confirmPassword,
+        // Send request to backend
+        const response = await mutateAsync({
+          oldpassword: values.oldpassword,
+          newpassword: values.newpassword,
+          confirmpassword: values.confirmpassword,
         });
 
-        toast.success("Successfully reset the password");
+        // Display success message from the server response
+        toast.success(response?.message || "Password reset successfully.");
         resetForm();
       } catch (err) {
-        // Handle errors, set appropriate error messages
-        setErrors({
-          submit: err?.response?.data?.message || "An error occurred while resetting the password.",
-        });
+        // Extract error message from the server response
+        const errorMessage =
+          err?.response?.data?.message ||
+          (err?.response?.data?.errors
+            ? Object.values(err.response.data.errors).flat().join(", ")
+            : "An error occurred while resetting the password.");
+
+        setErrors({ submit: errorMessage });
         console.error("Password reset error:", err);
-        toast.error("Password reset error");
+        toast.error(errorMessage);
       }
     },
   });
