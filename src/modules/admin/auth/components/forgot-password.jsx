@@ -3,11 +3,15 @@ import Label from "../../../../components/ui/label/Label";
 import Button from "../../../../components/ui/button/Button";
 import Input from "../../../../components/ui/input/Input";
 import { useAdminForgotPasswordFormik } from "../formik/useForgotPassword";
+import { Verification } from "@/modules/user/auth/components/verification";
 
 const ForgotPasswordForm = () => {
   const [email, setEmail] = useState("");
 
-  const { formik, isLoading } = useAdminForgotPasswordFormik();
+  const { formik, isLoading,isRegistrationSuccess } = useAdminForgotPasswordFormik();
+  if(isRegistrationSuccess){
+    return <Verification/>
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 py-12 px-6">

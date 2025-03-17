@@ -3,31 +3,37 @@ import Label from "../../../../components/ui/label/Label";
 import Button from "../../../../components/ui/button/Button";
 import Input from "../../../../components/ui/input/Input";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { useAdminForgotPasswordFormik } from "../formik/useForgotPassword";
+import { useResetPasswordFormik } from "../formik/useResetPassword";
 
 const ResetPasswordForm = () => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const { formik, isLoading } = useAdminForgotPasswordFormik();
-
+  const { formik, isLoading } = useResetPasswordFormik();
   return (
     <form onSubmit={formik?.handleSubmit} className="space-y-4">
-      {/* Email Field */}
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+      {/* Current Password Field */}
+      <div className="space-y-2 relative">
+        <Label htmlFor="currentPassword">Current Password</Label>
         <Input
-          id="email"
-          name="email"
-          type="email"
-          placeholder="Enter your email"
-          value={formik?.values.email}
+          id="currentPassword"
+          name="currentPassword"
+          type={showPassword ? "text" : "password"}
+          placeholder="Enter your current password"
+          value={formik?.values.currentPassword}
           onChange={formik?.handleChange}
           onBlur={formik?.handleBlur}
           required
           className="w-full"
         />
-        {formik?.touched.email && formik.errors.email && (
-          <div className="text-red-500 text-sm">{formik.errors.email}</div>
+        <button
+          type="button"
+          onClick={() => setShowPassword((prev) => !prev)}
+          className="absolute right-3 top-12 transform -translate-y-1/2 text-gray-500"
+        >
+          {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+        </button>
+        {formik?.touched.currentPassword && formik.errors.currentPassword && (
+          <div className="text-red-500 text-sm">{formik.errors.currentPassword}</div>
         )}
       </div>
 

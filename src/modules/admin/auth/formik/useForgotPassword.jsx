@@ -3,9 +3,12 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 import { forgotPasswordSchema } from "../schema/adminformSchema";
 import { useAdminForgotPassword } from "../api/forgot-Password";
 import { toast } from "react-toastify";
+import { useState } from "react";
 
 export const useAdminForgotPasswordFormik = () => {
   const { mutateAsync, isLoading, isError, error, isSuccess } = useAdminForgotPassword();
+    const [isRegistrationSuccess, setIsRegistrationSuccess] = useState(false);
+  
 
   const formik = useFormik({
     initialValues: {
@@ -17,6 +20,8 @@ export const useAdminForgotPasswordFormik = () => {
         await mutateAsync(values); // Trigger forgot password API
         formik.resetForm();
         toast.success("Sucessfully sent") // Reset form after successful submission
+        setIsRegistrationSuccess(true);
+
       } catch (err) {
         // Handle error and set form error
         helpers.setErrors({
@@ -32,5 +37,6 @@ export const useAdminForgotPasswordFormik = () => {
     isError,
     error,
     isSuccess,
+    isRegistrationSuccess
   };
 };
