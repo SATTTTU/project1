@@ -1,6 +1,6 @@
 
-import AuthImageSection from "@/modules/cook/auth/firstregisterpage/component/authimagesection";
-import RegisterForm from "@/modules/cook/auth/firstregisterpage/component/registerationform";
+import { PreRegisterForm } from "@/modules/cook/auth/components/preregisterform";
+import { WelcomePanel } from "@/modules/cook/auth/components/welcome";
 import React from "react";
 
 
@@ -11,13 +11,13 @@ import React from "react";
 
   return (
     <div className="flex h-screen w-full">
-      <AuthImageSection />
+      <WelcomePanel/>
       <div className="w-full md:w-1/2 flex flex-col py-30 overflow-y-auto">
         <div className="max-w-md mx-auto w-full">
           <h1 className="text-3xl font-bold text-[#4b6c1e] mb-8">
             Sign up as Cook
           </h1>
-          <RegisterForm onSubmit={handleFormSubmit} />
+          <PreRegisterForm onSubmit={handleFormSubmit} />
         </div>
       </div>
     </div>

@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { useCookRegisterFormik } from "../formik/usefirstregister";
 import { InputField } from "@/components/ui/inputfield/InputField";
-
+import { useCookRegisterFormik } from "../formik/usefirstregister";
 export const PreRegisterForm = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);

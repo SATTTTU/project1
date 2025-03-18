@@ -1,29 +1,27 @@
 // LoginPage.jsx - Main container component
-import React  from "react";
+import React from "react";
 import authimage from "../../../../assets/background1.jpg";
 import { LoginForm } from "@/modules/cook/auth/components/loginpage";
 import AuthSidebar from "@/components/ui/cookui/cooksidebar/cooksidebar";
 
-
-
 export const Login = () => {
   return (
-    <div className="flex h-screen w-full">
-      <div className="flex w-full flex-col justify-center px-8 md:w-1/2 lg:px-16">
-        <div className="mx-auto w-full max-w-lg">
-          <h1 className="mb-10 text-3xl font-bold text-[#4b6c1e]">
+    <div className="flex h-screen">
+      <AuthSidebar 
+        imageSrc={authimage} 
+        title="Welcome Back to Chef Connect" 
+        subtitle="Login to access your dashboard and start managing your culinary services."
+      />
+      
+      <div className="flex-1 flex items-center justify-center">
+        <div className="w-full max-w-md p-8">
+          <h1 className="text-2xl font-bold text-center mb-8">
             Login as Cook
           </h1>
+          
           <LoginForm />
         </div>
       </div>
-      <AuthSidebar 
-        image={authimage} 
-        title="Hello, Friends"
-        subtitle={["Enter your Personal Details", "Start journey with us"]}
-        buttonText="Sign Up"
-        buttonLink="/cook/preregister"
-      />
     </div>
   );
 };

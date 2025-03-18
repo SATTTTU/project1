@@ -5,6 +5,11 @@ const AuthSidebar = ({ image, title, subtitle, buttonText, buttonLink }) => {
   // Handle both string-based image paths and component-based images
   const ImageComponent = typeof image === "string" ? null : image;
 
+  // Convert subtitle to array if it's a string or handle if it's not provided
+  const subtitleArray = subtitle 
+    ? (Array.isArray(subtitle) ? subtitle : [subtitle]) 
+    : [];
+
   return (
     <div className="relative hidden md:flex md:w-1/2">
       {/* Dark overlay */}
@@ -26,7 +31,7 @@ const AuthSidebar = ({ image, title, subtitle, buttonText, buttonLink }) => {
         <h2 className="text-4xl font-bold mb-4">{title}</h2>
         
         {/* Subtitle paragraphs */}
-        {subtitle && subtitle.map((text, index) => (
+        {subtitleArray.map((text, index) => (
           <p key={index} className="text-center mb-2">
             {text}
           </p>

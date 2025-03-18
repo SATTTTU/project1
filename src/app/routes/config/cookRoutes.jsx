@@ -23,10 +23,10 @@ export const cookRoutes = [
           {
             path: paths.cook.registerPage.path,
             lazy: async () => {
-              const { FirstRegisterPage } = await import(
-                "../cook/auth/firstregisterpage"
+              const { FirstRegisterPageRoute } = await import(
+                "../cook/auth/preregisterpage"
               );
-              return { Component: FirstRegisterPage };
+              return { Component: FirstRegisterPageRoute };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },

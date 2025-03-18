@@ -3,6 +3,7 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";  
 import "react-toastify/dist/ReactToastify.css"; 
+
 import { signUpSchema } from "./schema/authschema";
 import { useCookPreRegister } from "../api/firstregisterpage";
 
@@ -17,7 +18,7 @@ export const useCookRegisterFormik = (config = {}) => {
       email: "",
       password: "",
     },
-    validationSchema: toFormikValidationSchema(signUpSchema),
+    validationSchema: toFormikValidationSchema(signUpSchema ),
     validateOnBlur: true,
     validateOnChange: false,
     onSubmit: async (values, helpers) => {
