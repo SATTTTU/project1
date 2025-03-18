@@ -1,23 +1,24 @@
 import { api } from "@/lib/api-client";
-import { useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
-// Admin Profile Edit API
-const getUsers = async (userData) => {
-  const response = await api.get("/api/admins/get-users", userData);
+// Get Users API
+const getUsers = async () => {
+  const response = await api.get("/api/admins/get-all-users");
   return response.data;
 };
 
-export const useUserList = ({ mutationConfig } = {}) => {
-  const mutation = useMutation({
-    mutationFn: getUsers,
-    ...mutationConfig,
+export const useUserList = (queryConfig = {}) => {
+  const query = useQuery({
+    queryKey: ["users"],
+    queryFn: getUsers,
+    ...queryConfig,
   });
 
   return {
-    mutateAsync: mutation.mutateAsync,
-    isLoading: mutation.isLoading, 
-    error: mutation.error,
-    isError: mutation.isError,
-    isSuccess: mutation.isSuccess,
+    data: query.data,
+    isLoading: query.isLoading,
+    error: query.error,
+    isError: query.isError,
+    isSuccess: query.isSuccess,
   };
 };

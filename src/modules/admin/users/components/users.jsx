@@ -1,4 +1,3 @@
-// UserList.jsx
 import React, { useMemo } from "react";
 import { Table } from "@/components/ui/tables/tables";
 import Pagination from "@/components/ui/pagination/pagination";
@@ -11,7 +10,7 @@ export const UserList = ({ search = "", currentPage = 1, rowsPerPage = 5, onPage
   // Filter users based on search
   const filteredUsers = useMemo(() => {
     if (!users) return [];
-    return users.filter(user => 
+    return users.filter(user =>
       user.name.toLowerCase().includes(search.toLowerCase())
     );
   }, [users, search]);
@@ -24,6 +23,7 @@ export const UserList = ({ search = "", currentPage = 1, rowsPerPage = 5, onPage
 
   // Get current page data
   const currentUsers = useMemo(() => {
+    if (!filteredUsers.length) return [];
     const startIndex = (currentPage - 1) * rowsPerPage;
     return filteredUsers.slice(startIndex, startIndex + rowsPerPage);
   }, [filteredUsers, currentPage, rowsPerPage]);
@@ -45,15 +45,15 @@ export const UserList = ({ search = "", currentPage = 1, rowsPerPage = 5, onPage
 
   // Loading and error states
   if (isLoading) return <p>Loading users...</p>;
-  if (error)
-    return <p>Error loading users: {error.message}</p>;
+  if (error) return <p>Error loading users: {error.message}</p>;
+  if (!users || users.length === 0) return <p>No users found.</p>;
 
   return (
     <>
-      <Table 
-        columns={columns} 
-        data={currentUsers} 
-        renderRow={renderRow} 
+      <Table
+        columns={columns}
+        data={currentUsers}
+        renderRow={renderRow}
       />
       {totalPages > 1 && (
         <Pagination

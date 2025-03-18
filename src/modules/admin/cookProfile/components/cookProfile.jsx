@@ -29,7 +29,7 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
     isLoading, 
     error, 
     data 
-  } = useGetSingleCook({
+  } = useGetSingleCook(cookId, {
     mutationConfig: {
       onSuccess: (data) => {
         console.log("Cook data fetched successfully:", data);
@@ -40,7 +40,6 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
     }
   });
 
-  // Fetch cook data on component mount or when cookId changes
   useEffect(() => {
     if (cookId) {
       fetchCook();
