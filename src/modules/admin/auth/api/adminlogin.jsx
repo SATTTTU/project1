@@ -3,11 +3,14 @@ import { useMutation } from "@tanstack/react-query";
 
 const loginAdmin = async (adminData) => {
   const response = await api.post("/api/admins/login", adminData);
-  const { token, user } = response.data;
+  const { token, admin } = response.data;
+  console.log("first,",response.data)
+  console.log("first",token,admin);
 
   if (token) {
-    localStorage.setItem("active_user", user); 
-    localStorage.setItem(`token_${user}`, token); // Store the token
+    localStorage.setItem("active_user", admin); 
+    
+    localStorage.setItem(`token_admin`, token); // Store the token
     console.log("✅ Token stored successfully:", token);
   } else {
     console.error("❌ No token received from server!");

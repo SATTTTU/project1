@@ -22,7 +22,10 @@ export const ProfileCard = () => {
   const handleLogout = async () => {
     try {
       await logout();
-      localStorage.removeItem("adminToken"); // Remove token
+      localStorage.removeItem("token_admin");
+      localStorage.removeItem("cart");
+      localStorage.removeItem("auth");
+      localStorage.removeItem("active_user");
       window.location.href = "/admin/login"; // Redirect
     } catch (error) {
       console.error("Logout failed", error);
@@ -39,14 +42,14 @@ export const ProfileCard = () => {
   // Function to get the full image URL
   const getFullImageUrl = (imagePath) => {
     if (!imagePath) return "/api/placeholder/80/80";
-    
+
     // If it's already a full URL (starts with http/https)
-    if (imagePath.startsWith('http')) return imagePath;
-    
+    if (imagePath.startsWith("http")) return imagePath;
+
     // Use your existing API_URL
     // If your API_URL already includes a trailing slash, you might need to adjust this
-    const storageUrl = import.meta.env.VITE_APP_API_URL.endsWith('/') 
-      ? `${import.meta.env.VITE_APP_API_URL}storage/` 
+    const storageUrl = import.meta.env.VITE_APP_API_URL.endsWith("/")
+      ? `${import.meta.env.VITE_APP_API_URL}storage/`
       : `${import.meta.env.VITE_APP_API_URL}/storage/`;
     return `${storageUrl}${imagePath}`;
   };
@@ -73,8 +76,8 @@ export const ProfileCard = () => {
   }, [fetchProfileData]);
 
   // Determine which image to use
-  const profileImageSrc = profileData.image_url 
-    ? getFullImageUrl(profileData.image_url) 
+  const profileImageSrc = profileData.image_url
+    ? getFullImageUrl(profileData.image_url)
     : profileData.image || "/api/placeholder/80/80";
 
   return (
