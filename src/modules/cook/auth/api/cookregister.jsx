@@ -1,29 +1,23 @@
-// api/cookregister.js
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { api } from '@/lib/api-client';
+import { api } from "@/lib/api-client";
+import { useMutation } from "@tanstack/react-query";
 
-// Function to handle document upload
-const uploadCookDocuments = (data) => {
-  // Create FormData object to handle file uploads
-  const formData = new FormData();
-  formData.append('passportSizePhoto', data.passportSizePhoto);
-  formData.append('citizenshipFront', data.citizenshipFront);
-  formData.append('citizenshipBack', data.citizenshipBack);
-  
-  return api.post(`/cooks/upload-documents`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data', 
-    },
-  });
+// Fixing async and await
+const RegisterCook = async (cookdata) => {
+  const response = await api.post("/api/cooks/upload-documents", cookdata);
+  return response.data; // Return response data
 };
 
-// Custom hook for document upload
-export const useRegisterCookDocuments = () => {
-  const queryClient = useQueryClient();
-  
-  return useMutation(uploadCookDocuments, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['user']); 
-    },
+export const useCookRegister = ({ mutationConfig } = {}) => {
+  const mutation = useMutation({
+    mutationFn: RegisterCook,
+    ...mutationConfig,
   });
+
+  return {
+    mutateAsync: mutation.mutateAsync,
+    isLoading: mutation.isLoading, // Fixed the state
+    error: mutation.error,
+    isError: mutation.isError,
+    isSuccess: mutation.isSuccess,
+  };
 };

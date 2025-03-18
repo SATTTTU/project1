@@ -1,3 +1,5 @@
+import { AlertCircle, Upload } from "lucide-react";
+
 export const CitizenshipUploadStep = ({ formData, errors, handleFileChange }) => {
   return (
     <div className="w-full space-y-6">
