@@ -67,7 +67,6 @@ export const Sidebar = () => {
           ))}
         </nav>
 
-        {/* Logout Button */}
         <div className="px-4 py-4 border-t border-gray-200">
           <button
             onClick={handleLogout}

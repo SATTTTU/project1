@@ -11,7 +11,7 @@ export const userRoutes = [
 	{
 		path: paths.user.root.path,
 		element: <Outlet />,
-		// ErrorBoundary: AppRootErrorBoundary,
+		ErrorBoundary: AppRootErrorBoundary,
 		children: [
 			{
 				element: <AuthRoot />,
@@ -19,20 +19,20 @@ export const userRoutes = [
 					{
 						path: paths.user.register.path,
 						lazy: async () => {
-							const { RegisterSection } = await import(
-								"../../../modules/user/auth/components/userRegister"
+							const { RegisterPage } = await import(
+								"../../routes/user/auth/register"
 							);
 
-							return { Component: RegisterSection };
+							return { Component: RegisterPage };
 						},
 					},
 					{
 						path: paths.user.login.path,
 						lazy: async () => {
-							const { LoginSection } = await import(
-								"../../../modules/user/auth/components/userLogin"
+							const { LoginPage } = await import(
+								"../../routes/user/auth/login"
 							);
-							return { Component: LoginSection };
+							return { Component: LoginPage };
 						},
 					},
 
@@ -40,7 +40,7 @@ export const userRoutes = [
 						path: paths.user.forgotPassword.path,
 						lazy: async () => {
 							const { ForgotPassword } = await import(
-								"../../../modules/user/auth/components/forgetPassword"
+								"../../routes/user/auth/forgot-password"
 							);
 							return { Component: ForgotPassword };
 						},
@@ -49,7 +49,7 @@ export const userRoutes = [
 						path: paths.user.changePassword.path,
 						lazy: async () => {
 							const { ChangePassword } = await import(
-								"../../../modules/user/auth/components/changePassword"
+								"../../routes/user/auth/change-password"
 							);
 							return { Component: ChangePassword };
 						},
@@ -58,7 +58,7 @@ export const userRoutes = [
 						path: paths.user.resetPassword.path,
 						lazy: async () => {
 							const { ResetPassword } = await import(
-								"../../../modules/user/auth/components/resetpassword"
+								"../../routes/user/auth/reset-password"
 							);
 							return { Component: ResetPassword };
 						},
@@ -176,15 +176,7 @@ export const userRoutes = [
 							return { Component: FoodDetailsPage };
 						},
 					},
-					// {
-					// 	path: paths.user.mainPage.path,
-					// 	lazy: async () => {
-					// 		const { HomePage } = await import(
-					// 			"../../../modules/user/LandingPage/HomePage"
-					// 		);
-					// 		return { Component: HomePage };
-					// 	},
-					// },
+				
 					{
 						path: paths.user.about.path,
 						lazy: async () => {

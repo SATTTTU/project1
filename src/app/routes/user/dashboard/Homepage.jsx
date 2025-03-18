@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../../../store/cart/cart";
-import { Header } from "@/modules/user/Homepage/component/header";
+import { Header } from "@/modules/user/Homepage/component/Header";
 import { Footer } from "@/modules/user/Homepage/component/footer";
 import { SearchBar } from "@/modules/user/Homepage/component/searchBar";
 import { PromotedRestaurants } from "@/modules/user/Homepage/component/filterBadges";

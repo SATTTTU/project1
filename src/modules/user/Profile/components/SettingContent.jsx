@@ -1,3 +1,4 @@
+import { ChangePassword } from "./changePassword";
 import ToggleSetting from "./toggleSetting";
 
 const SettingsContent = () => {
@@ -16,16 +17,11 @@ const SettingsContent = () => {
                 defaultChecked={true}
               />
   
-              <ToggleSetting
-                title="SMS Notifications"
-                description="Receive order updates via text message"
-                defaultChecked={false}
-              />
+            
             </div>
           </div>
   
-          {/* <PasswordChangeForm /> */}
-  
+<ChangePassword/>  
           <div className="bg-gray-50 p-6 rounded-lg">
             <h3 className="text-lg font-medium mb-4">Privacy Settings</h3>
   

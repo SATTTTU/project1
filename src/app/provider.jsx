@@ -3,6 +3,7 @@ import { useState } from "react";
 import { queryConfig } from "../lib/react-query";
 import { Provider } from "react-redux";
 import { store } from "@/store/cart/index";
+import { ToastContainer } from "react-toastify";
 
 export const AppProvider = ({ children }) => {
 	const [queryClient] = useState(
@@ -15,6 +16,7 @@ export const AppProvider = ({ children }) => {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<Provider store={store}>{children}</Provider>
+			<ToastContainer/>
 		</QueryClientProvider>
 	);
 };

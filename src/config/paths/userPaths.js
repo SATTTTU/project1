@@ -90,9 +90,9 @@ export const userPaths = {
 			}`,
 	},
 	orderHistory: {
-		path: "/profile/orders",
+		path: "/user/orders",
 		getHref: (redirectTo) =>
-			`/profile/orders${
+			`/user/orders${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},

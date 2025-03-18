@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart, updateQuantity, clearCart } from "../../../../store/cart/cart";
 import { CheckoutSteps } from "@/modules/user/CartSection/components/checkoutsteps";
-import { CartItems } from "@/modules/user/CartSection/components/cartitems";
+import { CartItems } from "@/modules/user/CartSection/components/cartItems";
 import { ShippingForm } from "@/modules/user/CartSection/components/shippingForm";
 import { PaymentForm } from "@/modules/user/CartSection/components/paymentForm";
 import { OrderSummary } from "@/modules/user/CartSection/components/orderSummary";

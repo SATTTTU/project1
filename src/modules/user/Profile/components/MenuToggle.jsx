@@ -1,8 +1,8 @@
 const MobileMenuToggle = ({ isMobile, activeTab, showMobileMenu, setShowMobileMenu }) => {
     const navItems = [
       { id: "profile", label: "Your Profile" },
-      { id: "orders", label: "Your Orders" },
-      { id: "wishlist", label: "Wishlist" },
+      { id: "orders", label: "Your Orde" },
+      { id: "wishlist", label: "Wishlists" },
       { id: "settings", label: "Settings" },
     ];
   
