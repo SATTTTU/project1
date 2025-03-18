@@ -1,5 +1,5 @@
 import React from "react";
-import { Badge } from "../../../../components/ui/badge/Badge";
+// import { Badge } from "../../../../components/ui/badge/Badge";
 import Category1 from "../../../../assets/UserImages/Category/Cato1.jpg";
 import Grand from "../../../../assets/UserImages/Ai.jpeg";
 import Lunch from "../../../../assets/UserImages/Lunch.jpeg";

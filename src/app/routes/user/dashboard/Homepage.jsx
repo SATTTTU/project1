@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../../../store/cart/cart";
 import { Header } from "@/modules/user/Homepage/component/header";
@@ -14,7 +14,7 @@ import {
 	cooks,
 	popularItems,
 } from "../../../../modules/user/Homepage/component/data";
-import { FilterBadges } from "@/modules/user/Homepage/component/filterBadges";
+// import { FilterBadges } from "@/modules/user/Homepage/component/filterBadges";
 import { PopularCooks } from "@/modules/user/Homepage/component/popularCooks";
 export const Homepage = () => {
   const dispatch = useDispatch();
@@ -47,10 +47,10 @@ export const Homepage = () => {
     setAddedToCart(item.productId);
 
     // Show success notification
-    toast.success(`${item.name} added to cart!`, {
-      position: "bottom-right",
-      autoClose: 2000,
-    });
+    // toast.success(`${item.name} added to cart!`, {
+    //   position: "bottom-right",
+    //   autoClose: 2000,
+    // });
   };
 
   return (
@@ -70,7 +70,7 @@ export const Homepage = () => {
             />
           </div>
 
-          <FilterBadges />
+          {/* <FilterBadges /> */}
           <PromotedRestaurants />
         </section>
 
