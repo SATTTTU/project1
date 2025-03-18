@@ -5,7 +5,7 @@ import { useUserLogin } from "../api/loginUser";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import { api } from "@/lib/api-client";
-import { toast } from "react-toastify"; // ✅ 
+import { toast } from "react-toastify"; 
 
 export const useLoginFormik = (config = {}) => {
   const navigate = useNavigate();
@@ -16,11 +16,11 @@ export const useLoginFormik = (config = {}) => {
         api.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
         navigate("/user/dashboard");
 
-        toast.success("Login successful! 🎉"); // ✅ 
+        toast.success("Login successful! 🎉"); 
       },
       onError: (error) => {
         console.error("Login failed:", error);
-        toast.error("Login failed. Please try again. ❌"); // ✅ 
+        toast.error("Login failed. Please try again. ❌"); 
       },
     },
   });
@@ -39,7 +39,7 @@ export const useLoginFormik = (config = {}) => {
         helpers.setStatus({ success: true, message: "Login successful" });
         helpers.resetForm();
         console.log("Login successful:", result);
-        toast.success("Welcome back! 🎉"); // ✅ Show success toast
+        // toast.success("Welcome back! 🎉"); // ✅ Show success toast
 
         if (config?.mutationConfig?.onSuccess) {
           config.mutationConfig.onSuccess(result);

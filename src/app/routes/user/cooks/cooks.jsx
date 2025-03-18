@@ -4,15 +4,15 @@ import { FiArrowLeft } from "react-icons/fi";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../../../store/cart/cart";
-import { cooksData } from "../../../../modules/user/Homepage/component/data";
-import { LoadingSkeleton } from "@/modules/user/CookSection/components/loadingSkeleton";
+import { cooksData } from "../../../../modules/user/dashboard/components/data";
+import { LoadingSkeleton } from "@/modules/user/cooks/components/loadingSkeleton";
 // import { Header } from "@/modules/user/CookSection/components/header";
-import { CookProfileHeader } from "@/modules/user/CookSection/components/cookProfileHeader";
-import { CookTabs } from "@/modules/user/CookSection/components/cookTabs";
-import { CookCategories } from "@/modules/user/CookSection/components/cookCategories";
-import { AboutTab } from "@/modules/user/CookSection/components/aboutTab";
-import { CookReviews } from "@/modules/user/CookSection/components/cookReviews";
-import { Header } from "@/modules/user/Homepage/component/Header";
+import { CookProfileHeader } from "@/modules/user/cooks/components/cookProfileHeader";
+import { CookTabs } from "@/modules/user/cooks/components/cookTabs";
+import { CookCategories } from "@/modules/user/cooks/components/cookCategories";
+import { AboutTab } from "@/modules/user/cooks/components/aboutTab";
+import { CookReviews } from "@/modules/user/cooks/components/cookReviews";
+import { Header } from "@/modules/user/dashboard/components/header";
 
 export const CookProfile = () => {
 	const { id } = useParams();

@@ -1,7 +1,7 @@
-import { HeroSlider } from "@/modules/user/LandingPage/components/heroSlider";
-import { About } from "@/modules/user/LandingPage/components/about";
-import { Footer } from "@/modules/user/LandingPage/components/footer";
-import { TestimonialSlider } from "@/modules/user/LandingPage/components/testimonialSlider";
+import { HeroSlider } from "@/modules/user/home/components/heroSlider";
+import { About } from "@/modules/user/home/components/about";
+import { Footer } from "@/modules/user/home/components/footer";
+import { TestimonialSlider } from "@/modules/user/home/components/testimonialSlider";
 
 export const Layout = () => {
 	return (
