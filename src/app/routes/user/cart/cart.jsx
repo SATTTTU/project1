@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart, updateQuantity, clearCart } from "../../../../store/cart/cart";
-import { CheckoutSteps } from "@/modules/user/CartSection/components/checkoutsteps";
-import { CartItems } from "@/modules/user/CartSection/components/cartItems";
-import { ShippingForm } from "@/modules/user/CartSection/components/shippingForm";
-import { PaymentForm } from "@/modules/user/CartSection/components/paymentForm";
-import { OrderSummary } from "@/modules/user/CartSection/components/orderSummary";
-import { CartHeader } from "@/modules/user/CartSection/components/cartheader";
-import { EmptyCart } from "@/modules/user/CartSection/components/emptyCart";
-import { OrderConfirmation } from "@/modules/user/CartSection/components/orderConfirmation";
+import { CheckoutSteps } from "@/modules/user/cart/components/checkoutsteps";
+import { CartItems } from "@/modules/user/cart/components/cartItems";
+import { ShippingForm } from "@/modules/user/cart/components/shippingForm";
+import { PaymentForm } from "@/modules/user/cart/components/paymentForm";
+import { OrderSummary } from "@/modules/user/cart/components/orderSummary";
+import { CartHeader } from "@/modules/user/cart/components/cartheader";
+import { EmptyCart } from "@/modules/user/cart/components/emptyCart";
+import { OrderConfirmation } from "@/modules/user/cart/components/orderConfirmation";
 
 export const Cart = () => {
   const cartItems = useSelector((store) => store.cart.items);
