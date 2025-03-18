@@ -17,11 +17,7 @@ const SettingsContent = () => {
                 defaultChecked={true}
               />
   
-              <ToggleSetting
-                title="SMS Notifications"
-                description="Receive order updates via text message"
-                defaultChecked={false}
-              />
+            
             </div>
           </div>
   

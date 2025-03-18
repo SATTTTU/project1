@@ -1,6 +1,6 @@
 import { useState } from "react"
-import ReviewCard from "./ReviewCard"
-import ReviewForm from "./ReviewForm"
+import ReviewCard from "./reviewCard"
+import ReviewForm from "./reviewForm"
 
 export const CookReviews = ({ reviews, cookId, cookName, setCook }) => {
   const [showReviewForm, setShowReviewForm] = useState(false)
