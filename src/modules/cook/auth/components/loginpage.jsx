@@ -26,7 +26,7 @@ export const LoginForm = () => {
   return (
     <form onSubmit={formik.handleSubmit} className="space-y-6">
       <div className="text-center mb-6">
-        <h2 className="text-xl font-semibold">Sign in as cook</h2>
+    
       </div>
 
       <div className="space-y-4">
@@ -78,7 +78,7 @@ export const LoginForm = () => {
           <span>Remember me</span>
         </label>
         
-        <Link to="/forgot-password" className="text-sm text-green-700 hover:underline">
+        <Link to="/forgot-password" className="text-sm text-[#4b6c1e] hover:underline">
           Forgot Password?
         </Link>
       </div>
@@ -86,7 +86,7 @@ export const LoginForm = () => {
       <button
         type="submit"
         disabled={isLoggingIn}
-        className="w-full py-2 px-4 bg-green-600 hover:bg-green-700 text-white rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+        className="w-full py-2 px-4 bg-[#4b6c1e] hover:bg-green-700 text-white rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
       >
         {isLoggingIn ? "Signing in..." : "Sign in"}
       </button>
