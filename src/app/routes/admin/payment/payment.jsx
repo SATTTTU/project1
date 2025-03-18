@@ -18,7 +18,7 @@ export const PaymentDashboardRoute = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center px-4 py-2 bg-white text-gray-700 text-sm font-medium rounded-lg shadow hover:shadow-md transition-transform transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
+            className="flex items-center px-4 py-2 bg-white text-gray-700 text-sm font-medium rounded-lg shadow hover:shadow-md transition-transform transform hover:-translate-y-0.5 focus:outline-none  cursor-pointer focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
           >
             <ArrowLeft size={20} className="mr-2" /> Back
           </button>

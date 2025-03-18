@@ -46,8 +46,41 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
     }
   }, [cookId, fetchCook]);
 
-  // Extract cook data from API response
-  const cook = data?.data;
+  // Extract cook data from API response and map to expected structure
+  const cookData = data?.data;
+  
+  // Map API response to component expected format
+  const cook = cookData ? {
+    id: cookData.id,
+    name: cookData.name,
+    email: cookData.email,
+    phone: cookData.phone || "Not provided",
+    image: cookData.image_url,
+    status: mapApprovalStatusToDisplay(cookData.approval_status),
+    averageRating: cookData.average_rating || 0,
+    totalReviews: cookData.total_reviews || 0,
+    joinedDate: new Date().toISOString(), // Add default if missing
+    address: "Not provided", // Add default
+    experience: "Not provided", // Add default
+    specialties: [], // Add default
+    certifications: [], // Add default
+    earnings: { total: 0, monthly: 0 }, // Add default
+    productsSold: 0, // Add default
+    documents: cookData.cook_documents || {},
+    video: cookData.intro_video_url,
+  } : null;
+  
+  // Utility function to map API status to display status
+  function mapApprovalStatusToDisplay(status) {
+    switch(status) {
+      case "approved": return "Verified";
+      case "under-review": return "Pending";
+      case "rejected": return "Unverified";
+      default: return "Pending";
+    }
+  }
+
+  // Rest of your component stays the same...
 
   // Show loading state
   if (isLoading) {

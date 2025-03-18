@@ -2,15 +2,15 @@ import { api } from "@/lib/api-client";
 import { useMutation } from "@tanstack/react-query";
 
 export const getSingleCook = (cookId) => {
-  return api.get(`/api/admins/get-all-cooks/${cookId}`);
+  return api.get(`/api/admins/get-cook/${cookId}`);
 };
 
-export const useGetSingleCook = ({ mutationConfig } = {}) => {
+export const useGetSingleCook = (cookId, { mutationConfig } = {}) => {
   const mutation = useMutation({
-    mutationFn: getSingleCook,
+    mutationFn: () => getSingleCook(cookId),
     ...mutationConfig,
   });
-
+  
   return {
     mutateAsync: mutation.mutateAsync,
     isLoading: mutation.isLoading,
