@@ -16,7 +16,12 @@ function authRequestInterceptor(config) {
 
   config.headers = config.headers || {};
   config.headers.Accept = "application/json";
-  config.headers["Content-Type"] = "application/json";
+  
+  // Only set Content-Type to application/json if it's not FormData
+  if (!(config.data instanceof FormData)) {
+    config.headers["Content-Type"] = "application/json";
+  }
+  // Otherwise, let the browser set the correct Content-Type with boundary
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;

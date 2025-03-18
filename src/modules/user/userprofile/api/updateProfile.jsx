@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 
 // Admin Profile Edit API
 const editUserProfile = async (userData) => {
-  const response = await api.put("/api/update-profile", userData);
+  const response = await api.post("/api/update-profile?_method=put", userData);
   return response.data;
 };
 

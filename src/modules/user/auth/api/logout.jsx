@@ -14,16 +14,13 @@ export const useUserLogout = ({ mutationConfig } = {}) => {
   const mutation = useMutation({
     mutationFn: logoutUser,
     onSuccess: () => {
-      // Clear user session (localStorage, sessionStorage, cookies)
       localStorage.removeItem("token");
-    //   sessionStorage.removeItem("token");
-    //   document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     },
     ...mutationConfig,
   });
 
   return {
-    logout: mutation.mutateAsync, // Renamed for clarity
+    logout: mutation.mutateAsync, 
     isLoading: mutation.isPending,
     error: mutation.error,
     isError: mutation.isError,

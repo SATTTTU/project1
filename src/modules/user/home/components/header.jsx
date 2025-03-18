@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
 import { Link as ScrollLink } from "react-scroll";
 import Logo from "../../../../assets/logo.jpg";
+
 export const Header = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 

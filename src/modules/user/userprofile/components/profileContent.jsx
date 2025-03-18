@@ -1,11 +1,11 @@
 import { useState, useRef } from "react";
 import { FaUserCircle } from "react-icons/fa"
-import { useProfileFormik } from "../formik/updateProfileFormik";
+import { useAdminProfileEditFormik } from "../formik/updateProfileFormik";
 // import { useProfileFormik } from "../formik/updateProfileFormik";
 
 
 export const ProfileContent = () => {
-  const { formik } = useProfileFormik();
+  const { formik } = useAdminProfileEditFormik();
   const [preview, setPreview] = useState(null);
   const fileInputRef = useRef(null);
 

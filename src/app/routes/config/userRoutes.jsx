@@ -99,10 +99,10 @@ export const userRoutes = [
 					{
 						path: paths.user.profileContent.path,
 						lazy: async () => {
-							const { ProfileContent } = await import(
-								"../../../modules/user/userprofile/components/profileContent"
+							const { MyProfile } = await import(
+								"../../../modules/user/userprofile/components/editProfile"
 							);
-							return { Component: ProfileContent };
+							return { Component: MyProfile };
 						},
 					},
 					{

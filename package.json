@@ -18,7 +18,7 @@
     "axios": "^1.8.1",
     "cors": "^2.8.5",
     "formik": "^2.4.6",
-    "framer-motion": "^12.4.10",
+    "framer-motion": "^12.5.0",
     "khalti-checkout-web": "^2.2.0",
     "lightningcss": "^1.29.2",
     "lucide-react": "^0.477.0",

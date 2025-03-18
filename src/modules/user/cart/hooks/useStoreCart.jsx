@@ -3,15 +3,15 @@ import { toast } from "react-toastify";
 import { storeCartItem } from "../api/addItems";
 
 export const useStoreCartItem = () => {
-  const queryClient = useQueryClient(); // Helps update cache after mutation
+  const queryClient = useQueryClient(); 
 
   return useMutation({
-    mutationFn: storeCartItem, // API function to add item to cart
+    mutationFn: storeCartItem, 
     onSuccess: (data) => {
         console.log("data",data)
       toast.success("Item added to cart successfully! 🛒");
 
-      // Invalidate and refetch the user basket query to show updated data
+      
       queryClient.invalidateQueries(["userBasket"]);
     },
     onError: (error) => {
