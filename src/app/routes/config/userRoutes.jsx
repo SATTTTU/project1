@@ -123,15 +123,7 @@ export const userRoutes = [
 							return { Component: OrdersContent };
 						},
 					},
-					// {
-					// 	path: paths.user.favourite.path,
-					// 	lazy: async () => {
-					// 		const { WishlistContent } = await import(
-					// 			"../../../modules/user/Profile/components/WishlistContent"
-					// 		);
-					// 		return { Component: WishlistContent };
-					// 	},
-					// },
+				
 					{
 						path: paths.user.setting.path,
 						lazy: async () => {
