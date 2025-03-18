@@ -1,22 +1,32 @@
-import { api } from "@/lib/api-client";
 import { useMutation } from "@tanstack/react-query";
+import { api } from "@/lib/api-client"; // Ensure this is correctly configured
 
 const logoutUser = async () => {
   try {
-    const response = await api.post("/api/logout"); // No need to pass userData unless required
+    const token = localStorage.getItem("authToken");
+    if (!token) throw new Error("No auth token found"); // Prevent request without a token
+
+    const response = await api.post("/api/logout", {}, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || "Logout failed");
   }
 };
 
-export const useUserLogout = ({ mutationConfig } = {}) => {
+
+export const useUserLogout = () => {
   const mutation = useMutation({
     mutationFn: logoutUser,
     onSuccess: () => {
-      localStorage.removeItem("token");
+      localStorage.removeItem("authToken"); // Remove auth token after successful logout
+      window.location.href = "/user/login"; // Redirect to login page
     },
-    ...mutationConfig,
+    onError: (error) => {
+      console.error("Logout error:", error);
+    },
   });
 
   return {
