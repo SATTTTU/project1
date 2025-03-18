@@ -1,6 +1,6 @@
 import LoginImage from "@/assets/login.jpg";
 import { RegisterForm } from "@/modules/user/auth/components/registerForm";
-import { WelcomePanel } from "@/modules/user/auth/components/RegisterPanel";
+import { WelcomePanel } from "@/modules/user/auth/components/registerPanel";
 
 export const RegisterPage = () => {
   return (

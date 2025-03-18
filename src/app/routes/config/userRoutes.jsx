@@ -176,15 +176,7 @@ export const userRoutes = [
 							return { Component: FoodDetailsPage };
 						},
 					},
-					// {
-					// 	path: paths.user.mainPage.path,
-					// 	lazy: async () => {
-					// 		const { HomePage } = await import(
-					// 			"../../../modules/user/LandingPage/HomePage"
-					// 		);
-					// 		return { Component: HomePage };
-					// 	},
-					// },
+				
 					{
 						path: paths.user.about.path,
 						lazy: async () => {

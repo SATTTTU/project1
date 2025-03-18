@@ -1,5 +1,5 @@
 import { LoginForm } from "@/modules/user/auth/components/loginForm";
-import { WelcomePanel } from "@/modules/user/auth/components/LoginPanel";
+import { WelcomePanel } from "@/modules/user/auth/components/loginPanel";
 import LoginImage from "@/assets/login.jpg";
 
 export const LoginPage = () => {

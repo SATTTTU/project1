@@ -12,7 +12,7 @@ import { CookTabs } from "@/modules/user/CookSection/components/cookTabs";
 import { CookCategories } from "@/modules/user/CookSection/components/cookCategories";
 import { AboutTab } from "@/modules/user/CookSection/components/aboutTab";
 import { CookReviews } from "@/modules/user/CookSection/components/cookReviews";
-import { Header } from "@/modules/user/Homepage/component/Header";
+import { Header } from "@/modules/user/Homepage/component/header";
 
 export const CookProfile = () => {
 	const { id } = useParams();
