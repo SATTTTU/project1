@@ -78,7 +78,7 @@ export const LoginForm = () => {
           <span>Remember me</span>
         </label>
         
-        <Link to="/forgot-password" className="text-sm text-[#4b6c1e] hover:underline">
+        <Link to="/cook/forgetpassword" className="text-sm text-[#4b6c1e] hover:underline">
           Forgot Password?
         </Link>
       </div>

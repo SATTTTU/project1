@@ -1,51 +1,50 @@
 import React from 'react';
-import { AlertCircle } from 'lucide-react';
 
-const TermsStep = ({ formData, setFormData, errors }) => {
+const TermsStep = ({ formik }) => {
   return (
-    <div className="w-full space-y-6">
-      <h2 className="text-2xl font-bold text-gray-800">Terms and Conditions</h2>
-      
-      <div className="bg-gray-50 p-4 rounded-lg h-64 overflow-y-auto text-gray-700 text-sm">
-        <h3 className="font-bold mb-2">Terms and Conditions Agreement</h3>
-        <p className="mb-3">
-          By checking the box below, you agree to be bound by the following terms and conditions:
-        </p>
-        <ol className="list-decimal ml-5 space-y-2">
-          <li>You certify that all documents provided are authentic and accurate.</li>
-          <li>You authorize the verification of any information provided.</li>
-          <li>You understand that providing false information may result in rejection.</li>
-          <li>You consent to the storage and processing of your personal data.</li>
-          <li>You understand that your application will be reviewed and may be rejected.</li>
-          <li>You agree to provide additional information if requested.</li>
-          <li>You acknowledge that submission does not guarantee acceptance.</li>
-          <li>You have read and understood all terms and conditions outlined herein.</li>
-        </ol>
-      </div>
-      
-      <div className="flex items-start">
-        <div className="flex items-center h-5">
-          <input
-            id="terms"
-            type="checkbox"
-            className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
-            style={{ accentColor: '#426B1F' }}
-            checked={formData.termsAccepted}
-            onChange={(e) => setFormData({...formData, termsAccepted: e.target.checked})}
-          />
+    <div className="flex flex-col items-center max-w-2xl mx-auto">
+      <div className="w-full bg-white p-6 rounded-lg shadow-sm">
+        <h2 className="text-2xl font-bold text-center mb-2">Terms and Conditions</h2>
+        
+        <h3 className="text-xl font-semibold text-center mb-4">Terms of Service</h3>
+        
+        <p className="mb-4">By checking the box below, you agree to be bound by the following terms and conditions:</p>
+        
+        <div className="bg-gray-50 p-4 rounded-md mb-6 max-h-64 overflow-y-auto">
+          <ol className="list-decimal pl-6 space-y-2">
+            <li>You certify that all documents and information provided are true and accurate.</li>
+            <li>You understand that providing false information may result in rejection of your application.</li>
+            <li>You agree to maintain the confidentiality of your account information.</li>
+            <li>You grant us permission to verify your documents with relevant authorities.</li>
+            <li>You understand that approval of your application is at our discretion.</li>
+            <li>You agree to comply with all applicable laws and regulations.</li>
+            <li>You acknowledge that we may modify these terms at any time.</li>
+            <li>You understand that we may terminate your account for violation of these terms.</li>
+            <li>You agree to indemnify and hold us harmless from any claims arising from your use of our service.</li>
+            <li>You acknowledge that you have read and understood these terms.</li>
+          </ol>
         </div>
-        <div className="ml-3 text-sm">
-          <label htmlFor="terms" className="font-medium text-gray-700">
-            I have read and agree to the terms and conditions
+        
+        <div className="flex items-center justify-center mb-2">
+          <label className="flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              name="termsAccepted"
+              checked={formik.values.termsAccepted}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            />
+            <span className="ml-2 text-gray-700">I have read and agree to the terms and conditions</span>
           </label>
         </div>
+        
+        {formik.touched.termsAccepted && formik.errors.termsAccepted && (
+          <div className="text-red-500 text-sm text-center mt-1">
+            {formik.errors.termsAccepted}
+          </div>
+        )}
       </div>
-      {errors.terms && (
-        <p className="text-sm text-red-600 flex items-center">
-          <AlertCircle className="h-4 w-4 mr-1" />
-          {errors.terms}
-        </p>
-      )}
     </div>
   );
 };

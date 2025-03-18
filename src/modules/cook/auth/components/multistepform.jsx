@@ -1,49 +1,58 @@
-import React, { useState } from 'react';
-import { ChevronRight } from 'lucide-react';
-import { documentSchema } from '../formik/schema/authschema';
-import { CitizenshipUploadStep } from './citizenshipupload';
-import CertificatesStep from './certificates';
-import TermsStep from './termsandconditions';
-import Stepper from './stepper';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useCookDocumentFormik } from "../formik/useDocumentUpload";
+import { ToastContainer } from "react-toastify";
+import Stepper from "./stepper";
+import { CitizenshipUploadStep } from "./citizenshipupload";
+import CertificatesStep from "./certificates";
+import TermsStep from "./termsandconditions";
+import { ChevronRight } from "lucide-react";
 
-// Import validation schema
-
-
+// Main MultiStepForm Component
 const MultiStepForm = () => {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState({
-    citizenshipFront: null,
-    citizenshipBack: null,
-    certificates: [],
-    experienceLetters: [],
-    termsAccepted: false
+  
+  const { formik, isRegistering } = useCookDocumentFormik({
+    mutationConfig: {
+      onSuccess: (data) => {
+        console.log("Submission successful:", data);
+        navigate("/cook/underreview"); // Navigate on successful submission
+      },
+      onError: (error) => {
+        console.error("Submission failed:", error);
+      },
+    },
   });
   
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  // Form validation
   const validateStep = (step) => {
-    const newErrors = {};
-    
-    if (step === 1) {
-      // Validate citizenship documents
-      if (documentSchema.citizenshipFront.validate(formData.citizenshipFront)) {
-        newErrors.citizenshipFront = documentSchema.citizenshipFront.validate(formData.citizenshipFront);
-      }
+    switch (step) {
+      case 1:
+        // Citizenship documents validation including passport-sized photo
+        // Make sure we're using the correct field name (passwordsizedphoto)
+        formik.setFieldTouched('passwordsizedphoto', true);
+        formik.setFieldTouched('citizenshipFront', true);
+        formik.setFieldTouched('citizenshipBack', true);
+        formik.validateField('passwordsizedphoto');
+        formik.validateField('citizenshipFront');
+        formik.validateField('citizenshipBack');
+        return !formik.errors.passwordsizedphoto && !formik.errors.citizenshipFront && 
+               !formik.errors.citizenshipBack && formik.values.passwordsizedphoto &&
+               formik.values.citizenshipFront && formik.values.citizenshipBack;
       
-      if (documentSchema.citizenshipBack.validate(formData.citizenshipBack)) {
-        newErrors.citizenshipBack = documentSchema.citizenshipBack.validate(formData.citizenshipBack);
-      }
-    } else if (step === 3) {
-      // Validate terms acceptance
-      if (documentSchema.termsAccepted.validate(formData.termsAccepted)) {
-        newErrors.terms = documentSchema.termsAccepted.validate(formData.termsAccepted);
-      }
+      case 2:
+        // Certificates step validation - optional fields, so always allow proceeding
+        return true;
+      
+      case 3:
+        // Terms acceptance validation
+        formik.setFieldTouched('termsAccepted', true);
+        formik.validateField('termsAccepted');
+        return !formik.errors.termsAccepted && formik.values.termsAccepted;
+      
+      default:
+        return true;
     }
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
   };
   
   const handleNext = () => {
@@ -56,48 +65,21 @@ const MultiStepForm = () => {
     setCurrentStep(prev => Math.max(prev - 1, 1));
   };
   
-  const handleChange = (field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-    
-    // Clear error when user updates the field
-    if (errors[field]) {
-      setErrors(prev => ({
-        ...prev,
-        [field]: null
-      }));
-    }
-  };
-  
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     
     if (validateStep(currentStep)) {
-      setIsSubmitting(true);
-      
-      try {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        // Reset form or redirect after successful submission
-        alert('Form submitted successfully!');
-        
-        // Reset form
-        setFormData({
-          citizenshipFront: null,
-          citizenshipBack: null,
-          certificates: [],
-          experienceLetters: [],
-          termsAccepted: false
+      // For the last step, submit the form and then navigate if valid
+      if (isLastStep) {
+        formik.handleSubmit(e);
+        // Navigation will be handled by onSuccess callback
+      } else {
+        // Just do normal validation for non-final steps
+        formik.validateForm().then(errors => {
+          if (Object.keys(errors).length === 0) {
+            handleNext();
+          }
         });
-        setCurrentStep(1);
-      } catch (error) {
-        console.error('Submission error:', error);
-        alert('Failed to submit form. Please try again.');
-      } finally {
-        setIsSubmitting(false);
       }
     }
   };
@@ -105,29 +87,11 @@ const MultiStepForm = () => {
   const renderStep = () => {
     switch (currentStep) {
       case 1:
-        return (
-          <CitizenshipUploadStep 
-            formData={formData}
-            onChange={handleChange}
-            errors={errors}
-          />
-        );
+        return <CitizenshipUploadStep formik={formik} />;
       case 2:
-        return (
-          <CertificatesStep 
-            formData={formData}
-            onChange={handleChange}
-            errors={errors}
-          />
-        );
+        return <CertificatesStep formik={formik} />;
       case 3:
-        return (
-          <TermsStep 
-            formData={formData}
-            onChange={handleChange}
-            errors={errors}
-          />
-        );
+        return <TermsStep formik={formik} />;
       default:
         return null;
     }
@@ -137,10 +101,15 @@ const MultiStepForm = () => {
   
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
+      <ToastContainer />
       <Stepper currentStep={currentStep} steps={['Citizenship', 'Certificates', 'Terms']} />
       
       <form onSubmit={handleSubmit} className="mt-8">
         {renderStep()}
+        
+        {formik.errors.submit && (
+          <div className="text-red-500 mt-4">{formik.errors.submit}</div>
+        )}
         
         <div className="flex justify-between mt-8">
           {currentStep > 1 && (
@@ -148,7 +117,7 @@ const MultiStepForm = () => {
               type="button"
               onClick={handlePrevious}
               className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
-              disabled={isSubmitting}
+              disabled={formik.isSubmitting || isRegistering}
             >
               Back
             </button>
@@ -158,17 +127,17 @@ const MultiStepForm = () => {
             <button
               type="submit"
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center"
-              disabled={isSubmitting}
+              disabled={formik.isSubmitting || isRegistering}
             >
-              {isSubmitting ? 'Submitting...' : 'Submit'}
-              {!isSubmitting && <ChevronRight className="ml-1 h-4 w-4" />}
+              {formik.isSubmitting || isRegistering ? 'Submitting...' : 'Submit'}
+              {!(formik.isSubmitting || isRegistering) && <ChevronRight className="ml-1 h-4 w-4" />}
             </button>
           ) : (
             <button
               type="button"
               onClick={handleNext}
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center"
-              disabled={isSubmitting}
+              disabled={formik.isSubmitting || isRegistering}
             >
               Next
               <ChevronRight className="ml-1 h-4 w-4" />
