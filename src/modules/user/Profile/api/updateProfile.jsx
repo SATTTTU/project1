@@ -1,19 +1,23 @@
-// hooks/useUpdateProfile.js
-import { useMutation } from "@tanstack/react-query";
 import { api } from "@/lib/api-client";
+import { useMutation } from "@tanstack/react-query";
 
-const updateUserProfile = async (updatedData) => {
-  const token = localStorage.getItem("authToken");
-  if (!token) throw new Error("Unauthorized");
-  console.log("Sending data to API:", updatedData); 
-
-  const response = await api.put("/api/update-profile", updatedData, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  console.log("Response from API:", response.data);
+// Admin Profile Edit API
+const editUserProfile = async (userData) => {
+  const response = await api.put("/api/update-profile", userData);
   return response.data;
 };
 
-export const useUpdateProfile = () => {
-  return useMutation({ mutationFn: updateUserProfile });
+export const UpdateProfile = ({ mutationConfig } = {}) => {
+  const mutation = useMutation({
+    mutationFn: editUserProfile,
+    ...mutationConfig,
+  });
+
+  return {
+    mutateAsync: mutation.mutateAsync,
+    isLoading: mutation.isLoading, // Loading state
+    error: mutation.error,
+    isError: mutation.isError,
+    isSuccess: mutation.isSuccess,
+  };
 };

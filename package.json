@@ -19,6 +19,7 @@
     "cors": "^2.8.5",
     "formik": "^2.4.6",
     "framer-motion": "^12.4.10",
+    "khalti-checkout-web": "^2.2.0",
     "lightningcss": "^1.29.2",
     "lucide-react": "^0.477.0",
     "react": "^19.0.0",

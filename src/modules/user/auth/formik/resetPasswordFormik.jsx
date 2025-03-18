@@ -1,13 +1,18 @@
 import { useFormik } from "formik";
-import { toFormikValidationSchema } from "zod-formik-adapter";
-import { resetPasswordSchema } from "../formik/schema/authschema";
 import { useEffect } from "react";
-import { useResetPassword } from "../api/resetPassword"; 
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toFormikValidationSchema } from "zod-formik-adapter";
+import { resetPasswordSchema } from "./schema/authschema";
+import { useResetPassword } from "../api/resetPassword";
 
 export const useResetPasswordFormik = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { mutateAsync, isLoading, isSuccess } = useResetPassword();
+
+  // Extract token from the URL
+  const searchParams = new URLSearchParams(location.search);
+  const token = searchParams.get("token");
 
   useEffect(() => {
     if (isSuccess) {
@@ -23,32 +28,24 @@ export const useResetPasswordFormik = () => {
     },
     validationSchema: toFormikValidationSchema(resetPasswordSchema),
     onSubmit: async (values, helpers) => {
+      if (!token) {
+        helpers.setErrors({ email: "Invalid or expired reset link." });
+        return;
+      }
+
       try {
-        // ✅ Get token from local storage
-        const token = localStorage.getItem("resetToken");
-
-        if (!token) {
-          helpers.setErrors({ email: "Authentication error. Please log in again." });
-          return;
-        }
-
-        // ✅ Send API request with token
-        await mutateAsync(
-          values,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        await mutateAsync(values, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
 
         helpers.setStatus({ success: true, message: "Password reset successful!" });
       } catch (err) {
         console.error("Error:", err);
         helpers.setStatus({ success: false });
 
-        // ✅ Ensure correct error handling
         helpers.setErrors({
           email: err?.response?.data?.email || "",
           password: err?.response?.data?.password || "Password reset failed",

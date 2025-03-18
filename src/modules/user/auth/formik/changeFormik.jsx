@@ -9,25 +9,22 @@ export const UsechangePasswordFormik = () => {
 
   const formik = useFormik({
     initialValues: {
-      oldpassword: "", // Updated to match backend expectation
+      oldpassword: "", 
       newpassword: "",
       confirmpassword: "",
     },
-    validationSchema: toFormikValidationSchema(changePasswordSchema), // Uses Zod validation schema
+    validationSchema: toFormikValidationSchema(changePasswordSchema),
     onSubmit: async (values, { resetForm, setErrors }) => {
       try {
-        // Send request to backend
         const response = await mutateAsync({
           oldpassword: values.oldpassword,
           newpassword: values.newpassword,
           confirmpassword: values.confirmpassword,
         });
 
-        // Display success message from the server response
         toast.success(response?.message || "Password reset successfully.");
         resetForm();
       } catch (err) {
-        // Extract error message from the server response
         const errorMessage =
           err?.response?.data?.message ||
           (err?.response?.data?.errors

@@ -1,5 +1,6 @@
-import React from "react";
-// import { useCart } from "@/hooks/useCart";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { removeFromCart, updateQuantity, clearCart } from "../../../../store/cart/cart";
 import { CheckoutSteps } from "@/modules/user/CartSection/components/checkoutsteps";
 import { CartItems } from "@/modules/user/CartSection/components/cartitems";
 import { ShippingForm } from "@/modules/user/CartSection/components/shippingForm";
@@ -8,44 +9,114 @@ import { OrderSummary } from "@/modules/user/CartSection/components/orderSummary
 import { CartHeader } from "@/modules/user/CartSection/components/cartheader";
 import { EmptyCart } from "@/modules/user/CartSection/components/emptyCart";
 import { OrderConfirmation } from "@/modules/user/CartSection/components/orderConfirmation";
-import { useCart } from "@/modules/user/CartSection/hooks/useCart";
 
 export const Cart = () => {
-  const { cartItems, isLoading, isError, updateCartItem, deleteCartItem} = useCart();
-  const [checkoutStep, setCheckoutStep] = React.useState("cart");
+  const cartItems = useSelector((store) => store.cart.items);
+  const dispatch = useDispatch();
 
-  if (isLoading) return <p>Loading cart...</p>;
-  if (isError) return <p>Error loading cart</p>;
+  const [checkoutStep, setCheckoutStep] = useState("cart");
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    cardName: "",
+    cardNumber: "",
+    expDate: "",
+    cvv: "",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleQuantityChange = (productId, newQuantity) => {
+    if (newQuantity < 1) return;
+
+    dispatch(
+      updateQuantity({
+        productId,
+        quantity: newQuantity,
+      })
+    );
+  };
+
+  const handleRemoveItem = (productId) => {
+    dispatch(removeFromCart(productId));
+  };
+
+  const handleProceedToCheckout = () => {
+    setCheckoutStep("shipping");
+  };
+
+  const handleProceedToPayment = (e) => {
+    e.preventDefault();
+    setCheckoutStep("payment");
+  };
+
+  const handleCompleteOrder = (e) => {
+    e.preventDefault();
+    setCheckoutStep("confirmation");
+    dispatch(clearCart());
+  };
+
+  if (cartItems.length === 0 && checkoutStep === "cart") {
+    return <EmptyCart/>;
+  }
+
+  if (checkoutStep === "confirmation") {
+    return <OrderConfirmation />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <CartHeader />
+      <CartHeader/>
       <CheckoutSteps currentStep={checkoutStep} />
 
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="lg:w-2/3">
-            {checkoutStep === "cart" && cartItems.length > 0 ? (
+            {checkoutStep === "cart" && (
               <CartItems
                 items={cartItems}
-                onQuantityChange={(id, quantity) => updateCartItem({ basket_item_id: id, quantity })}
-                onRemoveItem={(id) => deleteCartItem(id)}
+                onQuantityChange={handleQuantityChange}
+                onRemoveItem={handleRemoveItem}
               />
-            ) : (
-              <EmptyCart />
             )}
 
             {checkoutStep === "shipping" && (
-              <ShippingForm onSubmit={() => setCheckoutStep("payment")} onBack={() => setCheckoutStep("cart")} />
+              <ShippingForm
+                formData={formData}
+                onChange={handleInputChange}
+                onSubmit={handleProceedToPayment}
+                onBack={() => setCheckoutStep("cart")}
+              />
             )}
 
             {checkoutStep === "payment" && (
-              <PaymentForm onSubmit={() => setCheckoutStep("confirmation")} onBack={() => setCheckoutStep("shipping")} />
+              <PaymentForm
+                formData={formData}
+                onChange={handleInputChange}
+                onSubmit={handleCompleteOrder}
+                onBack={() => setCheckoutStep("shipping")}
+              />
             )}
           </div>
 
           <div className="lg:w-1/3">
-            <OrderSummary cartItems={cartItems} checkoutStep={checkoutStep} onProceedToCheckout={() => setCheckoutStep("shipping")} />
+            <OrderSummary
+              cartItems={cartItems}
+              checkoutStep={checkoutStep}
+              onProceedToCheckout={handleProceedToCheckout}
+            />
           </div>
         </div>
       </div>

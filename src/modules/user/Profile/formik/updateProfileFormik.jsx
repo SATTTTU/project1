@@ -1,12 +1,14 @@
 import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { useUpdateProfile } from "../api/updateProfile";
+// import { useUpdateProfile } from "../api/updateProfile";
 import { useNavigate } from "react-router-dom";
-import { profileSchema } from "./schema/updateSchema";
+import { profileEditSchema } from "./schema/updateSchema";
+import { UpdateProfile } from "../api/updateProfile";
+// import { profileSchema } from "./schema/updateSchema";
 
 export const useProfileFormik = () => {
   const navigate = useNavigate();
-  const { mutateAsync, isLoading } = useUpdateProfile();
+  const { mutateAsync, isLoading } = UpdateProfile();
 
   const formik = useFormik({
     initialValues: {
@@ -15,7 +17,7 @@ export const useProfileFormik = () => {
       phone: "",
       image: null, // ✅ Set as null initially
     },
-    validationSchema: toFormikValidationSchema(profileSchema),
+    validationSchema: toFormikValidationSchema(profileEditSchema),
     validateOnBlur: true,
     onSubmit: async (values, { setSubmitting, setErrors }) => {
       try {

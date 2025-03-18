@@ -1,6 +1,7 @@
-import { useProfileFormik } from "../formik/updateProfileFormik";
 import { useState, useRef } from "react";
 import { FaUserCircle } from "react-icons/fa"
+import { useProfileFormik } from "../formik/updateProfileFormik";
+// import { useProfileFormik } from "../formik/updateProfileFormik";
 
 
 export const ProfileContent = () => {
@@ -83,12 +84,12 @@ export const ProfileContent = () => {
         <label className="block text-sm font-medium">Phone</label>
         <input
           type="tel"
-          name="phone"
-          value={formik.values?.phone || ""}
+          name="phone_number"
+          value={formik.values?.phone_number || ""}
           onChange={formik.handleChange}
           className="w-full px-4 py-2 border rounded-md"
         />
-        {formik.errors?.phone && <p className="text-red-500">{formik.errors.phone}</p>}
+        {formik.errors?.phone_number && <p className="text-red-500">{formik.errors.phone_number}</p>}
       </div>
 
       <button
