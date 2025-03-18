@@ -1,4 +1,4 @@
-import { Header } from "@/modules/user/Homepage/component/Header";
+import { Header } from "@/modules/user/Homepage/component/header";
 import MobileMenuToggle from "@/modules/user/Profile/components/menuToggle";
 import { ProfileSidebar } from "@/modules/user/Profile/components/profileSidebar";
 import { useState, useEffect } from "react";
