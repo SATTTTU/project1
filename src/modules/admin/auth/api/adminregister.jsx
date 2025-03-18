@@ -5,16 +5,22 @@ import { useMutation } from "@tanstack/react-query";
 const registerAdmin = async (adminData) => {
   try {
     const response = await api.post("/api/admins/register", adminData);
+    const { token, user } = response.data;
+
+    // Store user and token in localStorage if registration is successful
+    if (token) {
+      localStorage.setItem("active_user", JSON.stringify(user)); // Store the user data
+      localStorage.setItem(`token_${user.id}`, token); // Store the token with the user's ID
+      console.log("✅ User and token stored successfully:", token, user);
+    }
+
     return response.data;
   } catch (error) {
-    // Extract validation messages from the response
     if (error.response) {
-      // If the server returned a response with an error status
       const { status, data } = error.response;
       console.log("Error response", status, data);
-      
+
       if (status === 422) {
-        // For validation errors, throw the error messages
         throw {
           status,
           message: data.message || "Validation failed",
@@ -22,8 +28,7 @@ const registerAdmin = async (adminData) => {
         };
       }
     }
-    
-    // For other errors, just rethrow
+
     throw error;
   }
 };

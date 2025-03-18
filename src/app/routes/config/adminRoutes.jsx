@@ -49,6 +49,16 @@ export const adminRoutes = [
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
+          // {
+          //   path: paths.admin.changePassword.path,
+          //   lazy: async () => {
+          //     const { ChangePasswordRoute } = await import(
+          //       "../../routes/admin/auth/reset-password"
+          //     );
+          //     return { Component: ChangePasswordRoute };
+          //   },
+          //   ErrorBoundary: AppRootErrorBoundary,
+          // },
           {
             path: paths.admin.profile.path,
             lazy: async () => {

@@ -5,18 +5,20 @@ export const profileEditSchema = z.object({
     .string()
     .min(1, "Full name is required")
     .max(100, "Full name must be 100 characters or less"),
-  
+    
+  email: z
+    .string()
+    .email("Invalid email format")
+    .optional(),
+    
   mobile: z
     .string()
     .regex(/^\d{10}$/, "Mobile number must be exactly 10 digits"),
-  
-  // Actual file for submission
+    
+  // Allow any type for image since it can be a File or a string URL
   image: z
-    .any() // Use any() since File objects can't be fully validated by Zod
-    .optional(), // Optional to allow cases when no image is uploaded
-  
-  // Image preview for UI only (not sent to API)
-  imagePreview: z.string().optional(),
-  
+    .any()
+    .optional(),
+    
   isEditing: z.boolean().optional(),
 });

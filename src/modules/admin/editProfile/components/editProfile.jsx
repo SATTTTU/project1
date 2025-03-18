@@ -3,26 +3,32 @@ import { useAdminProfileEditFormik } from "../hooks/useAdminProfileEdit";
 
 export const MyProfile = () => {
   const { formik, isLoading } = useAdminProfileEditFormik();
-  const [image, setImage] = useState("/api/placeholder/200/200");
+  const [imagePreview, setImagePreview] = useState("/api/placeholder/200/200");
   const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {
-    if (formik.values.image) {
-      setImage(formik.values.image);
+    // Set initial image preview when form is initialized
+    if (formik.values.image && !(formik.values.image instanceof File)) {
+      setImagePreview(formik.values.image);
     }
   }, [formik.values.image]);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      // Store the file object for validation purposes
-      formik.setFieldValue("originalFile", file);
+      // Verify the file type
+      if (!['image/jpeg', 'image/png', 'image/jpg'].includes(file.type)) {
+        toast.error("Only JPG, JPEG, and PNG files are allowed");
+        return;
+      }
       
+      // Store the actual file object in formik
+      formik.setFieldValue("image", file);
+      
+      // Create preview for UI
       const reader = new FileReader();
       reader.onload = () => {
-        const base64String = reader.result;
-        setImage(base64String);
-        formik.setFieldValue("image", base64String);
+        setImagePreview(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -43,14 +49,11 @@ export const MyProfile = () => {
     setIsEditMode(false);
     formik.setFieldValue("isEditing", false);
     formik.resetForm();
-    setImage(formik.initialValues.image);
+    setImagePreview(formik.initialValues.image);
   };
 
   return (
     <div className="max-w-3xl mx-auto">
-      {/* Back Button and Header */}
-     
-      
       {/* Profile Card */}
       <div className="bg-white rounded-lg shadow-sm overflow-hidden">
         {/* Header Gradient */}
@@ -68,11 +71,11 @@ export const MyProfile = () => {
           <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-16">
             <div className="relative">
               <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white bg-white shadow-md">
-                <img src={image} alt="Profile" className="w-full h-full object-cover" />
+                <img src={imagePreview} alt="Profile" className="w-full h-full object-cover" />
               </div>
               {isEditMode && (
                 <label htmlFor="profile-pic" className="absolute bottom-0 right-0 bg-white p-2 rounded-full shadow-md cursor-pointer hover:bg-gray-100">
-                  <input type="file" id="profile-pic" className="hidden" accept="image/*" onChange={handleImageChange} />
+                  <input type="file" id="profile-pic" className="hidden" accept="image/png,image/jpeg,image/jpg" onChange={handleImageChange} />
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-700" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                   </svg>

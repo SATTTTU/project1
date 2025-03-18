@@ -1,5 +1,5 @@
 import { Calendar } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   CheckCircle, 
   AlertCircle, 
@@ -17,11 +17,59 @@ import {
   Video,
   ExternalLink
 } from "react-feather";
+import { useGetSingleCook } from "../api/get-single-cook";
 
-const CookProfileDetails = ({ cook, navigate, onStatusChange }) => {
+const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [showDocumentModal, setShowDocumentModal] = useState(null);
   
+  // Use the API hook to fetch cook data
+  const { 
+    mutateAsync: fetchCook, 
+    isLoading, 
+    error, 
+    data 
+  } = useGetSingleCook({
+    mutationConfig: {
+      onSuccess: (data) => {
+        console.log("Cook data fetched successfully:", data);
+      },
+      onError: (error) => {
+        console.error("Failed to fetch cook data:", error);
+      }
+    }
+  });
+
+  // Fetch cook data on component mount or when cookId changes
+  useEffect(() => {
+    if (cookId) {
+      fetchCook();
+    }
+  }, [cookId, fetchCook]);
+
+  // Extract cook data from API response
+  const cook = data?.data;
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="p-4 bg-blue-100 rounded flex items-center">
+        <span>Loading cook details...</span>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="p-4 bg-red-100 rounded flex items-center">
+        <AlertCircle size={18} className="mr-2 text-red-600" />
+        <span>Error loading cook data: {error.message}</span>
+      </div>
+    );
+  }
+
+  // Show empty state
   if (!cook) {
     return (
       <div className="p-4 bg-red-100 rounded flex items-center">

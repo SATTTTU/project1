@@ -6,7 +6,6 @@ import { SettingsCard } from "./settings";
 import { useAdminProfile } from "../api/getprofile";
 import ConfirmModal from "@/components/ui/admin/confirmmodel/confirmmodel";
 import { useAdminLogout } from "../../dashboard/api/logout";
-
 export const ProfileCard = () => {
   const [notificationsAllowed, setNotificationsAllowed] = useState(true);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -16,6 +15,7 @@ export const ProfileCard = () => {
     name: "Your Name",
     email: "yourname@gmail.com",
     image: "/api/placeholder/80/80",
+    image_url: null,
     isOnline: true,
   });
   const { mutateAsync: logout } = useAdminLogout();
@@ -36,6 +36,21 @@ export const ProfileCard = () => {
     isError,
   } = useAdminProfile();
 
+  // Function to get the full image URL
+  const getFullImageUrl = (imagePath) => {
+    if (!imagePath) return "/api/placeholder/80/80";
+    
+    // If it's already a full URL (starts with http/https)
+    if (imagePath.startsWith('http')) return imagePath;
+    
+    // Use your existing API_URL
+    // If your API_URL already includes a trailing slash, you might need to adjust this
+    const storageUrl = import.meta.env.VITE_APP_API_URL.endsWith('/') 
+      ? `${import.meta.env.VITE_APP_API_URL}storage/` 
+      : `${import.meta.env.VITE_APP_API_URL}/storage/`;
+    return `${storageUrl}${imagePath}`;
+  };
+
   useEffect(() => {
     const loadProfileData = async () => {
       try {
@@ -44,7 +59,8 @@ export const ProfileCard = () => {
           setProfileData({
             name: data.name || "Your Name",
             email: data.email || "yourname@gmail.com",
-            image: data.image,
+            image: data.image || "/api/placeholder/80/80",
+            image_url: data.image_url || null,
             isOnline: data.isOnline !== undefined ? data.isOnline : true,
           });
         }
@@ -55,6 +71,11 @@ export const ProfileCard = () => {
 
     loadProfileData();
   }, [fetchProfileData]);
+
+  // Determine which image to use
+  const profileImageSrc = profileData.image_url 
+    ? getFullImageUrl(profileData.image_url) 
+    : profileData.image || "/api/placeholder/80/80";
 
   return (
     <motion.div
@@ -83,7 +104,7 @@ export const ProfileCard = () => {
           <div className="flex items-center space-x-4">
             <div className="relative">
               <img
-                src={profileData.image}
+                src={profileImageSrc}
                 alt="Profile"
                 className="w-20 h-20 rounded-full border-4 border-white shadow-lg object-cover"
               />
@@ -151,7 +172,7 @@ export const ProfileCard = () => {
         <div className="mt-4 pt-4 border-t">
           <button
             onClick={() => setShowLogoutModal(true)}
-            className="w-full  cursor-pointer flex items-center justify-center text-red-500 hover:bg-red-50 py-3 rounded-lg transition-colors group"
+            className="w-full cursor-pointer flex items-center justify-center text-red-500 hover:bg-red-50 py-3 rounded-lg transition-colors group"
           >
             <FaSignOutAlt className="mr-2 group-hover:rotate-6 transition-transform" />
             Log Out
