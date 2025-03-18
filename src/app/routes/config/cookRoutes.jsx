@@ -77,10 +77,10 @@ export const cookRoutes = [
           {
             path: paths.cook.emailVerification.path,
             lazy: async () => {
-              const { EmailVerify } = await import(
+              const { VerificationRoute } = await import(
                 "../cook/auth/verification"
               );
-              return { Component: EmailVerify};
+              return { Component: VerificationRoute };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
