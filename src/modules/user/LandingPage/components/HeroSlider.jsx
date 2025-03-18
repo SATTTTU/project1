@@ -1,12 +1,17 @@
-import { useState, useEffect } from "react"
+
+import { useState } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Header } from "./Header"
 import MainImage from "../../../../assets/Main.jpg"
-
+import { Swiper, SwiperSlide } from "swiper/react"
+import "swiper/css"
+import "swiper/css/pagination"
+import "swiper/css/navigation"
+import "swiper/css/effect-fade"
+import { Autoplay, Pagination, Navigation, EffectFade } from "swiper/modules"
 
 export const HeroSlider = () => {
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [swiperInstance, setSwiperInstance] = useState(null)
 
   const heroSlides = [
     {
@@ -32,47 +37,6 @@ export const HeroSlider = () => {
     },
   ]
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      nextSlide()
-    }, 1000) 
-
-    return () => clearInterval(interval)
-  }, [currentSlide])
-
-  const nextSlide = () => {
-    if (isTransitioning) return
-
-    setIsTransitioning(true)
-    setCurrentSlide((prev) => (prev === heroSlides.length - 1 ? 0 : prev + 1))
-
-    setTimeout(() => {
-      setIsTransitioning(false)
-    }, 500)
-  }
-
-  const prevSlide = () => {
-    if (isTransitioning) return
-
-    setIsTransitioning(true)
-    setCurrentSlide((prev) => (prev === 0 ? heroSlides.length - 1 : prev - 1))
-
-    setTimeout(() => {
-      setIsTransitioning(false)
-    }, 500)
-  }
-
-  const goToSlide = (index) => {
-    if (isTransitioning || index === currentSlide) return
-
-    setIsTransitioning(true)
-    setCurrentSlide(index)
-
-    setTimeout(() => {
-      setIsTransitioning(false)
-    }, 500)
-  }
-
   return (
     <header className="relative w-full h-screen overflow-hidden">
       <div className="absolute top-0 left-0 right-0 z-50">
@@ -84,71 +48,82 @@ export const HeroSlider = () => {
       <div className="relative w-full h-full">
         <button
           className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white rounded-full p-2 transition-colors"
-          onClick={prevSlide}
+          onClick={() => swiperInstance?.slidePrev()}
           aria-label="Previous slide"
-          disabled={isTransitioning}
         >
           <ChevronLeft className="h-6 w-6" />
         </button>
         <button
           className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white rounded-full p-2 transition-colors"
-          onClick={nextSlide}
+          onClick={() => swiperInstance?.slideNext()}
           aria-label="Next slide"
-          disabled={isTransitioning}
         >
           <ChevronRight className="h-6 w-6" />
         </button>
 
-        <div className="absolute inset-0 z-10 flex items-center justify-center">
-          <div className="container mx-auto px-4">
-            <div
-              className={`max-w-2xl mx-auto text-center transition-opacity duration-500 ${
-                isTransitioning ? "opacity-0" : "opacity-100"
-              }`}
-            >
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-green-600 mb-4">
-                {heroSlides[currentSlide].title}
-              </h1>
-              <p className="text-white text-lg md:text-xl mb-6">{heroSlides[currentSlide].subtitle}</p>
-              <button className="bg-[#426B1F] hover:bg-green-700 text-white font-medium py-3 px-6 rounded-md transition-colors">
-                {heroSlides[currentSlide].buttonText}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="absolute bottom-6 left-0 right-0 z-10 flex justify-center space-x-2">
-          {heroSlides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => goToSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                currentSlide === index ? "bg-gray-200 w-6" : "bg-white/50 hover:bg-white/80"
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-              aria-current={currentSlide === index ? "true" : "false"}
-            />
+        <Swiper
+          onSwiper={setSwiperInstance}
+          spaceBetween={0}
+          centeredSlides={true}
+          effect={"fade"}
+          autoplay={{
+            delay: 5000,
+            disableOnInteraction: false,
+          }}
+          pagination={{
+            clickable: true,
+            el: ".swiper-custom-pagination",
+            bulletClass: "swiper-custom-bullet",
+            bulletActiveClass: "swiper-custom-bullet-active",
+            renderBullet: (index, className) =>
+              `<button class="${className}" aria-label="Go to slide ${index + 1}"></button>`,
+          }}
+          modules={[Autoplay, Pagination, Navigation, EffectFade]}
+          className="h-full w-full"
+        >
+          {heroSlides.map((slide) => (
+            <SwiperSlide key={slide.id} className="relative">
+              <div className="absolute inset-0 bg-black/50 z-0"></div>
+              <img
+                src={slide.image || "/placeholder.svg"}
+                alt={`${slide.title}`}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 z-10 flex items-center justify-center">
+                <div className="container mx-auto px-4">
+                  <div className="max-w-2xl mx-auto text-center">
+                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#6fac3a] mb-4">{slide.title}</h1>
+                    <p className="text-white text-lg md:text-xl mb-6">{slide.subtitle}</p>
+                    <button className="bg-[#426B1F] hover:bg-green-900 text-white font-medium py-3 px-6 rounded-md transition-colors">
+                      {slide.buttonText}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </SwiperSlide>
           ))}
-        </div>
+        </Swiper>
 
-        {heroSlides.map((slide, index) => (
-          <div
-            key={slide.id}
-            className={`absolute inset-0 transition-opacity duration-500 ${
-              currentSlide === index ? "opacity-100" : "opacity-0"
-            }`}
-            aria-hidden={currentSlide !== index}
-          >
-            <div className="absolute inset-0 bg-black/50 z-0"></div>
-
-            <img
-              src={slide.image || "/placeholder.svg"}
-              alt={`${slide.title}`}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-          </div>
-        ))}
+        <div className="swiper-custom-pagination absolute bottom-6 left-0 right-0 z-20 flex justify-center space-x-2"></div>
       </div>
+
+      <style jsx global>{`
+        .swiper-custom-bullet {
+          width: 12px;
+          height: 12px;
+          background: rgba(255, 255, 255, 0.5);
+          border-radius: 9999px;
+          display: inline-block;
+          margin: 0 4px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        
+        .swiper-custom-bullet-active {
+          background: rgba(255, 255, 255, 1);
+          width: 24px;
+        }
+      `}</style>
     </header>
   )
 }

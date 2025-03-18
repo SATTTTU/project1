@@ -106,11 +106,11 @@ export const TestimonialSlider = () => {
             >
               <div className="swiper-wrapper equal-height-slides">
                 {testimonials.map((testimonial) => (
-                  <SwiperSlide key={testimonial.id} className="h-auto">
-                    <div className="bg-white p-10 rounded-lg shadow-lg flex flex-col h-full">
+                  <SwiperSlide key={testimonial.id} className="h-auto border border-slate-300 rounded-lg">
+                    <div className="bg-white p-10 rounded-lg shadow-xl flex flex-col h-[400px] lg:h-[330px]">
                       <div className="flex items-center mb-4">
                         <img
-                          src={testimonial.image || "/placeholder.svg"}
+                          src={testimonial.image}
                           alt={testimonial.name}
                           width={50}
                           height={50}
@@ -144,7 +144,7 @@ export const TestimonialSlider = () => {
           <div className="swiper-button-prev !absolute !left-0 !top-1/2 !-translate-y-1/2 !z-10 !bg-[#426B1F] !w-10 !h-10 !rounded-full !flex !items-center !justify-center !text-white after:!text-lg after:!content-['prev']  !shadow-md"></div>
           <div className="swiper-button-next !absolute !right-0 !top-1/2 !-translate-y-1/2 !z-10 !bg-[#426B1F] !w-10 !h-10 !rounded-full !flex !items-center !justify-center !text-white after:!text-lg after:!content-['next']  !shadow-md"></div>
 
-          <div className="testimonial-pagination mx-auto space-x-4  mt-16 flex justify-center"></div>
+          <div className="testimonial-pagination mx-auto space-x-4 text-center mt-16 flex justify-center"></div>
         </div>
       </div>
     </section>

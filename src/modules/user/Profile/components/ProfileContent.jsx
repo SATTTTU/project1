@@ -1,107 +1,104 @@
+import { useState, useRef } from "react";
+import { FaUserCircle } from "react-icons/fa"
+import { useProfileFormik } from "../formik/updateProfileFormik";
+// import { useProfileFormik } from "../formik/updateProfileFormik";
+
+
 export const ProfileContent = () => {
-	return (
-		<div>
-			<h2 className="text-2xl font-bold mb-6">Your Profile</h2>
+  const { formik } = useProfileFormik();
+  const [preview, setPreview] = useState(null);
+  const fileInputRef = useRef(null);
 
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-				<div className="bg-gray-50 p-6 rounded-lg">
-					<h3 className="text-lg font-medium mb-4">Personall Information</h3>
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      formik.setFieldValue("image", file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
 
-					<div className="space-y-4">
-						<div>
-							<label className="block text-sm font-medium text-gray-700 mb-1">
-								Full Name
-							</label>
-							<input
-								type="text"
-								defaultValue="Enter your name"
-								className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
-							/>
-						</div>
+  const handleAvatarClick = () => {
+    fileInputRef.current.click();
+  };
 
-						<div>
-							<label className="block text-sm font-medium text-gray-700 mb-1">
-								Email Address
-							</label>
-							<input
-								type="email"
-								defaultValue="indra@example.com"
-								className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
-							/>
-						</div>
+  return (
+    <form onSubmit={formik.handleSubmit} className="space-y-4">
+      {/* Image field moved to top */}
+      <div className="flex flex-col items-center mb-6">
+        <div 
+          onClick={handleAvatarClick}
+          className="relative cursor-pointer group"
+        >
+          <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+            {preview ? (
+              <img src={preview} alt="Profile" className="w-full h-full object-cover" />
+            ) : formik.values?.imageUrl ? (
+              <img src={formik.values.imageUrl} alt="Profile" className="w-full h-full object-cover" />
+            ) : (
+              <span className="text-gray-400 text-9xl">
+				<FaUserCircle/>
+			  </span>
+            )}
+          </div>
+          <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+            <span className="text-white text-xl">Change Photo</span>
+          </div>
+        </div>
+        <input
+          ref={fileInputRef}
+          type="file"
+          name="image"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="hidden"
+        />
+        <label className="mt-2 text-sm text-gray-500">Click on avatar to change</label>
+        {formik.errors?.image && <p className="text-red-500">{formik.errors.image}</p>}
+      </div>
 
-						<div>
-							<label className="block text-sm font-medium text-gray-700 mb-1">
-								Phone Number
-							</label>
-							<input
-								type="tel"
-								defaultValue="+44 123 456 7890"
-								className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
-							/>
-						</div>
-					</div>
+      <div>
+        <label className="block text-sm font-medium">Name</label>
+        <input
+          type="text"
+          name="name"
+          value={formik.values?.name || ""}
+          onChange={formik.handleChange}
+          className="w-full px-4 py-2 border rounded-md"
+        />
+        {formik.errors?.name && <p className="text-red-500">{formik.errors.name}</p>}
+      </div>
 
-					<button className="mt-6 px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
-						Save Changes
-					</button>
-				</div>
+      <div>
+        <label className="block text-sm font-medium">Email</label>
+        <input
+          type="email"
+          name="email"
+          value={formik.values?.email || ""}
+          onChange={formik.handleChange}
+          className="w-full px-4 py-2 border rounded-md"
+        />
+        {formik.errors?.email && <p className="text-red-500">{formik.errors.email}</p>}
+      </div>
 
-				<div className="bg-gray-50 p-6 rounded-lg">
-					<h3 className="text-lg font-medium mb-4">Address Information</h3>
+      <div>
+        <label className="block text-sm font-medium">Phone</label>
+        <input
+          type="tel"
+          name="phone_number"
+          value={formik.values?.phone_number || ""}
+          onChange={formik.handleChange}
+          className="w-full px-4 py-2 border rounded-md"
+        />
+        {formik.errors?.phone_number && <p className="text-red-500">{formik.errors.phone_number}</p>}
+      </div>
 
-					<div className="space-y-4">
-						<div>
-							<label className="block text-sm font-medium text-gray-700 mb-1">
-								Address Line 1
-							</label>
-							<input
-								type="text"
-								defaultValue="123 Main Street"
-								className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
-							/>
-						</div>
-
-						<div>
-							<label className="block text-sm font-medium text-gray-700 mb-1">
-								Address Line 2
-							</label>
-							<input
-								type="text"
-								defaultValue="Apt 4B"
-								className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
-							/>
-						</div>
-
-						<div className="grid grid-cols-2 gap-4">
-							<div>
-								<label className="block text-sm font-medium text-gray-700 mb-1">
-									City
-								</label>
-								<input
-									type="text"
-									className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
-								/>
-							</div>
-
-							<div>
-								<label className="block text-sm font-medium text-gray-700 mb-1">
-									Postal Code
-								</label>
-								<input
-									type="text"
-									defaultValue="SW1A 1AA"
-									className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
-								/>
-							</div>
-						</div>
-					</div>
-
-					<button className="mt-6 px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
-						Save Address
-					</button>
-				</div>
-			</div>
-		</div>
-	);
+      <button
+        type="submit"
+        disabled={formik.isSubmitting}
+        className="px-6 py-2 bg-green-600 text-white rounded-md"
+      >
+        {formik.isSubmitting ? "Updating..." : "Save Changes"}
+      </button>
+    </form>
+  );
 };

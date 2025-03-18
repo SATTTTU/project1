@@ -1,95 +1,89 @@
 import { useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { IoEyeOffSharp } from "react-icons/io5";
+import Label from "@/components/ui/label/label";
+import Input from "@/components/ui/input/input";
+import { useResetPasswordFormik } from "../../../../modules/user/auth/formik/resetPasswordFormik";
 
-export const ResetPassword = () => {
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [showOldPassword, setShowOldPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [error, setError] = useState("");
+export const ResetPasswordForm = () => {
+	const { formik } = useResetPasswordFormik();
+	const [showNewPassword, setShowNewPassword] = useState(false);
+	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!oldPassword || !newPassword) {
-      setError("Both passwords are required");
-      return;
-    }
-
-    if (oldPassword ===newPassword) {
-      setError("New password must be different from old password");
-      return;
-    }
-
-    console.log("Resetting password...", { oldPassword, newPassword });
-
-    setOldPassword("");
-    setNewPassword("");
-    setError("");
-  };
-
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-sm bg-white rounded-lg shadow-md border border-gray-100 p-6 sm:p-8">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="old-password" className="block text-sm font-medium text-gray-900 mb-2">
-              Old Password
-            </label>
-            <div className="relative">
-              <input
-                id="old-password"
-                type={showOldPassword ? "text" : "password"}
-                value={oldPassword}
-                onChange={(e) => setOldPassword(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
-                required
-              />
-              <button
-                type="button"
-                onClick={() => setShowOldPassword(!showOldPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                aria-label={showOldPassword ? "Hide password" : "Show password"}
-              >
-                {showOldPassword ? <IoEyeOffSharp className="h-5 w-5" /> : <FaEye className="h-5 w-5" />}
-              </button>
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="new-password" className="block text-sm font-medium text-gray-900 mb-2">
-              New Password
-            </label>
-            <div className="relative">
-              <input
-                id="new-password"
-                type={showNewPassword ? "text" : "password"}
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
-                required
-              />
-              <button
-                type="button"
-                onClick={() => setShowNewPassword(!showNewPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 "
-              >
-                {showNewPassword ? <IoEyeOffSharp className="h-5 w-5" /> : <FaEye className="h-5 w-5" />}
-              </button>
-            </div>
-          </div>
-
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-
-          <button
-            type="submit"
-            className="w-full bg-green-700 text-white py-2 px-4 rounded-md hover:bg-green-900 transition-colors"
-          >
-            Reset Password
-          </button>
-        </form>
+	return (
+		<form onSubmit={formik.handleSubmit} className="space-y-6">
+			<h1 className="mb-6 text-3xl font-bold text-[#4b6c1e]">
+				Reset your password
+			</h1>
+			<p className="text-gray-400">
+				Choose a strong password that you’ll use across all our services.
+			</p>
+			<div>
+        <label className="block text-sm font-medium">Email</label>
+        <input
+          type="email"
+          name="email"
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          className="w-full px-4 py-2 border rounded-md"
+        />
+        {formik.errors.email && <p className="text-red-500">{formik.errors.email}</p>}
       </div>
-    </div>
-  );
+			<div className="space-y-2 relative">
+				<Label htmlFor="password">New Password</Label>
+				<Input
+					id="password"
+					name="password"
+					type={showNewPassword ? "text" : "password"}
+					placeholder="Enter new password"
+					value={formik.values.password}
+					onChange={formik.handleChange}
+					onBlur={formik.handleBlur}
+					className={`w-full ${formik.touched.password && formik.errors.password ? "border-red-500" : ""}`}
+				/>
+				<button
+					type="button"
+					onClick={() => setShowNewPassword((prev) => !prev)}
+					className="absolute right-3 top-12 transform -translate-y-1/2 text-gray-500"
+				>
+					{showNewPassword ? <IoEyeOffSharp size={20} /> : <FaEye size={20} />}
+				</button>
+				{formik.touched.password && formik.errors.password && (
+					<div className="text-red-500 text-sm">{formik.errors.password}</div>
+				)}
+			</div>
+
+			<div className="space-y-2 relative">
+				<Label htmlFor="password_confirmation">Confirm Password</Label>
+				<Input
+					id="password_confirmation"
+					name="password_confirmation"
+					type={showConfirmPassword ? "text" : "password"}
+					placeholder="Confirm new password"
+					value={formik.values.password_confirmation}
+					onChange={formik.handleChange}
+					onBlur={formik.handleBlur}
+					className={`w-full ${formik.touched.password_confirmation && formik.errors.password_confirmation ? "border-red-500" : ""}`}
+				/>
+				<button
+					type="button"
+					onClick={() => setShowConfirmPassword((prev) => !prev)}
+					className="absolute right-3 top-12 transform -translate-y-1/2 text-gray-500"
+				>
+					{showConfirmPassword ? <IoEyeOffSharp size={20} /> : <FaEye size={20} />}
+				</button>
+				{formik.touched.password_confirmation && formik.errors.password_confirmation && (
+					<div className="text-red-500 text-sm">{formik.errors.password_confirmation}</div>
+				)}
+			</div>
+
+			<button
+				type="submit"
+				className="w-full bg-[#426B1F] text-white py-2 px-4 rounded-md hover:bg-green-900 transition-colors"
+				disabled={formik.isSubmitting}
+			>
+				{formik.isSubmitting ? "Resetting..." : "Reset Password"}
+			</button>
+		</form>
+	);
 };

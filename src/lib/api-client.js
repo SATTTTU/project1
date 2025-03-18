@@ -69,7 +69,6 @@ api.interceptors.response.use(
     // If unauthorized, handle logout (optional)
     if (error.response?.status === 401) {
       console.warn("⚠️ Unauthorized! Token may be expired. Consider logging out.");
-      // localStorage.removeItem(`token_${localStorage.getItem("active_user")}`); // Uncomment if you want to auto-remove token on 401
     }
 
     return Promise.reject(error);
