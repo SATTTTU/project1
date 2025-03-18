@@ -10,7 +10,7 @@ import { FaUserCircle, FaUser } from "react-icons/fa";
 import { CiSettings } from "react-icons/ci";
 import { useSelector } from "react-redux";
 import Logo from "../../../../assets/logo.jpg";
-import { useProfile } from "../../Profile/api/getProfile";
+import { useProfile } from "../../userprofile/api/getProfile";
 
 export const Header = () => {
 	const cartItems = useSelector((store) => store.cart.items);

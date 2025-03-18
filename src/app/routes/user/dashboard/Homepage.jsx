@@ -3,19 +3,19 @@ import { useNavigate } from "react-router-dom";
 // import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../../../store/cart/cart";
-import { Header } from "@/modules/user/Homepage/component/header";
-import { Footer } from "@/modules/user/Homepage/component/footer";
-import { SearchBar } from "@/modules/user/Homepage/component/searchBar";
-import { PromotedRestaurants } from "@/modules/user/Homepage/component/filterBadges";
-import { CategorySection } from "@/modules/user/Homepage/component/categoriesSection";
-import { PopularItems } from "@/modules/user/Homepage/component/popularItemsSection";
+import { Header } from "@/modules/user/dashboard/components/header";
+import { Footer } from "@/modules/user/dashboard/components/footer";
+import { SearchBar } from "@/modules/user/dashboard/components/searchBar";
+import { PromotedRestaurants } from "@/modules/user/dashboard/components/filterBadges";
+import { CategorySection } from "@/modules/user/dashboard/components/categoriesSection";
+import { PopularItems } from "@/modules/user/dashboard/components/popularItemsSection";
 import {
 	categories,
 	cooks,
 	popularItems,
-} from "../../../../modules/user/Homepage/component/data";
+} from "../../../../modules/user/dashboard/components/data";
 // import { FilterBadges } from "@/modules/user/Homepage/component/filterBadges";
-import { PopularCooks } from "@/modules/user/Homepage/component/popularCooks";
+import { PopularCooks } from "@/modules/user/dashboard/components/popularCooks";
 export const Homepage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();

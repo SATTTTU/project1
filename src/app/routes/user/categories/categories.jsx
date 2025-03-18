@@ -7,14 +7,14 @@ import { addToCart } from "../../../../store/cart/cart";
 import {
 	categoriesData,
 	allFoodItems,
-} from "@/modules/user/CategoriesSection/components/data";
-import { Navbar } from "@/modules/user/CategoriesSection/components/navbar";
-import BackButton from "@/modules/user/CategoriesSection/components/button";
-import { FilterBar } from "@/modules/user/CategoriesSection/components/filterBar";
-import { CategoryHeader } from "@/modules/user/CategoriesSection/components/categoryHeader";
-import FilterPanel from "@/modules/user/CategoriesSection/components/filterPanel";
-import ItemsGrid from "@/modules/user/CategoriesSection/components/itemsGrid";
-import EmptyState from "@/modules/user/CategoriesSection/components/emptyState";
+} from "@/modules/user/categories/components/data";
+import { Navbar } from "@/modules/user/categories/components/navbar";
+import BackButton from "@/modules/user/categories/components/button";
+import { FilterBar } from "@/modules/user/categories/components/filterBar";
+import { CategoryHeader } from "@/modules/user/categories/components/categoryHeader";
+import FilterPanel from "@/modules/user/categories/components/filterPanel";
+import ItemsGrid from "@/modules/user/categories/components/itemsGrid";
+import EmptyState from "@/modules/user/categories/components/emptyState";
 
 export const CategoryPage = () => {
   const { id } = useParams();

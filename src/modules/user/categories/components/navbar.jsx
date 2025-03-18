@@ -4,9 +4,9 @@ import { useSelector } from "react-redux";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 
 import Logo from "../../../../assets/logo.jpg";
-import { Profile } from "../../Homepage/component/profile";
+import { Profile } from "../../dashboard/components/profile";
 
-export const Header = () => {
+export const Navbar = () => {
     const carts = useSelector((store) => store.cart.items);
     
 
@@ -18,10 +18,10 @@ export const Header = () => {
             <div className="bg-white shadow-sm sticky top-0 z-50">
                 <div className="container mx-auto px-4 py-3">
                     <div className="flex items-center justify-between">
-                        <Link to="/user/dashboard" className="flex items-center">
+                        <Link to="/user/home" className="flex items-center">
                             <img
-                                src={Logo}
-                                alt="KhajaBox"
+                                src={Logo || "/placeholder.svg"}
+                                alt="KhanaBox"
                                 className="h-12 w-12"
                             />
                             <span className="text-3xl font-bold text-green-600">KhajaBox</span>

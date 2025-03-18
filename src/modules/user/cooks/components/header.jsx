@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 
 import Logo from "../../../../assets/logo.jpg";
-import { Profile } from "../../Homepage/component/profile";
+import { Profile } from "../../dashboard/components/profile";
 
 export const Header = () => {
     const carts = useSelector((store) => store.cart.items);
@@ -21,7 +21,7 @@ export const Header = () => {
                         <Link to="/user/dashboard" className="flex items-center">
                             <img
                                 src={Logo}
-                                alt="KhanaBox"
+                                alt="KhajaBox"
                                 className="h-12 w-12"
                             />
                             <span className="text-3xl font-bold text-green-600">KhajaBox</span>
@@ -43,7 +43,7 @@ export const Header = () => {
                                     </span>
                                 )}
                             </Link>
-                            <Profile/>
+                            <Profile />
                         </div>
                     </div>
                 </div>
