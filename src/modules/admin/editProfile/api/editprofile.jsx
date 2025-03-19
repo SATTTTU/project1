@@ -3,8 +3,17 @@ import { useMutation } from "@tanstack/react-query";
 
 // Admin Profile Edit API
 const editAdminProfile = async (adminData) => {
-  const response = await api.put("/api/admin/profile", adminData); // Assuming this is the endpoint for profile edit
-  return response.data; // Return response data
+  // Log form data contents for debugging (optional)
+  if (adminData instanceof FormData) {
+    console.log("FormData contents:");
+    for (let [key, value] of adminData.entries()) {
+      console.log(`${key}: ${value instanceof File ? `File: ${value.name}` : value}`);
+    }
+  }
+  
+  // Send the request with FormData
+  const response = await api.post("/api/admins/update-profile?_method=put", adminData);
+  return response.data;
 };
 
 export const useAdminProfileEdit = ({ mutationConfig } = {}) => {
@@ -15,7 +24,7 @@ export const useAdminProfileEdit = ({ mutationConfig } = {}) => {
 
   return {
     mutateAsync: mutation.mutateAsync,
-    isLoading: mutation.isLoading, // Loading state
+    isLoading: mutation.isLoading,
     error: mutation.error,
     isError: mutation.isError,
     isSuccess: mutation.isSuccess,

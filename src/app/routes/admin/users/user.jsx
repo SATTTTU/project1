@@ -1,61 +1,19 @@
-import React, { useState, useMemo } from "react";
+// DisplayUserRoute.jsx
+import React, { useState } from "react";
 import { Sidebar } from "@/components/ui/admin/aside/aside";
-import Pagination from "@/components/ui/pagination/pagination";
-import { User } from "@/modules/admin/users/components/users";
-import { Table } from "@/components/ui/tables/tables";
 import { Link } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
-
-const dummyUsers = [
-  { id: 1, name: "John Doe", email: "john@example.com" },
-  { id: 2, name: "Jane Smith", email: "jane@example.com" },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com" },
-  { id: 4, name: "Bob Brown", email: "bob@example.com" },
-  { id: 5, name: "Charlie Adams", email: "charlie@example.com" },
-  { id: 6, name: "David White", email: "david@example.com" },
-  { id: 7, name: "Emma Green", email: "emma@example.com" },
-  { id: 8, name: "Frank Black", email: "frank@example.com" },
-  { id: 9, name: "Grace Blue", email: "grace@example.com" },
-  { id: 10, name: "Hank Red", email: "hank@example.com" },
-];
-
+import { UserList } from "@/modules/admin/users/components/users";
 export const DisplayUserRoute = () => {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 5; // Fixed rows per page
+  const rowsPerPage = 5;
 
-  // Debounced Search
+  // Handle search input change
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
     setCurrentPage(1); // Reset to first page on search
   };
-
-  // Memoized filtered users
-  const filteredUsers = useMemo(
-    () =>
-      dummyUsers.filter((user) =>
-        user.name.toLowerCase().includes(search.toLowerCase())
-      ),
-    [search]
-  );
-
-  // Total Pages Calculation
-  const totalPages = useMemo(
-    () => Math.ceil(filteredUsers.length / rowsPerPage),
-    [filteredUsers.length]
-  );
-
-  const currentUsers = useMemo(() => {
-    const indexOfLastUser = currentPage * rowsPerPage;
-    const indexOfFirstUser = indexOfLastUser - rowsPerPage;
-    return filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
-  }, [currentPage, filteredUsers]);
-
-  // Define columns for the Table
-  const columns = ["ID", "Name", "Email"];
-
-  // Render Row with User Component
-  const renderRow = (user) => <User key={user.id} user={user} />;
 
   return (
     <section className="flex h-screen font-sans bg-gray-100">
@@ -76,15 +34,12 @@ export const DisplayUserRoute = () => {
           className="p-3 border rounded-lg w-full mb-6 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <div className="bg-white p-6 shadow-md rounded-lg">
-          <Table columns={columns} data={currentUsers} renderRow={renderRow} />
-          {/* Pagination Component */}
-          {totalPages > 1 && (
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            />
-          )}
+          <UserList 
+            search={search}
+            currentPage={currentPage}
+            rowsPerPage={rowsPerPage}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </div>
     </section>

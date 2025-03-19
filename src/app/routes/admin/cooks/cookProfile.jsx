@@ -94,7 +94,8 @@ export const CookProfileRoute = () => {
           </button>
         </div>
         <div className="bg-white rounded-lg shadow-sm p-6">
-          <CookProfileDetails cook={cook} navigate={navigate} />
+        <CookProfileDetails cookId={id} navigate={navigate} />
+
         </div>
       </div>
     </div>

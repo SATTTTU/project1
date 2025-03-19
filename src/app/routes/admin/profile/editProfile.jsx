@@ -13,7 +13,7 @@ export const MyProfileRoute = () => {
                   className="mr-2 p-1 rounded-full hover:bg-gray-100 text-gray-500 cursor-pointer"
                   onClick={()=>navigate("/admin/dashboard")}
                 >
-                  <FaArrowLeft size={20} />
+                  <FaArrowLeft size={16} />
                 </button>
         {/* Page Header */}
         <div className="mb-6">
@@ -27,5 +27,3 @@ export const MyProfileRoute = () => {
     </div>
   );
 };
-
-export default MyProfileRoute;

@@ -13,9 +13,12 @@ import {
 	categories,
 	cooks,
 	popularItems,
-} from "../../../../modules/user/dashboard/components/data";
-// import { FilterBadges } from "@/modules/user/Homepage/component/filterBadges";
-import { PopularCooks } from "@/modules/user/dashboard/components/popularCooks";
+} from "../../../../modules/user/Homepage/component/data";
+import { FilterBadges } from "@/modules/user/Homepage/component/filterBadges";
+import { PopularCooks } from "@/modules/user/Homepage/component/popularCooks";
+// Update import to use the correct path and name
+import { UserLocation } from "@/modules/user/Homepage/component/setLocation";
+
 export const Homepage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,7 +30,7 @@ export const Homepage = () => {
       const timer = setTimeout(() => {
         setAddedToCart(null);
       }, 1500);
-
+      
       return () => clearTimeout(timer);
     }
   }, [addedToCart]);
@@ -42,10 +45,10 @@ export const Homepage = () => {
         img: item.img,
       }),
     );
-
+    
     // Set animation state
     setAddedToCart(item.productId);
-
+    
     // Show success notification
     // toast.success(`${item.name} added to cart!`, {
     //   position: "bottom-right",
@@ -56,7 +59,7 @@ export const Homepage = () => {
   return (
     <div className="min-h-screen bg-white">
       <Header />
-
+      
       <main className="container px-4 py-6 mx-auto">
         <section className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
@@ -69,19 +72,21 @@ export const Homepage = () => {
               handleAddToCart={handleAddToCart}
             />
           </div>
-
-          {/* <FilterBadges /> */}
+          
+          <FilterBadges />
           <PromotedRestaurants />
         </section>
-
+        
         <CategorySection categories={categories} />
         <PopularCooks cooks={cooks} />
         <PopularItems 
-          popularItems={popularItems} 
-          handleAddToCart={handleAddToCart} 
+          popularItems={popularItems}
+          handleAddToCart={handleAddToCart}
           addedToCart={addedToCart}
         />
-        
+        {/* Use the component directly with correct syntax */}
+        <UserLocation />
+                
         <Footer />
       </main>
     </div>

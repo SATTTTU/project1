@@ -4,17 +4,24 @@ import Button from "../../../../components/ui/button/Button";
 import Input from "../../../../components/ui/input/input";
 
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { useAdminRegisterFormik } from "../formik/useAdminlogin";
+import { useAdminRegisterFormik } from "../formik/useAdminregister";
+import { Verification } from "@/modules/user/auth/components/verification";
 
 const AdminRegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const { formik, isLoading } = useAdminRegisterFormik({
+  const { formik, isLoading,isRegistrationSuccess } = useAdminRegisterFormik({
     mutationConfig: {
-      onSuccess: (data) => console.log("Admin Registration Successful:", data),
+      onSuccess: (data) => {
+        console.log("Admin Registration Successful:", data);
+      },
       onError: (error) => console.error("Registration failed:", error),
     },
   });
+
+  if (isRegistrationSuccess) {
+    return <Verification />;
+  }
 
   return (
     <form onSubmit={formik.handleSubmit} className="space-y-4">

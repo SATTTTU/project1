@@ -2,7 +2,7 @@ import { api } from "@/lib/api-client";
 import { useMutation } from "@tanstack/react-query";
 
 export const CreateNewPassword=(data)=>{
-    return api.post(`/admin/reset-password`,data);
+    return api.post(`/api/admins/change-password`,data);
 
 }
 export const useAdminResetPassword = ({ mutationConfig } = {}) => {

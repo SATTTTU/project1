@@ -1,41 +1,42 @@
 import { useFormik } from "formik";
-import { resetPasswordSchema } from "../schema/adminformSchema";
+import { toFormikValidationSchema } from "zod-formik-adapter";
+import { toast } from "react-toastify";
 import { useAdminResetPassword } from "../api/create-newPassword";
+import { adminResetPasswordSchema } from "../schema/adminformSchema";
 
 export const useResetPasswordFormik = () => {
-  // Use your custom hook to get the mutation
   const { mutateAsync, isLoading, isError, error, isSuccess } = useAdminResetPassword();
 
   const formik = useFormik({
     initialValues: {
-      email: "",
-      newPassword: "",
-      confirmPassword: "",
+      oldpassword: "", // Updated to match backend expectation
+      newpassword: "",
+      confirmpassword: "",
     },
-    validate: (values) => {
+    validationSchema: toFormikValidationSchema(adminResetPasswordSchema), // Uses Zod validation schema
+    onSubmit: async (values, { resetForm, setErrors }) => {
       try {
-        resetPasswordSchema.parse(values);
-        return {}; // No errors
-      } catch (err) {
-        const errors = {};
-        if (err.errors) {
-          err.errors.forEach((issue) => {
-            errors[issue.path[0]] = issue.message;
-          });
-        } else {
-          console.error("Unexpected error during validation:", err);
-        }
-        return errors;
-      }
-    },
-    validateOnBlur: true,
-    onSubmit: async (values, { resetForm }) => {
-      try {
-        await mutateAsync(values);
-        alert("Password reset successful!");
+        // Send request to backend
+        const response = await mutateAsync({
+          oldpassword: values.oldpassword,
+          newpassword: values.newpassword,
+          confirmpassword: values.confirmpassword,
+        });
+
+        // Display success message from the server response
+        toast.success(response?.message || "Password reset successfully.");
         resetForm();
       } catch (err) {
+        // Extract error message from the server response
+        const errorMessage =
+          err?.response?.data?.message ||
+          (err?.response?.data?.errors
+            ? Object.values(err.response.data.errors).flat().join(", ")
+            : "An error occurred while resetting the password.");
+
+        setErrors({ submit: errorMessage });
         console.error("Password reset error:", err);
+        toast.error(errorMessage);
       }
     },
   });

@@ -11,15 +11,35 @@ export const signUpSchema = z.object({
   email: z.string().email("Invalid email format"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
-export const resetPasswordSchema = z.object({
-  email: z.string().email("Invalid email format"),
-  newPassword: z.string().min(6, "Password must be at least 6 characters"),
-  confirmPassword: z.string().min(6, "Password must be at least 6 characters"),
-}).refine((data) => data.newPassword === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"], // The error will be associated with confirmPassword
-});
+
+export const adminResetPasswordSchema = z
+  .object({
+    // Old Password Field (Renamed from currentPassword)
+    oldpassword: z.string().min(6, "Current password must be at least 6 characters"),
+
+    // New Password Field
+    newpassword: z.string().min(6, "Password must be at least 6 characters"),
+
+    // Confirm Password Field
+    confirmpassword: z.string().min(6, "Password must be at least 6 characters"),
+  })
+  .refine((data) => data.newpassword === data.confirmpassword, {
+    message: "Passwords do not match",
+    path: ["confirmpassword"], // Ensure validation applies to the correct field
+  });
+
 
 export const forgotPasswordSchema = z.object({
   email: z.string().email("Invalid email format"),
+});
+
+export const adminnewResetPasswordSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  newpassword: z.string().min(6, "Password must be at least 6 characters"),
+  confirmpassword: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .refine((val, ctx) => val === ctx.parent.newpassword, {
+      message: "Passwords must match",
+    }),
 });
