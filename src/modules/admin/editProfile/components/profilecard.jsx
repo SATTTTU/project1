@@ -22,10 +22,7 @@ export const ProfileCard = () => {
   const handleLogout = async () => {
     try {
       await logout();
-      localStorage.removeItem("token_admin");
-      localStorage.removeItem("cart");
-      localStorage.removeItem("auth");
-      localStorage.removeItem("active_user");
+      localStorage.clear();
       window.location.href = "/admin/login"; // Redirect
     } catch (error) {
       console.error("Logout failed", error);

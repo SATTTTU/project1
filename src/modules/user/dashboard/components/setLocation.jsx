@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios"; // For API requests
 import { useSetLocation } from "../api/post-location";
-
 export const UserLocation = () => {
   const [location, setLocation] = useState(null);
   const [place, setPlace] = useState(""); // To store the place name
