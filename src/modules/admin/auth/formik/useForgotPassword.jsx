@@ -1,33 +1,38 @@
 import { useFormik } from "formik";
+import { toFormikValidationSchema } from "zod-formik-adapter";
 import { forgotPasswordSchema } from "../schema/adminformSchema";
 import { useAdminForgotPassword } from "../api/forgot-Password";
+import { toast } from "react-toastify";
+import { useState } from "react";
 
 export const useAdminForgotPasswordFormik = () => {
   const { mutateAsync, isLoading, isError, error, isSuccess } = useAdminForgotPassword();
+  const [isRegistrationSuccess, setIsRegistrationSuccess] = useState(false);
 
   const formik = useFormik({
     initialValues: {
       email: "",
     },
-    validate: (values) => {
+    validationSchema: toFormikValidationSchema(forgotPasswordSchema), // Use Zod validation schema with Formik
+    onSubmit: async (values, helpers) => {
       try {
-        forgotPasswordSchema.parse(values);
-        return {}; // No errors
+        const response = await mutateAsync(values); // Trigger forgot password API
+        
+        // Display success message from the server response
+        toast.success(response?.message || "Password reset request sent successfully.");
+        formik.resetForm(); // Reset form after successful submission
+        setIsRegistrationSuccess(true);
       } catch (err) {
-        const errors = {};
-        err.errors.forEach((issue) => {
-          errors[issue.path[0]] = issue.message;
-        });
-        return errors;
-      }
-    },
-    validateOnBlur: true,
-    onSubmit: async (values) => {
-      try {
-        await mutateAsync(values); // Trigger forgot password API
-        formik.resetForm();
-      } catch (err) {
-        console.error(err);
+        // Extract error message from the server response
+        const errorMessage =
+          err?.response?.data?.message ||
+          (err?.response?.data?.errors
+            ? Object.values(err.response.data.errors).flat().join(", ")
+            : "An error occurred while requesting a password reset.");
+
+        // Set formik errors and show toast error
+        helpers.setErrors({ submit: errorMessage });
+        toast.error(errorMessage);
       }
     },
   });
@@ -38,5 +43,6 @@ export const useAdminForgotPasswordFormik = () => {
     isError,
     error,
     isSuccess,
+    isRegistrationSuccess,
   };
 };

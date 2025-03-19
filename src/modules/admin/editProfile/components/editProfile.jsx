@@ -2,160 +2,170 @@ import React, { useState, useEffect } from "react";
 import { useAdminProfileEditFormik } from "../hooks/useAdminProfileEdit";
 
 export const MyProfile = () => {
-  const { formik, isLoading, isError, error, isSuccess } = useAdminProfileEditFormik();
-  
-  // Initialize with a safe default value
-  const [image, setImage] = useState("/api/placeholder/200/200");
-  
-  // Update image when formik values change
+  const { formik, isLoading } = useAdminProfileEditFormik();
+  const [imagePreview, setImagePreview] = useState("/api/placeholder/200/200");
+  const [isEditMode, setIsEditMode] = useState(false);
+
   useEffect(() => {
-    if (formik?.values?.image) {
-      setImage(formik.values.image);
+    // Set initial image preview when form is initialized
+    if (formik.values.image && !(formik.values.image instanceof File)) {
+      setImagePreview(formik.values.image);
     }
-  }, [formik?.values?.image]);
+  }, [formik.values.image]);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      // Verify the file type
+      if (!['image/jpeg', 'image/png', 'image/jpg'].includes(file.type)) {
+        toast.error("Only JPG, JPEG, and PNG files are allowed");
+        return;
+      }
+      
+      // Store the actual file object in formik
+      formik.setFieldValue("image", file);
+      
+      // Create preview for UI
       const reader = new FileReader();
       reader.onload = () => {
-        const result = reader.result;
-        setImage(result);
-        formik.setFieldValue("image", result);
+        setImagePreview(reader.result);
       };
       reader.readAsDataURL(file);
     }
   };
 
-  // Helper function to format mobile number as user types
-  const handleMobileChange = (e) => {
-    // Strip non-digit characters
-    const value = e.target.value.replace(/\D/g, '');
-    formik.setFieldValue("mobile", value);
+  const handleEditToggle = () => {
+    setIsEditMode(!isEditMode);
+    formik.setFieldValue("isEditing", !formik.values.isEditing);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    formik.handleSubmit(event);
+    setIsEditMode(false);
+  };
+
+  const handleCancel = () => {
+    setIsEditMode(false);
+    formik.setFieldValue("isEditing", false);
+    formik.resetForm();
+    setImagePreview(formik.initialValues.image);
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-xl overflow-hidden">
-      {/* Top Section with Background and Profile Photo */}
-      <div className="relative h-48 bg-gradient-to-r from-blue-500 to-purple-600">
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-        {/* Edit Profile Button */}
-        {!formik.isSubmitting && !formik.values.isEditing && (
-          <button
-            type="button"
-            onClick={() => formik.setFieldValue("isEditing", true)}
-            className="absolute top-4 right-4 bg-white text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-full shadow-md transition-all duration-300 flex items-center space-x-2 z-10"
-          >
-            <span className="font-medium text-sm">Edit Profile</span>
-          </button>
-        )}
-      </div>
-
-      {/* Profile Picture */}
-      <div className="relative -mt-16 px-6 flex justify-center">
-        <div className="relative">
-          <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white bg-white shadow-lg">
-            <img src={image} alt="Profile" className="w-full h-full object-cover" />
-          </div>
-          {formik.values.isEditing && (
-            <label htmlFor="profile-pic" className="absolute bottom-1 right-1 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full shadow cursor-pointer transition-all duration-200 transform hover:scale-105">
-              <input
-                type="file"
-                id="profile-pic"
-                className="hidden"
-                accept="image/*"
-                onChange={handleImageChange}
-              />
-            </label>
+    <div className="max-w-3xl mx-auto">
+      {/* Profile Card */}
+      <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+        {/* Header Gradient */}
+        <div className="relative h-48 bg-gradient-to-r from-green-500 to-green-700">
+          {!isEditMode && (
+            <button 
+              onClick={handleEditToggle}
+              className="absolute top-4 right-4 bg-white text-gray-800 px-4 py-2 rounded-full font-medium shadow-md hover:bg-gray-100 transition-colors"
+            >
+              Edit Profile
+            </button>
           )}
-        </div>
-      </div>
-
-      {/* User Name and Email */}
-      <div className="text-center pt-2 pb-4">
-        <h3 className="text-2xl font-bold text-gray-800">{formik.values.name}</h3>
-        <p className="text-sm text-gray-500">{formik.values.email}</p>
-      </div>
-
-      {/* Profile Content */}
-      <form onSubmit={formik.handleSubmit}>
-        <div className="p-6">
-          <div className="space-y-6">
-            {/* Name Field */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-              <input
-                type="text"
-                value={formik.values.name}
-                onChange={formik.handleChange}
-                name="name"
-                disabled={!formik.values.isEditing || formik.isSubmitting}
-                className={`w-full px-4 py-3 rounded-lg focus:outline-none ${
-                  formik.values.isEditing ? "bg-gray-50 border border-gray-300" : "bg-white"
-                }`}
-              />
-              {formik.errors.name && formik.touched.name && (
-                <div className="text-red-500 text-sm mt-1">{formik.errors.name}</div>
+          
+          {/* Profile Image */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-16">
+            <div className="relative">
+              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white bg-white shadow-md">
+                <img src={imagePreview} alt="Profile" className="w-full h-full object-cover" />
+              </div>
+              {isEditMode && (
+                <label htmlFor="profile-pic" className="absolute bottom-0 right-0 bg-white p-2 rounded-full shadow-md cursor-pointer hover:bg-gray-100">
+                  <input type="file" id="profile-pic" className="hidden" accept="image/png,image/jpeg,image/jpg" onChange={handleImageChange} />
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-700" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                  </svg>
+                </label>
               )}
             </div>
-
-            {/* Mobile Field with custom handler */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
-              <input
-                type="text"
-                value={formik.values.mobile}
-                onChange={handleMobileChange} // Use custom handler
-                name="mobile"
-                disabled={!formik.values.isEditing || formik.isSubmitting}
-                placeholder="Enter your 10-digit mobile number"
-                maxLength={10} // Limit to 10 characters
-                className={`w-full px-4 py-3 rounded-lg focus:outline-none ${
-                  formik.values.isEditing ? "bg-gray-50 border border-gray-300" : "bg-white"
-                }`}
-              />
-              {formik.errors.mobile && formik.touched.mobile && (
-                <div className="text-red-500 text-sm mt-1">{formik.errors.mobile}</div>
-              )}
-            </div>
-
-            {/* Save Changes Button */}
-            {formik.values.isEditing && (
-              <div className="pt-4 flex space-x-3">
-                <button
-                  type="button" 
-                  className="flex-1 bg-white border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition-all duration-200 font-medium"
-                  onClick={() => {
-                    formik.resetForm();
-                    setImage(formik.initialValues.image || "/api/placeholder/200/200");
-                  }}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 text-white py-3 rounded-lg hover:from-blue-700 hover:to-blue-600 transition-all duration-200 font-medium flex items-center justify-center"
-                  disabled={isLoading || formik.isSubmitting}
-                >
-                  {isLoading || formik.isSubmitting ? "Saving..." : "Save Changes"}
-                </button>
-              </div>
-            )}
-
-            {/* Success/Error Messages */}
-            {isSuccess && (
-              <div className="mt-4 p-3 bg-green-50 text-green-700 rounded-lg">
-                Profile updated successfully!
-              </div>
-            )}
-            {isError && (
-              <div className="mt-4 p-3 bg-red-50 text-red-700 rounded-lg">
-                Error: {error?.message || "Something went wrong while updating your profile."}
-              </div>
-            )}
           </div>
         </div>
-      </form>
+        
+        {/* Profile Content */}
+        <div className="pt-20 pb-6 px-8">
+          <form onSubmit={handleSubmit}>
+            <div className="space-y-6">
+              {/* Full Name */}
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Full Name</label>
+                {isEditMode ? (
+                  <input
+                    type="text"
+                    name="name"
+                    value={formik.values.name}
+                    onChange={formik.handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                ) : (
+                  <p className="text-gray-800 font-medium">{formik.values.name}</p>
+                )}
+                {formik.errors.name && formik.touched.name && (
+                  <div className="text-red-500 text-xs mt-1">{formik.errors.name}</div>
+                )}
+              </div>
+
+              {/* Mobile Number */}
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Mobile Number</label>
+                {isEditMode ? (
+                  <input
+                    type="text"
+                    name="mobile"
+                    value={formik.values.mobile}
+                    onChange={formik.handleChange}
+                    maxLength={10}
+                    placeholder="Enter 10-digit mobile number"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                ) : (
+                  <p className="text-gray-800 font-medium">{formik.values.mobile || "Not provided"}</p>
+                )}
+                {formik.errors.mobile && formik.touched.mobile && (
+                  <div className="text-red-500 text-xs mt-1">{formik.errors.mobile}</div>
+                )}
+              </div>
+
+              {/* Email - Read Only */}
+              {!isEditMode && formik.values.email && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">Email</label>
+                  <p className="text-gray-800 font-medium">{formik.values.email}</p>
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              {isEditMode && (
+                <div className="flex space-x-4 pt-4">
+                  <button
+                    type="button"
+                    onClick={handleCancel}
+                    className="flex-1 py-2 px-4 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Saving..." : "Save Changes"}
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {formik.errors.submit && (
+              <div className="mt-4 p-3 bg-red-50 text-red-700 rounded-md text-sm">
+                {formik.errors.submit}
+              </div>
+            )}
+          </form>
+        </div>
+      </div>
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 import { useUserLogin } from "../api/loginUser";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
-import { api } from "@/lib/api-client";
+// import { api } from "@/lib/api-client";
 import { toast } from "react-toastify"; 
 
 export const useLoginFormik = (config = {}) => {
@@ -12,8 +12,9 @@ export const useLoginFormik = (config = {}) => {
   const { mutateAsync, isLoading: isLoggingIn } = useUserLogin({
     mutationConfig: {
       onSuccess: (data) => {
-        localStorage.setItem("authToken", data.token);
-        api.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+        console.log(data)
+        // localStorage.setItem("authToken", data.token);
+        // api.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
         navigate("/user/dashboard");
 
         toast.success("Login successful! 🎉"); 

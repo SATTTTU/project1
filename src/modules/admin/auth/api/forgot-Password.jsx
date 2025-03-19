@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 
 // Forgot Password API Call
 export const ForgotPassword = (data) => {
-  return api.post(`/admin/forgot-password`, data);
+  return api.post(`/api/admins/forgot-password`, data);
 };
 
 export const useAdminForgotPassword = ({ mutationConfig } = {}) => {

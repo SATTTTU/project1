@@ -12,11 +12,13 @@ function saveToken(user, token) {
 
 function authRequestInterceptor(config) {
   const user = localStorage.getItem("active_user");
-  const token = getToken(user);
+  console.log("user:", user);
+  const token = getToken("admin");
+  console.log("token", token);
 
   config.headers = config.headers || {};
   config.headers.Accept = "application/json";
-  
+
   // Only set Content-Type to application/json if it's not FormData
   if (!(config.data instanceof FormData)) {
     config.headers["Content-Type"] = "application/json";
@@ -32,7 +34,6 @@ function authRequestInterceptor(config) {
   console.log("🔄 Sending request with headers:", config.headers);
   return config;
 }
-
 
 // Ensure API URL is set correctly
 const API_URL = import.meta.env.VITE_APP_API_URL;
@@ -68,8 +69,9 @@ api.interceptors.response.use(
 
     // If unauthorized, handle logout (optional)
     if (error.response?.status === 401) {
-      console.warn("⚠️ Unauthorized! Token may be expired. Consider logging out.");
-      // localStorage.removeItem(`token_${localStorage.getItem("active_user")}`); // Uncomment if you want to auto-remove token on 401
+      console.warn(
+        "⚠️ Unauthorized! Token may be expired. Consider logging out."
+      );
     }
 
     return Promise.reject(error);

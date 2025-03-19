@@ -10,7 +10,7 @@ export const ResetPasswordRoute = () => {
         <ResetPasswordForm />
         <div className="text-center mt-4">
           <span className="text-gray-600">Remembered your password? </span>
-          <Link to="/login" className="text-blue-500 hover:underline">
+          <Link to="/admin/login" className="text-green-500 hover:underline">
             Login
           </Link>
         </div>

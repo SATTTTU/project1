@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { useUserLogout } from "../api/logout"; // Import logout API hook
+import { useUserLogout } from "../api/logout"; 
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../../../store/cart/authSlice"; // Redux logout action

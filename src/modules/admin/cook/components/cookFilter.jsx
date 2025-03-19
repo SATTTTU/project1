@@ -1,6 +1,7 @@
-
+import React from "react";
 import Input from "@/components/ui/input/input";
 import Select from "@/components/ui/Select/select";
+
 const CookFilters = ({ search, setSearch, statusFilter, setStatusFilter, ratingFilter, setRatingFilter }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -12,9 +13,9 @@ const CookFilters = ({ search, setSearch, statusFilter, setStatusFilter, ratingF
       <Select
         options={[
           { label: "All Status", value: "all" },
-          { label: "Verified", value: "Verified" },
-          { label: "Pending", value: "Pending" },
-          { label: "Unverified", value: "Unverified" },
+          { label: "Verified", value: "verified" },
+          { label: "Pending", value: "under-review" },
+          { label: "Rejected", value: "rejected" },
         ]}
         value={statusFilter}
         onChange={(e) => setStatusFilter(e.target.value)}

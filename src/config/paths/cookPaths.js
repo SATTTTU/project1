@@ -29,8 +29,7 @@ export const cookPaths = {
     getHref: (redirectTo) =>
       `/cook/verification${
         redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
-      }`,
-  },
+      }`,},
   forgetPassword: {
     path: "/cook/forgetPassword",
     getHref: (redirectTo) =>

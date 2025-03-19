@@ -10,13 +10,13 @@ import AdminLoginForm from "@/modules/admin/auth/components/adminlogin";
         <h2 className="text-2xl font-bold text-center mb-4">Admin Login</h2>
         <AdminLoginForm />
         <div className="text-center mt-4">
-          <Link to="/forgot-password" className="text-blue-500 hover:underline">
+          <Link to="/admin/forgot-password" className="text-green-500 hover:underline">
             Forgot Password?
           </Link>
         </div>
         <div className="text-center mt-2">
           <span className="text-gray-600">Don't have an account? </span>
-          <Link to="/signup" className="text-blue-500 hover:underline">
+          <Link to="/admin/register" className="text-green-500 hover:underline">
             Sign Up
           </Link>
         </div>

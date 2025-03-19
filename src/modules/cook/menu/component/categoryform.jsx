@@ -1,90 +1,71 @@
 // components/CategoryForm.jsx
 import React from "react";
 import { X } from "lucide-react";
+import { useCategoryFormik } from "../formik/useCategory";
 
 const CategoryForm = ({
-  newCategory,
-  setNewCategory,
-  editingCategory,
   categories,
   setCategories,
   setShowAddCategory,
+  editingCategory,
   setEditingCategory,
 }) => {
-  // Add or edit category
-  const handleAddCategory = () => {
-    if (newCategory.trim()) {
-      if (editingCategory) {
-        // Update existing category
-        setCategories(
-          categories.map((category) =>
-            category.id === editingCategory
-              ? { ...category, name: newCategory }
-              : category
-          )
-        );
-        setEditingCategory(null);
-      } else {
-        // Check if category already exists
-        const existingCategory = categories.find(
-          (c) => c.name.toLowerCase() === newCategory.toLowerCase()
-        );
-
-        if (existingCategory) {
-          // If exists, just focus on it
-          setCategories(
-            categories.map((c) =>
-              c.id === existingCategory.id ? { ...c, isExpanded: true } : c
-            )
-          );
-        } else {
-          // Add new category
-          const newId = Math.max(...categories.map((c) => c.id), 0) + 1;
-          setCategories([
-            ...categories,
-            {
-              id: newId,
-              name: newCategory,
-              isExpanded: true,
-              items: [],
-            },
-          ]);
-        }
-      }
-      setNewCategory("");
-      setShowAddCategory(false);
-    }
-  };
+  const { formik, isEditing, isLoading } = useCategoryFormik({
+    editingCategory,
+    categories,
+    setCategories,
+    setShowAddCategory,
+    setEditingCategory,
+  });
 
   return (
     <div className="mb-6 p-4 bg-white rounded-lg shadow">
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-semibold">
-          {editingCategory ? "Edit Category" : "Add New Category"}
+          {isEditing ? "Edit Category" : "Add New Category"}
         </h3>
         <button
+          type="button"
           onClick={() => setShowAddCategory(false)}
           className="text-gray-500 hover:text-gray-700"
         >
           <X size={18} />
         </button>
       </div>
-      <div className="flex-col flex gap-2">
-        <input
-          type="text"
-          value={newCategory}
-          onChange={(e) => setNewCategory(e.target.value)}
-          placeholder="Category Name"
-          className="flex-1 p-2 border rounded"
-        />
-
+      
+      <form onSubmit={formik.handleSubmit} className="flex-col flex gap-2">
+        <div>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            placeholder="Category Name"
+            className={`flex-1 p-2 border rounded w-full ${
+              formik.touched.name && formik.errors.name 
+                ? "border-red-500" 
+                : ""
+            }`}
+            disabled={isLoading}
+          />
+          {formik.touched.name && formik.errors.name && (
+            <div className="text-red-500 text-sm mt-1">{formik.errors.name}</div>
+          )}
+        </div>
+        
         <button
-          onClick={handleAddCategory}
-          className="bg-[#426B1F] w-fit flex justify-end items-end text-white px-4 py-2 rounded hover:bg-[#365818]"
+          type="submit"
+          disabled={formik.isSubmitting || isLoading}
+          className="bg-[#426B1F] w-fit flex justify-end items-end text-white px-4 py-2 rounded hover:bg-[#365818] disabled:bg-gray-400"
         >
-          {editingCategory ? "Update" : "Add"}
+          {isLoading ? "Processing..." : isEditing ? "Update" : "Add"}
+          {isLoading && (
+            <span className="ml-2 inline-block animate-spin">⌛</span>
+          )}
         </button>
-      </div>
+      </form>
     </div>
   );
 };

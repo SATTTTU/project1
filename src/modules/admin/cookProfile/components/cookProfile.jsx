@@ -1,5 +1,5 @@
 import { Calendar } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   CheckCircle, 
   AlertCircle, 
@@ -17,11 +17,91 @@ import {
   Video,
   ExternalLink
 } from "react-feather";
+import { useGetSingleCook } from "../api/get-single-cook";
 
-const CookProfileDetails = ({ cook, navigate, onStatusChange }) => {
+const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [showDocumentModal, setShowDocumentModal] = useState(null);
   
+  // Use the API hook to fetch cook data
+  const { 
+    mutateAsync: fetchCook, 
+    isLoading, 
+    error, 
+    data 
+  } = useGetSingleCook(cookId, {
+    mutationConfig: {
+      onSuccess: (data) => {
+        console.log("Cook data fetched successfully:", data);
+      },
+      onError: (error) => {
+        console.error("Failed to fetch cook data:", error);
+      }
+    }
+  });
+
+  useEffect(() => {
+    if (cookId) {
+      fetchCook();
+    }
+  }, [cookId, fetchCook]);
+
+  // Extract cook data from API response and map to expected structure
+  const cookData = data?.data;
+  
+  // Map API response to component expected format
+  const cook = cookData ? {
+    id: cookData.id,
+    name: cookData.name,
+    email: cookData.email,
+    phone: cookData.phone || "Not provided",
+    image: cookData.image_url,
+    status: mapApprovalStatusToDisplay(cookData.approval_status),
+    averageRating: cookData.average_rating || 0,
+    totalReviews: cookData.total_reviews || 0,
+    joinedDate: new Date().toISOString(), // Add default if missing
+    address: "Not provided", // Add default
+    experience: "Not provided", // Add default
+    specialties: [], // Add default
+    certifications: [], // Add default
+    earnings: { total: 0, monthly: 0 }, // Add default
+    productsSold: 0, // Add default
+    documents: cookData.cook_documents || {},
+    video: cookData.intro_video_url,
+  } : null;
+  
+  // Utility function to map API status to display status
+  function mapApprovalStatusToDisplay(status) {
+    switch(status) {
+      case "approved": return "Verified";
+      case "under-review": return "Pending";
+      case "rejected": return "Unverified";
+      default: return "Pending";
+    }
+  }
+
+  // Rest of your component stays the same...
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="p-4 bg-blue-100 rounded flex items-center">
+        <span>Loading cook details...</span>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="p-4 bg-red-100 rounded flex items-center">
+        <AlertCircle size={18} className="mr-2 text-red-600" />
+        <span>Error loading cook data: {error.message}</span>
+      </div>
+    );
+  }
+
+  // Show empty state
   if (!cook) {
     return (
       <div className="p-4 bg-red-100 rounded flex items-center">
