@@ -9,51 +9,72 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  // Check authentication status on component mount
   useEffect(() => {
     const checkAuthStatus = () => {
-      // Get token from localStorage
-      const token = localStorage.getItem("token_admin")
-      const user = localStorage.getItem("active_user")
-  
-      console.log("Auth check - token found:", !!token)
-  
-      if (token && user) {
-        // In a real app, you might want to validate the token with your backend
+      // Get token based on the same keys used in api-client.js
+      const userType = localStorage.getItem("user_type")
+      const adminToken = localStorage.getItem("admin_token") || localStorage.getItem("authToken")
+      const cookToken = localStorage.getItem("cook_token")
+      const activeUser = localStorage.getItem("active_user")
+
+      // Determine if we have a valid token
+      const hasValidToken =
+        (userType === "admin" && adminToken && adminToken !== "undefined") ||
+        (userType === "cook" && cookToken && cookToken !== "undefined")
+
+      console.log("Auth check - token found:", hasValidToken, "user type:", userType)
+
+      if (hasValidToken && activeUser) {
         setIsAuthenticated(true)
-  
-        // Load user data from the "active_user" key
-        try {
-          const userData = JSON.parse(user)
-          setUser(userData)
-        } catch (error) {
-          console.error("Failed to parse user data:", error)
-        }
+
+        setUser({
+          type: userType,
+        })
       } else {
-        // Explicitly set to false if no token
         setIsAuthenticated(false)
+        setUser(null)
       }
-  
+
       setLoading(false)
     }
-  
-    checkAuthStatus()
-  }, [])
-  
 
-  // Login function
+    checkAuthStatus()
+
+    window.addEventListener("storage", checkAuthStatus)
+
+    return () => {
+      window.removeEventListener("storage", checkAuthStatus)
+    }
+  }, [])
+
   const login = (userData, token) => {
-    localStorage.setItem("authToken", token)
-    localStorage.setItem("userData", JSON.stringify(userData))
+    const userType = userData.type || "admin" 
+
+    localStorage.setItem("user_type", userType)
+
+    if (userType === "admin") {
+      localStorage.setItem("admin_token", token)
+      localStorage.setItem("authToken", token) 
+    } else if (userType === "cook") {
+      localStorage.setItem("cook_token", token)
+    }
+
+    localStorage.setItem("active_user", userType)
+
     setIsAuthenticated(true)
     setUser(userData)
     console.log("Login successful, auth state:", true)
   }
 
-  // Logout function
+  // Logout function - updated to match clearAuthData in api-client.js
   const logout = () => {
+    // Clear all auth-related localStorage items
+    localStorage.removeItem("user_type")
+    localStorage.removeItem("admin_token")
+    localStorage.removeItem("cook_token")
+    localStorage.removeItem("active_user")
     localStorage.removeItem("authToken")
-    localStorage.removeItem("userData")
+
     setIsAuthenticated(false)
     setUser(null)
     console.log("Logout successful, auth state:", false)
@@ -68,7 +89,7 @@ export const AuthProvider = ({ children }) => {
     logout,
   }
 
-  console.log("Auth Provider state:", { isAuthenticated, loading })
+  console.log("Auth Provider state:", { isAuthenticated, loading, userType: user?.type })
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
