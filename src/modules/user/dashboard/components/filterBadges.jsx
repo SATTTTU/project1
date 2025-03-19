@@ -4,24 +4,7 @@ import Category1 from "../../../../assets/UserImages/Category/Cato1.jpg";
 import Grand from "../../../../assets/UserImages/Ai.jpeg";
 import Lunch from "../../../../assets/UserImages/Lunch.jpeg";
 
-// export const FilterBadges = () => {
-//   return (
-//     // <div className="flex flex-wrap gap-2 mb-6">
-//     //   <Badge variant="outline" className="px-3 py-1 rounded-full">
-//     //     Vegan
-//     //   </Badge>
-//     //   <Badge variant="outline" className="px-3 py-1 rounded-full">
-//     //     Sushi
-//     //   </Badge>
-//     //   <Badge variant="outline" className="px-3 py-1 rounded-full text-green-500 border-green-500">
-//     //     Pizza & Fast food
-//     //   </Badge>
-//     //   <Badge variant="outline" className="px-3 py-1 rounded-full">
-//     //     Others
-//     //   </Badge>
-//     // </div>
-//   );
-// };
+
 
 export const PromotedRestaurants = () => {
   return (

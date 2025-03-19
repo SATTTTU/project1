@@ -1,99 +1,60 @@
 import React, { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+// import { fetchMenuItems } from "../../api/menuItems";
 import { toast } from "react-toastify";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import { FiStar, FiClock } from "react-icons/fi";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+// import { storeCartItem } from "../../api/cart";
+import { FiShoppingCart } from "react-icons/fi";
+import { fetchMenuItems } from "../api/get-items";
 import { storeCartItem } from "../../cart/api/addItems";
 
-export const PopularItems = ({ popularItems, userId }) => {
-  const [addedToCart, setAddedToCart] = useState(null);
+export const PopularItems = () => {
+  const { data: menuItems, isLoading, error } = useQuery({
+    queryKey: ["menuItems"],
+    queryFn: fetchMenuItems,
+  });
+
+  const [addedToCart, setAddedToCart] = useState([]);
   const queryClient = useQueryClient();
 
-  const { mutate: handleAddToCart, isLoading } = useMutation({
-    mutationFn: ({ productId }) => storeCartItem({ userId, productId, quantity: 1 }),
-    onSuccess: (data, { productId }) => {
-      setAddedToCart(productId); // Set added item
+  const { mutate: addToCart, isLoading: addingToCart } = useMutation({
+    mutationFn: async (menuItemId) => storeCartItem({ menu_item_id: menuItemId, quantity: 1 }),
+    onSuccess: (data, { menu_item_id }) => {
+      setAddedToCart((prevItems) => [...prevItems, menu_item_id]);
       toast.success("Item added to cart! 🛒");
-      queryClient.invalidateQueries(["userBasket"]); // Refresh cart
+      queryClient.invalidateQueries(["userBasket"]);
     },
     onError: () => {
       toast.error("Failed to add item to cart!");
     },
   });
 
+  if (isLoading) return <p>Loading menu items...</p>;
+  if (error) return <p>Failed to load menu items.</p>;
+
   return (
-    <section className="mb-8">
-      <h2 className="mb-4 text-xl font-bold text-center">Popular Items</h2>
-      <div className="relative">
-        <Swiper
-          modules={[Navigation, Pagination, Autoplay]}
-          spaceBetween={30}
-          slidesPerView={1}
-          breakpoints={{
-            640: { slidesPerView: 1 },
-            768: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
-          }}
-          navigation
-          pagination={{ clickable: true }}
-          autoplay={{ delay: 3000 }}
-          className="pb-30"
-        >
-          {popularItems.map((item) => (
-            <SwiperSlide key={item.productId}>
-              <FoodItemCard 
-                item={item} 
-                handleAddToCart={handleAddToCart} 
-                addedToCart={addedToCart} 
-                isLoading={isLoading}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+    <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      {menuItems.map((item) => (
+        <div key={item.id} className="bg-white shadow-md rounded-lg overflow-hidden">
+          <img src={item.image_url} alt={item.name} className="w-full h-48 object-cover" />
+          <div className="p-4">
+            <h3 className="text-lg font-bold">{item.name}</h3>
+            <p className="text-sm text-gray-600">{item.description}</p>
+            <p className="text-lg font-semibold mt-2">Rs. {item.price}</p>
+            <button
+              onClick={() => addToCart(item.id)}
+              disabled={addingToCart || addedToCart.includes(item.id)}
+              className={`mt-3 w-full py-2 rounded-lg text-white transition-all duration-300 ${
+                addedToCart.includes(item.id) ? "bg-green-600" : "bg-blue-500 hover:bg-blue-600"
+              } flex items-center justify-center`}
+            >
+              {addedToCart.includes(item.id) ? "Added to Cart" : "Add to Cart"}{" "}
+              <FiShoppingCart className="ml-2" />
+            </button>
+          </div>
+        </div>
+      ))}
     </section>
   );
 };
 
-const FoodItemCard = ({ item, handleAddToCart, addedToCart, isLoading }) => {
-  return (
-    <div className="overflow-hidden bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-      <div className="relative">
-        <img
-          src={item.img || "/placeholder.svg"}
-          alt={item.name}
-          className="object-cover w-full h-48 md:h-56 lg:h-64"
-        />
-        {item.rating && (
-          <div className="absolute top-2 right-2 bg-white px-2 py-1 rounded-md shadow-md flex items-center">
-            <FiStar className="text-yellow-500 fill-current mr-1" />
-            <span className="font-medium">{item.rating}</span>
-          </div>
-        )}
-        {item.preparationTime && (
-          <div className="absolute bottom-2 left-2 bg-black bg-opacity-70 px-2 py-1 rounded-full text-white text-xs flex items-center">
-            <FiClock className="mr-1" />
-            <span>{item.preparationTime}</span>
-          </div>
-        )}
-      </div>
-      <div className="p-3">
-        <h3 className="text-lg font-medium">{item.name}</h3>
-        <p className="mb-3 text-lg font-bold">Rs. {item.price}</p>
-        <button
-          onClick={() => handleAddToCart({ productId: item.productId })}
-          disabled={isLoading}
-          className={`w-full py-3 rounded-xl text-white transition-all duration-300 ${
-            addedToCart === item.productId ? "bg-green-700" : "bg-green-600 hover:bg-green-700"
-          }`}
-        >
-          {isLoading ? "Adding..." : addedToCart === item.productId ? "Added to Cart!" : "Order Now"}
-        </button>
-      </div>
-    </div>
-  );
-};

@@ -7,22 +7,21 @@ import {
 } from "react-icons/ai";
 import { FaUserCircle } from "react-icons/fa";
 import { CiSettings } from "react-icons/ci";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import Logo from "../../../../assets/logo.jpg";
 import { useProfile } from "../../userprofile/api/getProfile";
-import LogoutForm from "../../auth/components/logoutform";
 import { useUserLogout } from "../../auth/api/logout";
 
 export const Header = () => {
-	const cartItems = useSelector((store) => store.cart.items);
+	// const cartItems = useSelector((store) => store.cart.items);
 	const [showProfileMenu, setShowProfileMenu] = useState(false);
 	const profileRef = useRef(null);
 	const { data: user } = useProfile();
 	const { mutateAsync:logout, isLoading } = useUserLogout();
 
-	const getTotalCartItems = () => {
-		return cartItems.reduce((total, item) => total + item.quantity, 0);
-	};
+	// const getTotalCartItems = () => {
+	// 	return cartItems.reduce((total, item) => total + item.quantity, 0);
+	// };
 
 	useEffect(() => {
 		const handleClickOutside = (event) => {
@@ -55,7 +54,7 @@ export const Header = () => {
 					<Link to="/user/dashboard" className="flex items-center">
 						<img src={Logo} alt="KhanaBox" className="h-10 w-10 mr-2" />
 						<span className="text-2xl font-bold text-[#426B1F]">
-							KhanaBoxsss
+							Khajabox
 						</span>
 					</Link>
 
@@ -69,11 +68,7 @@ export const Header = () => {
 							className="relative p-1 hover:bg-gray-100 rounded-full transition-colors"
 						>
 							<AiOutlineShoppingCart className="text-3xl text-[#426B1F]" />
-							{getTotalCartItems() > 0 && (
-								<span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-									{getTotalCartItems()}
-								</span>
-							)}
+							
 						</Link>
 
 						<div className="relative" ref={profileRef}>
@@ -131,8 +126,6 @@ export const Header = () => {
 
 									<div className="border-t border-slate-200 my-1"></div>
 
-									{/* Logout Form */}
-									{/* <LogoutForm /> */}
 									<button
 										onClick={handleLogout}
 										disabled={isLoading}

@@ -95,6 +95,7 @@ export const userRoutes = [
 									return { Component: Homepage };
 								},
 							},
+							
 							{
 								path: paths.user.changePassword.path,
 								lazy: async () => {
