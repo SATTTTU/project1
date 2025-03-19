@@ -13,13 +13,11 @@ import {
 	categories,
 	cooks,
 	popularItems,
-} from "../../../../modules/user/dashboard/components/data";
-import { PopularCooks } from "@/modules/user/dashboard/components/popularCooks";
-// import UserLocation from "@/modules/user/dashboard/components/setLocation";
-// import { FilterBadges } from "@/modules/user/Homepage/component/filterBadges";
-// import { PopularCooks } from "@/modules/user/Homepage/component/popularCooks";
+} from "../../../../modules/user/Homepage/component/data";
+import { FilterBadges } from "@/modules/user/Homepage/component/filterBadges";
+import { PopularCooks } from "@/modules/user/Homepage/component/popularCooks";
 // Update import to use the correct path and name
-// import { UserLocation } from "@/modules/user/Homepage/component/setLocation";
+import { UserLocation } from "@/modules/user/Homepage/component/setLocation";
 
 export const Homepage = () => {
   const dispatch = useDispatch();
@@ -74,8 +72,8 @@ export const Homepage = () => {
               handleAddToCart={handleAddToCart}
             />
           </div>
-
-          {/* <FilterBadges /> */}
+          
+          <FilterBadges />
           <PromotedRestaurants />
         </section>
         

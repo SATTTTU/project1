@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { toast } from "react-toastify";
 import { categorySchema } from "./schema/menuschema";
-import { UseCreateCategory } from "../api/createCategory";
+import { useCreateCategory } from "../api/createCategory";
 
 export const useCategoryFormik = ({
   editingCategory,
@@ -17,7 +17,7 @@ export const useCategoryFormik = ({
     : "";
 
   // Initialize the API mutation hook
-  const { mutateAsync, isLoading, isError, error, isSuccess } = UseCreateCategory({
+  const { mutateAsync, isLoading, isError, error, isSuccess } = useCreateCategory({
     mutationConfig: {
       onSuccess: () => {
         // You can add additional success handling if needed
