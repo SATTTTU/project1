@@ -38,7 +38,7 @@ const ProtectedRoute = ({ allowedRoles = [] }) => {
       if (user?.type === "admin" && location.pathname.startsWith("/cook")) {
         return <Navigate to="/admin/dashboard" replace state={{ from: location }} />;
       }
-      return <Navigate to={user?.type === "admin" ? "/admin/dashboard" : "/cook/dashboard"} replace state={{ from: location }} />;
+      return <Navigate to={user?.type === "admin" ? "/admin/dashboard" : "/admin/login"} replace state={{ from: location }} />;
     }
     return <Outlet />;
   }
