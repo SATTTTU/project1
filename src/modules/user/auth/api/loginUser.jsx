@@ -1,23 +1,51 @@
-import { api } from "@/lib/api-client";
+import { api, saveUserData, clearAuthData } from "@/lib/api-client";
 import { useMutation } from "@tanstack/react-query";
 
 const loginUser = async (userData) => {
-   const response =await api.post("/api/login", userData);
-  //  return response.data;
-  const { token, user } = response.data;
-  console.log("first toke", response.data)
-  console.log('user',user)
-   if (token) {
-    localStorage.setItem("active_user", user.name); 
-    localStorage.setItem(`token_user`, token);
-    console.log("✅ Token stored successfully:", token);
-  } else {
-    console.error("No token received from server!");
+  try {
+    clearAuthData();
+
+    const response = await api.post("/api/login", userData);
+    console.log("user login response:", response);
+
+    // Check if response has token directly or nested in data
+    const token = response.token || response.data?.token;
+
+    if (!token) {
+      throw new Error("No token received from server");
+    }
+
+    // Save user data with token
+    saveUserData("user", token);
+
+    // Verify token was saved
+    const savedToken = localStorage.getItem("user_token");
+    if (!savedToken || savedToken === "undefined") {
+      throw new Error("Failed to save token to localStorage");
+    }
+
+    console.log("✅ Usertoken stored successfully in localStorage");
+
+    // Add a delay to confirm token is not cleared immediately
+    setTimeout(() => {
+      const confirmedToken = localStorage.getItem("user_token");
+      console.log("Token after 1 second:", confirmedToken);
+    }, 1000);
+
+    return {
+      ...response,
+      token,
+      user: {
+        type: "user",
+      },
+    };
+  } catch (error) {
+    console.error("Login error:", error);
+    // Clear any partial auth data on error
+    clearAuthData();
+    throw error;
   }
-
-  return response.data; // Return response data
 };
-
 
 export const useUserLogin = ({ mutationConfig } = {}) => {
   const mutation = useMutation({
@@ -27,7 +55,7 @@ export const useUserLogin = ({ mutationConfig } = {}) => {
 
   return {
     mutateAsync: mutation.mutateAsync,
-    isLoading: mutation.isPending,
+    isLoading: mutation.isLoading,
     error: mutation.error,
     isError: mutation.isError,
     isSuccess: mutation.isSuccess,

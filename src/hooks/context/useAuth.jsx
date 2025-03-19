@@ -1,106 +1,62 @@
-"use client"
+import { createContext, useContext, useEffect, useState } from "react";
 
-import { createContext, useContext, useState, useEffect } from "react"
-
-const AuthContext = createContext(null)
+const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const checkAuthStatus = () => {
-      // Get token based on the same keys used in api-client.js
-      const userType = localStorage.getItem("user_type")
-      const adminToken = localStorage.getItem("admin_token") || localStorage.getItem("authToken")
-      const cookToken = localStorage.getItem("cook_token")
-      const activeUser = localStorage.getItem("active_user")
-      
+    const adminToken = localStorage.getItem("admin_token");
+    const cookToken = localStorage.getItem("cook_token");
+    const userToken = localStorage.getItem("user_token");
+    
 
-      // Determine if we have a valid token
-      const hasValidToken =
-        (userType === "admin" && adminToken && adminToken !== "undefined") ||
-        (userType === "cook" && cookToken && cookToken !== "undefined")
-
-      console.log("Auth check - token found:", hasValidToken, "user type:", userType)
-
-      if (hasValidToken && activeUser) {
-        setIsAuthenticated(true)
-
-        setUser({
-          type: userType,
-        })
-      } else {
-        setIsAuthenticated(false)
-        setUser(null)
-      }
-
-      setLoading(false)
+    if (adminToken) {
+      setUser({ type: "admin", token: adminToken });
+    } else if (cookToken) {
+      setUser({ type: "cook", token: cookToken });
+    } else if (userToken) {
+      setUser({ type: "user", token: userToken });
+    } else {
+      setUser(null);
     }
 
-    checkAuthStatus()
-
-    window.addEventListener("storage", checkAuthStatus)
-
-    return () => {
-      window.removeEventListener("storage", checkAuthStatus)
-    }
-  }, [])
+    setLoading(false);
+  }, []);
 
   const login = (userData, token) => {
-    const userType = userData.type || "admin" 
-
-    localStorage.setItem("user_type", userType)
-
-    if (userType === "admin") {
-      localStorage.setItem("admin_token", token)
-      localStorage.setItem("authToken", token) 
-    } else if (userType === "cook") {
-      localStorage.setItem("cook_token", token)
+    if (userData?.type === "admin") {
+      localStorage.setItem("admin_token", token);
+      localStorage.removeItem("cook_token"); // Ensure cook token is cleared
+    } else if (userData?.type === "cook") {
+      localStorage.setItem("cook_token", token);
+      localStorage.removeItem("admin_token"); // Ensure admin token is cleared
+    }else if (userData?.type === "user") {
+      localStorage.setItem("user_token", token);
+      localStorage.removeItem("admin_token");
+      localStorage.removeItem("cook_token");
+       // Ensure admin token is cleared
     }
+    setUser({ type: userData.type, token });
+  };
 
-    localStorage.setItem("active_user", userType)
+  const isAuthenticated = !!user;
 
-    setIsAuthenticated(true)
-    setUser(userData)
-    console.log("Login successful, auth state:", true)
-  }
+  const checkPermission = (allowedRoles) => {
+    if (!user) return false;
+    return allowedRoles.length === 0 || allowedRoles.includes(user.type);
+  };
 
-  // Logout function - updated to match clearAuthData in api-client.js
-  const logout = () => {
-    // Clear all auth-related localStorage items
-    localStorage.removeItem("user_type")
-    localStorage.removeItem("admin_token")
-    localStorage.removeItem("cook_token")
-    localStorage.removeItem("active_user")
-    localStorage.removeItem("authToken")
+  return (
+    <AuthContext.Provider
+      value={{ user, isAuthenticated, loading, checkPermission, login }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
-    setIsAuthenticated(false)
-    setUser(null)
-    console.log("Logout successful, auth state:", false)
-  }
-
-  // Auth context value
-  const value = {
-    isAuthenticated,
-    user,
-    loading,
-    login,
-    logout,
-  }
-
-  console.log("Auth Provider state:", { isAuthenticated, loading, userType: user?.type })
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-}
-
-// Custom hook for using auth context
 export const useAuth = () => {
-  const context = useContext(AuthContext)
-  if (context === null) {
-    throw new Error("useAuth must be used within an AuthProvider")
-  }
-  return context
-}
-
+  return useContext(AuthContext);
+};

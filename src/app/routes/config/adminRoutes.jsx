@@ -51,10 +51,10 @@ export const adminRoutes = [
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
-          
+
           // Protected routes - require authentication
           {
-            element: <ProtectedRoute />, // Apply protection to all child routes
+            element: <ProtectedRoute allowedRoles={["admin"]} />, // Restrict to admin only
             children: [
               {
                 path: paths.admin.dashboard.path,

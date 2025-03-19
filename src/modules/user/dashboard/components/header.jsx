@@ -18,7 +18,7 @@ export const Header = () => {
 	const [showProfileMenu, setShowProfileMenu] = useState(false);
 	const profileRef = useRef(null);
 	const { data: user } = useProfile();
-	const { logout, isLoading } = useUserLogout();
+	const { mutateAsync:logout, isLoading } = useUserLogout();
 
 	const getTotalCartItems = () => {
 		return cartItems.reduce((total, item) => total + item.quantity, 0);
@@ -42,10 +42,12 @@ export const Header = () => {
 	const handleLogout = async () => {
 		try {
 			await logout();
-		} catch (error) {
-			console.error("Logout failed:", error);
-		}
-	};
+			localStorage.clear();
+			window.location.href = "/user/login"; // Redirect
+		  } catch (error) {
+			console.error("Logout failed", error);
+		  }
+		};
 	return (
 		<div className="bg-white shadow-sm sticky top-0 z-50">
 			<div className="container mx-auto px-4 py-3">

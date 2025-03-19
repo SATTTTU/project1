@@ -2,7 +2,7 @@ import { api } from "@/lib/api-client";
 import { useMutation } from "@tanstack/react-query";
 
 // Create Category API Call
-export const createCategory = async (data) => {
+export const createCategoryItem = async (data) => {
   try {
     console.log("🔍 Sending request to API with data:", data);
 

@@ -6,17 +6,11 @@ import { addToCart } from "../../../../store/cart/cart";
 import { Header } from "@/modules/user/dashboard/components/header";
 import { Footer } from "@/modules/user/dashboard/components/footer";
 import { SearchBar } from "@/modules/user/dashboard/components/searchBar";
-import { PromotedRestaurants } from "@/modules/user/dashboard/components/filterBadges";
-import { CategorySection } from "@/modules/user/dashboard/components/categoriesSection";
-import { PopularItems } from "@/modules/user/dashboard/components/popularItemsSection";
-import {
-	categories,
-	cooks,
-	popularItems,
-} from "../../../../modules/user/dashboard/components/data";
-// import { FilterBadges } from "@/modules/user/dashboard/components/filterBadges";
+import { categories, cooks, popularItems } from "@/modules/user/dashboard/components/data";
+// import PopularItems from "@/modules/cook/homepage/component/popularitem";
 import { PopularCooks } from "@/modules/user/dashboard/components/popularCooks";
-// import { UserLocation } from "@/modules/user/dashboard/components/setLocation";
+import { PopularItems } from "@/modules/user/dashboard/components/popularItemsSection";
+// import UserLocation from "@/modules/user/dashboard/components/setLocation";
 
 export const Homepage = () => {
   const dispatch = useDispatch();
@@ -72,13 +66,10 @@ export const Homepage = () => {
             />
           </div>
           
-          {/* <FilterBadges /> */}
-          <PromotedRestaurants />
         </section>
         
-        <CategorySection categories={categories} />
         <PopularCooks cooks={cooks} />
-        <PopularItems 
+        <PopularItems
           popularItems={popularItems}
           handleAddToCart={handleAddToCart}
           addedToCart={addedToCart}

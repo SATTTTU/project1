@@ -11,7 +11,7 @@ export const userRoutes = [
 	{
 		path: paths.user.root.path,
 		element: <Outlet />,
-		// ErrorBoundary: AppRootErrorBoundary,
+		ErrorBoundary: AppRootErrorBoundary,
 		children: [
 			{
 				element: <AuthRoot />,
@@ -25,6 +25,8 @@ export const userRoutes = [
 
 							return { Component: RegisterPage };
 						},
+						ErrorBoundary: AppRootErrorBoundary,
+
 					},
 					{
 						path: paths.user.login.path,
@@ -82,7 +84,7 @@ export const userRoutes = [
 						},
 					},
 					{
-						element: <ProtectedRoute />, 
+						element: <ProtectedRoute  allowedRoles={["user"]}/>, 
 						children: [
 							{
 								path: paths.user.dashboard.path,

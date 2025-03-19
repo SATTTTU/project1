@@ -1,15 +1,18 @@
+import { Outlet } from "react-router-dom";
 import { AppRootErrorBoundary, AuthRoot } from "../app/root";
 import { paths } from "../../../config/paths";
+import ProtectedRoute from "./protectedRoute";
 
 export const cookRoutes = [
   {
     path: paths.cook.root.path,
-    // element: <Outlet />,
+    element: <Outlet />,
     ErrorBoundary: AppRootErrorBoundary,
     children: [
       {
         element: <AuthRoot />,
         children: [
+          // Public routes - no authentication required
           {
             path: paths.cook.register.path,
             lazy: async () => {
@@ -31,66 +34,20 @@ export const cookRoutes = [
             ErrorBoundary: AppRootErrorBoundary,
           },
           {
-            path: paths.cook.pendingPage.path,
+            path: paths.cook.login.path,
             lazy: async () => {
-              const { PendingPageroute } = await import(
-                "../cook/auth/pendingpage"
-              );
-              return { Component: PendingPageroute };
-            },
-            ErrorBoundary: AppRootErrorBoundary,
-          },
-          {
-            path: paths.cook.homepage.path,
-            lazy: async () => {
-              const { Homepage } = await import("../cook/homepage/homepage");
-              return { Component: Homepage };
-            },
-            ErrorBoundary: AppRootErrorBoundary,
-          },
-          {
-            path: paths.cook.orderpage.path,
-            lazy: async () => {
-              const { OrderPage } = await import("../cook/order/order");
-              return { Component: OrderPage };
-            },
-            ErrorBoundary: AppRootErrorBoundary,
-          },
-          {
-            path: paths.cook.cookProfile.path,
-            lazy: async () => {
-              const { ProfileRoute } = await import("../cook/profile/profile");
-              return { Component: ProfileRoute };
-            },
-            ErrorBoundary: AppRootErrorBoundary,
-          },
-          {
-            path: paths.cook.earningsPage.path,
-            lazy: async () => {
-              const { EarningsPage } = await import(
-                "../cook/earnings/earnings"
-              );
-              return { Component: EarningsPage };
-            },
-            ErrorBoundary: AppRootErrorBoundary,
-          },
-          {
-            path: paths.cook.emailVerification.path,
-            lazy: async () => {
-              const { VerificationRoute } = await import(
-                "../cook/auth/verification"
-              );
-              return { Component: VerificationRoute };
+              const { Login } = await import("../cook/auth/login");
+              return { Component: Login };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
           {
             path: paths.cook.forgetPassword.path,
             lazy: async () => {
-              const { forgetPasswordroute} = await import(
+              const { forgetPasswordroute } = await import(
                 "../cook/auth/forgetpassword"
               );
-              return { Component: forgetPasswordroute};
+              return { Component: forgetPasswordroute };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
@@ -105,30 +62,87 @@ export const cookRoutes = [
             ErrorBoundary: AppRootErrorBoundary,
           },
           {
-            path: paths.cook.login.path,
+            path: paths.cook.emailVerification.path,
             lazy: async () => {
-              const { Login } = await import(
-                "../cook/auth/login"
+              const { VerificationRoute } = await import(
+                "../cook/auth/verification"
               );
-              return { Component: Login };
+              return { Component: VerificationRoute };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
+
+          // Protected routes - require cook authentication
           {
-            path: paths.cook.menupage.path,
-            lazy: async () => {
-              const { MenuPage } = await import("../cook/menu/menu");
-              return { Component: MenuPage };
-            },
-            ErrorBoundary: AppRootErrorBoundary,
-          },
-          {
-            path: paths.cook.historyPage.path,
-            lazy: async () => {
-              const { HistoryPage } = await import("../cook/history/history");
-              return { Component: HistoryPage };
-            },
-            ErrorBoundary: AppRootErrorBoundary,
+            element: <ProtectedRoute allowedRoles={["cook"]} />,
+            children: [
+              {
+                path: paths.cook.homepage.path,
+                lazy: async () => {
+                  const { Homepage } = await import(
+                    "../cook/homepage/homepage"
+                  );
+                  return { Component: Homepage };
+                },
+                ErrorBoundary: AppRootErrorBoundary,
+              },
+              {
+                path: paths.cook.orderpage.path,
+                lazy: async () => {
+                  const { OrderPage } = await import("../cook/order/order");
+                  return { Component: OrderPage };
+                },
+                ErrorBoundary: AppRootErrorBoundary,
+              },
+              {
+                path: paths.cook.cookProfile.path,
+                lazy: async () => {
+                  const { ProfileRoute } = await import(
+                    "../cook/profile/profile"
+                  );
+                  return { Component: ProfileRoute };
+                },
+                ErrorBoundary: AppRootErrorBoundary,
+              },
+              {
+                path: paths.cook.earningsPage.path,
+                lazy: async () => {
+                  const { EarningsPage } = await import(
+                    "../cook/earnings/earnings"
+                  );
+                  return { Component: EarningsPage };
+                },
+                ErrorBoundary: AppRootErrorBoundary,
+              },
+              {
+                path: paths.cook.menupage.path,
+                lazy: async () => {
+                  const { MenuPage } = await import("../cook/menu/menu");
+                  return { Component: MenuPage };
+                },
+                ErrorBoundary: AppRootErrorBoundary,
+              },
+              {
+                path: paths.cook.historyPage.path,
+                lazy: async () => {
+                  const { HistoryPage } = await import(
+                    "../cook/history/history"
+                  );
+                  return { Component: HistoryPage };
+                },
+                ErrorBoundary: AppRootErrorBoundary,
+              },
+              {
+                path: paths.cook.pendingPage.path,
+                lazy: async () => {
+                  const { PendingPageroute } = await import(
+                    "../cook/auth/pendingpage"
+                  );
+                  return { Component: PendingPageroute };
+                },
+                ErrorBoundary: AppRootErrorBoundary,
+              },
+            ],
           },
         ],
       },
