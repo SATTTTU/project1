@@ -114,7 +114,7 @@ export const useCookDocumentFormik = (config = {}) => {
             autoClose: 3000,
           });
         } else if (err?.response) {
-          const status = err.response?.status;
+          // const status = err.response?.status;
           const message = err.response?.data?.message || "Document submission failed";
           
           helpers.setErrors({ submit: message });

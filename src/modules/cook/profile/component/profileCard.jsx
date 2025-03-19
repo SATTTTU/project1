@@ -1,132 +1,238 @@
-import React from "react";
-import { FaCamera } from "react-icons/fa";
+import React, { useState } from 'react';
+import { Camera, Loader2 } from 'lucide-react';
+import { useProfileForm } from '../hooks/useProfileForm';
 
 const ProfileCard = ({ userData }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [imagePreview, setImagePreview] = useState(userData.profileImage);
+
+  const { formik, isSubmitting } = useProfileForm({
+    fullName: userData.fullName,
+    bio: userData.bio,
+    phone: userData.phone,
+    cuisineSpecialties: userData.cuisineSpecialties || [],
+    profileImage: null
+  });
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      formik.setFieldValue('profileImage', file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    formik.resetForm();
+    setImagePreview(userData.profileImage);
+  };
+
+  const availableCuisines = [
+    'Italian', 'French', 'Chinese', 'Indian', 'Japanese', 
+    'Mexican', 'Mediterranean', 'American', 'Thai', 'Middle Eastern'
+  ];
+
   return (
-    <div className="mb-8 rounded-lg bg-white p-6 shadow-sm">
-      <div className="flex flex-col md:flex-row gap-6">
-        <ProfileImage userData={userData} />
-        <ProfileInfo userData={userData} />
-      </div>
-    </div>
-  );
-};
-
-const ProfileImage = ({ userData }) => {
-  return (
-    <div className="flex flex-col items-center">
-      <div className="relative">
-        <div className="h-32 w-32 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-          <img
-            src="/placeholder.svg?height=128&width=128"
-            alt="Profile"
-            className="h-full w-full object-cover"
-          />
-        </div>
-        <button className="absolute bottom-0 right-0 rounded-full bg-[#426B1F] p-2 text-white shadow-sm">
-          <FaCamera className="h-4 w-4" />
-        </button>
-      </div>
-      <div className="mt-4 text-center">
-        <h2 className="text-xl font-bold">{userData.name}</h2>
-        <p className="text-sm text-gray-500">
-          Cook since {userData.joinedDate}
-        </p>
-        <div className="mt-2 flex items-center justify-center">
-          <div className="flex items-center">
-            <span className="text-yellow-400">★</span>
-            <span className="ml-1 font-medium">{userData.rating}</span>
-          </div>
-          <span className="mx-2 text-gray-300">•</span>
-          <span className="text-sm text-gray-500">
-            {userData.totalOrders} orders
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const ProfileInfo = ({ userData }) => {
-  return (
-    <div className="flex-1 space-y-6">
-      <div>
-        <h3 className="text-lg font-medium">Personal Information</h3>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          <div>
-            <label className="block text-sm font-medium text-gray-500">
-              Full Name
-            </label>
-            <input
-              type="text"
-              defaultValue={userData.name}
-              className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-[#426B1F] focus:outline-none focus:ring-1 focus:ring-[#426B1F]"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-500">
-              Email
-            </label>
-            <input
-              type="email"
-              defaultValue={userData.email}
-              className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-[#426B1F] focus:outline-none focus:ring-1 focus:ring-[#426B1F]"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-500">
-              Phone Number
-            </label>
-            <input
-              type="tel"
-              defaultValue={userData.phone}
-              className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-[#426B1F] focus:outline-none focus:ring-1 focus:ring-[#426B1F]"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-500">
-              Address
-            </label>
-            <input
-              type="text"
-              defaultValue={userData.address}
-              className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-[#426B1F] focus:outline-none focus:ring-1 focus:ring-[#426B1F]"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-500">Bio</label>
-        <textarea
-          defaultValue={userData.bio}
-          rows={3}
-          className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-[#426B1F] focus:outline-none focus:ring-1 focus:ring-[#426B1F]"
-          placeholder="Tell customers about yourself and your cooking..."
-        />
-      </div>
-
-      <div>
-        <h3 className="text-lg font-medium">Specialties</h3>
-        <div className="mt-2 flex flex-wrap gap-2">
-          {userData.specialties.map((specialty, index) => (
-            <span
-              key={index}
-              className="inline-flex rounded-full bg-[#426B1F]/10 px-3 py-1 text-sm font-medium text-[#426B1F]"
-            >
-              {specialty}
-            </span>
-          ))}
-          <button className="inline-flex rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700">
-            + Add More
+    <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-xl font-semibold text-gray-800">Personal Information</h2>
+        {!isEditing ? (
+          <button 
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            onClick={() => setIsEditing(true)}
+          >
+            Edit Profile
           </button>
-        </div>
+        ) : (
+          <div className="flex space-x-2">
+            <button 
+              className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+              onClick={handleCancel}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </button>
+            <button 
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center"
+              onClick={formik.handleSubmit}
+              disabled={isSubmitting}
+            >
+              {isSubmitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              Save Changes
+            </button>
+          </div>
+        )}
       </div>
 
-      <div className="pt-4">
-        <button className="rounded-md bg-[#426B1F] px-4 py-2 text-white hover:bg-[#365818]">
-          Save Changes
-        </button>
+      <div className="flex flex-col md:flex-row">
+        {/* Profile Image */}
+        <div className="mb-6 md:mb-0 md:mr-6">
+          <div className="relative">
+            <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-100">
+              {imagePreview ? (
+                <img 
+                  src={imagePreview} 
+                  alt="Profile" 
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-400">
+                  <span className="text-xl">{userData.fullName.charAt(0)}</span>
+                </div>
+              )}
+            </div>
+            
+            {isEditing && (
+              <label 
+                htmlFor="profileImage" 
+                className="absolute bottom-0 right-0 bg-blue-600 rounded-full p-1 cursor-pointer"
+              >
+                <Camera className="h-4 w-4 text-white" />
+                <input 
+                  type="file" 
+                  id="profileImage" 
+                  accept="image/*" 
+                  className="hidden"
+                  onChange={handleImageChange}
+                />
+              </label>
+            )}
+          </div>
+        </div>
+
+        {/* Profile Information */}
+        <div className="flex-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Full Name */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+              {isEditing ? (
+                <div>
+                  <input
+                    type="text"
+                    name="fullName"
+                    value={formik.values.fullName}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    className="w-full p-2 border rounded-md"
+                  />
+                  {formik.touched.fullName && formik.errors.fullName && (
+                    <p className="text-red-500 text-xs mt-1">{formik.errors.fullName}</p>
+                  )}
+                </div>
+              ) : (
+                <p className="text-gray-900">{userData.fullName}</p>
+              )}
+            </div>
+
+            {/* Phone */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+              {isEditing ? (
+                <div>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formik.values.phone}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    className="w-full p-2 border rounded-md"
+                  />
+                  {formik.touched.phone && formik.errors.phone && (
+                    <p className="text-red-500 text-xs mt-1">{formik.errors.phone}</p>
+                  )}
+                </div>
+              ) : (
+                <p className="text-gray-900">{userData.phone}</p>
+              )}
+            </div>
+
+            {/* Bio */}
+            <div className="col-span-1 md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Bio</label>
+              {isEditing ? (
+                <div>
+                  <textarea
+                    name="bio"
+                    value={formik.values.bio}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    rows="3"
+                    className="w-full p-2 border rounded-md"
+                  />
+                  <p className="text-gray-500 text-xs mt-1">
+                    {formik.values.bio.length}/500 characters
+                  </p>
+                  {formik.touched.bio && formik.errors.bio && (
+                    <p className="text-red-500 text-xs mt-1">{formik.errors.bio}</p>
+                  )}
+                </div>
+              ) : (
+                <p className="text-gray-900">{userData.bio || "No bio provided"}</p>
+              )}
+            </div>
+
+            {/* Cuisine Specialties */}
+            <div className="col-span-1 md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Cuisine Specialties
+              </label>
+              {isEditing ? (
+                <div>
+                  <div className="flex flex-wrap gap-2">
+                    {availableCuisines.map((cuisine) => (
+                      <label key={cuisine} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          name="cuisineSpecialties"
+                          value={cuisine}
+                          checked={formik.values.cuisineSpecialties.includes(cuisine)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              formik.setFieldValue('cuisineSpecialties', [
+                                ...formik.values.cuisineSpecialties,
+                                cuisine
+                              ]);
+                            } else {
+                              formik.setFieldValue(
+                                'cuisineSpecialties',
+                                formik.values.cuisineSpecialties.filter(
+                                  (c) => c !== cuisine
+                                )
+                              );
+                            }
+                          }}
+                          className="mr-1"
+                        />
+                        <span className="text-sm">{cuisine}</span>
+                      </label>
+                    ))}
+                  </div>
+                  {formik.touched.cuisineSpecialties && formik.errors.cuisineSpecialties && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {formik.errors.cuisineSpecialties}
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <div className="flex flex-wrap gap-1">
+                  {userData.cuisineSpecialties && userData.cuisineSpecialties.map((cuisine) => (
+                    <span 
+                      key={cuisine} 
+                      className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full"
+                    >
+                      {cuisine}
+                    </span>
+                  ))}
+                  {(!userData.cuisineSpecialties || userData.cuisineSpecialties.length === 0) && (
+                    <span className="text-gray-500">No specialties specified</span>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
