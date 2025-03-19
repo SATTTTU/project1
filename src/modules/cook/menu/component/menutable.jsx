@@ -1,4 +1,3 @@
-// components/MenuTable.jsx
 import React from "react";
 import {
   ChevronDown,
@@ -178,7 +177,7 @@ const MenuTable = ({
               <React.Fragment key={category.id}>
                 {/* Category Row */}
                 <CategoryRow
-                  category={category}
+                  categoryId={category.id} // Ensure category.id is being passed
                   toggleCategory={toggleCategory}
                   handleDeleteCategory={handleDeleteCategory}
                   resetItemForm={resetItemForm}
@@ -209,7 +208,10 @@ const MenuTable = ({
                   category.items.map((item) => (
                     <ItemRow
                       key={item.id}
-                      item={item}
+                      item={{
+                        ...item,
+                        available: item.available ?? true, // Ensure 'available' exists
+                      }}
                       categoryId={category.id}
                       handleEditItem={handleEditItem}
                       handleDeleteItem={handleDeleteItem}
