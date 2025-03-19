@@ -85,6 +85,7 @@ export const Header = () => {
 							{showProfileMenu && (
 								<div className="absolute right-0 lg:p-2 mt-2 w-48 bg-white rounded-md shadow-xl py-1 z-50 border border-slate-200">
 									<div className="px-4 flex flex-col items-center justify-center py-3 border-b border-slate-200">
+										{/* {user?.image_url} */}
 										<FaUserCircle className="text-3xl text-[#426B1F]" />
 										<p className="text-sm font-medium text-gray-900">
 											{user?.name}

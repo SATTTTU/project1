@@ -24,13 +24,14 @@ export const cooks = [
 ];
 
 export const popularItems = [
-  { productId: 1, name: "Cheese Burger", price: "11.88", img: Burger, rating: 4.8, preparationTime: "15-20 min" },
-  { productId: 2, name: "Pancake", price: "11.99", img: Burger, rating: 4.7, preparationTime: "10-15 min" },
-  { productId: 3, name: "Crispy Sandwich", price: "13.99", img: Burger, rating: 4.6, preparationTime: "15-20 min" },
-  { productId: 4, name: "Chicken Wrap", price: "12.99", img: Burger, rating: 4.5, preparationTime: "10-15 min" },
-  { productId: 5, name: "Veggie Bowl", price: "10.99", img: Burger, rating: 4.7, preparationTime: "15-20 min" },
-  { productId: 6, name: "Steak Sandwich", price: "15.99", img: Burger, rating: 4.9, preparationTime: "20-25 min" },
+  { menu_item_id: 1, name: "Cheese Burger", price: "11.88", img: "/images/burger.jpg", quantity: 1 },
+  { menu_item_id: 2, name: "Pancake", price: "11.99", img: "/images/pancake.jpg", quantity: 1 },
+  { menu_item_id: 3, name: "Crispy Sandwich", price: "13.99", img: "/images/sandwich.jpg", quantity: 1 },
+  { menu_item_id: 4, name: "Chicken Wrap", price: "12.99", img: "/images/wrap.jpg", quantity: 1 },
+  { menu_item_id: 5, name: "Veggie Bowl", price: "10.99", img: "/images/bowl.jpg", quantity: 1 },
+  { menu_item_id: 6, name: "Steak Sandwich", price: "15.99", img: "/images/steak.jpg", quantity: 1 },
 ];
+
 // This file contains the updated cook data with categorized dishes
 export const cooksData = [
   {

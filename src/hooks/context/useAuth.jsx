@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
       const adminToken = localStorage.getItem("admin_token") || localStorage.getItem("authToken")
       const cookToken = localStorage.getItem("cook_token")
       const activeUser = localStorage.getItem("active_user")
+      
 
       // Determine if we have a valid token
       const hasValidToken =

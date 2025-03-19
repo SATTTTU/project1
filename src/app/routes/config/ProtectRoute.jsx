@@ -9,17 +9,15 @@ const getUserRole = () => {
 const ProtectedRoute = ({ allowedRoles }) => {
   const userRole = getUserRole();
 
-  // If user is not authenticated, redirect to login
   if (!userRole) {
     return <Navigate to="/user/login" replace />;
   }
 
-  // If the user's role is not allowed, redirect to unauthorized page
   if (!allowedRoles.includes(userRole)) {
     return <Navigate to="/unauthorized" replace />;
   }
 
-  return <Outlet />; // Render child routes if authorized
+  return <Outlet />; 
 };
 
 export default ProtectedRoute;

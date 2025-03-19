@@ -24,7 +24,8 @@ export const useUserLogout = () => {
 	const mutation = useMutation({
 		mutationFn: logoutUser,
 		onSuccess: () => {
-			localStorage.removeItem("token_user"); // Remove auth token after successful logout
+			localStorage.removeItem("token_user");
+			// Remove auth token after successful logout
 			window.location.href = "/user/login"; // Redirect to login page
 		},
 		onError: (error) => {
