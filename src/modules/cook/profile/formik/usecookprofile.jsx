@@ -1,11 +1,11 @@
 import { useInstantLayoutTransition } from "framer-motion";
-import { useProfile } from "../api/cookprofile";
+import { useGetCookProfile} from "../api/cookprofile";
 import { useFormik } from "formik";
 import { profileSchema } from "./schema/cookprofileschema";
 
 export const useProfileForm = (initialValues) => {
   const { toast } = useInstantLayoutTransition();
-  const { mutate: updateProfile, isLoading } = useProfile({
+  const { mutate: updateProfile, isLoading } = useGetCookProfile({
     onSuccess: () => {
       toast({
         title: "Profile updated",
