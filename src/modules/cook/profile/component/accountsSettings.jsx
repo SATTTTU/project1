@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Lock, Mail, Eye, EyeOff, Loader2 } from 'lucide-react';
-import { useProfileForm } from '../formik/schema/cookprofileschema';
+import { useProfileForm } from '../formik/schema/cookprofileupdateschema';
 
 
 const AccountSettings = () => {

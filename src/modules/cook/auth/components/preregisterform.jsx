@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { InputField } from "@/components/ui/inputfield/InputField";
 import { useCookRegisterFormik } from "../formik/usefirstregister";
+
 export const PreRegisterForm = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -11,7 +12,28 @@ export const PreRegisterForm = () => {
     mutationConfig: {
       onSuccess: (data) => {
         console.log("Registration successful:", data);
-        navigate("/cook/verification"); // 👈 Navigate ONLY on success
+        
+        // Store user data in localStorage
+        const userData = {
+          id: data.id,
+          name: data.name,
+          email: data.email
+        };
+        
+        // Store user data in localStorage for persistence across the application
+        localStorage.setItem('userData', JSON.stringify(userData));
+        
+        // If the response includes a clientId or token, also store that
+        if (data.clientId) {
+          localStorage.setItem('cookClientId', data.clientId);
+        }
+        
+        if (data.token) {
+          localStorage.setItem('authToken', data.token);
+        }
+        
+        // Navigate to verification page after successful registration
+        navigate("/cook/verification");
       },
       onError: (error) => {
         console.error("Registration failed:", error);

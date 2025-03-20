@@ -3,11 +3,15 @@ import { z } from "zod";
 export const VideoUploadSchema = z.object({
   file: z
     .instanceof(File)
-    .refine((file) => file.type === "video/quicktime", {
-      message: "Only .mov files are allowed",
+    .refine((file) => {
+      // Allow multiple video formats
+      const allowedTypes = ["video/mp4", "video/quicktime", "video/webm"];
+      return allowedTypes.includes(file.type);
+    }, {
+      message: "Only MP4, MOV, or WebM files are allowed",
     })
     .refine((file) => file.size <= 50 * 1024 * 1024, {
-      // Assuming a max file size of 50MB (adjust as needed)
+      // 50MB max file size
       message: "File size must be under 50MB",
     }),
   duration: z
@@ -15,5 +19,3 @@ export const VideoUploadSchema = z.object({
     .positive("Duration must be greater than 0")
     .max(60, "Video must be less than 1 minute"),
 });
-
-
