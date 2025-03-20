@@ -1,6 +1,7 @@
+// useCookDocumentFormik.js (Updated version of useDocumentUpload.js) 
+// This is a modified version of the code from your first document to ensure cook_id is correctly handled
 import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -20,6 +21,7 @@ export const useCookDocumentFormik = (config = {}) => {
       certificates: [],
       experienceLetters: [],
       termsAccepted: false,
+      ...(config?.initialValues || {}),
     },
     validationSchema: toFormikValidationSchema(documentSchema),
     validateOnBlur: true,
@@ -42,11 +44,16 @@ export const useCookDocumentFormik = (config = {}) => {
           formData.append("citizenship_back", values.citizenshipBack);
         }
         
-        // Get cook_id from localStorage or another source
-        // This is the missing field that's required by the backend
-        const cookId = localStorage.getItem('cook_id') || sessionStorage.getItem('cook_id');
+        // Get cook_id from localStorage - UPDATED to check both potential keys
+        const cookId = localStorage.getItem('cook_id') || 
+                       localStorage.getItem('cookClientId') || 
+                       sessionStorage.getItem('cook_id') ||
+                       values.clientId; // Also check if it was passed directly in values
+                       
         if (cookId) {
           formData.append("cook_id", cookId);
+          // Also store it in localStorage for future use, ensuring consistency
+          localStorage.setItem('cook_id', cookId);
         } else {
           // If cook_id is not available, show an error
           helpers.setErrors({ submit: "Cook ID is required. Please complete registration first." });

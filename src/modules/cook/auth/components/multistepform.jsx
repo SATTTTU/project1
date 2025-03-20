@@ -1,3 +1,4 @@
+// MultiStepForm.jsx - Updated with cook_id handling
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useCookDocumentFormik } from "../formik/useDocumentUpload";
@@ -31,8 +32,11 @@ const MultiStepForm = () => {
       }
     }
     
-    // Get clientId (in order of priority):
-    // 1. From localStorage (set by PreRegisterForm)
+    // Check specifically for cook_id which is required by the document upload form
+    const cookId = localStorage.getItem('cook_id');
+    
+    // For backwards compatibility, also check other possible ID sources:
+    // 1. From cookClientId in localStorage (set by PreRegisterForm)
     const storedClientId = localStorage.getItem('cookClientId');
     
     // 2. From URL search params
@@ -42,16 +46,16 @@ const MultiStepForm = () => {
     // 3. From state if navigated programmatically
     const stateClientId = location.state?.clientId;
     
-    // Use clientId from highest priority source
-    const id = storedClientId || urlClientId || stateClientId || (userDataObj?.id);
+    // Use ID from highest priority source
+    const id = cookId || storedClientId || urlClientId || stateClientId || (userDataObj?.id);
     
     if (id) {
       setClientId(id);
-      // Ensure it's stored in localStorage for persistence
-      localStorage.setItem('cookClientId', id);
-      console.log("Using client ID:", id);
+      // Ensure it's stored as cook_id for the document form
+      localStorage.setItem('cook_id', id);
+      console.log("Using cook ID:", id);
     } else {
-      console.error("No client ID found. User needs to restart registration.");
+      console.error("No cook ID found. User needs to restart registration.");
     }
   }, [location]);
   
