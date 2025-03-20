@@ -4,11 +4,12 @@ import React, { useState, useRef } from "react";
 import CookNavBAr from "../../../../components/ui/cooknavbar/cooknavbar";
 import ProfileHeader from "@/modules/cook/profile/component/profileHeader";
 import StatusBanner from "@/modules/cook/profile/component/statusBanner";
-import ProfileCard from "@/modules/cook/profile/component/profileCard";
+
 import IntroductionVideo from "@/modules/cook/profile/component/introductionVideo";
 import AchievementsExperience from "@/modules/cook/profile/component/achivementsExperience";
 import AccountSettings from "@/modules/cook/profile/component/accountsSettings";
 import { userData } from "@/modules/cook/profile/component/data";
+import { ProfileCard } from "@/modules/cook/profile/component/cookprofile";
 
 export const ProfileRoute = () => {
   const [videoFile, setVideoFile] = useState(null);

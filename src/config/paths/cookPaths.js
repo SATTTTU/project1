@@ -17,6 +17,13 @@ export const cookPaths = {
         redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
       }`,
   },
+  settingPage: {
+    path: "/cook/settings",
+    getHref: (redirectTo) =>
+      `/cook/settings${
+        redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+      }`,
+  },
   pendingPage: {
     path: "/cook/underReview",
     getHref: (redirectTo) =>

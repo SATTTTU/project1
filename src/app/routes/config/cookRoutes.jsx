@@ -33,6 +33,7 @@ export const cookRoutes = [
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
+         
           {
             path: paths.cook.login.path,
             lazy: async () => {

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Lock, Mail, Eye, EyeOff, Loader2 } from 'lucide-react';
-import { useCookProfile } from '../formik/schema/cookprofileupdateschema';
-
+import { useProfileForm } from '../formik/useupdatecookprofile copy';
 
 const AccountSettings = () => {
-  const [isEditingEmail, setIsEditingEmail] = useState(false);
+
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [showPassword, setShowPassword] = useState({
     current: false,
@@ -12,7 +11,7 @@ const AccountSettings = () => {
     confirm: false
   });
 
-  const { formik, isSubmitting } =useCookProfile({
+  const { formik, isSubmitting } =useProfileForm({
     email: '',
     currentPassword: '',
     newPassword: '',
@@ -26,10 +25,7 @@ const AccountSettings = () => {
     });
   };
 
-  const handleCancelEmail = () => {
-    setIsEditingEmail(false);
-    formik.setFieldValue('email', '');
-  };
+
 
   const handleCancelPassword = () => {
     setIsChangingPassword(false);
@@ -44,67 +40,7 @@ const AccountSettings = () => {
 
       <div className="space-y-6">
         {/* Email Settings */}
-        <div className="border-b pb-6">
-          <div className="flex items-center mb-4">
-            <Mail className="h-5 w-5 text-blue-600 mr-2" />
-            <h3 className="font-medium text-gray-800">Email Address</h3>
-          </div>
-
-          {isEditingEmail ? (
-            <div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  New Email Address
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formik.values.email}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  className="w-full p-2 border rounded-md"
-                  placeholder="Enter new email address"
-                />
-                {formik.touched.email && formik.errors.email && (
-                  <p className="text-red-500 text-xs mt-1">{formik.errors.email}</p>
-                )}
-              </div>
-
-              <div className="flex space-x-2">
-                <button
-                  className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
-                  onClick={handleCancelEmail}
-                  disabled={isSubmitting}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center"
-                  onClick={() => {
-                    formik.handleSubmit();
-                    if (!formik.errors.email) {
-                      setIsEditingEmail(false);
-                    }
-                  }}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                  Update Email
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="flex justify-between items-center">
-              <p className="text-gray-700">example@email.com</p>
-              <button
-                className="text-blue-600 hover:text-blue-800"
-                onClick={() => setIsEditingEmail(true)}
-              >
-                Change Email
-              </button>
-            </div>
-          )}
-        </div>
+       
 
         {/* Password Settings */}
         <div>
