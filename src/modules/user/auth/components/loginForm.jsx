@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { InputField } from "@/components/ui/inputfield/inputField";
 import { useLoginFormik } from "../../../../modules/user/auth/formik/useLoginFormik";
+import { InputField } from "@/components/ui/inputfield/InputField";
 
 export const LoginForm = () => {
   const navigate = useNavigate();

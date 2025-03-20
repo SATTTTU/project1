@@ -1,7 +1,7 @@
 
 import { useState } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { Header } from "./Header"
+import { Header } from "./header"
 import MainImage from "../../../../assets/Main.jpg"
 import { Swiper, SwiperSlide } from "swiper/react"
 import "swiper/css"

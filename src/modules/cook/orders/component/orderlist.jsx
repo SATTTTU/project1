@@ -1,6 +1,6 @@
 // src/components/Orders/OrdersList.jsx
 import React from "react";
-import { OrderCard } from "./OrderCard";
+import { OrderCard } from "./ordercard";
 
 export const OrdersList = ({ filteredOrders, updateOrderStatus }) => {
   return (

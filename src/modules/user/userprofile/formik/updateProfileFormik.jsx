@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 // import { profileEditSchema } from "../schema/editprofile";
-import {  useProfile } from "../api/getprofile";
+import {  useProfile } from "../api/getProfile";
 // import { useAdminProfileEdit } from "../api/editprofile";
 import { toast } from "react-toastify";
 import { UpdateProfile } from "../api/updateProfile";

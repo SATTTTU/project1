@@ -1,5 +1,5 @@
 import React from "react";
-import CookRow from "./CookRow";
+import CookRow from "./cookRow";
 
 const CookTable = ({ cooks, navigate, isLoading }) => {
   console.log("CookTable props - cooks:", cooks); // For debugging

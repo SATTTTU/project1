@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Label from "../../../../components/ui/label/Label";
+import Label from "../../../../components/ui/label/label";
 import Button from "../../../../components/ui/button/Button";
-import Input from "../../../../components/ui/input/Input";
+import Input from "../../../../components/ui/input/input";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useResetPasswordFormik } from "../formik/useResetPassword";
 
