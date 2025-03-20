@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Lock, Mail, Eye, EyeOff, Loader2 } from 'lucide-react';
-import { useProfileForm } from '../formik/schema/cookprofileupdateschema';
+import { useCookProfile } from '../formik/schema/cookprofileupdateschema';
 
 
 const AccountSettings = () => {
@@ -12,7 +12,7 @@ const AccountSettings = () => {
     confirm: false
   });
 
-  const { formik, isSubmitting } = useProfileForm({
+  const { formik, isSubmitting } =useCookProfile({
     email: '',
     currentPassword: '',
     newPassword: '',

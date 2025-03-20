@@ -1,7 +1,7 @@
 import { useInstantLayoutTransition } from "framer-motion";
 import { useUpdateCookProfile } from "../api/cookprofile";
 import { useFormik } from "formik";
-import { validateProfileUpdate } from "./schema/cookprofileupdateschema";
+import { VideoUploadSchema } from "./schema/videoschema";
 
 // Custom hook to handle form logic and API integration
 export const useProfileForm = (initialValues) => {
@@ -26,7 +26,7 @@ export const useProfileForm = (initialValues) => {
 
   const formik = useFormik({
     initialValues,
-    validate: validateProfileUpdate,
+    validate: VideoUploadSchema,
     onSubmit: (values) => {
       // Convert form data to API format
       const formData = new FormData();
