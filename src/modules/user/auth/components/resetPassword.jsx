@@ -16,7 +16,7 @@ export const ResetPasswordForm = () => {
 				Reset your password
 			</h1>
 			<p className="text-gray-400">
-				Choose a strong password that you’ll use across all our services.
+				Choose a strong password that you’ll use across all your services.
 			</p>
 			<div>
         <label className="block text-sm font-medium">Email</label>

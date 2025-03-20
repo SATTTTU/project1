@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export const WelcomePanel = ({ image }) => {
+export const WelcomeRegisterPanel = ({ image }) => {
   return (
     <div className="hidden md:flex relative w-1/2">
       <img
