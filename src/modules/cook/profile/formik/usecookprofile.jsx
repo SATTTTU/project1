@@ -1,11 +1,13 @@
 import { useInstantLayoutTransition } from "framer-motion";
-import { useProfile } from "../api/cookprofile";
+import { useUpdateCookProfile } from "../api/cookprofile";
 import { useFormik } from "formik";
-import { profileSchema } from "./schema/cookprofileschema";
+import { validateProfileUpdate } from "./schema/cookprofileupdateschema";
 
+// Custom hook to handle form logic and API integration
 export const useProfileForm = (initialValues) => {
   const { toast } = useInstantLayoutTransition();
-  const { mutate: updateProfile, isLoading } = useProfile({
+  
+  const { mutate: updateProfile, isLoading } = useUpdateCookProfile({
     onSuccess: () => {
       toast({
         title: "Profile updated",
@@ -24,9 +26,9 @@ export const useProfileForm = (initialValues) => {
 
   const formik = useFormik({
     initialValues,
-    validationSchema: profileSchema,
+    validate: validateProfileUpdate,
     onSubmit: (values) => {
-      // Convert form data to API format if needed
+      // Convert form data to API format
       const formData = new FormData();
       
       // Append text fields
@@ -35,7 +37,7 @@ export const useProfileForm = (initialValues) => {
           formData.append(key, values[key]);
         } else if (Array.isArray(values[key])) {
           // Handle arrays (like cuisineSpecialties, skills)
-          if (typeof values[key][0] === 'object') {
+          if (values[key].length > 0 && typeof values[key][0] === 'object') {
             // For array of objects like qualifications
             formData.append(key, JSON.stringify(values[key]));
           } else {
@@ -46,11 +48,13 @@ export const useProfileForm = (initialValues) => {
           }
         } else if (typeof values[key] === 'object' && values[key] !== null) {
           formData.append(key, JSON.stringify(values[key]));
-        } else if (values[key] !== undefined && values[key] !== null) {
+        } else if (values[key] !== undefined && values[key] !== null && values[key] !== '') {
+          // Only append non-empty values
           formData.append(key, values[key]);
         }
       });
       
+      // Send the update to the API
       updateProfile(formData);
     }
   });

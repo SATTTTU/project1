@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Camera, Loader2 } from 'lucide-react';
-import { useVideoFormik } from '../formik/usevideoupload';
-
+import { useProfileForm } from '../api/cookprofile';
 
 const ProfileCard = ({ userData }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [imagePreview, setImagePreview] = useState(userData.profileImage);
 
-  const { formik, isSubmitting } = useVideoFormik({
+  // Initialize the form with data from backend
+  const { formik, isSubmitting } = useProfileForm({
     fullName: userData.fullName,
     bio: userData.bio,
     phone: userData.phone,
@@ -27,6 +27,14 @@ const ProfileCard = ({ userData }) => {
     setIsEditing(false);
     formik.resetForm();
     setImagePreview(userData.profileImage);
+  };
+
+  const handleSubmit = () => {
+    formik.handleSubmit();
+    // Only close the edit mode if submission is successful
+    if (Object.keys(formik.errors).length === 0) {
+      // The edit mode will be closed when API call succeeds via the onSuccess callback
+    }
   };
 
   const availableCuisines = [
@@ -56,7 +64,7 @@ const ProfileCard = ({ userData }) => {
             </button>
             <button 
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center"
-              onClick={formik.handleSubmit}
+              onClick={handleSubmit}
               disabled={isSubmitting}
             >
               {isSubmitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}

@@ -8,6 +8,7 @@ export const LoginForm = () => {
   const navigate = useNavigate();
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [apiError, setApiError] = useState("");
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
@@ -15,10 +16,38 @@ export const LoginForm = () => {
     mutationConfig: {
       onSuccess: (data) => {
         console.log("Login successful:", data);
-        // navigate("/cook/dashboard"); 
+        
+        // Store user data in localStorage
+        const userData = {
+          id: data.id,
+          name: data.name,
+          email: data.email
+        };
+        
+        // If remember me is checked, store in localStorage
+        // Otherwise, use sessionStorage (clears on browser close)
+        if (rememberMe) {
+          localStorage.setItem('userData', JSON.stringify(userData));
+        } else {
+          sessionStorage.setItem('userData', JSON.stringify(userData));
+        }
+        
+        // Store token if available
+        if (data.token) {
+          localStorage.setItem('authToken', data.token);
+        }
+        
+        navigate("/cook/dashboard");
       },
       onError: (error) => {
         console.error("Login failed:", error);
+        
+        // Extract the error message from the API response
+        if (error.response && error.response.data && error.response.data.error) {
+          setApiError(error.response.data.error);
+        } else {
+          setApiError("Login failed. Please try again.");
+        }
       },
     },
   });
@@ -26,8 +55,16 @@ export const LoginForm = () => {
   return (
     <form onSubmit={formik.handleSubmit} className="space-y-6">
       <div className="text-center mb-6">
-    
+        {/* Header content can go here */}
       </div>
+      
+      {/* Display API error message */}
+      {apiError && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+          <strong className="font-bold">Error: </strong>
+          <span className="block sm:inline">{apiError}</span>
+        </div>
+      )}
 
       <div className="space-y-4">
         <InputField
@@ -54,16 +91,16 @@ export const LoginForm = () => {
             onBlur={formik.handleBlur}
             error={formik.touched.password && formik.errors.password}
           />
-         <button
-  type="button"
-  onClick={togglePasswordVisibility}
-  className="absolute right-3 top-9 text-gray-500"
->
-  {showPassword ? 
-    <FiEyeOff size={20} fill="none" stroke="currentColor" /> : 
-    <FiEye size={20} fill="none" stroke="currentColor" />
-  }
-</button>
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className="absolute right-3 top-9 text-gray-500"
+          >
+            {showPassword ? 
+              <FiEyeOff size={20} fill="none" stroke="currentColor" /> : 
+              <FiEye size={20} fill="none" stroke="currentColor" />
+            }
+          </button>
         </div>
       </div>
 
