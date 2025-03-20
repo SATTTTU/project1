@@ -19,6 +19,7 @@ import {
   FaUser,
   FaUtensils,
 } from "react-icons/fa";
+import { useCookLogout } from "@/modules/cook/auth/api/cooklogout";
 
 const CookNavBAr = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -37,6 +38,16 @@ const CookNavBAr = () => {
     if (path.includes("/cook/menu")) return "/cook/menu";
     return "";
   });
+  const { logout, isLoading } = useCookLogout();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      window.location.href = "/"; // Redirect after logout
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
+  };
 
   const handleItemClick = (path) => {
     setActiveItem(path);
@@ -228,8 +239,8 @@ const CookNavBAr = () => {
                     to={"/"}
                     className="w-full flex items-center gap-2 p-2 rounded-md hover:bg-gray-100 text-sm text-red-600"
                   >
-                    <LogOut className="h-4 w-4" />
-                    <span>Logout</span>
+                    <LogOut className="h-4 w-4" onClick={handleLogout} disabled={isLoading} />
+                    <span> {isLoading ? "Logging out..." : "Logout"}</span>
                   </Link>
                 </div>
               </div>

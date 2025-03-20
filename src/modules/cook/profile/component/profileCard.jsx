@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Camera, Loader2 } from 'lucide-react';
-import { useProfileForm } from '../hooks/useProfileForm';
+import { useVideoFormik } from '../formik/usevideoupload';
+
 
 const ProfileCard = ({ userData }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [imagePreview, setImagePreview] = useState(userData.profileImage);
 
-  const { formik, isSubmitting } = useProfileForm({
+  const { formik, isSubmitting } = useVideoFormik({
     fullName: userData.fullName,
     bio: userData.bio,
     phone: userData.phone,

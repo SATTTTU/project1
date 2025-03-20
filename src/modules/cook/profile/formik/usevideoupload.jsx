@@ -3,8 +3,9 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import { api } from "@/lib/api-client";
-import { VideoSchema } from "./schema/authschema";
-import { useCookVideo } from "../api/cookVideo";
+
+import { useProfile } from "../api/cookprofile";
+import { VideoUploadSchema } from "./schema/videoschema";
 
 export const useVideoFormik = (config = { 
   mutationConfig: { 
@@ -14,7 +15,7 @@ export const useVideoFormik = (config = {
 }) => {
   const navigate = useNavigate();
   
-  const { mutateAsync, isLoading: isLoggingIn } = useCookVideo({
+  const { mutateAsync, isLoading: isLoggingIn } = useProfile ({
     mutationConfig: {
       onSuccess: (data) => {
         localStorage.setItem("authToken", data.token);
@@ -40,7 +41,7 @@ export const useVideoFormik = (config = {
       email: "",
       password: "",
     },
-    validationSchema: toFormikValidationSchema(VideoSchema),
+    validationSchema: toFormikValidationSchema(VideoUploadSchema),
     validateOnBlur: true,
     validateOnChange: false,
     onSubmit: async (values, helpers) => {

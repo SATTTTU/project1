@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Lock, Mail, Eye, EyeOff, Loader2 } from 'lucide-react';
-import { useProfileForm } from '../hooks/useProfileForm';
+import { useProfileForm } from '../formik/schema/cookprofileschema';
+
 
 const AccountSettings = () => {
   const [isEditingEmail, setIsEditingEmail] = useState(false);
