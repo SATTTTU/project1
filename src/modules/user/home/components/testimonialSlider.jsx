@@ -141,8 +141,8 @@ export const TestimonialSlider = () => {
             </Swiper>
           )}
 
-          <div className="swiper-button-prev !absolute !left-0 !top-1/2 !-translate-y-1/2 !z-10 !bg-[#426B1F] !w-10 !h-10 !rounded-full !flex !items-center !justify-center !text-white after:!text-lg after:!content-['prev']  !shadow-md"></div>
-          <div className="swiper-button-next !absolute !right-0 !top-1/2 !-translate-y-1/2 !z-10 !bg-[#426B1F] !w-10 !h-10 !rounded-full !flex !items-center !justify-center !text-white after:!text-lg after:!content-['next']  !shadow-md"></div>
+          <div className="swiper-button-prev !absolute !left-0 !top-1/2 !-translate-y-1/2 !z-10 !bg-[#84c749] !w-10 !h-10 !rounded-full !flex !items-center !justify-center !text-white after:!text-lg after:!content-['prev']  !shadow-md"></div>
+          <div className="swiper-button-next !absolute !right-0 !top-1/2 !-translate-y-1/2 !z-10 !bg-[#84c749] !w-10 !h-10 !rounded-full !flex !items-center !justify-center !text-white after:!text-lg after:!content-['next']  !shadow-md"></div>
 
           <div className="testimonial-pagination mx-auto space-x-4 text-center mt-16 flex justify-center"></div>
         </div>

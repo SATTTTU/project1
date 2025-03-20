@@ -1,21 +1,34 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { storeCartItem } from "../api/addItems";
+import { fetchCartItems, storeCartItem, removeCartItem } from "../../cart/api/addItems";
 
-export const useStoreCartItem = () => {
-  const queryClient = useQueryClient(); 
+export const useStoreCart = () => {
+  const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: storeCartItem, 
-    onSuccess: (data) => {
-        console.log("data",data)
+  // Fetch Cart Items
+  const { data: cartItems, isLoading } = useQuery(["cart"], fetchCartItems);
+
+  // Add Item Mutation
+  const addToCart = useMutation(storeCartItem, {
+    onSuccess: () => {
       toast.success("Item added to cart successfully! 🛒");
-
-      
-      queryClient.invalidateQueries(["userBasket"]);
+      queryClient.invalidateQueries(["cart"]); // Refresh cart
     },
-    onError: (error) => {
-      toast.error(error.response?.data?.message || "Failed to add item to cart!");
+    onError: () => {
+      toast.error("Failed to add item to cart!");
     },
   });
+
+  // Remove Item Mutation
+  const removeFromCart = useMutation(removeCartItem, {
+    onSuccess: () => {
+      toast.success("Item removed from cart!");
+      queryClient.invalidateQueries(["cart"]);
+    },
+    onError: () => {
+      toast.error("Failed to remove item from cart!");
+    },
+  });
+
+  return { cartItems, isLoading, addToCart, removeFromCart };
 };

@@ -1,99 +1,76 @@
-import React, { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import { FiStar, FiClock } from "react-icons/fi";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import { storeCartItem } from "../../cart/api/addItems";
+import React from "react";
+import { useMenuItems } from "../api/get-items";
 
-export const PopularItems = ({ popularItems, userId }) => {
-  const [addedToCart, setAddedToCart] = useState(null);
-  const queryClient = useQueryClient();
+export const PopularItems = () => {
+	const { data: menuItems, isLoading, error } = useMenuItems();
 
-  const { mutate: handleAddToCart, isLoading } = useMutation({
-    mutationFn: ({ productId }) => storeCartItem({ userId, productId, quantity: 1 }),
-    onSuccess: (data, { productId }) => {
-      setAddedToCart(productId); // Set added item
-      toast.success("Item added to cart! 🛒");
-      queryClient.invalidateQueries(["userBasket"]); // Refresh cart
-    },
-    onError: () => {
-      toast.error("Failed to add item to cart!");
-    },
-  });
+	if (isLoading) {
+		return (
+			<div className="p-6 text-center">
+				<div className="animate-pulse">Loading menu items...</div>
+			</div>
+		);
+	}
 
-  return (
-    <section className="mb-8">
-      <h2 className="mb-4 text-xl font-bold text-center">Popular Items</h2>
-      <div className="relative">
-        <Swiper
-          modules={[Navigation, Pagination, Autoplay]}
-          spaceBetween={30}
-          slidesPerView={1}
-          breakpoints={{
-            640: { slidesPerView: 1 },
-            768: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
-          }}
-          navigation
-          pagination={{ clickable: true }}
-          autoplay={{ delay: 3000 }}
-          className="pb-30"
-        >
-          {popularItems.map((item) => (
-            <SwiperSlide key={item.productId}>
-              <FoodItemCard 
-                item={item} 
-                handleAddToCart={handleAddToCart} 
-                addedToCart={addedToCart} 
-                isLoading={isLoading}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
-    </section>
-  );
-};
+	if (error) {
+		return (
+			<div className="p-6 text-center text-red-500">
+				Error loading menu items: {error.message}
+			</div>
+		);
+	}
 
-const FoodItemCard = ({ item, handleAddToCart, addedToCart, isLoading }) => {
-  return (
-    <div className="overflow-hidden bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-      <div className="relative">
-        <img
-          src={item.img || "/placeholder.svg"}
-          alt={item.name}
-          className="object-cover w-full h-48 md:h-56 lg:h-64"
-        />
-        {item.rating && (
-          <div className="absolute top-2 right-2 bg-white px-2 py-1 rounded-md shadow-md flex items-center">
-            <FiStar className="text-yellow-500 fill-current mr-1" />
-            <span className="font-medium">{item.rating}</span>
-          </div>
-        )}
-        {item.preparationTime && (
-          <div className="absolute bottom-2 left-2 bg-black bg-opacity-70 px-2 py-1 rounded-full text-white text-xs flex items-center">
-            <FiClock className="mr-1" />
-            <span>{item.preparationTime}</span>
-          </div>
-        )}
-      </div>
-      <div className="p-3">
-        <h3 className="text-lg font-medium">{item.name}</h3>
-        <p className="mb-3 text-lg font-bold">Rs. {item.price}</p>
-        <button
-          onClick={() => handleAddToCart({ productId: item.productId })}
-          disabled={isLoading}
-          className={`w-full py-3 rounded-xl text-white transition-all duration-300 ${
-            addedToCart === item.productId ? "bg-green-700" : "bg-green-600 hover:bg-green-700"
-          }`}
-        >
-          {isLoading ? "Adding..." : addedToCart === item.productId ? "Added to Cart!" : "Order Now"}
-        </button>
-      </div>
-    </div>
-  );
+	if (!menuItems || menuItems.length === 0) {
+		return (
+			<div className="p-6 text-center">
+				No menu items available at the moment.
+			</div>
+		);
+	}
+
+	return (
+		<div className="container mx-auto p-4">
+			<h2 className="text-2xl font-bold mb-6">Our Menu</h2>
+
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+				{menuItems.map((item) => (
+					<div
+						key={item.id}
+						className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+					>
+						{item.image && (
+							<div className="h-48 overflow-hidden">
+								<img
+									src={item.image}
+									alt={item.name}
+									className="w-full h-full object-cover"
+								/>
+							</div>
+						)}
+
+						<div className="p-4">
+							<div className="flex justify-between items-start">
+								<h3 className="text-lg font-bold">{item.name}</h3>
+								<span className="text-green-600 font-semibold">
+									Rs. {parseFloat(item.price).toFixed(2)}
+								</span>
+							</div>
+
+							{item.description && (
+								<p className="text-gray-600 mt-2 text-sm">
+									{item.description.length > 100
+										? `${item.description.substring(0, 100)}...`
+										: item.description}
+								</p>
+							)}
+
+							<button className="mt-4 bg-[#426B1F] text-white px-4 py-2 rounded-md w-full hover:bg-[#375a1a] transition-colors">
+								Add to Cart
+							</button>
+						</div>
+					</div>
+				))}
+			</div>
+		</div>
+	);
 };

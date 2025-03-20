@@ -1,12 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useCategoryItems } from "../api/getCategories";
 
-export const CategorySection = ({ categories }) => {
+export const CategorySection = () => {
+    const { data: popularCategory } = useCategoryItems();
+  
+
   return (
     <section className="mb-12">
       <h2 className="mb-6 text-2xl text-center font-bold text-gray-800">Popular Categories</h2>
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-6 rounded-2xl">
-        {categories.map((category, index) => (
+        {popularCategory?.map((category, index) => (
           <Link
             to={`/category/${category.id}`}
             key={index}

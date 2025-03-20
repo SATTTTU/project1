@@ -9,11 +9,15 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const adminToken = localStorage.getItem("admin_token");
     const cookToken = localStorage.getItem("cook_token");
+    const userToken = localStorage.getItem("user_token");
+    
 
     if (adminToken) {
       setUser({ type: "admin", token: adminToken });
     } else if (cookToken) {
       setUser({ type: "cook", token: cookToken });
+    } else if (userToken) {
+      setUser({ type: "user", token: userToken });
     } else {
       setUser(null);
     }
@@ -28,6 +32,11 @@ export const AuthProvider = ({ children }) => {
     } else if (userData?.type === "cook") {
       localStorage.setItem("cook_token", token);
       localStorage.removeItem("admin_token"); // Ensure admin token is cleared
+    }else if (userData?.type === "user") {
+      localStorage.setItem("user_token", token);
+      localStorage.removeItem("admin_token");
+      localStorage.removeItem("cook_token");
+       // Ensure admin token is cleared
     }
     setUser({ type: userData.type, token });
   };

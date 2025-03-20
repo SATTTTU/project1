@@ -30,22 +30,51 @@ const ProtectedRoute = ({ allowedRoles = [] }) => {
   if (isAuthenticated) {
     const hasRequiredRole =
       allowedRoles.length === 0 || allowedRoles.includes(user?.type);
-
+    
     if (!hasRequiredRole) {
+      // Redirect based on user type and current path
       if (user?.type === "cook" && location.pathname.startsWith("/admin")) {
-        return <Navigate to="/admin/login" replace state={{ from: location }} />;
+        return <Navigate to="/cook/dashboard" replace state={{ from: location }} />;
+      }
+      if (user?.type === "cook" && location.pathname.startsWith("/user")) {
+        return <Navigate to="/cook/dashboard" replace state={{ from: location }} />;
       }
       if (user?.type === "admin" && location.pathname.startsWith("/cook")) {
         return <Navigate to="/admin/dashboard" replace state={{ from: location }} />;
       }
-      return <Navigate to={user?.type === "admin" ? "/admin/dashboard" : "/admin/login"} replace state={{ from: location }} />;
+      if (user?.type === "admin" && location.pathname.startsWith("/user")) {
+        return <Navigate to="/admin/dashboard" replace state={{ from: location }} />;
+      }
+      if (user?.type === "user" && location.pathname.startsWith("/user")) {
+        return <Navigate to="/user/dashboard" replace state={{ from: location }} />;
+      }
+      if (user?.type === "user" && location.pathname.startsWith("/cook")) {
+        return <Navigate to="/user/dashboard" replace state={{ from: location }} />;
+      }
+      
+      // Default redirects based on user type
+      const defaultRedirects = {
+        admin: "/admin/dashboard",
+        cook: "/cook/dashboard",
+        user: "/user/dashboard"
+      };
+      
+      return <Navigate to={defaultRedirects[user?.type] || "/"} replace state={{ from: location }} />;
     }
     return <Outlet />;
   }
 
-  const loginPath = location.pathname.startsWith("/admin")
-    ? "/admin/login"
-    : "/cook/login";
+  // Fixed logic for unauthenticated users
+  let loginPath = "/login"; // Default fallback
+  
+  if (location.pathname.includes("/admin")) {
+    loginPath = "/admin/login";
+  } else if (location.pathname.includes("/cook")) {
+    loginPath = "/cook/login";
+  } else if (location.pathname.includes("/user")) {
+    loginPath = "/user/login";
+  }
+  
   return <Navigate to={loginPath} replace state={{ from: location }} />;
 };
 

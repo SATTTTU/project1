@@ -18,7 +18,7 @@ export const Navbar = () => {
             <div className="bg-white shadow-sm sticky top-0 z-50">
                 <div className="container mx-auto px-4 py-3">
                     <div className="flex items-center justify-between">
-                        <Link to="/user/home" className="flex items-center">
+                        <Link to="/user/dashboard" className="flex items-center">
                             <img
                                 src={Logo || "/placeholder.svg"}
                                 alt="KhanaBox"
@@ -28,9 +28,7 @@ export const Navbar = () => {
                         </Link>
 
                         <div className="flex items-center space-x-4">
-                            <button className="px-4 py-1.5 bg-green-600 text-white rounded-full text-sm">
-                                Special Offers
-                            </button>
+                            
                             <button className="px-4 py-1.5 border border-gray-300 rounded-full text-sm">
                                 Track Order
                             </button>

@@ -47,7 +47,7 @@ export const Header = () => {
 							to="/authpage"
 							className="text-white lg:text-xl hover:text-green-400 transition-colors text-sm font-medium"
 						>
-							Login/Register
+							Login/Registerss
 						</Link>
 					</div>
 

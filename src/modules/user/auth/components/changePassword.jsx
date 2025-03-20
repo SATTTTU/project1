@@ -20,8 +20,8 @@ export const ChangePasswordForm = () => {
 				toggleShowPassword={() => setShowCurrentPassword(!showCurrentPassword)}
 			/>
 		
-			{formik.errors.currentPassword && (
-				<p className="text-red-500 text-sm">{formik.errors.currentPassword}</p>
+			{formik.errors.oldpassword && (
+				<p className="text-red-500 text-sm">{formik.errors.oldpassword}</p>
 			)}
 
 			<PasswordInput
@@ -32,8 +32,8 @@ export const ChangePasswordForm = () => {
 				showPassword={showNewPassword}
 				toggleShowPassword={() => setShowNewPassword(!showNewPassword)}
 			/>
-			{formik.errors.newPassword && (
-				<p className="text-red-500 text-sm">{formik.errors.newPassword}</p>
+			{formik.errors.newpassword && (
+				<p className="text-red-500 text-sm">{formik.errors.newpassword}</p>
 			)}
 
 			<PasswordInput

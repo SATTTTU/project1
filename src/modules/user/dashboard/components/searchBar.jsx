@@ -11,7 +11,6 @@ export const SearchBar = ({ navigate, popularItems, categories, cooks, handleAdd
     cooks: [],
   });
 
-  // Handle search input change
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
@@ -71,7 +70,6 @@ export const SearchBar = ({ navigate, popularItems, categories, cooks, handleAdd
     };
   }, []);
 
-  // Handle search result click
   const handleSearchResultClick = (type, id) => {
     setShowResults(false);
     if (type === "menuItem") {
