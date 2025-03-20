@@ -8,9 +8,10 @@ import {
   Trash,
   Utensils,
 } from "lucide-react";
-import ItemForm from "./ItemForm";
-import CategoryRow from "./CategoryRow";
-import ItemRow from "./ItemRow";
+import CategoryRow from "./categoryrow";
+import ItemForm from "./itemform";
+import ItemRow from "./itemrow";
+
 
 const MenuTable = ({
   categories,
