@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Camera, Loader2 } from 'lucide-react';
-import { useProfileForm } from '../api/cookprofile';
+import { useProfileForm } from '../formik/usecookprofile';
 
 const ProfileCard = ({ userData }) => {
   const [isEditing, setIsEditing] = useState(false);
