@@ -10,14 +10,5 @@ export default defineConfig({
       '@': path.resolve('src')
     }
   },
-  server: {
-    proxy: {
-      '/api': {
-        target: 'https://khajabox-backend.dev.tai.com.np', 
-        changeOrigin: false,
-        secure: false,
-        rewrite: (path) => path.replace(/^\/api/, ''), 
-      }
-    }
-  }
+ 
 });

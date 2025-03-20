@@ -1,4 +1,3 @@
-// components/ItemRow.jsx
 import React from "react";
 import { Edit, Trash } from "lucide-react";
 
@@ -14,7 +13,7 @@ const ItemRow = ({
       <td className="px-6 py-4 pl-12">
         <div className="flex items-center">
           <img
-            src={item.image || "/placeholder.svg"}
+            src={item.image_url || "/placeholder.svg"}
             alt={item.name}
             className="h-10 w-10 rounded-full object-cover mr-3"
           />

@@ -2,13 +2,12 @@ import React, { useState } from "react";
 import Label from "../../../../components/ui/label/label";
 import Button from "../../../../components/ui/button/Button";
 import Input from "../../../../components/ui/input/input";
-import { useAdminRegisterFormik } from "../../auth/formik/useAdminLogin";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-
+import { useAdminLoginFormik } from "../formik/useAdminlogin";
 const AdminLoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const { formik, isLoading } = useAdminRegisterFormik({
+  const { formik, isLoading } = useAdminLoginFormik({
     mutationConfig: {
       onSuccess: (data) => console.log("Admin Login Successful:", data),
       onError: (error) => console.error("Login failed:", error),

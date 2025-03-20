@@ -1,36 +1,42 @@
 import { useFormik } from "formik";
+import { toFormikValidationSchema } from "zod-formik-adapter";
 import { signInSchema } from "../schema/adminformSchema";
-import { useAdminRegister } from "../api/adminlogin";
+import { useAdminLogin } from "../api/adminlogin";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/context/useAuth";
 
-export const useAdminRegisterFormik = () => {
-  const { mutateAsync, isLoading, isError, error, isSuccess } = useAdminRegister();
+export const useAdminLoginFormik = () => {
+  const { mutateAsync, isLoading, isError, error, isSuccess } = useAdminLogin();
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
-    validate: (values) => {
+    validationSchema: toFormikValidationSchema(signInSchema), 
+    onSubmit: async (values, helpers) => {
       try {
-        // Validate using Zod schema
-        signInSchema.parse(values);
-        return {}; // No errors
-      } catch (err) {
-        // Convert Zod errors to Formik errors
-        const errors = {};
-        err.errors.forEach((issue) => {
-          errors[issue.path[0]] = issue.message;
-        });
-        return errors;
-      }
-    },
-    validateOnBlur: true,
-    onSubmit: async (values) => {
-      try {
-        await mutateAsync(values);
+        const response = await mutateAsync(values);
+        console.log("Login Response:", response); // Debugging
+
+        if (!response.token) {
+          throw new Error("No token received from server");
+        }
+
+        await login({ type: "admin" }, response.token);
+
+        toast.success("Login successfully");
         formik.resetForm();
+        navigate("/admin/dashboard")
       } catch (err) {
-        console.error(err);
+        console.error("Login Error:", err); // Debugging
+        const errorMessage =
+          err?.response?.data?.message || "An error occurred";
+        helpers.setErrors({ submit: errorMessage });
+        toast.error(errorMessage);
       }
     },
   });

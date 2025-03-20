@@ -1,34 +1,47 @@
 import { Outlet } from "react-router-dom";
 import AuthWrapperLayout from "../../../components/layout/auth/AuthWrapperLayout";
 
-export const AppRootErrorBoundary=()=>{
-    return <div>Something wrong</div>
+// ErrorBoundary Component
+export const AppRootErrorBoundary = ({ children }) => {
+  try {
+    return children;
+  } catch (error) {
+    console.error("Error Boundary Caught:", error);
+    return <div>Something went wrong. Please try again later.</div>;
+  }
 };
-export const AuthRoot =()=>{
-    return (
-        <AuthWrapperLayout>
-            <Outlet/>
-        </AuthWrapperLayout>
-    )
-}
-export const CookRoot =()=>{
-    return (
-        <>
-        <Outlet/>
-        </>
-    )
-}
-export const AdminRoot =()=>{
-    return (
-        <>
-        <Outlet/>
-        </>
-    )
-}
-export const UserRoot=()=>{
-    return (
-        <>
-        <Outlet/>
-        </>
-    )
-}
+
+// Root Components for Auth, Admin, Cook, and User
+export const AuthRoot = () => {
+  return (
+    <AppRootErrorBoundary>
+      <AuthWrapperLayout>
+        <Outlet />
+      </AuthWrapperLayout>
+    </AppRootErrorBoundary>
+  );
+};
+
+export const CookRoot = () => {
+  return (
+    <AppRootErrorBoundary>
+      <Outlet />
+    </AppRootErrorBoundary>
+  );
+};
+
+export const AdminRoot = () => {
+  return (
+    <AppRootErrorBoundary>
+      <Outlet />
+    </AppRootErrorBoundary>
+  );
+};
+
+export const UserRoot = () => {
+  return (
+    <AppRootErrorBoundary>
+      <Outlet />
+    </AppRootErrorBoundary>
+  );
+};

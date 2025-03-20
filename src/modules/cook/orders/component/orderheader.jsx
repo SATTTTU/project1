@@ -1,6 +1,6 @@
 // src/components/Orders/OrderHeader.jsx
 import React from "react";
-import { OrderStatusBadge } from "./OrderStatusBadge";
+import { OrderStatusBadge } from "./orderstatusbadge";
 
 export const OrderHeader = ({ order }) => {
   return (

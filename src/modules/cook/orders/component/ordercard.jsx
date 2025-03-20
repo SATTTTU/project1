@@ -1,9 +1,9 @@
 // src/components/Orders/OrderCard.jsx
 import React from "react";
-import { OrderHeader } from "./OrderHeader";
-import { OrderDetails } from "./OrderDetails";
-import { OrderItems } from "./OrderItems";
-import { OrderActions } from "./OrderActions";
+import { OrderHeader } from "./orderheader";
+import { OrderDetails } from "./orderdetails";
+import { OrderItems } from "./orderitems";
+import { OrderActions } from "./orderactions";
 
 export const OrderCard = ({ order, updateOrderStatus }) => {
   return (

@@ -1,5 +1,7 @@
-import { ResetPassword } from "@/modules/cook/auth/resetpassword/resetpassword"
+import { ResetPassword } from "../../user/auth/reset-password";
 
-export const ResetPasswordRoute =()=>{
-    <h1><ResetPassword/></h1>
-}
+export const ResetPasswordRoute = () => {
+	<h1>
+		<ResetPassword />
+	</h1>;
+};

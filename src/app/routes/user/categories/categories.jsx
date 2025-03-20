@@ -4,14 +4,17 @@ import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { addToCart } from "../../../../store/cart/cart";
-import { categoriesData, allFoodItems } from "@/modules/user/CategoriesSection/components/Data";
-import { Navbar } from "@/modules/user/CategoriesSection/components/Navbar";
-import BackButton from "@/modules/user/CategoriesSection/components/Button";
-import { FilterBar } from "@/modules/user/CategoriesSection/components/FilterBar";
-import { CategoryHeader } from "@/modules/user/CategoriesSection/components/CategoryHeader";
-import FilterPanel from "@/modules/user/CategoriesSection/components/FilterPanel";
-import ItemsGrid from "@/modules/user/CategoriesSection/components/ItemsGrid";
-import EmptyState from "@/modules/user/CategoriesSection/components/EmptyState";
+import {
+	categoriesData,
+	allFoodItems,
+} from "@/modules/user/categories/components/data";
+import { Navbar } from "@/modules/user/categories/components/navbar";
+import BackButton from "@/modules/user/categories/components/button";
+import { FilterBar } from "@/modules/user/categories/components/filterBar";
+import { CategoryHeader } from "@/modules/user/categories/components/categoryHeader";
+import FilterPanel from "@/modules/user/categories/components/filterPanel";
+import ItemsGrid from "@/modules/user/categories/components/itemsGrid";
+import EmptyState from "@/modules/user/categories/components/emptyState";
 
 export const CategoryPage = () => {
   const { id } = useParams();

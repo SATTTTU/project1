@@ -53,13 +53,7 @@ export const userPaths = {
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
-	// homePage: {
-	// 	path: "/user/home",
-	// 	getHref: (redirectTo) =>
-	// 		`/user/home${
-	// 			redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
-	// 		}`,
-	// },
+
 	cart: {
 		path: "/user/cart",
 		getHref: (redirectTo) =>
@@ -103,9 +97,9 @@ export const userPaths = {
 			}`,
 	},
 	favourite: {
-		path: "/user/favourite",
+		path: "/profile/favourite",
 		getHref: (redirectTo) =>
-			`/user/favourite${
+			`/profile/favourite${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},

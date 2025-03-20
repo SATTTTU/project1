@@ -2,7 +2,9 @@ import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { AxiosError } from "axios";
 import { signUpSchema } from "./schema/authschema";
-import { useUserRegister } from "../api/register";
+import { useUserRegister } from "../api/registerUser";
+import { toast } from "react-toastify";  
+import "react-toastify/dist/ReactToastify.css"; 
 
 export const useUserRegisterFormik = (config = {}) => {
   const { mutateAsync, isLoading: isRegistering } = useUserRegister({
@@ -21,26 +23,52 @@ export const useUserRegisterFormik = (config = {}) => {
     onSubmit: async (values, helpers) => {
       try {
         const result = await mutateAsync(values);
-        helpers.setStatus({ success: true, message: 'Registration successful' });
+        helpers.setStatus({ success: true, message: "Registration successful" });
         helpers.resetForm();
+
+        toast.success("🎉 Registration successful!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+
         console.log("Registration successful:", result);
-        
-        // Let the component handle redirect if needed
+
         if (config?.mutationConfig?.onSuccess) {
           config.mutationConfig.onSuccess(result);
         }
       } catch (err) {
         console.error("Registration error:", err);
-        helpers.setStatus({ success: false });
-        
+        // helpers.setStatus({ success: false });
+
         if (err instanceof AxiosError && err.response) {
-          const message = err.response?.data?.message || "Registration failed";
-          helpers.setErrors({ submit: message });
+          const status = err.response?.status;
+          const message =
+            err.response?.data?.message || "Registration failed";
+
+          if (status === 422) {
+            // helpers.setErrors({ email: "This email is already registered. Please use a different email." });
+
+            toast.error(" This email is already registered. Try another one!", {
+              position: "top-right",
+              autoClose: 3000,
+            });
+          } else {
+            helpers.setErrors({ submit: message });
+
+            toast.error(`⚠️ ${message}`, {
+              position: "top-right",
+              autoClose: 3000,
+            });
+          }
         } else {
           helpers.setErrors({ submit: "An unexpected error occurred" });
+
+          toast.error("❌ An unexpected error occurred. Please try again later.", {
+            position: "top-right",
+            autoClose: 3000,
+          });
         }
-        
-        // Let the component handle error if needed
+
         if (config?.mutationConfig?.onError) {
           config.mutationConfig.onError(err);
         }
