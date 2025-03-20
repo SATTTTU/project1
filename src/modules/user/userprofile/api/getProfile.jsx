@@ -2,7 +2,7 @@ import { api } from "@/lib/api-client";
 import { useQuery } from "@tanstack/react-query";
 
 const fetchUserProfile = async () => {
-  const token = localStorage.getItem("token_user");
+  const token = localStorage.getItem("user_token");
 
   if (!token) {
     throw new Error("User not authenticated");

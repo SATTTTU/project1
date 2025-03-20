@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-// import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../../../store/cart/cart";
 import { Header } from "@/modules/user/dashboard/components/header";
@@ -8,9 +7,9 @@ import { Footer } from "@/modules/user/dashboard/components/footer";
 import { SearchBar } from "@/modules/user/dashboard/components/searchBar";
 import { categories, cooks, popularItems } from "@/modules/user/dashboard/components/data";
 import { PopularCooks } from "@/modules/user/dashboard/components/popularCooks";
-import { PopularItems } from "@/modules/user/dashboard/components/popularItemsSection";
 import { CategorySection } from "@/modules/user/dashboard/components/categoriesSection";
 import { PromotedRestaurants } from "@/modules/user/dashboard/components/filterBadges";
+import { PopularItems } from "@/modules/user/dashboard/components/popularItemsSection";
 // import UserLocation from "@/modules/user/dashboard/components/setLocation";
 
 export const Homepage = () => {
@@ -40,14 +39,9 @@ export const Homepage = () => {
       }),
     );
     
-    // Set animation state
     setAddedToCart(item.productId);
     
-    // Show success notification
-    // toast.success(`${item.name} added to cart!`, {
-    //   position: "bottom-right",
-    //   autoClose: 2000,
-    // });
+   
   };
 
   return (
@@ -75,7 +69,6 @@ export const Homepage = () => {
           handleAddToCart={handleAddToCart}
           addedToCart={addedToCart}
         />
-        {/* Use the component directly with correct syntax */}
         {/* <UserLocation /> */}
                 
         <Footer />

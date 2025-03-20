@@ -46,15 +46,15 @@ export const Home = () => {
           alt={heroSlide.title}
           className="absolute inset-0 w-full h-full object-cover z-0"
         />
-
         <div className="relative z-10 text-center text-white space-x-8">
+<p className="text-4xl mb-10 text-center flex justify-center items-center mx-auto">Login as </p>
           <Link to="/cook/login">
-            <button className="bg-[#426B1F] text-white font-medium text-2xl py-6 px-8 rounded-md transition-colors">
+            <button className="bg-[#426B1F] text-white font-medium text-2xl py-4 px-8 rounded-md transition-colors">
               Cook
             </button>
           </Link>
           <Link to="/user/login">
-            <button className="bg-[#426B1F] text-white font-medium text-2xl py-6 px-8 rounded-md transition-colors">
+            <button className="bg-[#426B1F] text-white font-medium text-2xl py-4 px-8 rounded-md transition-colors">
               User
             </button>
           </Link>
