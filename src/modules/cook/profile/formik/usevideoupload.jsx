@@ -4,8 +4,8 @@ import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import { api } from "@/lib/api-client";
 
-import { useProfile } from "../api/cookprofile";
 import { VideoUploadSchema } from "./schema/videoschema";
+import { useGetCookProfile } from "../api/cookprofile";
 
 export const useVideoFormik = (config = { 
   mutationConfig: { 
@@ -15,7 +15,7 @@ export const useVideoFormik = (config = {
 }) => {
   const navigate = useNavigate();
   
-  const { mutateAsync, isLoading: isLoggingIn } = useProfile ({
+  const { mutateAsync, isLoading: isLoggingIn } = useGetCookProfile ({
     mutationConfig: {
       onSuccess: (data) => {
         localStorage.setItem("authToken", data.token);
