@@ -1,6 +1,7 @@
 import React from "react";
-import OrderRequest from "./OrderRequest";
-import ActiveOrder from "./ActiveOrder";
+import OrderRequest from "./orderrequest";
+import ActiveOrder from "./activeorder";
+
 
 const OrderManagement = ({ orderRequests, activeOrders }) => {
   return (
