@@ -1,3 +1,5 @@
+// import { CartItem } from "./cartitem";
+
 import { CartItem } from "./cartitem";
 
 export const CartItems = ({ items, onQuantityChange, onRemoveItem }) => {

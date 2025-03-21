@@ -33,7 +33,7 @@ export const AboutTab = ({ cook }) => {
   
               <h3 className="font-bold text-lg mt-6 mb-3">Specialties</h3>
               <div className="flex flex-wrap gap-2">
-                {cook.specialties.map((specialty, index) => (
+                {cook.specialties?.map((specialty, index) => (
                   <span key={index} className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">
                     {specialty}
                   </span>

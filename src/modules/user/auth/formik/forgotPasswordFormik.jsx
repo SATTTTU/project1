@@ -1,12 +1,11 @@
 import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { forgotPasswordSchema } from "../formik/schema/authschema";
+import { forgotPasswordSchema } from "./schema/authschema";
+import { useForgotPassword } from "../api/forgotPassword";
 import { useNavigate } from "react-router-dom";
 
-import { useForgotPassword } from "../api/forgotPassword"; 
-
 export const useForgotPasswordFormik = () => {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const { mutateAsync, isLoading, isSuccess, isError, error } = useForgotPassword();
 
   const formik = useFormik({
@@ -16,20 +15,36 @@ export const useForgotPasswordFormik = () => {
     validationSchema: toFormikValidationSchema(forgotPasswordSchema),
     onSubmit: async (values, helpers) => {
       try {
-        const result = await mutateAsync(values);
-        navigate("/user/verification")
-        console.log("Forgot password response:", result);
-        
-        helpers.setStatus({ success: true, message: "Password reset email sent! Check your inbox." });
+        const response = await mutateAsync({ email: values.email });
+
+        if (response?.token?.token) {
+          localStorage.setItem("resetPasswordToken", response.token.token);
+          localStorage.setItem("resetPasswordEmail", values.email);
+
+          navigate(`/user/resetpassword`);
+        }
+
+        helpers.setStatus({
+          success: true,
+          message: response.message || "Check your email for the reset link.",
+        });
       } catch (err) {
         console.error("Error:", err);
-        helpers.setStatus({ success: false, message: "Failed to send reset email. Try again." });
+        helpers.setStatus({
+          success: false,
+          message: err.response?.data?.message || "Failed to send reset email.",
+        });
       } finally {
         helpers.setSubmitting(false);
       }
-    }
-    
+    },
   });
 
-  return { formik, isLoading, isSuccess, isError, error };
+  return {
+    formik,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  };
 };

@@ -1,19 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api-client";
 
-// Fetch user basket items
 const fetchUserBasket = async (userId) => {
+  if (!userId) return [];
   const response = await api.get("/api/baskets/index", {
-    params: { user_id: userId }, // Fetch cart items by user ID
+    params: { user_id: userId },
   });
-  return response.data; // Return the basket items
+  return response.data;
 };
 
-// React Query hook to fetch the basket
 export const useUserBasket = (userId) => {
   return useQuery({
-    queryKey: ["userBasket", userId], // Unique cache key for React Query
+    queryKey: ["userBasket", userId],
     queryFn: () => fetchUserBasket(userId),
-    enabled: !!userId, // Only fetch if userId exists
+    enabled: !!userId,
   });
 };

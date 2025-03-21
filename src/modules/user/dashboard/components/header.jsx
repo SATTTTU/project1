@@ -8,13 +8,13 @@ import {
 import { FaUserCircle } from "react-icons/fa";
 import { CiSettings } from "react-icons/ci";
 import Logo from "../../../../assets/logo.jpg";
-import { useProfile } from "../../userprofile/api/getProfile";
 import { useUserLogout } from "../../auth/api/logout";
+import { useProfile } from "../../userprofile/api/getProfile";
 
 export const Header = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const profileRef = useRef(null);
-  const { data: user, isLoading: isProfileLoading, isError } = useProfile();
+  const {  isLoading: isProfileLoading, isError } = useProfile();
   const { mutateAsync: logout, isLoading: isLoggingOut } = useUserLogout();
 
   useEffect(() => {
@@ -29,9 +29,59 @@ export const Header = () => {
     };
   }, []);
 
+    const [profileData, setProfileData] = useState({
+      name: "Your Name",
+      email: "yourname@gmail.com",
+      image: "/api/placeholder/80/80",
+      image_url: null,
+      isOnline: true,
+    });
   const toggleProfileMenu = () => {
     setShowProfileMenu(!showProfileMenu);
   };
+
+   const {
+     mutateAsync: fetchProfileData,
+   } = useProfile();
+
+    const getFullImageUrl = (imagePath) => {
+      if (!imagePath) return "/api/placeholder/80/80";
+  
+      // If it's already a full URL (starts with http/https)
+      if (imagePath.startsWith("http")) return imagePath;
+  
+      // Use your existing API_URL
+      // If your API_URL already includes a trailing slash, you might need to adjust this
+      const storageUrl = import.meta.env.VITE_APP_API_URL.endsWith("/")
+        ? `${import.meta.env.VITE_APP_API_URL}storage/`
+        : `${import.meta.env.VITE_APP_API_URL}/storage/`;
+      return `${storageUrl}${imagePath}`;
+    };
+  
+    useEffect(() => {
+      const loadProfileData = async () => {
+        try {
+          const data = await fetchProfileData();
+          if (data) {
+            setProfileData({
+              name: data.name || "Your Name",
+              email: data.email || "yourname@gmail.com",
+              image: data.image || "/api/placeholder/80/80",
+              image_url: data.image_url || null,
+              isOnline: data.isOnline !== undefined ? data.isOnline : true,
+            });
+          }
+        } catch (err) {
+          console.error("Failed to load profile data:", err);
+        }
+      }
+      loadProfileData();
+    }, [fetchProfileData]);
+
+    const profileImageSrc = profileData.image_url
+    ? getFullImageUrl(profileData.image_url)
+    : profileData.image || "/api/placeholder/80/80";
+
 
   const handleLogout = async () => {
     try {
@@ -75,8 +125,8 @@ export const Header = () => {
               {showProfileMenu && (
                 <div className="absolute right-0 lg:p-2 mt-2 w-48 bg-white rounded-md shadow-xl py-1 z-50 border border-slate-200">
                   <div className="px-4 flex flex-col items-center justify-center py-3 border-b border-slate-200">
-                    <FaUserCircle className="text-3xl text-[#426B1F]" />
-                    
+                    {/* <FaUserCircle className="text-3xl text-[#426B1F]" /> */}
+                    <img src={profileImageSrc} alt="image" />
                     {isProfileLoading ? (
                       <p className="text-sm text-gray-500">Loading...</p>
                     ) : isError ? (
@@ -84,10 +134,10 @@ export const Header = () => {
                     ) : (
                       <>
                         <p className="text-sm font-medium text-gray-900">
-                          {user?.name || "Guest"}
+                          {profileData.name}
                         </p>
                         <p className="text-xs text-gray-500 truncate">
-                          {user?.email || "No email available"}
+                          {profileData.email}
                         </p>
                       </>
                     )}

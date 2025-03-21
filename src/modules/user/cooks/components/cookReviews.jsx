@@ -27,7 +27,7 @@ export const CookReviews = ({ reviews, cookId, cookName, setCook }) => {
       )}
 
       <div className="space-y-6">
-        {reviews.map((review) => (
+        {reviews?.map((review) => (
           <ReviewCard key={review.id} review={review} />
         ))}
       </div>
