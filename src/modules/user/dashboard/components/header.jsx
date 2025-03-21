@@ -53,9 +53,9 @@ export const Header = () => {
           </Link>
 
           <div className="flex items-center space-x-4">
-            <button className="px-4 py-1.5 border border-gray-300 rounded-full text-sm hover:bg-gray-50 transition-colors">
+            {/* <button className="px-4 py-1.5 border border-gray-300 rounded-full text-sm hover:bg-gray-50 transition-colors">
               Track Order
-            </button>
+            </button> */}
 
             <Link
               to="/user/cart"

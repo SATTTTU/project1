@@ -3,7 +3,7 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 import { forgotPasswordSchema } from "../formik/schema/authschema";
 import { useNavigate } from "react-router-dom";
 
-import { useForgotPassword } from "../api/forgotPassword"; // API hook
+import { useForgotPassword } from "../api/forgotPassword"; 
 
 export const useForgotPasswordFormik = () => {
   const navigate=useNavigate()

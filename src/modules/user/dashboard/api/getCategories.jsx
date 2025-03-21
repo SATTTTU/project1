@@ -4,6 +4,7 @@ import { api } from '@/lib/api-client';
 // API function to fetch menu items
 export const getCategory = async () => {
   const response = await api.get('/api/cooks/get-menu');
+  
   return response.data;
 };
 

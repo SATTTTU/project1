@@ -3,7 +3,7 @@ import { FaEye } from "react-icons/fa";
 import { IoEyeOffSharp } from "react-icons/io5";
 import Label from "@/components/ui/label/label";
 import Input from "@/components/ui/input/input";
-import { useResetPasswordFormik } from "../../../../modules/user/auth/formik/resetPasswordFormik";
+import { useResetPasswordFormik } from "../formik/resetPasswordFormik";
 
 export const ResetPasswordForm = () => {
 	const { formik } = useResetPasswordFormik();
