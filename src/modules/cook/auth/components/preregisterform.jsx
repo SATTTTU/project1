@@ -53,7 +53,7 @@ export const PreRegisterForm = () => {
   };
   
   return (
-    <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+    <div className="bg-white p-8 rounded-lg  w-full max-w-md">
       <h2 className="text-2xl font-bold mb-6 text-center">Create Account</h2>
       
       {formik.status && !formik.status.success && (
@@ -105,7 +105,7 @@ export const PreRegisterForm = () => {
         <button
           type="submit"
           disabled={isRegistering || formik.isSubmitting}
-          className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300 disabled:bg-blue-400"
+          className="w-full bg-[#426B1F] text-white py-2 rounded-md hover:bg-[#426B1G] transition duration-300 disabled:bg-blue-400"
         >
           {isRegistering ? "Signing Up..." : "Sign Up"}
         </button>

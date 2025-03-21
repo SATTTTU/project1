@@ -3,7 +3,7 @@ import React from 'react';
 const TermsStep = ({ formik }) => {
   return (
     <div className="flex flex-col items-center max-w-2xl mx-auto">
-      <div className="w-full bg-white p-6 rounded-lg shadow-sm">
+      <div className="w-full bg-white p-6 rounded-lg ">
         <h2 className="text-2xl font-bold text-center mb-2">Terms and Conditions</h2>
         
         <h3 className="text-xl font-semibold text-center mb-4">Terms of Service</h3>

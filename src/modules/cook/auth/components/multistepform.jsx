@@ -168,7 +168,7 @@ const MultiStepForm = () => {
         </div>
         <button
           onClick={() => navigate('/cook/register')}
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          className="mt-4 px-4 py-2 bg-[#426B1F] text-white rounded hover:bg-[#426B1G]"
         >
           Go to Registration
         </button>
@@ -210,7 +210,7 @@ const MultiStepForm = () => {
           {isLastStep ? (
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center"
+              className="px-4 py-2 bg-[#426B1F] text-white rounded hover:bg-[#426B1G] flex items-center"
               disabled={formik.isSubmitting || isRegistering}
             >
               {formik.isSubmitting || isRegistering ? 'Submitting...' : 'Submit'}
@@ -220,7 +220,7 @@ const MultiStepForm = () => {
             <button
               type="button"
               onClick={handleNext}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center"
+              className="px-4 py-2 bg-[#426B1F] text-white rounded hover:bg-[#426B1H] flex items-center"
               disabled={formik.isSubmitting || isRegistering}
             >
               Next

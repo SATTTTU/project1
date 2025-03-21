@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Trash2, Award, Clock, Briefcase } from 'lucide-react';
-import { useAdminProfileEditFormik } from '@/modules/admin/editProfile/hooks/useAdminProfileEdit';
+import { useProfileForm } from '../formik/useupdatecookprofile copy';
 
 
 const AchievementsExperience = ({ userData }) => {
@@ -12,7 +12,7 @@ const AchievementsExperience = ({ userData }) => {
     year: new Date().getFullYear()
   });
 
-  const { formik, isSubmitting } = useAdminProfileEditFormik({
+  const { formik, isSubmitting } = useProfileForm({
     skills: userData.skills || [],
     yearsOfExperience: userData.yearsOfExperience || 0,
     qualifications: userData.qualifications || []
