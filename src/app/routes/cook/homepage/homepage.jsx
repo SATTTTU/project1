@@ -1,4 +1,5 @@
 import CookNavBAr from "@/components/ui/cooknavbar/cooknavbar";
+import CookLocation from "@/modules/cook/homepage/component/cooksetLocation";
 import DashboardHeader from "@/modules/cook/homepage/component/dashboardheader";
 import InsightsAnalytics from "@/modules/cook/homepage/component/insightsanlytics";
 import MenuManagement from "@/modules/cook/homepage/component/menumanagement";
@@ -23,6 +24,7 @@ export const Homepage = () => {
     <div className="flex h-screen flex-col">
       {/* Header */}
       <CookNavBAr />
+      <CookLocation/>
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
         {/* Main content */}

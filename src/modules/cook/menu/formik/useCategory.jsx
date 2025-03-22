@@ -13,10 +13,9 @@ export const useCategoryFormik = ({
   setEditingCategory,
 }) => {
   const initialCategory = editingCategory
-    ? categories.find((c) => c.id === editingCategory)
+    ? categories?.find((c) => c.id === editingCategory)
     : null;
 
-  // Initialize the API mutation hook
   const { mutateAsync, isLoading, isError, error, isSuccess } =
     useCreateCategory({
       mutationConfig: {

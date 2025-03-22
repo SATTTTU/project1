@@ -10,7 +10,7 @@ import { PopularCooks } from "@/modules/user/dashboard/components/popularCooks";
 import { CategorySection } from "@/modules/user/dashboard/components/categoriesSection";
 import { PromotedRestaurants } from "@/modules/user/dashboard/components/filterBadges";
 import { PopularItems } from "@/modules/user/dashboard/components/popularItemsSection";
-// import UserLocation from "@/modules/user/dashboard/components/setLocation";
+import UserLocation from "@/modules/user/dashboard/components/setLocation";
 
 export const Homepage = () => {
   const dispatch = useDispatch();
@@ -69,7 +69,7 @@ export const Homepage = () => {
           handleAddToCart={handleAddToCart}
           addedToCart={addedToCart}
         />
-        {/* <UserLocation /> */}
+        <UserLocation />
                 
         <Footer />
       </main>

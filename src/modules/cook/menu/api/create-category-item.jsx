@@ -9,7 +9,9 @@ const createCategoryItem = async (data) => {
     const endpoint =
       data.action === "update" && data.id
         ? `/api/cooks/store-menu-item/${data.category_id}/${data.id}`
-        : `/api/cooks/store-menu-item/${data.category_id}`;
+        : `/api/cooks/update-menu-item/${data.category_id},params`;
+        console.log("Updating menu with ID:", menuId);
+
 
     let requestData;
     if (data.image instanceof File) {

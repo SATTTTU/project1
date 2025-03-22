@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
 import axios from "axios"; // For API requests
-import { useSetLocation } from "../api/post-location";
-export const UserLocation = () => {
+import { UseSetCookLocation } from "../api/setLocation";
+
+export const CookLocation = () => {
   const [location, setLocation] = useState(null);
   const [place, setPlace] = useState(""); // To store the place name
   const [city, setCity] = useState(""); // To store the city name
   const [address, setAddress] = useState(""); // To store the full address
   const [locationError, setLocationError] = useState(""); // To store location fetch errors
   const [backendError, setBackendError] = useState(""); // To store backend error message
-  const [isPermissionGranted, setIsPermissionGranted] = useState(false);
   const [isLocationFetched, setIsLocationFetched] = useState(
     localStorage.getItem("locationSaved") === "true"
   );
+
   const { mutateAsync, isLoading, isError, error, isSuccess } =
-    useSetLocation();
+    UseSetCookLocation();
 
   const fetchLocation = async () => {
     if (!("geolocation" in navigator)) {
@@ -59,28 +60,26 @@ export const UserLocation = () => {
       setCity(cityName);
       setAddress(fullAddress);
 
-      try {
-        await mutateAsync({
-          latitude,
-          longitude,
-          city: cityName,
-          address: fullAddress,
-        });
+      // Send location data to backend
+      const locationData = {
+        latitude,
+        longitude,
+        city: cityName,
+        address: fullAddress,
+      };
+
+      await mutateAsync(locationData);
+      localStorage.setItem("locationSaved", "true");
+      setIsLocationFetched(true);
+    } catch (error) {
+      if (error.response?.status === 400) {
+        setBackendError("Your location is already stored.");
         localStorage.setItem("locationSaved", "true");
         setIsLocationFetched(true);
-      } catch (error) {
-        if (error.response?.status === 400) {
-          setBackendError("Your location is already stored.");
-          localStorage.setItem("locationSaved", "true");
-          setIsLocationFetched(true);
-        } else {
-          setBackendError("Error sending location to backend.");
-        }
-        console.error("Error sending location:", error);
+      } else {
+        setLocationError(error.message || "Error getting location.");
+        console.error("Error:", error);
       }
-    } catch (error) {
-      setLocationError(error.message || "Error getting location.");
-      console.error("Error:", error);
     }
   };
 
@@ -93,7 +92,7 @@ export const UserLocation = () => {
   if (isLocationFetched) {
     return (
       <div className="p-4">
-        <h1 className="text-2xl font-bold mb-4">User Location</h1>
+        <h1 className="text-2xl font-bold mb-4">Cook Location</h1>
         <p>
           Your location has already been stored. You cannot submit it again.
         </p>
@@ -103,15 +102,12 @@ export const UserLocation = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">User Location</h1>
-      {!isPermissionGranted && <p>Please allow location access to proceed.</p>}
+      <h1 className="text-2xl font-bold mb-4">Cook Location</h1>
       {isLoading && <p>Sending location...</p>}
       {isSuccess && <p>Location sent successfully!</p>}
       {isError && <p className="text-red-500">Error: {error.message}</p>}
-      {backendError && <p className="text-red-500">{backendError}</p>}{" "}
-      {/* Show backend error */}
-      {locationError && <p className="text-red-500">{locationError}</p>}{" "}
-      {/* Show location error */}
+      {backendError && <p className="text-red-500">{backendError}</p>}
+      {locationError && <p className="text-red-500">{locationError}</p>}
       {location ? (
         <>
           <p>
@@ -129,4 +125,4 @@ export const UserLocation = () => {
 };
 
 // Add default export
-export default UserLocation;
+export default CookLocation;

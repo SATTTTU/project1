@@ -37,7 +37,7 @@ export const ProfileCard = () => {
   } = useAdminProfile();
 
   // Function to get the full image URL
-  const getFullImageUrl = (imagePath) => {
+   const getFullImageUrl = (imagePath) => {
     if (!imagePath) return "/api/placeholder/80/80";
 
     // If it's already a full URL (starts with http/https)

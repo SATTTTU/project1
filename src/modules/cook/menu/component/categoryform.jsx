@@ -1,6 +1,6 @@
-// components/CategoryForm.jsx
+
 import React from "react";
-import { X } from "lucide-react";
+import { X } from 'lucide-react';
 import { useCategoryFormik } from "../formik/useCategory";
 
 const CategoryForm = ({
@@ -77,7 +77,7 @@ const CategoryForm = ({
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             placeholder="Enter category description"
-            rows="3"
+            rows={3}
             className={`flex-1 p-2 border rounded w-full ${
               formik.touched.description && formik.errors.description
                 ? "border-red-500"

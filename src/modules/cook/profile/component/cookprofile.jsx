@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useCookEditFormik } from "../formik/useupdatecookprofile";
+import LocationMap from "@/components/ui/locationMap/locationmap";
+import { UsegetCookLocation } from "../api/getCookLocation";
 
 
 export const ProfileCard = () => {
+  const {mutateAsync:fetchCookLOcation}=UsegetCookLocation();
   const { formik, isLoading } = useCookEditFormik();
   const [imagePreview, setImagePreview] = useState("/api/placeholder/200/200");
   const [isEditMode, setIsEditMode] = useState(false);
@@ -165,6 +168,10 @@ export const ProfileCard = () => {
               </div>
             )}
           </form>
+          <label htmlFor="">Your LOcation</label>
+          <LocationMap
+          fetchLocationFn={fetchCookLOcation}
+          title="cook location"/>
         </div>
       </div>
     </div>
