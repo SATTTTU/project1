@@ -20,7 +20,7 @@ export const ProfileContent = () => {
 
   // Use mutation to get location
   const { mutateAsync: fetchLocation, isLoading, isError
-    
+
   } = usegetLocation();
 
   const handleImageChange = (event) => {
