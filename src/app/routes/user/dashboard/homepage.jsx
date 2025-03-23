@@ -9,10 +9,8 @@ import { categories, cooks, popularItems } from "@/modules/user/dashboard/compon
 import { PopularCooks } from "@/modules/user/dashboard/components/popularCooks";
 import { CategorySection } from "@/modules/user/dashboard/components/categoriesSection";
 import { PromotedRestaurants } from "@/modules/user/dashboard/components/filterBadges";
-import { PopularItemsPage } from "@/modules/user/dashboard/components/popularItemsSection";
-// import PopularItems from "@/modules/cook/homepage/component/popularitem";
-// import { PopularItems } from "@/modules/user/dashboard/components/popularItemsSection";
-// import UserLocation from "@/modules/user/dashboard/components/setLocation";
+import { PopularItems } from "@/modules/user/dashboard/components/popularItemsSection";
+import UserLocation from "@/modules/user/dashboard/components/setLocation";
 
 export const Homepage = () => {
   
@@ -73,7 +71,7 @@ export const Homepage = () => {
           handleAddToCart={handleAddToCart}
           addedToCart={addedToCart}
         />
-        {/* <UserLocation /> */}
+        <UserLocation />
                 
         <Footer />
       </main>

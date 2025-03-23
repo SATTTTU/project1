@@ -1,7 +1,7 @@
 export const userData = {
   name: "Alka Rai",
   email: "alakarai@example.com",
-  phone: "+91 98765 43210",
+  phone: "+977 9800000000",
   address: "123 Main Street, Kathmandu",
   joinedDate: "January 2023",
   totalOrders: 156,

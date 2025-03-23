@@ -1,5 +1,6 @@
+
 import React from "react";
-import { Edit, Trash } from "lucide-react";
+import { Edit, Trash } from 'lucide-react';
 
 const ItemRow = ({
   item,
@@ -8,12 +9,27 @@ const ItemRow = ({
   handleDeleteItem,
   toggleItemAvailability,
 }) => {
+  // Function to construct the full image URL
+  const getFullImageUrl = (imagePath) => {
+    if (!imagePath) return "/api/placeholder/80/80";
+
+    // If it's already a full URL (starts with http/https)
+    if (imagePath.startsWith("http")) return imagePath;
+
+    // Use your existing API_URL
+    // If your API_URL already includes a trailing slash, you might need to adjust this
+    const storageUrl = import.meta.env.VITE_APP_API_URL.endsWith("/")
+      ? `${import.meta.env.VITE_APP_API_URL}storage/`
+      : `${import.meta.env.VITE_APP_API_URL}/storage/`;
+    return `${storageUrl}${imagePath}`;
+  };
+
   return (
     <tr className="hover:bg-gray-50">
       <td className="px-6 py-4 pl-12">
         <div className="flex items-center">
           <img
-            src={item.image_url || "/placeholder.svg"}
+            src={getFullImageUrl(item.image_url) || "/placeholder.svg"}
             alt={item.name}
             className="h-10 w-10 rounded-full object-cover mr-3"
           />
@@ -26,7 +42,7 @@ const ItemRow = ({
         </div>
       </td>
       <td className="px-6 py-4">
-        <span className="font-medium">₹{item.price}</span>
+        <span className="font-medium">${item.price}</span>
       </td>
       <td className="px-6 py-4">
         <div
@@ -49,13 +65,13 @@ const ItemRow = ({
       <td className="px-6 py-4 text-right space-x-2">
         <button
           onClick={() => handleEditItem(categoryId, item)}
-          className="text-blue-500 hover:text-blue-700"
+          className="text-blue-500 hover:text-blue-700 cursor-pointer"
         >
           <Edit size={18} />
         </button>
         <button
           onClick={() => handleDeleteItem(categoryId, item.id)}
-          className="text-red-500 hover:text-red-700"
+          className="text-red-500 hover:text-red-700 cursor-pointer"
         >
           <Trash size={18} />
         </button>

@@ -7,10 +7,20 @@ export const getSingleCook = (cookId) => {
 
 export const useGetSingleCook = (cookId, { mutationConfig } = {}) => {
   const mutation = useMutation({
-    mutationFn: () => getSingleCook(cookId),
+    mutationFn: async () => {
+      try {
+        console.log("Fetching cook with ID:", cookId); // Debugging
+        const response = await getSingleCook(cookId);
+        console.log("API Response:", response.data); // Debugging
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching cook:", error.response?.data || error);
+        throw error;
+      }
+    },
     ...mutationConfig,
   });
-  
+
   return {
     mutateAsync: mutation.mutateAsync,
     isLoading: mutation.isLoading,

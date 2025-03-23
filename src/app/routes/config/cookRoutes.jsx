@@ -19,7 +19,7 @@ export const cookRoutes = [
               const { RegisterPage } = await import(
                 "../cook/auth/registerpage"
               );
-              return { Component: RegisterPage };
+              return { Component: RegisterPage};
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
@@ -33,6 +33,7 @@ export const cookRoutes = [
             },
             ErrorBoundary: AppRootErrorBoundary,
           },
+         
           {
             path: paths.cook.login.path,
             lazy: async () => {

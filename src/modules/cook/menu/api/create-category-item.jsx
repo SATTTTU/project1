@@ -4,13 +4,18 @@ import { useMutation } from "@tanstack/react-query";
 const createCategoryItem = async (data) => {
   try {
     console.log("🔍 Sending request to API with data:", data);
-
-    const method = data.action === "update" ? "put" : "post";
-    const endpoint =
-      data.action === "update" && data.id
-        ? `/api/cooks/store-menu-item/${data.category_id}/${data.id}`
-        : `/api/cooks/store-menu-item/${data.category_id}`;
-
+    
+    // Check if it's an update operation and the ID is defined
+    const isUpdate = data.action === "update" && data.id !== undefined;
+    const method = isUpdate ? "put" : "post";
+    
+    // Fix the endpoint paths to match what's used in MenuTable
+    const endpoint = isUpdate
+      ? `/api/cooks/update-menu-item/${data.id}`  // Changed to match MenuTable format
+      : `/api/cooks/add-menu-item/${data.category_id}`; // Changed to match MenuTable format
+    
+    console.log("📬 API Call Method:", method, "Endpoint:", endpoint);
+    
     let requestData;
     if (data.image instanceof File) {
       const formData = new FormData();
@@ -18,9 +23,7 @@ const createCategoryItem = async (data) => {
       formData.append("description", data.description);
       formData.append("price", data.price.toString());
       formData.append("image", data.image);
-      if (data.category_id) {
-        formData.append("category_id", data.category_id.toString());
-      }
+      formData.append("category_id", data.category_id.toString()); // Always include category_id
       requestData = formData;
     } else {
       requestData = {
@@ -33,20 +36,20 @@ const createCategoryItem = async (data) => {
         requestData.image = data.image;
       }
     }
-
+    
     // Add authentication token
-    const token = localStorage.getItem("authToken"); // Adjust key based on your app
+    const token = localStorage.getItem("authToken");
     if (!token) {
       throw new Error("No authentication token found");
     }
-
+    
     const headers = {
       ...(data.image instanceof File ? { "Content-Type": "multipart/form-data" } : {}),
       Authorization: `Bearer ${token}`,
     };
-
+    
     const response = await api[method](endpoint, requestData, { headers });
-
+    
     console.log("✅ API Response:", response);
     return response;
   } catch (error) {
@@ -57,16 +60,14 @@ const createCategoryItem = async (data) => {
 
 export const useCreateCategoryItem = (options = {}) => {
   const { onSuccess, onError, ...mutationConfig } = options;
-
+  
   const mutation = useMutation({
     mutationFn: createCategoryItem,
     onSuccess,
     onError,
     ...mutationConfig,
   });
-
-  console.log("Mutation object:", mutation);
-
+  
   return {
     createCategoryItem: mutation.mutateAsync,
     isLoading: mutation.isLoading,

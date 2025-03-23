@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import {
   ChevronDown,
   ChevronUp,
@@ -7,28 +9,53 @@ import {
   Trash,
   Utensils,
 } from "lucide-react";
-import ItemForm from "./itemform";
+import { useCategory } from "../api/getCategory";
+import { useQueryClient } from "@tanstack/react-query";
+import { api } from "@/lib/api-client";
 import CategoryRow from "./categoryrow";
+import ItemFormModal from "./itemform";
 import ItemRow from "./itemrow";
+import { useUpdateMenu } from "../api/update-menu";
+import { useDeleteMenu } from "../api/deletecategory";
+import { useDeleteMenuItem } from "../api/deletemenu";
 
 const MenuTable = ({
-  categories,
-  setCategories,
-  showAddItem,
-  setShowAddItem,
-  editingItem,
-  setEditingItem,
-  newItem,
-  setNewItem,
-  resetItemForm,
   setEditingCategory,
   setNewCategory,
   setShowAddCategory,
 }) => {
+  const queryClient = useQueryClient();
+  const { data: categories = [], isLoading, error } = useCategory();
+
+  const [showAddItem, setShowAddItem] = useState(null);
+  const [editingItem, setEditingItem] = useState(null);
+  const [newItem, setNewItem] = useState({
+    name: "",
+    price: "",
+    description: "",
+    image: null,
+    imagePreview: null,
+    available: true,
+  });
+
+  // Reset the item form
+  const resetItemForm = () => {
+    setNewItem({
+      name: "",
+      price: "",
+      description: "",
+      image: null,
+      imagePreview: null,
+      available: true,
+    });
+    setEditingItem(null);
+    setShowAddItem(null);
+  };
+
   // Toggle category expansion
   const toggleCategory = (categoryId) => {
-    setCategories(
-      categories.map((category) =>
+    queryClient.setQueryData(["categories"], (oldData) =>
+      oldData.map((category) =>
         category.id === categoryId
           ? { ...category, isExpanded: !category.isExpanded }
           : category
@@ -37,111 +64,125 @@ const MenuTable = ({
   };
 
   // Delete category
-  const handleDeleteCategory = (categoryId) => {
-    setCategories(categories.filter((category) => category.id !== categoryId));
-  };
+ 
 
   // Add or edit item
-  const handleAddItem = (categoryId) => {
-    if (newItem.name.trim() && newItem.price) {
+  const handleAddItem = async (categoryId, values) => {
+    try {
       if (editingItem) {
         // Update existing item
-        setCategories(
-          categories.map((category) =>
-            category.id === categoryId
-              ? {
-                  ...category,
-                  items: category.items.map((item) =>
-                    item.id === editingItem
-                      ? {
-                          ...item,
-                          name: newItem.name,
-                          price: parseFloat(newItem.price),
-                          description: newItem.description,
-                          image: newItem.imagePreview || item.image,
-                          available: newItem.available,
-                        }
-                      : item
-                  ),
-                }
-              : category
-          )
-        );
+        await api.put(`/api/cooks/update-menu-item/${editingItem}`, {
+          ...values,
+          category_id: categoryId,
+        });
       } else {
         // Add new item
-        setCategories(
-          categories.map((category) =>
-            category.id === categoryId
-              ? {
-                  ...category,
-                  items: [
-                    ...category.items,
-                    {
-                      id: Date.now(),
-                      name: newItem.name,
-                      price: parseFloat(newItem.price),
-                      description: newItem.description,
-                      image: newItem.imagePreview || "/placeholder.svg",
-                      available: newItem.available,
-                    },
-                  ],
-                }
-              : category
-          )
-        );
+        await api.post(`/api/cooks/add-menu-item/${categoryId}`, values);
       }
+      queryClient.invalidateQueries(["categories"]);
       resetItemForm();
+    } catch (error) {
+      console.error("Error saving item:", error);
+    }
+  };
+
+  // Delete item
+  const { mutate: deleteCategory } = useDeleteMenu({
+    onSuccess: () => {
+      console.log("Category deleted successfully")
+      queryClient.invalidateQueries(["categories"])
+    },
+    onError: (error) => {
+      console.error("Error deleting category:", error)
+    },
+  })
+  const { mutate: deleteMenuItem } = useDeleteMenuItem({
+    onSuccess: () => {
+      console.log("Menu item deleted successfully!")
+      queryClient.invalidateQueries(["categories"])
+    },
+    onError: (error) => {
+      console.error("Error deleting menu item:", error)
+    },
+  })
+  const handleDeleteCategory = async (categoryId) => {
+    console.log("Deleting category with ID:", categoryId)
+    try {
+      deleteCategory(categoryId)
+    } catch (error) {
+      console.error("Error deleting category:", error)
+    }
+  }
+
+  const handleDeleteItem = async (categoryId, itemId) => {
+    console.log("Deleting item with ID:", itemId)
+    try {
+      deleteMenuItem(itemId)
+    } catch (error) {
+      console.error("Error deleting item:", error)
+    }
+  }
+  // Toggle item availability
+  const toggleItemAvailability = async (categoryId, itemId) => {
+    try {
+      await api.put(`/api/cooks/toggle-menu-item/${itemId}`);
+      queryClient.invalidateQueries(["categories"]);
+    } catch (error) {
+      console.error("Error toggling item availability:", error);
     }
   };
 
   // Start editing item
+  const { mutate: updateMenuItem } = useUpdateMenu({
+    onSuccess: () => {
+      console.log("Menu item updated successfully!");
+    },
+  });
+
   const handleEditItem = (categoryId, item) => {
     setNewItem({
       name: item.name,
       price: item.price,
       description: item.description,
       image: null,
-      imagePreview: item.image,
-      available: item.available,
+      imagePreview: item.image_url,
+      available: item.available ?? true,
     });
     setEditingItem(item.id);
     setShowAddItem(categoryId);
   };
 
-  // Delete item
-  const handleDeleteItem = (categoryId, itemId) => {
-    setCategories(
-      categories.map((category) =>
-        category.id === categoryId
-          ? {
-              ...category,
-              items: category.items.filter((item) => item.id !== itemId),
-            }
-          : category
-      )
-    );
+  // Function to call API when editing is confirmed
+  const saveEditedItem = () => {
+    if (!editingItem) return;
+    updateMenuItem({
+      menuId: editingItem, // Pass the item ID
+      data: newItem, // Pass the updated item data
+    });
   };
 
-  // Toggle item availability
-  const toggleItemAvailability = (categoryId, itemId) => {
-    setCategories(
-      categories.map((category) =>
-        category.id === categoryId
-          ? {
-              ...category,
-              items: category.items.map((item) =>
-                item.id === itemId
-                  ? { ...item, available: !item.available }
-                  : item
-              ),
-            }
-          : category
-      )
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#426B1F]"></div>
+      </div>
     );
-  };
+  }
+
+  if (error) {
+    return (
+      <div className="text-center text-red-500 p-4">
+        <p>Error loading menu: {error.message}</p>
+      </div>
+    );
+  }
+
+  // Find the current category when showAddItem is not null
+  const currentCategory =
+    showAddItem !== null ? categories.find((c) => c.id === showAddItem) : null;
 
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
+    <div className="bg-white rounded-lg shadow overflow-auto">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
@@ -175,43 +216,21 @@ const MenuTable = ({
           ) : (
             categories.map((category) => (
               <React.Fragment key={category.id}>
-                {/* Category Row */}
                 <CategoryRow
-                  categoryId={category.id} // Ensure category.id is being passed
+                  category={category}
                   toggleCategory={toggleCategory}
                   handleDeleteCategory={handleDeleteCategory}
-                  resetItemForm={resetItemForm}
                   setShowAddItem={setShowAddItem}
                   setEditingCategory={setEditingCategory}
                   setNewCategory={setNewCategory}
                   setShowAddCategory={setShowAddCategory}
                 />
 
-                {/* Add/Edit Item Form */}
-                {showAddItem === category.id && (
-                  <tr className="bg-gray-100">
-                    <td colSpan={4} className="px-6 py-4">
-                      <ItemForm
-                        category={category}
-                        newItem={newItem}
-                        setNewItem={setNewItem}
-                        editingItem={editingItem}
-                        resetItemForm={resetItemForm}
-                        handleAddItem={handleAddItem}
-                      />
-                    </td>
-                  </tr>
-                )}
-
-                {/* Item Rows */}
                 {category.isExpanded &&
-                  category.items.map((item) => (
+                  category.items?.map((item) => (
                     <ItemRow
                       key={item.id}
-                      item={{
-                        ...item,
-                        available: item.available ?? true, // Ensure 'available' exists
-                      }}
+                      item={item}
                       categoryId={category.id}
                       handleEditItem={handleEditItem}
                       handleDeleteItem={handleDeleteItem}
@@ -223,6 +242,18 @@ const MenuTable = ({
           )}
         </tbody>
       </table>
+
+      {showAddItem !== null && currentCategory && (
+        <ItemFormModal
+          category={currentCategory}
+          newItem={newItem}
+          setNewItem={setNewItem}
+          editingItem={editingItem}
+          handleAddItem={(values) => handleAddItem(showAddItem, values)}
+          onClose={resetItemForm}
+          visible={true}
+        />
+      )}
     </div>
   );
 };

@@ -133,7 +133,6 @@ function saveUserData(userType, token) {
     safeRemoveItem(STORAGE_KEYS.ADMIN_TOKEN);
     safeRemoveItem(STORAGE_KEYS.COOK_TOKEN);
     safeRemoveItem(STORAGE_KEYS.USER_TOKEN);
-
     safeRemoveItem(STORAGE_KEYS.AUTH_TOKEN);
 
     if (
@@ -173,7 +172,6 @@ function saveUserData(userType, token) {
 function authRequestInterceptor(config) {
   try {
     const token = getToken();
-
 
     config.headers = config.headers || {};
     config.headers.Accept = "application/json";
@@ -221,7 +219,6 @@ api.interceptors.response.use(
   }
 );
 
-// Function to clear all auth data (for logout)
 function clearAuthData() {
   try {
     safeRemoveItem(STORAGE_KEYS.USER_TYPE);

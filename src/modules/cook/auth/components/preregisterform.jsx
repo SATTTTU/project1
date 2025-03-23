@@ -3,94 +3,120 @@ import { Link, useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { InputField } from "@/components/ui/inputfield/InputField";
 import { useCookRegisterFormik } from "../formik/usefirstregister";
+
 export const PreRegisterForm = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-
+  
   const { formik, isRegistering } = useCookRegisterFormik({
     mutationConfig: {
       onSuccess: (data) => {
         console.log("Registration successful:", data);
-        navigate("/cook/verification"); // 👈 Navigate ONLY on success
+        
+        // Store user data in localStorage
+        const userData = {
+          id: data.id,
+          name: data.name,
+          email: data.email
+        };
+        
+        // Store user data in localStorage for persistence across the application
+        localStorage.setItem('userData', JSON.stringify(userData));
+        
+        // Store the cook_id specifically - this is what the document upload form needs
+        if (data.id) {
+          localStorage.setItem('cook_id', data.id);
+        }
+        
+        // For backwards compatibility, also store as clientId if that's what the server returns
+        if (data.clientId) {
+          localStorage.setItem('cookClientId', data.clientId);
+          // Also store as cook_id if that's the field your document form expects
+          localStorage.setItem('cook_id', data.clientId);
+        }
+        
+        if (data.token) {
+          localStorage.setItem('authToken', data.token);
+        }
+        
+        // Navigate to verification page after successful registration
+        navigate("/cook/verification");
       },
       onError: (error) => {
         console.error("Registration failed:", error);
       },
     },
   });
-
+  
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-
+  
   return (
-    <form onSubmit={formik.handleSubmit} className="w-full max-w-md">
-      <h1 className="text-3xl lg:text-4xl font-bold text-[#426B1F] mb-6">
-        Create Account
-      </h1>
-
+    <div className="bg-white p-8 rounded-lg  w-full max-w-md">
+      <h2 className="text-2xl font-bold mb-6 text-center">Create Account</h2>
+      
       {formik.status && !formik.status.success && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
+        <div className="bg-red-100 p-3 rounded mb-4 text-red-700">
           {formik.errors.submit || "Registration failed. Please try again."}
         </div>
       )}
-
-      <div className="space-y-4">
+      
+      <form onSubmit={formik.handleSubmit} className="space-y-4">
         <InputField
-          label="Name"
+          label="Full Name"
+          id="name"
           name="name"
           type="text"
-          value={formik.values.name}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.name && formik.errors?.name}
+          placeholder="Enter your full name"
+          {...formik.getFieldProps('name')}
+          error={formik.touched.name && formik.errors.name}
         />
+        
         <InputField
-          label="E-mail"
+          label="Email"
+          id="email"
           name="email"
           type="email"
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.email && formik.errors?.email}
+          placeholder="Enter your email"
+          {...formik.getFieldProps('email')}
+          error={formik.touched.email && formik.errors.email}
         />
+        
         <div className="relative">
           <InputField
             label="Password"
+            id="password"
             name="password"
             type={showPassword ? "text" : "password"}
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.password && formik.errors?.password}
+            placeholder="Create a password"
+            {...formik.getFieldProps('password')}
+            error={formik.touched.password && formik.errors.password}
           />
           <button
             type="button"
             onClick={togglePasswordVisibility}
-            className="absolute right-3 top-12 transform -translate-y-1/2 text-gray-500"
+            className="absolute right-3 top-9 text-gray-500"
           >
-            {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+            {showPassword ? <FiEyeOff /> : <FiEye />}
           </button>
         </div>
-      </div>
-
-      <button
-        type="submit"
-        disabled={isRegistering || !formik.isValid || formik.isSubmitting}
-        className="bg-[#426B1F] text-white px-4 py-2 rounded-md mt-6 w-full hover:bg-[#5c9429] transition disabled:bg-gray-400 disabled:cursor-not-allowed"
-      >
-        {isRegistering ? "Signing Up..." : "Sign Up"}
-      </button>
-
-      <p className="text-md mt-3 text-center text-black mb-6">
-        Already have an account?{" "}
-        <Link
-          to="/cook/login"
-          className="text-green-700 font-medium hover:underline"
+        
+        <button
+          type="submit"
+          disabled={isRegistering || formik.isSubmitting}
+          className="w-full bg-[#426B1F] text-white py-2 rounded-md hover:bg-[#426B1G] transition duration-300 disabled:bg-blue-400"
         >
+          {isRegistering ? "Signing Up..." : "Sign Up"}
+        </button>
+      </form>
+      
+      <p className="mt-4 text-center text-gray-600">
+        Already have an account?{" "}
+        <Link to="/cook/login" className="text-blue-600 hover:underline">
           Login Now
         </Link>
       </p>
-    </form>
+    </div>
   );
 };

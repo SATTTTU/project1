@@ -1,38 +1,186 @@
-import React from "react";
+import React, { useState } from 'react';
+import { Lock, Mail, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { useProfileForm } from '../formik/useupdatecookprofile copy';
 
 const AccountSettings = () => {
+
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState({
+    current: false,
+    new: false,
+    confirm: false
+  });
+
+  const { formik, isSubmitting } =useProfileForm({
+    email: '',
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+
+  const toggleShowPassword = (field) => {
+    setShowPassword({
+      ...showPassword,
+      [field]: !showPassword[field]
+    });
+  };
+
+
+
+  const handleCancelPassword = () => {
+    setIsChangingPassword(false);
+    formik.setFieldValue('currentPassword', '');
+    formik.setFieldValue('newPassword', '');
+    formik.setFieldValue('confirmPassword', '');
+  };
+
   return (
-    <div className="rounded-lg bg-white p-6 shadow-sm">
-      <h3 className="text-lg font-medium">Account Settings</h3>
-      <div className="mt-4 space-y-4">
-        <div className="flex items-center justify-between py-2">
-          <div>
-            <h4 className="font-medium">Notifications</h4>
-            <p className="text-sm text-gray-500">
-              Receive order and promotional notifications
-            </p>
+    <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+      <h2 className="text-xl font-semibold text-gray-800 mb-6">Account Settings</h2>
+
+      <div className="space-y-6">
+        {/* Email Settings */}
+       
+
+        {/* Password Settings */}
+        <div>
+          <div className="flex items-center mb-4">
+            <Lock className="h-5 w-5 text-blue-600 mr-2" />
+            <h3 className="font-medium text-gray-800">Password</h3>
           </div>
-          <label className="relative inline-flex cursor-pointer items-center">
-            <input type="checkbox" defaultChecked className="peer sr-only" />
-            <div className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-[#426B1F] peer-checked:after:translate-x-full"></div>
-          </label>
-        </div>
-        <div className="flex items-center justify-between py-2">
-          <div>
-            <h4 className="font-medium">SMS Alerts</h4>
-            <p className="text-sm text-gray-500">
-              Receive text messages for new orders
-            </p>
-          </div>
-          <label className="relative inline-flex cursor-pointer items-center">
-            <input type="checkbox" className="peer sr-only" />
-            <div className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-[#426B1F] peer-checked:after:translate-x-full"></div>
-          </label>
-        </div>
-        <div className="border-t pt-4">
-          <button className="text-red-600 hover:text-red-800">
-            Deactivate Account
-          </button>
+
+          {isChangingPassword ? (
+            <div>
+              {/* Current Password */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Current Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword.current ? "text" : "password"}
+                    name="currentPassword"
+                    value={formik.values.currentPassword}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    className="w-full p-2 border rounded-md pr-10"
+                    placeholder="Enter current password"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
+                    onClick={() => toggleShowPassword('current')}
+                  >
+                    {showPassword.current ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+                {formik.touched.currentPassword && formik.errors.currentPassword && (
+                  <p className="text-red-500 text-xs mt-1">{formik.errors.currentPassword}</p>
+                )}
+              </div>
+
+              {/* New Password */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  New Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword.new ? "text" : "password"}
+                    name="newPassword"
+                    value={formik.values.newPassword}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    className="w-full p-2 border rounded-md pr-10"
+                    placeholder="Enter new password"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
+                    onClick={() => toggleShowPassword('new')}
+                  >
+                    {showPassword.new ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+                {formik.touched.newPassword && formik.errors.newPassword && (
+                  <p className="text-red-500 text-xs mt-1">{formik.errors.newPassword}</p>
+                )}
+              </div>
+
+              {/* Confirm Password */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Confirm New Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword.confirm ? "text" : "password"}
+                    name="confirmPassword"
+                    value={formik.values.confirmPassword}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    className="w-full p-2 border rounded-md pr-10"
+                    placeholder="Confirm new password"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
+                    onClick={() => toggleShowPassword('confirm')}
+                  >
+                    {showPassword.confirm ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+                {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+                  <p className="text-red-500 text-xs mt-1">{formik.errors.confirmPassword}</p>
+                )}
+              </div>
+
+              <div className="flex space-x-2">
+                <button
+                  className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+                  onClick={handleCancelPassword}
+                  disabled={isSubmitting}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center"
+                  onClick={() => {
+                    formik.handleSubmit();
+                    if (!formik.errors.currentPassword && !formik.errors.newPassword && !formik.errors.confirmPassword) {
+                      setIsChangingPassword(false);
+                    }
+                  }}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                  Update Password
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex justify-between items-center">
+              <p className="text-gray-700">••••••••</p>
+              <button
+                className="text-blue-600 hover:text-blue-800"
+                onClick={() => setIsChangingPassword(true)}
+              >
+                Change Password
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
