@@ -19,7 +19,9 @@ export const ProfileContent = () => {
   const [location, setLocation] = useState(null);
 
   // Use mutation to get location
-  const { mutateAsync: fetchLocation, isLoading, isError } = usegetLocation();
+  const { mutateAsync: fetchLocation, isLoading, isError
+    
+  } = usegetLocation();
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
