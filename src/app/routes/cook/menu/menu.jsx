@@ -12,6 +12,7 @@ export const MenuPage = () => {
   const [showAddCategory, setShowAddCategory] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
   const [newCategory, setNewCategory] = useState("");
+  const [categories, setCategories] = useState([]);  // ✅ Add categories state
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -42,6 +43,8 @@ export const MenuPage = () => {
             {/* Add/Edit Category Form */}
             {showAddCategory && (
               <CategoryForm
+                categories={categories}           // ✅ Pass categories as prop
+                setCategories={setCategories}     // ✅ Pass setCategories as prop
                 newCategory={newCategory}
                 setNewCategory={setNewCategory}
                 editingCategory={editingCategory}
@@ -52,6 +55,8 @@ export const MenuPage = () => {
 
             {/* Categories and Items Table */}
             <MenuTable
+              categories={categories}            // ✅ Pass categories to MenuTable
+              setCategories={setCategories}      // ✅ Pass setCategories to MenuTable
               setEditingCategory={setEditingCategory}
               setNewCategory={setNewCategory}
               setShowAddCategory={setShowAddCategory}

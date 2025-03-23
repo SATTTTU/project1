@@ -1,4 +1,5 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { api } from "@/lib/api-client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const deleteMenu = (menuId) => {
     return api.delete(`/api/cooks/delete-menu/${menuId}`);

@@ -1,4 +1,3 @@
-// hooks/useCategoryFormik.js
 import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { toast } from "react-toastify";
@@ -7,7 +6,7 @@ import { useCreateCategory } from "../api/createCategory";
 
 export const useCategoryFormik = ({
   editingCategory,
-  categories,
+  categories=[],
   setCategories,
   setShowAddCategory,
   setEditingCategory,
@@ -19,8 +18,16 @@ export const useCategoryFormik = ({
   const { mutateAsync, isLoading, isError, error, isSuccess } =
     useCreateCategory({
       mutationConfig: {
-        onSuccess: () => {
-          console.log("Category created/updated successfully via API");
+        onSuccess: (response) => {
+          console.log("Category created/updated successfully via API", response);
+        },
+        onError: (error) => {
+          console.error("API Error:", error);
+          const errorMessage =
+            error.response?.data?.message ||
+            error.message ||
+            "An error occurred while saving the category";
+          toast.error(errorMessage);
         },
       },
     });
@@ -35,7 +42,7 @@ export const useCategoryFormik = ({
       try {
         const categoryName = values.name.trim();
         const categoryDescription = values.description.trim();
-
+    
         if (categoryName && categoryDescription) {
           if (editingCategory) {
             // Create API payload for updating
@@ -45,13 +52,13 @@ export const useCategoryFormik = ({
               description: categoryDescription,
               action: "update",
             };
-
+    
             // Call API to update category
             await mutateAsync(updatePayload);
-
+    
             // Update local state
             setCategories(
-              categories.map((category) =>
+              (categories || []).map((category) => // Ensure categories is an array
                 category.id === editingCategory
                   ? {
                       ...category,
@@ -65,32 +72,32 @@ export const useCategoryFormik = ({
             toast.success("Category updated successfully");
           } else {
             // Check if category already exists locally
-            const existingCategory = categories.find(
+            const existingCategory = (categories || []).find( // Ensure categories is an array
               (c) => c.name.toLowerCase() === categoryName.toLowerCase()
             );
-
+    
             if (existingCategory) {
               toast.info("Category already exists");
               return;
             }
-
+    
             // Create API payload for new category
             const createPayload = {
               name: categoryName,
               description: categoryDescription,
               action: "create",
             };
-
+    
             // Call API to create category
             const response = await mutateAsync(createPayload);
-
+    
             // Get the ID from API response if available, otherwise use local ID
-            const newId = Math.max(...categories.map((c) => c.id || 0), 0) + 1;
+            const newId = Math.max(...(categories || []).map((c) => c.id || 0), 0) + 1; // Ensure categories is an array
             const categoryId = response?.data?.id || newId;
-
+    
             // Add new category to local state
             setCategories([
-              ...categories,
+              ...(categories || []), // Ensure categories is an array
               {
                 id: categoryId,
                 name: categoryName,
@@ -101,14 +108,15 @@ export const useCategoryFormik = ({
             ]);
             toast.success("Category added successfully");
           }
-
+    
           resetForm();
           setShowAddCategory(false);
         }
       } catch (err) {
-        console.error("API Error Response:", err.response);
+        console.error("Submission Error:", err);
         const errorMessage =
           err?.response?.data?.message ||
+          err.message ||
           "An error occurred while saving the category";
         toast.error(errorMessage);
       } finally {

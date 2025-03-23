@@ -16,6 +16,8 @@ import CategoryRow from "./categoryrow";
 import ItemFormModal from "./itemform";
 import ItemRow from "./itemrow";
 import { useUpdateMenu } from "../api/update-menu";
+import { useDeleteMenu } from "../api/deletecategory";
+import { useDeleteMenuItem } from "../api/deletemenu";
 
 const MenuTable = ({
   setEditingCategory,
@@ -62,14 +64,7 @@ const MenuTable = ({
   };
 
   // Delete category
-  const handleDeleteCategory = async (categoryId) => {
-    try {
-      await api.delete(`/api/cooks/delete-category/${categoryId}`);
-      queryClient.invalidateQueries(["categories"]);
-    } catch (error) {
-      console.error("Error deleting category:", error);
-    }
-  };
+ 
 
   // Add or edit item
   const handleAddItem = async (categoryId, values) => {
@@ -92,15 +87,41 @@ const MenuTable = ({
   };
 
   // Delete item
-  const handleDeleteItem = async (categoryId, itemId) => {
+  const { mutate: deleteCategory } = useDeleteMenu({
+    onSuccess: () => {
+      console.log("Category deleted successfully")
+      queryClient.invalidateQueries(["categories"])
+    },
+    onError: (error) => {
+      console.error("Error deleting category:", error)
+    },
+  })
+  const { mutate: deleteMenuItem } = useDeleteMenuItem({
+    onSuccess: () => {
+      console.log("Menu item deleted successfully!")
+      queryClient.invalidateQueries(["categories"])
+    },
+    onError: (error) => {
+      console.error("Error deleting menu item:", error)
+    },
+  })
+  const handleDeleteCategory = async (categoryId) => {
+    console.log("Deleting category with ID:", categoryId)
     try {
-      await api.delete(`/api/cooks/delete-menu-item/${itemId}`);
-      queryClient.invalidateQueries(["categories"]);
+      deleteCategory(categoryId)
     } catch (error) {
-      console.error("Error deleting item:", error);
+      console.error("Error deleting category:", error)
     }
-  };
+  }
 
+  const handleDeleteItem = async (categoryId, itemId) => {
+    console.log("Deleting item with ID:", itemId)
+    try {
+      deleteMenuItem(itemId)
+    } catch (error) {
+      console.error("Error deleting item:", error)
+    }
+  }
   // Toggle item availability
   const toggleItemAvailability = async (categoryId, itemId) => {
     try {
@@ -222,7 +243,6 @@ const MenuTable = ({
         </tbody>
       </table>
 
-      {/* Only render the modal when we have a valid category */}
       {showAddItem !== null && currentCategory && (
         <ItemFormModal
           category={currentCategory}

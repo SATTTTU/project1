@@ -13,14 +13,14 @@ const CategoryRow = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Function to construct the full image URL
   const getFullImageUrl = (imagePath) => {
-    if (!imagePath) return "/placeholder.svg?height=80&width=80"; // Fallback for missing images
-    if (imagePath.startsWith("http")) return imagePath; // External URLs
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"; // Default fallback
-    const storageUrl = baseUrl.endsWith("/")
-      ? `${baseUrl}storage/`
-      : `${baseUrl}/storage/`;
+    if (!imagePath) return "/api/placeholder/80/80";
+
+    if (imagePath.startsWith("http")) return imagePath;
+
+    const storageUrl = import.meta.env.VITE_APP_API_URL.endsWith("/")
+      ? `${import.meta.env.VITE_APP_API_URL}storage/`
+      : `${import.meta.env.VITE_APP_API_URL}/storage/`;
     return `${storageUrl}${imagePath}`;
   };
 

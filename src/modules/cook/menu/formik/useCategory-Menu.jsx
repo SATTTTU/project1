@@ -50,14 +50,22 @@ export const useItemFormik = ({
       try {
         const data = {
           action: editingItem ? "update" : "create",
-          id: editingItem?.id,
+          id: editingItem, // Simply use editingItem directly as the ID
           name: values.name,
           description: values.description,
           price: Number(values.price),
           image: values.image,
           category_id: values.category_id || category?.id,
         };
+    
         console.log("Data being sent to API:", data);
+    
+        // Ensure that the correct action is being sent
+        if (data.action === "update" && !data.id) {
+          toast.error("ID is missing for update");
+          return;
+        }
+    
         await createCategoryItem(data);
         resetForm();
       } catch (err) {
@@ -68,6 +76,7 @@ export const useItemFormik = ({
         setSubmitting(false);
       }
     },
+    
   });
 
   return {
