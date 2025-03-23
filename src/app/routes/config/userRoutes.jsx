@@ -11,7 +11,7 @@ export const userRoutes = [
 	{
 		path: paths.user.root.path,
 		element: <Outlet />,
-		ErrorBoundary: AppRootErrorBoundary,
+		// ErrorBoundary: AppRootErrorBoundary,
 		children: [
 			{
 				element: <AuthRoot />,
@@ -25,7 +25,7 @@ export const userRoutes = [
 
 							return { Component: RegisterPage };
 						},
-						ErrorBoundary: AppRootErrorBoundary,
+						// ErrorBoundary: AppRootErrorBoundary,
 
 					},
 					{
@@ -81,6 +81,15 @@ export const userRoutes = [
 								"../../../modules/user/home/components/about"
 							);
 							return { Component: About };
+						},
+					},
+					{
+						path: paths.user.token.path,
+						lazy: async () => {
+							const { Verification } = await import(
+								"../../../modules/user/auth/components/verification"
+							);
+							return { Component: Verification };
 						},
 					},
 					{

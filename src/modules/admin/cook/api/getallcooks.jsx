@@ -1,5 +1,5 @@
 import { api } from "@/lib/api-client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation} from "@tanstack/react-query";
 
 // Get All Cooks API Call without parameters (fetch all)
 export const getAllCooks = () => {

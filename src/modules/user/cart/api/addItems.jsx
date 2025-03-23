@@ -5,5 +5,6 @@ export const storeCartItem = async ({ menu_item_id, quantity }) => {
     menu_item_id,
     quantity,
   });
+  console.log(response.data)
   return response.data;
 };

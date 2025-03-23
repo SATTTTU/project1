@@ -1,24 +1,32 @@
-import { useQuery } from '@tanstack/react-query';
-import { api } from '@/lib/api-client';
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/lib/api-client";
 
-// API function to fetch menu items
-export const getMenuItems = async () => {
-  const response = await api.get('/api/cooks/get-menu/${menuItemId}');
-  return response.data;
+// API function to fetch popular dishes
+export const getPopularDishes = async () => {
+  try {
+    const response = await api.get("/api/get-popular-dishes");
+
+    console.log("API Response:", response.data); // Debugging
+
+    // Ensure we return the correct structure
+    return response.data?.data || response.data;
+  } catch (error) {
+    console.error("Error fetching popular dishes:", error);
+    throw new Error("Failed to fetch popular dishes");
+  }
 };
 
-// Define query options for fetching menu items
-export const getMenuItemsQueryOptions = () => {
-  return {
-    queryKey: ['menuItems'],
-    queryFn: getMenuItems,
-  };
-};
+// Query options for react-query
+export const getPopularDishesQueryOptions = () => ({
+  queryKey: ["popularDishes", "list"], // Unique key
+  queryFn: getPopularDishes,
+});
 
-// Hook to fetch menu items
-export const useMenuItems = (queryConfig = {}) => {
+// Hook to use in components
+export const usePopularDishes = (queryConfig = {}) => {
   return useQuery({
-    ...getMenuItemsQueryOptions(),
+    ...getPopularDishesQueryOptions(),
     ...queryConfig,
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
   });
 };

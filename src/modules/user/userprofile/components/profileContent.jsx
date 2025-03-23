@@ -13,7 +13,7 @@ const customIcon = new L.Icon({
 });
 
 export const ProfileContent = () => {
-  const { formik } = useAdminProfileEditFormik();
+  const { formik } = useUserProfileEditFormik();
   const [preview, setPreview] = useState(null);
   const fileInputRef = useRef(null);
   const [location, setLocation] = useState(null);

@@ -8,13 +8,14 @@ import {
 import { FaUserCircle } from "react-icons/fa";
 import { CiSettings } from "react-icons/ci";
 import Logo from "../../../../assets/logo.jpg";
-import { useProfile } from "../../userprofile/api/getProfile";
 import { useUserLogout } from "../../auth/api/logout";
+import { useProfile } from "../../userprofile/api/getProfile";
+import { useUserBasket } from "../../cart/api/getItems";
 
 export const Header = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const profileRef = useRef(null);
-  const { data: user, isLoading: isProfileLoading, isError } = useProfile();
+  const {  isLoading: isProfileLoading, isError } = useProfile();
   const { mutateAsync: logout, isLoading: isLoggingOut } = useUserLogout();
 
   useEffect(() => {
@@ -29,9 +30,59 @@ export const Header = () => {
     };
   }, []);
 
+    const [profileData, setProfileData] = useState({
+      name: "Your Name",
+      email: "yourname@gmail.com",
+      image: "/api/placeholder/80/80",
+      image_url: null,
+      isOnline: true,
+    });
   const toggleProfileMenu = () => {
     setShowProfileMenu(!showProfileMenu);
   };
+
+   const {
+     mutateAsync: fetchProfileData,
+   } = useProfile();
+
+    const getFullImageUrl = (imagePath) => {
+      if (!imagePath) return "/api/placeholder/80/80";
+  
+      // If it's already a full URL (starts with http/https)
+      if (imagePath.startsWith("http")) return imagePath;
+  
+      // Use your existing API_URL
+      // If your API_URL already includes a trailing slash, you might need to adjust this
+      const storageUrl = import.meta.env.VITE_APP_API_URL.endsWith("/")
+        ? `${import.meta.env.VITE_APP_API_URL}storage/`
+        : `${import.meta.env.VITE_APP_API_URL}/storage/`;
+      return `${storageUrl}${imagePath}`;
+    };
+  
+    useEffect(() => {
+      const loadProfileData = async () => {
+        try {
+          const data = await fetchProfileData();
+          if (data) {
+            setProfileData({
+              name: data.name || "Your Name",
+              email: data.email || "yourname@gmail.com",
+              image: data.image || "/api/placeholder/80/80",
+              image_url: data.image_url || null,
+              isOnline: data.isOnline !== undefined ? data.isOnline : true,
+            });
+          }
+        } catch (err) {
+          console.error("Failed to load profile data:", err);
+        }
+      }
+      loadProfileData();
+    }, [fetchProfileData]);
+
+    const profileImageSrc = profileData.image_url
+    ? getFullImageUrl(profileData.image_url)
+    : profileData.image || "/api/placeholder/80/80";
+
 
   const handleLogout = async () => {
     try {
@@ -43,6 +94,11 @@ export const Header = () => {
     }
   };
 
+  const { data: profile } = useProfile();
+  const userId = profile?.id;
+  console.log("userId",userId)
+  const { data: cartItems } = useUserBasket(userId);
+  const cartItemCount = cartItems?.length || 0;
   return (
     <div className="bg-white shadow-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-3">
@@ -53,15 +109,20 @@ export const Header = () => {
           </Link>
 
           <div className="flex items-center space-x-4">
-            <button className="px-4 py-1.5 border border-gray-300 rounded-full text-sm hover:bg-gray-50 transition-colors">
+            {/* <button className="px-4 py-1.5 border border-gray-300 rounded-full text-sm hover:bg-gray-50 transition-colors">
               Track Order
-            </button>
+            </button> */}
 
             <Link
               to="/user/cart"
               className="relative p-1 hover:bg-gray-100 rounded-full transition-colors"
             >
-              <AiOutlineShoppingCart className="text-3xl text-[#426B1F]" />
+               <AiOutlineShoppingCart className="text-3xl text-[#426B1F]" />
+            {cartItemCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                {cartItemCount}
+              </span>
+            )}
             </Link>
 
             <div className="relative" ref={profileRef}>
@@ -75,8 +136,8 @@ export const Header = () => {
               {showProfileMenu && (
                 <div className="absolute right-0 lg:p-2 mt-2 w-48 bg-white rounded-md shadow-xl py-1 z-50 border border-slate-200">
                   <div className="px-4 flex flex-col items-center justify-center py-3 border-b border-slate-200">
-                    <FaUserCircle className="text-3xl text-[#426B1F]" />
-                    
+                    {/* <FaUserCircle className="text-3xl text-[#426B1F]" /> */}
+                    <img src={profileImageSrc} alt="image" />
                     {isProfileLoading ? (
                       <p className="text-sm text-gray-500">Loading...</p>
                     ) : isError ? (
@@ -84,10 +145,10 @@ export const Header = () => {
                     ) : (
                       <>
                         <p className="text-sm font-medium text-gray-900">
-                          {user?.name || "Guest"}
+                          {profileData.name}
                         </p>
                         <p className="text-xs text-gray-500 truncate">
-                          {user?.email || "No email available"}
+                          {profileData.email}
                         </p>
                       </>
                     )}

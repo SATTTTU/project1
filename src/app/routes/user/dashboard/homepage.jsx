@@ -13,6 +13,7 @@ import { PopularItems } from "@/modules/user/dashboard/components/popularItemsSe
 import UserLocation from "@/modules/user/dashboard/components/setLocation";
 
 export const Homepage = () => {
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
@@ -50,7 +51,7 @@ export const Homepage = () => {
       
       <main className="container px-4 py-6 mx-auto">
         <section className="mb-8">
-          <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
+          <div className="flex flex-col md:flex-row md:items-center   md:justify-around mb-4">
             <h2 className="text-xl font-bold">Up to -40% dealss</h2>
             <SearchBar 
               navigate={navigate}
@@ -58,13 +59,14 @@ export const Homepage = () => {
               categories={categories}
               cooks={cooks}
               handleAddToCart={handleAddToCart}
+              
             />
           </div>
           <PromotedRestaurants/>
         </section>
         <CategorySection categories={categories}/>
         <PopularCooks cooks={cooks} />
-        <PopularItems
+        <PopularItemsPage
           popularItems={popularItems}
           handleAddToCart={handleAddToCart}
           addedToCart={addedToCart}

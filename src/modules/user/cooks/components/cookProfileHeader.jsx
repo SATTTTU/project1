@@ -48,7 +48,7 @@ export const CookProfileHeader = ({ cook, isFavorite, toggleFavorite }) => {
 						</div>
 
 						<div className="flex flex-wrap justify-center md:justify-start gap-2 mt-3">
-							{cook.specialties.map((specialty, index) => (
+							{cook.specialties?.map((specialty, index) => (
 								<span
 									key={index}
 									className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full"

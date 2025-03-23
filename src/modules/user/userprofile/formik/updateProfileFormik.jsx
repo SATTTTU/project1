@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { UpdateProfile } from "../api/updateProfile";
 import { profileEditSchema } from "./schema/updateSchema";
 
-export const useAdminProfileEditFormik = () => {
+export const useUserProfileEditFormik = () => {
   const { mutateAsync: editProfile, isLoading: isEditing } = UpdateProfile();
   const { data: profileData, isLoading: isFetching } = useProfile(); // ✅ Correctly use `useQuery`
 
