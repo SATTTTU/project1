@@ -1,18 +1,30 @@
-import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api-client";
+import { useMutation } from "@tanstack/react-query";
 
-const fetchUserBasket = async (userId) => {
-  if (!userId) return [];
-  const response = await api.get("/api/baskets/index", {
-    params: { user_id: userId },
-  });
+// ✅ Fix: Ensure correct API request format
+const getCartItems = async (userData) => {
+  console.log("🔄 Fetching Cart Items for:", userData);
+
+  const response = await api.get("/api/baskets/index", { params: userData });
+
+  console.log("✅ API Response:", response.data);
   return response.data;
 };
 
-export const useUserBasket = (userId) => {
-  return useQuery({
-    queryKey: ["userBasket", userId],
-    queryFn: () => fetchUserBasket(userId),
-    enabled: !!userId,
+export const useUserBasket = ({ mutationConfig } = {}) => {
+  const mutation = useMutation({
+    mutationFn: async (userData) => {
+      console.log("🔄 API Request Triggered:", userData);
+      return getCartItems(userData);
+    },
+    ...mutationConfig,
   });
+
+  return {
+    mutateAsync: mutation.mutateAsync,
+    isLoading: mutation.isLoading,
+    error: mutation.error,
+    isError: mutation.isError,
+    isSuccess: mutation.isSuccess,
+  };
 };

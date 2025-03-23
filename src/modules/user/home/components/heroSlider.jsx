@@ -2,7 +2,7 @@
 import { useState } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Header } from "./header"
-import MainImage from "../../../../assets/Main.jpg"
+import MainImage from "../../../../assets/UserImages/bac.jpg"
 import { Swiper, SwiperSlide } from "swiper/react"
 import "swiper/css"
 import "swiper/css/pagination"
@@ -92,11 +92,9 @@ export const HeroSlider = () => {
               <div className="absolute inset-0 z-10 flex items-center justify-center">
                 <div className="container mx-auto px-4">
                   <div className="max-w-2xl mx-auto text-center">
-                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#6fac3a] mb-4">{slide.title}</h1>
-                    <p className="text-white text-lg md:text-xl mb-6">{slide.subtitle}</p>
-                    <button className="bg-[#426B1F] hover:bg-green-900 text-white font-medium py-3 px-6 rounded-md transition-colors">
-                      {slide.buttonText}
-                    </button>
+                    <h1 className="text-4xl md:text-4xl lg:text-5xl font-bold text-white mb-4">{slide.title}</h1>
+                    <p className="text-white text-lg md:text-2xl mb-6">{slide.subtitle}</p>
+                  
                   </div>
                 </div>
               </div>

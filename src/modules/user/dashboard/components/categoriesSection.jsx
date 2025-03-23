@@ -1,14 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useCategoryItems } from "../api/getCategories";
+// import { useCategoryItems } from "../api/getCategories";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { useAllCategoryItems } from "../../categories/api/getCategory";
 
 export const CategorySection = () => {
-  const { data: popularCategory, isLoading, error } = useCategoryItems();
+  const { data: popularCategory, isLoading, error } = useAllCategoryItems();
+  
 
   if (isLoading) {
     return <div className="text-center py-8">Loading categories...</div>;

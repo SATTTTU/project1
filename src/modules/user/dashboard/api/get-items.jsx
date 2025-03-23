@@ -1,29 +1,32 @@
-import { useQuery } from '@tanstack/react-query';
-import { api } from '@/lib/api-client';
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/lib/api-client";
 
-// API function to fetch menu items by menuId
-export const getMenuItems = async (menuId) => {
-  if (!menuId) throw new Error('menuId is required');
-
+// API function to fetch popular dishes
+export const getPopularDishes = async () => {
   try {
-    const response = await api.get(`/api/cooks/all-menu-items/${menuId}`);
-    return response.data; // Ensure API returns an array of menu items
+    const response = await api.get("/api/get-popular-dishes");
+
+    console.log("API Response:", response.data); // Debugging
+
+    // Ensure we return the correct structure
+    return response.data?.data || response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to fetch menu items");
+    console.error("Error fetching popular dishes:", error);
+    throw new Error("Failed to fetch popular dishes");
   }
 };
 
-// Define query options for fetching menu items by menuId
-export const getMenuItemsQueryOptions = (menuId) => ({
-  queryKey: ['menuItems', menuId], // Ensure caching per menuId
-  queryFn: () => getMenuItems(menuId),
+// Query options for react-query
+export const getPopularDishesQueryOptions = () => ({
+  queryKey: ["popularDishes", "list"], // Unique key
+  queryFn: getPopularDishes,
 });
 
-// Hook to fetch menu items by menuId
-export const useMenuItems = (menuId, queryConfig = {}) => {
+// Hook to use in components
+export const usePopularDishes = (queryConfig = {}) => {
   return useQuery({
-    ...getMenuItemsQueryOptions(menuId),
+    ...getPopularDishesQueryOptions(),
     ...queryConfig,
-    enabled: !!menuId, // Prevent query execution when menuId is undefined
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
   });
 };

@@ -1,108 +1,136 @@
-import React, { useState, useEffect, useRef } from "react";
-import { FiSearch } from "react-icons/fi";
-import { search, useSearch } from "../api/search";
+import React, { useState } from "react";
+import { useSearch } from "../api/search";
+import { useNavigate } from "react-router-dom";
+import { useGetSingleCook } from "../../cooks/api/getCookProfie";
+import { toast } from "react-toastify"; // Import toast notifications
+import "react-toastify/dist/ReactToastify.css"; // Import toast styles
+import { storeCartItem } from "../../cart/api/addItems";
 
-export const SearchBar = ({ navigate, handleAddToCart }) => {
-  const searchRef = useRef(null);
+export const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [showResults, setShowResults] = useState(false);
+  const [selectedCookId, setSelectedCookId] = useState(null);
+  const [loadingCartItem, setLoadingCartItem] = useState(null); // Tracks loading state for add to cart
+  const navigate = useNavigate();
 
-  // Fetch search results using the custom hook
-  const { data: searchResults, isLoading } = useSearch({
+  // Fetch search results
+  const { data: searchResults, isLoading, error } = useSearch({
+    query: searchTerm,
+    queryConfig: { enabled: searchTerm.length > 0 },
+  });
+
+  // Fetch cook details when cookId changes
+  const { isFetching } = useGetSingleCook(selectedCookId, {
     queryConfig: {
-      queryKey: ['search', searchTerm],
-      queryFn: () => search({ query: searchTerm }),
-      enabled: searchTerm.length > 0, // Only fetch data when there is a search term
+      enabled: !!selectedCookId,
+      onSuccess: () => {
+        navigate(`/cook/${selectedCookId}`);
+      },
     },
   });
 
-  // Handle search input change
-  const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    setShowResults(value.trim() !== "");
+  // Handle input change
+  const handleInputChange = (e) => {
+    setSearchTerm(e.target.value);
   };
 
-  // Handle search submission (navigates to a search results page)
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (searchTerm.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
+  // Handle cook name click
+  const handleCookClick = (cookId) => {
+    setSelectedCookId(cookId);
+  };
+
+  // Handle Add to Cart
+  const handleAddToCart = async (dish) => {
+    try {
+      setLoadingCartItem(dish.menu_item_id); // Set loading state for this item
+      await storeCartItem({ menu_item_id: dish.menu_item_id, quantity: 1 });
+
+      toast.success(`${dish.name} added to cart! 🛒`, { position: "top-right" });
+    } catch (error) {
+      toast.error("Failed to add item to cart. Try again!", { position: "top-right" });
+      console.error("Error adding to cart:", error);
+    } finally {
+      setLoadingCartItem(null); // Reset loading state
     }
   };
 
-  // Close search results when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
-        setShowResults(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   return (
-    <div className="relative mt-2 md:mt-0 md:w-96" ref={searchRef}>
-      <form onSubmit={handleSearchSubmit}>
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search from menu..."
-            className="pl-10 pr-4 py-2 w-full border rounded-full"
-            value={searchTerm}
-            onChange={handleSearchChange}
-          />
-          <FiSearch className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
-          <button
-            type="submit"
-            className="absolute right-2 top-1.5 bg-green-600 text-white p-1 rounded-full hover:bg-green-700 transition-colors"
-            aria-label="Search"
-          >
-            <FiSearch className="w-4 h-4" />
-          </button>
-        </div>
-      </form>
+    <div className="p-6 max-w-5xl mx-auto">
+      {/* Search Input */}
+      <input
+        type="text"
+        placeholder="Search for dishes..."
+        value={searchTerm}
+        onChange={handleInputChange}
+        className="border p-3 rounded-md w-full text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 md:w-4/5 lg:w-3/5"
+      />
 
-      {/* Search Results Dropdown */}
-      {showResults && (
-        <div className="absolute z-50 mt-2 w-full bg-white rounded-lg shadow-lg border overflow-hidden">
-          {isLoading ? (
-            <div className="p-4 text-center text-gray-500">Loading...</div>
-          ) : searchResults && searchResults.length > 0 ? (
-            <div className="max-h-[70vh] overflow-y-auto">
-              {searchResults.map((result) => (
-                <div
-                  key={result.id}
-                  className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded cursor-pointer"
-                  onClick={() => navigate(`/food/${result.id}`)}
-                >
-                  <img
-                    src={result.img || "/placeholder.svg"}
-                    alt={result.name}
-                    className="w-12 h-12 object-cover rounded"
-                  />
-                  <div className="flex-1">
-                    <h4 className="font-medium text-sm">{result.name}</h4>
-                    <p className="text-green-600 font-semibold">${result.price}</p>
+      {/* Cart Button */}
+      {/* <div className="mt-4 text-right">
+        <button
+          className="bg-green-500 text-white px-4 py-2 rounded-md font-semibold hover:bg-green-600 transition"
+          onClick={() => navigate("/user/cart")}
+        >
+          🛒 Go to Cart
+        </button>
+      </div> */}
+
+      {/* Search Results */}
+      {searchTerm.length > 0 && (
+        <div className="mt-4 bg-white shadow-lg rounded-lg p-4 z-10">
+          {isLoading && <p className="text-gray-600">Loading...</p>}
+          {error && <p className="text-red-500">Error: {error.message}</p>}
+          
+          {searchResults?.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {searchResults.map((dish) => (
+                <div key={dish.menu_item_id} className="bg-white rounded-xl shadow-md p-4 hover:shadow-xl transition">
+                  {/* Dish Image */}
+                  <img src={dish.image_url} alt={dish.name} className="w-full h-40 object-cover rounded-md" />
+                  
+                  {/* Dish Details */}
+                  <div className="mt-3">
+                    <h2 className="text-lg font-semibold">{dish.name}</h2>
+                    
+                    {/* Clickable Cook Name */}
+                    <p className="text-gray-600">
+                      Cook:{" "}
+                      <span
+                        className="font-medium text-blue-500 hover:underline cursor-pointer"
+                        onClick={() => handleCookClick(dish.cook_id)}
+                      >
+                        {dish.cook_name}
+                      </span>
+                    </p>
+                    
+                    <p className="text-gray-800 font-bold mt-2">${dish.price}</p>
+
+                    {/* Rating */}
+                    <div className="flex items-center mt-1">
+                      <span className="text-yellow-500 text-lg">⭐</span>
+                      <span className="ml-1 text-gray-700">{dish.average_rating} / 5</span>
+                    </div>
+
+                    {/* Add to Cart Button */}
+                    <button
+                      className="mt-3 w-full bg-blue-500 text-white py-2 rounded-md font-semibold hover:bg-blue-600 transition disabled:opacity-50"
+                      onClick={() => handleAddToCart(dish)}
+                      disabled={loadingCartItem === dish.menu_item_id} // Disable while adding
+                    >
+                      {loadingCartItem === dish.menu_item_id ? "Adding..." : "Add to Cart 🛒"}
+                    </button>
                   </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleAddToCart(result);
-                    }}
-                    className="px-2 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700"
-                  >
-                    Add
-                  </button>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="p-4 text-center text-gray-500">No results found</div>
+            <p className="text-gray-500">No results found</p>
           )}
         </div>
+      )}
+
+      {/* Show loading state if cook details are being fetched */}
+      {isFetching && (
+        <p className="mt-4 text-blue-500 text-center">Loading cook profile...</p>
       )}
     </div>
   );

@@ -1,24 +1,31 @@
-import { useQuery } from '@tanstack/react-query';
-import { api } from '@/lib/api-client';
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/lib/api-client";
 
-// API function to fetch popular cooks
-export const search = async ({query}) => {
-  const response = await api.get(`/api/search/${query}`);
-  return response.data;
+// API function to fetch search results based on query
+export const search = async ({ query }) => {
+  if (!query) return []; // Avoid calling API with an empty query
+
+  try {
+    const response = await api.get(`/api/search/${query}`); // Query is part of the URL
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching search results:", error);
+    throw new Error("Failed to fetch search results");
+  }
 };
 
-// Define query options for fetching popular cooks
-export const searchQueryOptions = () => {
-  return {
-    queryKey: ['search'],
-    queryFn: search,
-  };
-};
+// Define query options for fetching search results
+export const searchQueryOptions = ({ query }) => ({
+  queryKey: ["search", query], // Unique cache key based on query
+  queryFn: () => search({ query }),
+  enabled: Boolean(query), // Fetch only when query exists
+});
 
-// Hook to fetch popular cooks
-export const useSearch = (queryConfig = {}) => {
+// Hook to fetch search results
+export const useSearch = ({ query, queryConfig = {} }) => {
   return useQuery({
-    ...searchQueryOptions(),
+    ...searchQueryOptions({ query }),
     ...queryConfig,
   });
 };

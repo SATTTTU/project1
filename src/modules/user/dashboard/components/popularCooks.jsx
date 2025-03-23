@@ -10,6 +10,7 @@ import "swiper/css/pagination";
 
 export const PopularCooks = () => {
   const { data: popularCooks } = usePopularCooks();
+  console.log("cooks to be", popularCooks)
 
   return (
     <section className="p-6 mb-12 rounded-lg bg-white relative">
@@ -54,7 +55,6 @@ export const PopularCooks = () => {
         ))}
       </Swiper>
 
-      {/* Pagination dots positioned slightly lower */}
       <div className="custom-pagination absolute bottom-[-20px] left-1/2 transform -translate-x-1/2 flex space-x-2"></div>
     </section>
   );

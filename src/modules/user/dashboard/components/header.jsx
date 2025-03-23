@@ -10,6 +10,7 @@ import { CiSettings } from "react-icons/ci";
 import Logo from "../../../../assets/logo.jpg";
 import { useUserLogout } from "../../auth/api/logout";
 import { useProfile } from "../../userprofile/api/getProfile";
+import { useUserBasket } from "../../cart/api/getItems";
 
 export const Header = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -93,6 +94,11 @@ export const Header = () => {
     }
   };
 
+  const { data: profile } = useProfile();
+  const userId = profile?.id;
+  console.log("userId",userId)
+  const { data: cartItems } = useUserBasket(userId);
+  const cartItemCount = cartItems?.length || 0;
   return (
     <div className="bg-white shadow-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-3">
@@ -111,7 +117,12 @@ export const Header = () => {
               to="/user/cart"
               className="relative p-1 hover:bg-gray-100 rounded-full transition-colors"
             >
-              <AiOutlineShoppingCart className="text-3xl text-[#426B1F]" />
+               <AiOutlineShoppingCart className="text-3xl text-[#426B1F]" />
+            {cartItemCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                {cartItemCount}
+              </span>
+            )}
             </Link>
 
             <div className="relative" ref={profileRef}>

@@ -1,12 +1,11 @@
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
-// import { storeCartItem } from "../api/storeCartItem"; // Import API function
-// import { useMenuItems } from "../api/get-items";
 import { storeCartItem } from "../../cart/api/addItems";
-import { useMenuItems } from "../api/get-items";
+import { usePopularDishes } from "../api/get-items";
 
-export const PopularItemsPage = ({menuId}) => {
-	const { data: menuItems, isLoading, error } = useMenuItems(menuId);
+export const PopularItemsPage = () => {
+	const { data: menuItems, isLoading, error } = usePopularDishes();
+	console.log("data", menuItems)
 
   // ✅ Mutation to add item to the cart
   const addToCartMutation = useMutation({
@@ -19,7 +18,6 @@ export const PopularItemsPage = ({menuId}) => {
     },
   });
 
-  // ✅ Handle Add to Cart
   const handleAddToCart = (menu_item_id) => {
     addToCartMutation.mutate({ menu_item_id, quantity: 1 }); // Default quantity is 1
   };
@@ -46,7 +44,7 @@ export const PopularItemsPage = ({menuId}) => {
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-6">Our Menus</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center">Our Popular Dishes</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {menuItems.map((item) => (

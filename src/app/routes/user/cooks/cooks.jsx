@@ -16,6 +16,7 @@ export const CookProfile = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { data: cook, isLoading, isError } = useGetSingleCook(id);
+  console.log("cook",cook)
   const [activeTab, setActiveTab] = useState("categories");
   const safeCook = cook || { categories: [], reviews: [] };
   const videoBaseUrl = "https://khajabox-backend.dev.tai.com.np/storage/";
@@ -45,7 +46,6 @@ export const CookProfile = () => {
     <div className="min-h-screen bg-gray-100">
       <Header />
       <main className="container mx-auto px-6 py-8">
-        {/* Back Button */}
         <div className="mb-4">
           <Link
             to="/user/dashboard"
@@ -93,11 +93,12 @@ export const CookProfile = () => {
           {activeTab === "categories" && (
             <>
               <h2 className="text-xl font-bold text-gray-800 mb-4">Food Categories</h2>
-              <CookCategories cook={safeCook} onAddToCart={handleAddToCart} />
+              <CookCategories cookId={safeCook.id} cook={safeCook} onAddToCart={handleAddToCart} />
             </>
           )}
           {activeTab === "reviews" && (
             <CookReviews
+            id={safeCook.id}
               reviews={safeCook.reviews}
               reviewCount={safeCook.reviewCount || 0}
               cookId={safeCook.id}

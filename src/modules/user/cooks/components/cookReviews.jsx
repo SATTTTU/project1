@@ -1,9 +1,32 @@
-import { useState } from "react"
-import ReviewCard from "./reviewCard"
-import ReviewForm from "./reviewForm"
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import ReviewCard from "./reviewCard";
+import { useUserReview } from "../api/getReview";
+import { ReviewForm } from "./reviewForm";
 
-export const CookReviews = ({ reviews, cookId, cookName, setCook }) => {
-  const [showReviewForm, setShowReviewForm] = useState(false)
+export const CookReviews = ({ id, cookName, setCook }) => {
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const queryClient = useQueryClient();
+  const { data: reviews } = useUserReview(id); // Fetch reviews
+
+  const handleDeleteReview = (id) => {
+    // ✅ Invalidate the query to refetch the updated reviews
+    queryClient.invalidateQueries(["cookProfile", id]);
+  };
+
+  const handleReviewSubmit = (newReview) => {
+    setShowReviewForm(false);
+
+    // ✅ Optimistically update the UI before fetching new data
+    setCook((prevCook) => ({
+      ...prevCook,
+      reviews: [newReview, ...prevCook.reviews], // Prepend new review
+      reviewCount: prevCook.reviewCount + 1,
+    }));
+
+    // ✅ Invalidate the query to refresh the review list
+    queryClient.invalidateQueries(["cookProfile", id]);
+  };
 
   return (
     <div>
@@ -18,20 +41,21 @@ export const CookReviews = ({ reviews, cookId, cookName, setCook }) => {
       </div>
 
       {showReviewForm && (
-        <ReviewForm 
+        <ReviewForm
           setShowReviewForm={setShowReviewForm}
-          cookId={cookId}
+          cookId={id}
           cookName={cookName}
           setCook={setCook}
+          onReviewSubmit={handleReviewSubmit} // ✅ Pass callback function
         />
       )}
 
       <div className="space-y-6">
         {reviews?.map((review) => (
-          <ReviewCard key={review.id} review={review} />
+          <ReviewCard key={`${review.id}-${Math.random()}`}
+          review={review} onDelete={handleDeleteReview} />
         ))}
       </div>
     </div>
-  )
-}
-
+  );
+};

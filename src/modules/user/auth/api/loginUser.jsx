@@ -6,7 +6,7 @@ const loginUser = async (userData) => {
     clearAuthData();
 
     const response = await api.post("/api/login", userData);
-    console.log("user login response:", response);
+    console.log("user login response:", response.data);
 
     // Check if response has token directly or nested in data
     const token = response.token || response.data?.token;

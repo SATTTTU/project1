@@ -1,4 +1,6 @@
+
 export const DishCard = ({ dish, onAddToCart }) => {
+  
     return (
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <img src={dish.img || "/placeholder.svg"} alt={dish.name} className="w-full h-48 object-cover" />

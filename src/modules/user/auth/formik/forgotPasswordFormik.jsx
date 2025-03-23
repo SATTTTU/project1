@@ -16,11 +16,13 @@ export const useForgotPasswordFormik = () => {
     onSubmit: async (values, helpers) => {
       try {
         const response = await mutateAsync({ email: values.email });
-
-        if (response?.token?.token) {
+        
+        // Based on your API response structure: {message: "...", token: {token: "..."}}
+        if (response && response.token && response.token.token) {
           localStorage.setItem("resetPasswordToken", response.token.token);
           localStorage.setItem("resetPasswordEmail", values.email);
-
+          
+          // Navigate to reset password page
           navigate(`/user/resetpassword`);
         }
 
