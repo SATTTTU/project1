@@ -43,7 +43,8 @@ const CookNavBAr = () => {
   const handleLogout = async () => {
     try {
       await logout();
-      window.location.href = "/"; // Redirect after logout
+      window.location.href = "/";
+      localStorage.clear();
     } catch (error) {
       console.error("Logout failed", error);
     }

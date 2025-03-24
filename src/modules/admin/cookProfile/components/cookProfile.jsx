@@ -1,5 +1,5 @@
 import { Calendar } from "lucide-react";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   CheckCircle,
   AlertCircle,
@@ -25,23 +25,19 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [showDocumentModal, setShowDocumentModal] = useState(null);
 
-  const {
-    mutateAsync: fetchCook,
-    isLoading,
-    error,
-    data: cookData, // Directly use the response data
-  } = useGetSingleCook(cookId, {
-    mutationConfig: {
-      onSuccess: (data) => {
-        console.log("Cook data fetched successfully:", data);
-      },
-      onError: (error) => {
-        console.error("Failed to fetch cook data:", error);
-      },
-    },
-  });
+  const { isError, isLoading, data: cookData } = useGetSingleCook(cookId);
+
+  // if (isError) {
+  //   return <div>An error occurred!</div>;
+  // }
+
+  // if (isLoading) {
+  //   return <div>loading...</div>;
+  // }
 
   // Initialize verify cook API hook
+
+  console.log("cookdataa:", cookData);
   const {
     mutateAsync: verifyCook,
     isLoading: isVerifying,
@@ -51,7 +47,6 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
       onSuccess: (data) => {
         console.log("Cook verified successfully:", data);
         // Refetch cook data to update the UI
-        fetchCook();
         // Call the parent component's status change handler if provided
         onStatusChange?.(cookId, "Verified");
       },
@@ -80,15 +75,8 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
     },
   });
 
-  useEffect(() => {
-    if (cookId) {
-      fetchCook();
-    }
-  }, [cookId, fetchCook]);
-
   console.log("Cook Data:", cookData);
 
-  // Map API response to component expected format
   const cook = cookData
     ? {
         id: cookData?.id || cookId || "unknown",
@@ -115,7 +103,6 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
 
   console.log("Mapped Cook Object:", cook);
 
-  // Utility function to map API status to display status
   function mapApprovalStatusToDisplay(status) {
     switch (status) {
       case "approved":
@@ -139,11 +126,11 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
   }
 
   // Show error state
-  if (error) {
+  if (isError) {
     return (
       <div className="p-4 bg-red-100 rounded flex items-center">
         <AlertCircle size={18} className="mr-2 text-red-600" />
-        <span>Error loading cook data: {error.message}</span>
+        <span>Error loading cook data: {isError.message}</span>
       </div>
     );
   }
@@ -176,10 +163,11 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
 
   const handleVerifyStatus = async (newStatus) => {
     console.log(`Changing status to ${newStatus} for cook:`, cook.id);
-
+  
     try {
       if (newStatus === "Verified") {
-        await verifyCook();
+        // Pass the required params here
+        await verifyCook({ approval_status: "approved" });
         // Status update and refetching is handled in the onSuccess callback
       } else if (newStatus === "Unverified") {
         // If there's a specific API endpoint for this, you would call it here
@@ -328,7 +316,10 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
                 <span>{cook.phone}</span>
               </div>
               <div className="flex items-start text-sm text-gray-600">
-                <MapPin size={16} className="mr-2 mt-0.5 text-gray-400 flex-shrink-0" />
+                <MapPin
+                  size={16}
+                  className="mr-2 mt-0.5 text-gray-400 flex-shrink-0"
+                />
                 <span>{cook.address}</span>
               </div>
             </div>
@@ -552,7 +543,8 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-bold text-gray-900">
                 {showDocumentModal === "passportPhoto" && "Passport Size Photo"}
-                {showDocumentModal === "citizenshipFront" && "Citizenship Front"}
+                {showDocumentModal === "citizenshipFront" &&
+                  "Citizenship Front"}
                 {showDocumentModal === "citizenshipBack" && "Citizenship Back"}
               </h3>
               <button

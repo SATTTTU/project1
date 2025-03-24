@@ -72,8 +72,8 @@ function getToken() {
         safeSetItem(STORAGE_KEYS.ACTIVE_USER, "user");
         return userToken;
       }
-      console.warn("⚠️ No user type or valid tokens found in localStorage!");
-      return null;
+      // console.warn("⚠️ No user type or valid tokens found in localStorage!");
+      // return null;
     }
 
     if (userType === "admin") {
