@@ -51,38 +51,104 @@ export const Cart = () => {
 			},
 		});
 
-    const handleQuantityChange = async (itemId, newQuantity) => {
-      if (newQuantity < 1) return;
-  
+    const handleCheckout = async () => {
       try {
-          // Update Redux store immediately
-          dispatch(updateQuantity({ productId: itemId, quantity: newQuantity }));
-  
-          // Update local state immediately
-          setCartItems((prevItems) =>
-              prevItems.map((item) =>
-                  item.id === itemId
-                      ? { ...item, quantity: newQuantity }
-                      : item
-              )
-          );
-  
-          // Update backend asynchronously
-          await mutateAsync({
-              basket_item_id: itemId,
-              quantity: newQuantity,
-          });
-  
-          toast.success("Quantity updated successfully");
+        // Fetch the latest cart data before checkout
+        await refetch();
+    
+        // Ensure cart is not empty
+        if (!data || !data[1]?.items || data[1].items.length === 0) {
+          toast.error("Your cart is empty. Add items before proceeding.");
+          return;
+        }
+    
+        // Prepare cart data for checkout
+        const cartData = {
+          items: data[1].items.map((item) => ({
+            id: item.id,
+            quantity: item.quantity,
+          })),
+        };
+    
+        // Perform the checkout mutation
+        const response = await checkoutMutation(cartData);
+    
+        // Handle successful checkout
+        setOrderComplete(true);
+        setOrderId(response.orderId); // Assuming API returns orderId
+        toast.success("Order placed successfully!");
+    
+        // Clear the cart from Redux store
+        dispatch(removeFromCart()); // Ensure this action clears all cart items
+    
       } catch (error) {
-          toast.error("Failed to update quantity");
-          console.error("Error updating quantity:", error);
-  
-          // Revert changes if API fails
-          refetch();
+        console.error("Error during checkout:", error);
+        toast.error("Checkout failed. Please try again.");
       }
-  };
-  
+    };
+    
+
+	// Update cart items when either Redux store or API data changes
+	useEffect(() => {
+		if (reduxCartItems && reduxCartItems.length > 0) {
+			// Prioritize Redux state for immediate updates
+			setCartItems(reduxCartItems);
+		} else if (data && data[1].items) {
+			// Fall back to API data
+			setCartItems(data[1].items);
+
+			// Sync Redux store with API data if needed
+			if (JSON.stringify(reduxCartItems) !== JSON.stringify(data[1].items)) {
+				data[1].items?.forEach((item) => {
+					dispatch(addToCart(item));
+				});
+			}
+		}
+	}, [reduxCartItems, data, dispatch]);
+
+	// Calculate subtotal dynamically
+  const calculateSubtotal = () => {
+    return cartItems.reduce((total, item) => total + (item.price * item.quantity || 0), 0).toFixed(2);
+};
+
+
+
+	// Handle quantity change with immediate update
+	const handleQuantityChange = async (itemId, newQuantity) => {
+		if (newQuantity < 1) return;
+
+		try {
+			// Update Redux store immediately for UI update
+			dispatch(updateQuantity({ productId: itemId, quantity: newQuantity }));
+
+			// Update local state immediately
+			setCartItems((prevItems) =>
+				prevItems.map((item) =>
+					item.id === itemId
+						? {
+								...item,
+								quantity: newQuantity,
+								total: item.price * newQuantity,
+						  }
+						: item
+				)
+			);
+
+			// Update backend asynchronously
+			await mutateAsync({
+				basket_item_id: itemId,
+				quantity: newQuantity,
+			});
+
+			toast.success("Quantity updated successfully");
+		} catch (error) {
+			toast.error("Failed to update quantity");
+			console.error("Error updating quantity:", error);
+
+			// Revert changes if API fails
+			refetch();
+		}
+	};
 
 	// Handle item removal with immediate update
 	const handleRemoveItem = async (itemId) => {
