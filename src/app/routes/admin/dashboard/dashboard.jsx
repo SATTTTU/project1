@@ -1,13 +1,14 @@
 import React, { useState, useRef, useCallback } from "react";
 import { IoIosNotifications, IoMdSearch } from "react-icons/io";
 import { FaUsers, FaUtensils, FaMoneyBillWave, FaClipboardList } from "react-icons/fa";
-import { AnimatePresence,motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Sidebar } from "@/components/ui/admin/aside/aside";
 import { StatsCard } from "@/modules/admin/dashboard/components/statscard";
 import { TopCooksList } from "@/modules/admin/dashboard/components/top-cooks";
 import { ProfileAvatar } from "@/modules/admin/dashboard/components/avatar";
 import { Link } from "react-router-dom";
 import { ProfileCard } from "@/modules/admin/editProfile/components/profilecard";
+import { useGetTotalEarning } from "@/modules/admin/payment/api/gettotalearning";
 
 // Custom hook to detect clicks outside a specified element
 const useOutsideClick = (ref, callback) => {
@@ -33,13 +34,26 @@ export const AdminDashboardRoute = React.memo(() => {
   const [showNotifications, setShowNotifications] = useState(false);
   const profileRef = useRef(null);
   const notificationRef = useRef(null);
+  
+  // Fetch total earnings data
+  const { data: earningsData, isLoading: earningsLoading, error: earningsError } = useGetTotalEarning();
 
-  const dashboardStats = React.useMemo(() => [
-    { icon: <FaUsers className="text-blue-500 text-2xl" />, title: "Total Users", value: "1,254", increase: "+12.5%", timeFrame: "this month" },
-    { icon: <FaUtensils className="text-green-500 text-2xl" />, title: "Active Cooks", value: "328", increase: "+8.2%", timeFrame: "this month" },
-    { icon: <FaMoneyBillWave className="text-purple-500 text-2xl" />, title: "Total Revenue", value: "₹45,230", increase: "+15.3%", timeFrame: "this month" },
-    { icon: <FaClipboardList className="text-orange-500 text-2xl" />, title: "Total Orders", value: "856", increase: "+10.7%", timeFrame: "today" },
-  ], []);
+  const dashboardStats = React.useMemo(() => {
+    const formattedEarnings = earningsLoading || earningsError 
+  ? "Loading..." 
+  : `₹${earningsData?.totalEarnings?.toLocaleString() || "0"}`;
+
+const earningIncrease = earningsLoading || earningsError
+  ? "..." 
+  : `+${earningsData?.percentageIncrease || "0"}%`;
+      
+    return [
+      { icon: <FaUsers className="text-blue-500 text-2xl" />, title: "Total Users", value: "1,254", increase: "+12.5%", timeFrame: "this month" },
+      { icon: <FaUtensils className="text-green-500 text-2xl" />, title: "Active Cooks", value: "328", increase: "+8.2%", timeFrame: "this month" },
+      { icon: <FaMoneyBillWave className="text-purple-500 text-2xl" />, title: "Total Revenue", value: formattedEarnings, increase: earningIncrease, timeFrame: "this month" },
+      { icon: <FaClipboardList className="text-orange-500 text-2xl" />, title: "Total Orders", value: "856", increase: "+10.7%", timeFrame: "today" },
+    ];
+  }, [earningsData, earningsLoading, earningsError]);
 
   const topCooks = React.useMemo(() => [
     { name: "Meera's Kitchen", rating: 4.8, orders: 156, earnings: "₹25,400" },

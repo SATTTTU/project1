@@ -1,4 +1,3 @@
-
 import { Calendar } from "lucide-react"
 import { useState } from "react"
 import {
@@ -77,6 +76,20 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
   })
 
   console.log("Cook Data:", cookData)
+  
+  // Base URL for images
+  const baseUrl = import.meta.env.VITE_APP_API_URL; // Get from env or adjust as needed
+  console.log("first",baseUrl)
+  
+  // Function to get full image URL
+  const getFullImageUrl = (path) => {
+    if (!path) return null;
+    // Check if the path already includes http:// or https://
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return path;
+    }
+    return `${baseUrl}/storage/${path}`;
+  };
 
   const cook = cookData
     ? {
@@ -84,7 +97,7 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
         name: cookData?.name || "Unknown Cook",
         email: cookData?.email || "Email not available",
         phone: cookData?.phone || "Phone not available",
-        image: cookData?.image_url || "https://via.placeholder.com/150",
+        image: getFullImageUrl(cookData?.image_url) || "https://via.placeholder.com/150",
         status: cookData?.approval_status ? mapApprovalStatusToDisplay(cookData.approval_status) : "Unknown",
         averageRating: cookData?.average_rating || 0,
         totalReviews: cookData?.total_reviews || 0,
@@ -95,11 +108,18 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
         certifications: cookData?.certifications || [],
         earnings: cookData?.earnings || { total: 0, monthly: 0 },
         productsSold: cookData?.products_sold || 0,
-        documents: cookData?.cook_documents || {},
-        video: cookData?.intro_video_url || null,
+        documents: {
+          passportPhoto: getFullImageUrl(cookData?.cook_documents?.passport_photo_url),
+          citizenshipFront: getFullImageUrl(cookData?.cook_documents?.citizenship_front),
+          citizenshipBack: getFullImageUrl(cookData?.cook_documents?.citizenship_back),
+          cookingCertificate: getFullImageUrl(cookData?.cook_documents?.cooking_certificate),
+          pastExperience: getFullImageUrl(cookData?.cook_documents?.past_experience)
+        },
+        video: getFullImageUrl(cookData?.intro_video_url),
       }
     : null
-
+          
+          console.log('val', getFullImageUrl(cookData?.cook_documents?.passport_photo_url));
   console.log("Mapped Cook Object:", cook)
 
   function mapApprovalStatusToDisplay(status) {
@@ -395,7 +415,7 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
                 </div>
                 <div className="relative group">
                   <img
-                    src={cook.documents.passportPhoto || "https://via.placeholder.com/100" || "/placeholder.svg"}
+                    src={cook.documents.passportPhoto}
                     alt="Passport"
                     className="w-full h-32 object-cover"
                   />
@@ -415,7 +435,7 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
                 </div>
                 <div className="relative group">
                   <img
-                    src={cook.documents.citizenshipFront || "https://via.placeholder.com/100" || "/placeholder.svg"}
+                    src={cook.documents.citizenshipFront}
                     alt="Citizenship Front"
                     className="w-full h-32 object-cover"
                   />
@@ -438,7 +458,7 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
                 </div>
                 <div className="relative group">
                   <img
-                    src={cook.documents.citizenshipBack || "https://via.placeholder.com/100" || "/placeholder.svg"}
+                    src={cook.documents.citizenshipBack}
                     alt="Citizenship Back"
                     className="w-full h-32 object-cover"
                   />
@@ -524,7 +544,7 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
             </div>
             <div className="flex justify-center">
               <img
-                src={cook.documents?.[showDocumentModal] || "https://via.placeholder.com/400" || "/placeholder.svg"}
+                src={cook.documents?.[showDocumentModal]}
                 alt={showDocumentModal}
                 className="max-h-screen object-contain"
               />
@@ -537,4 +557,3 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
 }
 
 export default CookProfileDetails
-

@@ -1,4 +1,4 @@
-// components/StatsCard.js
+// modules/admin/dashboard/components/statscard.js
 import React from "react";
 import { motion } from "framer-motion";
 
