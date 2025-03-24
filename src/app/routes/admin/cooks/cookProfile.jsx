@@ -12,8 +12,6 @@ export const CookProfileRoute = () => {
   
   const handleStatusChange = (cookId, newStatus) => {
     console.log(`Status changed for cook ${cookId} to ${newStatus}`);
-    // You could implement additional logic here if needed
-    // For example, showing a notification or refreshing data
   };
   
   return (

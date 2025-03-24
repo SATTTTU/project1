@@ -38,17 +38,19 @@ const CookNavBAr = () => {
     if (path.includes("/cook/menu")) return "/cook/menu";
     return "";
   });
-  const { logout, isLoading } = useCookLogout();
+  const { logout, isLoading, isError, error } = useCookLogout();
 
   const handleLogout = async () => {
     try {
       await logout();
+      console.log("Logout successful");
+      localStorage.clear()
       window.location.href = "/";
-      localStorage.clear();
-    } catch (error) {
-      console.error("Logout failed", error);
+    } catch (err) {
+      console.error("Logout failed", err);
     }
   };
+  
 
   const handleItemClick = (path) => {
     setActiveItem(path);
@@ -238,10 +240,13 @@ const CookNavBAr = () => {
                   <div className="border-t my-1"></div>
                   <Link
                     to={"/"}
-                    className="w-full flex items-center gap-2 p-2 rounded-md hover:bg-gray-100 text-sm text-red-600"
+                    onClick={handleLogout}
+                    className={`w-full flex items-center gap-2 p-2 rounded-md hover:bg-gray-100 text-sm text-red-600 ${
+                      isLoading ? "pointer-events-none opacity-50" : ""
+                    }`}
                   >
-                    <LogOut className="h-4 w-4" onClick={handleLogout} disabled={isLoading} />
-                    <span> {isLoading ? "Logging out..." : "Logout"}</span>
+                    <LogOut className="h-4 w-4" />
+                    <span>{isLoading ? "Logging out..." : "Logout"}</span>
                   </Link>
                 </div>
               </div>

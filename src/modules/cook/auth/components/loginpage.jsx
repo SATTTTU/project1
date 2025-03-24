@@ -16,6 +16,7 @@ export const LoginForm = () => {
     mutationConfig: {
       onSuccess: (data) => {
         console.log("Login successful:", data);
+        navigate('/cook/homepage');
         
         // Store user data in localStorage
         const userData = {
@@ -24,8 +25,6 @@ export const LoginForm = () => {
           email: data.email
         };
         
-        // If remember me is checked, store in localStorage
-        // Otherwise, use sessionStorage (clears on browser close)
         if (rememberMe) {
           localStorage.setItem('userData', JSON.stringify(userData));
         } else {
@@ -37,7 +36,6 @@ export const LoginForm = () => {
           localStorage.setItem('authToken', data.token);
         }
         
-        navigate("/cook/dashboard");
       },
       onError: (error) => {
         console.error("Login failed:", error);
@@ -55,10 +53,8 @@ export const LoginForm = () => {
   return (
     <form onSubmit={formik.handleSubmit} className="space-y-6">
       <div className="text-center mb-6">
-        {/* Header content can go here */}
       </div>
       
-      {/* Display API error message */}
       {apiError && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
           <strong className="font-bold">Error: </strong>

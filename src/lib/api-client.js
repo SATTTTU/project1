@@ -43,9 +43,7 @@ function getToken() {
         localStorage.getItem(STORAGE_KEYS.ADMIN_TOKEN) ||
         localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
       const cookToken = localStorage.getItem(STORAGE_KEYS.COOK_TOKEN);
-      const userToken =
-      localStorage.getItem(STORAGE_KEYS.USER_TOKEN) 
-      // localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
+      const userToken = localStorage.getItem(STORAGE_KEYS.USER_TOKEN);
 
       if (adminToken && adminToken !== "undefined") {
         console.log(
@@ -66,7 +64,7 @@ function getToken() {
       }
       if (userToken && userToken !== "undefined") {
         console.log(
-          "Found user token without user type, setting user type to cook"
+          "Found user token without user type, setting user type to user" // Fixed: Changed from "cook" to "user"
         );
         safeSetItem(STORAGE_KEYS.USER_TYPE, "user");
         safeSetItem(STORAGE_KEYS.ACTIVE_USER, "user");
@@ -98,18 +96,17 @@ function getToken() {
 
       console.log("Retrieved cook token from localStorage");
       return token;
-    }else if (userType === "user") {
+    } else if (userType === "user") {
       const token = localStorage.getItem(STORAGE_KEYS.USER_TOKEN);
 
       if (!token || token === "undefined") {
-        console.warn("⚠️ user token is undefined or invalid");
+        console.warn("⚠️ User token is undefined or invalid"); // Fixed: Changed from "user" to "User"
         return null;
       }
 
-      console.log("Retrieved cook token from localStorage");
+      console.log("Retrieved user token from localStorage"); // Fixed: Changed from "cook" to "user"
       return token;
-    }
-     else {
+    } else {
       console.warn(
         `⚠️ Unrecognized user type: ${userType}. No token available.`
       );
@@ -130,11 +127,13 @@ function saveUserData(userType, token) {
 
     console.log(`Saving ${userType} data to localStorage`);
 
+    // Clear all existing tokens first
     safeRemoveItem(STORAGE_KEYS.ADMIN_TOKEN);
     safeRemoveItem(STORAGE_KEYS.COOK_TOKEN);
     safeRemoveItem(STORAGE_KEYS.USER_TOKEN);
     safeRemoveItem(STORAGE_KEYS.AUTH_TOKEN);
 
+    // Set the user type and active user
     if (
       !safeSetItem(STORAGE_KEYS.USER_TYPE, userType) ||
       !safeSetItem(STORAGE_KEYS.ACTIVE_USER, userType)
@@ -142,23 +141,26 @@ function saveUserData(userType, token) {
       throw new Error("Failed to save user type");
     }
 
+    // Set a common AUTH_TOKEN for all user types for consistency
+    safeSetItem(STORAGE_KEYS.AUTH_TOKEN, token);
+
+    // Set the specific token based on user type
     if (userType === "admin") {
-      if (
-        !safeSetItem(STORAGE_KEYS.ADMIN_TOKEN, token) ||
-        !safeSetItem(STORAGE_KEYS.AUTH_TOKEN, token)
-      ) {
+      if (!safeSetItem(STORAGE_KEYS.ADMIN_TOKEN, token)) {
         throw new Error("Failed to save admin token");
       }
     } else if (userType === "cook") {
       if (!safeSetItem(STORAGE_KEYS.COOK_TOKEN, token)) {
         throw new Error("Failed to save cook token");
       }
-    }
-    else if (userType === "user") {
+    } else if (userType === "user") {
       if (!safeSetItem(STORAGE_KEYS.USER_TOKEN, token)) {
-        throw new Error("Failed to save cook token");
+        throw new Error("Failed to save user token"); // Fixed: Changed from "cook" to "user"
       }
+    } else {
+      throw new Error(`Invalid user type: ${userType}`);
     }
+
     console.log(`✅ ${userType} data saved successfully to localStorage`);
     return true;
   } catch (error) {
@@ -193,13 +195,13 @@ function authRequestInterceptor(config) {
 
 const API_URL = import.meta.env.VITE_APP_API_URL;
 if (!API_URL) {
-	console.error("❌ API URL is not defined in the .env file");
+  console.error("❌ API URL is not defined in the .env file");
 }
 
 // Create Axios instance
 export const api = Axios.create({
-	baseURL: API_URL,
-	withCredentials: true,
+  baseURL: API_URL,
+  withCredentials: true,
 });
 
 console.log("🌍 API Base URL:", API_URL);
@@ -213,7 +215,11 @@ api.interceptors.response.use(
     const message = error.response?.data?.message || error.message;
     console.error("❌ API Error:", message);
 
-    
+    // Handle unauthorized errors (401) by clearing auth data
+    if (error.response && error.response.status === 401) {
+      console.log("401 Unauthorized response detected, clearing auth data");
+      clearAuthData();
+    }
 
     return Promise.reject(error);
   }
@@ -235,4 +241,9 @@ function clearAuthData() {
   }
 }
 
-export { saveUserData, getToken, clearAuthData };
+// Helper function to get current user type
+function getCurrentUserType() {
+  return localStorage.getItem(STORAGE_KEYS.USER_TYPE) || null;
+}
+
+export { saveUserData, getToken, clearAuthData, getCurrentUserType };
