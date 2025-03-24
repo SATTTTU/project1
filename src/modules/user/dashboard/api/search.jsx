@@ -7,7 +7,7 @@ export const search = async ({ query }) => {
 
   try {
     const response = await api.get(`/api/search/${query}`); // Query is part of the URL
-    console.log(response.data);
+    console.log("serach",response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching search results:", error);

@@ -20,14 +20,14 @@ export const Header = () => {
 		};
 	}, []);
 	return (
-		<div className="absolute top-0 left-0 right-0 z-50">
+		<div className="absolute top-0 left-0 right-0 z-50 ">
 			<div className="container mx-auto px-4">
 				<div className="flex justify-between  items-center h-16 md:h-20">
 					<div className="flex items-center">
 						<Link to="/" className="flex items-center justify-center ">
-							<span className="text-[#426B1F] text-2xl md:text-3xl font-bold flex justify-center items-center">
+							<span className=" text-2xl md:text-4xl text-white font-bold flex justify-center items-center">
 								<span className="inline-block">
-									<img src={Logo} alt="logo" className="lg:w-10 w-10 " />
+									<img src={Logo} alt="logo" className="lg:w-12 w-12  " />
 								</span>
 								KhajaBox
 							</span>
@@ -47,7 +47,7 @@ export const Header = () => {
 							to="/authpage"
 							className="text-white lg:text-xl hover:text-green-400 transition-colors text-sm font-medium"
 						>
-							Login/Registerss
+							Login/Register
 						</Link>
 					</div>
 

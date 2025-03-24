@@ -1,18 +1,50 @@
-import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api-client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const UpdateUserBasket = async (userId) => {
-  if (!userId) return [];
-  const response = await api.put("/update/item/{basket_item_id}", {
-    params: { user_id: userId },
-  });
-  return response.data;
+export const updateCartItem = async ({ item_id, quantity }) => {
+  try {
+    const response = await api.put(`/api/baskets/update/item/${item_id}`, { quantity });
+    console.log("Updated Cart Item:", response.data.items);
+    return response.data.items;
+  } catch (error) {
+    console.error("Error updating cart item:", error.response?.data || error.message);
+    throw new Error(error.response?.data?.message || "Failed to update cart item.");
+  }
 };
 
-export const useUserUpdateBasket = (userId) => {
-  return useQuery({
-    queryKey: ["userBasket", userId],
-    queryFn: () => UpdateUserBasket(userId),
-    enabled: !!userId,
+export const useUpdateStoreItem = (mutationConfig = {}) => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: updateCartItem,
+    onMutate: async ({ item_id, quantity }) => {
+      await queryClient.cancelQueries(["cartItems"]); // Cancel any outgoing refetches
+      const previousCart = queryClient.getQueryData(["cartItems"]); // Get previous cart state
+
+      queryClient.setQueryData(["cartItems"], (oldCart) => {
+        return oldCart?.map((item) =>
+          item.item_id === item_id ? { ...item, quantity } : item
+        );
+      });
+
+      return { previousCart };
+    },
+    onError: (error, _, context) => {
+      if (context?.previousCart) {
+        queryClient.setQueryData(["cartItems"], context.previousCart); // Revert on error
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(["cartItems"]); // Refetch cart data after mutation
+    },
+    ...mutationConfig,
   });
+
+  return {
+    updateItem: mutation.mutateAsync,
+    isLoading: mutation.isPending,
+    error: mutation.error,
+    isError: mutation.isError,
+    isSuccess: mutation.isSuccess,
+  };
 };

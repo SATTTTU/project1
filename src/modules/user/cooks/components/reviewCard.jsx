@@ -1,14 +1,12 @@
 import { FiStar, FiTrash } from "react-icons/fi";
 import { useDeleteReview } from "../api/deleteReview";
-// import { useState } from "react";
 
 const ReviewCard = ({ review, setCook }) => {
   const { mutate: deleteReview, isLoading } = useDeleteReview({
     onSuccess: (deletedReviewId) => {
-      // ✅ Remove deleted review from UI
       setCook((prevCook) => ({
         ...prevCook,
-        reviews: prevCook.reviews.filter((r) => r.id !== deletedReviewId),
+        reviews: prevCook.reviews.filter((r) => r.review_id !== deletedReviewId), // ✅ Use review_id
         reviewCount: prevCook.reviewCount - 1,
       }));
     },
@@ -16,7 +14,7 @@ const ReviewCard = ({ review, setCook }) => {
 
   const handleDelete = () => {
     if (window.confirm("Are you sure you want to delete this review?")) {
-      deleteReview(review.id);
+      deleteReview(review.review_id);
     }
   };
 
@@ -36,7 +34,6 @@ const ReviewCard = ({ review, setCook }) => {
           </div>
         </div>
 
-        {/* Delete Button */}
         <button
           onClick={handleDelete}
           className="text-red-500 hover:text-red-700"

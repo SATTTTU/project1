@@ -11,7 +11,7 @@ export const CookCategories = ({ cookId,menuId, onAddToCart }) => {
   // Fetch menu items using the custom hook
   const { data: menuItems, isLoading, error } = useCategoryItems(cookId);
   const { data: Items } = useCategoryMenuItems(menuId);
-  console.log("items",Items)
+  console.log("menu vitra item",Items)
 
 
   console.log("Fetched menu items:", menuItems);
