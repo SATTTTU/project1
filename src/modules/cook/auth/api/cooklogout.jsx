@@ -3,18 +3,16 @@ import { useMutation } from "@tanstack/react-query";
 
 // Logout API Call
 const logoutCook = async () => {
-  const response = await api.post("/api/logout"); 
-  return response.data; 
+  const response = await api.post("/api/logout");
+  return response.data;
 };
 
 export const useCookLogout = ({ mutationConfig } = {}) => {
-  const mutation = useMutation({
-    mutationFn: logoutCook,
-    ...mutationConfig,
-  });
+  const mutation = useMutation(logoutCook, mutationConfig);
 
   return {
-    mutateAsync: mutation.mutateAsync,
+    logout: mutation.mutate,         // Updated here
+    logoutAsync: mutation.mutateAsync,
     isLoading: mutation.isLoading,
     error: mutation.error,
     isError: mutation.isError,
