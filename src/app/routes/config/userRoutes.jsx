@@ -206,6 +206,16 @@ export const userRoutes = [
 									{ path: "settings", element: <SettingsContent /> },
 								],
 							},
+							{
+								path: paths.user.payment.path,
+								lazy: async () => {
+									const { PaymentVerify } = await import(
+										"../../../modules/user/cart/components/payment-verify"
+									);
+									return { Component: PaymentVerify };
+								},
+							},
+							
 						],
 					},
 				],

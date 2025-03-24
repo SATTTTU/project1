@@ -10,15 +10,8 @@ import { CartHeader } from "@/modules/user/cart/components/cartheader"
 import { CartItems } from "@/modules/user/cart/components/cartItems"
 import { OrderSummary } from "@/modules/user/cart/components/orderSummary"
 import { useCheckout } from "@/modules/user/cart/api/checkout"
-// import { CartItems } from "./components/cart-items"
-// import { CartHeader } from "./components/cart-header"
-// import { EmptyCart } from "./components/empty-cart"
-// import { OrderConfirmation } from "./components/order-confirmation"
-// import { OrderSummary } from "./components/order-summary"
-// import { useUserBasket } from "./api/get-items"
-// import { useUpdateStoreItem } from "./api/update-items"
-// import { useDeleteStoreItem } from "./api/delete-items"
-// import { useCheckout } from "./api/checkout"
+import { CartSummary } from "@/modules/user/cart/components/cartSummary"
+
 
 export const Cart=()=> {
   const [orderComplete, setOrderComplete] = useState(false)
@@ -156,12 +149,7 @@ export const Cart=()=> {
             />
           </div>
           <div className="lg:w-1/3">
-            <OrderSummary
-              items={data[1]?.items || []}
-              subtotal={calculateSubtotal()}
-              onCheckout={handleCheckout}
-              isCheckoutLoading={isCheckoutLoading}
-            />
+            <CartSummary/>
           </div>
         </div>
       </div>

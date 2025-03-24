@@ -159,6 +159,13 @@ export const userPaths = {
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
+	payment: {
+		path: "/payment",
+		getHref: (redirectTo) =>
+			`/payment${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
 	token: {
 		path: "/api/password/reset/:token",
 		getHref: (redirectTo) =>
