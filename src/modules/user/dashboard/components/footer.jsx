@@ -11,17 +11,17 @@ import { Link } from "react-router-dom";
 export const Footer = () => {
 	return (
 		<div>
-			<footer className="bg-gray-100 border-t border-gray-200 pt-12 pb-6">
-				<div className="container mx-auto px-4 md:px-8">
+			<footer className="bg-gray-100 border-t border-gray-200 pt-12 pb-6 ">
+				<div className="container mx-auto px-4 md:px-8 text-center ">
 					<div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-						<div className="col-span-1">
-							<Link to="/user/home" className="flex items-center mb-4">
+						<div className="col-span-1 lg:text-left flex flex-col  ">
+							<Link to="/user/dashboard" className="flex mb-4 lg:text-left text-center items-center">
 								<img
-									src={Logo || "/placeholder.svg"}
+									src={Logo}
 									alt="KhanaBox Logo"
 									width={40}
 									height={40}
-									className="mr-2"
+									className=""
 								/>
 								<span className="text-3xl font-bold text-green-600">
 									KhanaBox
@@ -69,14 +69,14 @@ export const Footer = () => {
 							</ul>
 						</div>
 
-					<div className="col-span-1">
+					<div className="col-span-1 lg:text-right">
 						<h3 className="text-xl font-semibold ">Contact Us</h3>
 						<p className="mt-2 text-gray-600">
 							Email: support@Khajabox.com
 						</p>
 						<p className="text-gray-600">Phone: +1 (234) 567-890</p>
 
-						<div className="flex justify-center md:justify-start space-x-4 mt-4">
+						<div className="flex   space-x-4 mt-4 lg:justify-end">
 							<a href="#" className="hover:text-gray-300">
 								<FaFacebookF size={20} />
 							</a>

@@ -7,10 +7,11 @@ import { Footer } from "@/modules/user/dashboard/components/footer";
 import { SearchBar } from "@/modules/user/dashboard/components/searchBar";
 import { categories, cooks, popularItems } from "@/modules/user/dashboard/components/data";
 import { PopularCooks } from "@/modules/user/dashboard/components/popularCooks";
-import { CategorySection } from "@/modules/user/dashboard/components/categoriesSection";
+// import { CategorySection } from "@/modules/user/dashboard/components/categoriesSection";
 import { PromotedRestaurants } from "@/modules/user/dashboard/components/filterBadges";
-import { PopularItems } from "@/modules/user/dashboard/components/popularItemsSection";
+// import { PopularItems } from "@/modules/user/dashboard/components/popularItemsSection";
 import UserLocation from "@/modules/user/dashboard/components/setLocation";
+import { PopularItemsPage } from "@/modules/user/dashboard/components/popularItemsSection";
 
 export const Homepage = () => {
   
@@ -51,8 +52,8 @@ export const Homepage = () => {
       
       <main className="container px-4 py-6 mx-auto">
         <section className="mb-8">
-          <div className="flex flex-col md:flex-row md:items-center   md:justify-around mb-4">
-            <h2 className="text-xl font-bold">Up to -40% dealss</h2>
+          <div className="flex flex-col md:flex-row md:items-center   md:justify-between  mb-4">
+            <h2 className="text-xl font-bold">Up to -40% deals</h2>
             <SearchBar 
               navigate={navigate}
               popularItems={popularItems}
@@ -64,7 +65,7 @@ export const Homepage = () => {
           </div>
           <PromotedRestaurants/>
         </section>
-        <CategorySection categories={categories}/>
+        {/* <CategorySection categories={categories}/> */}
         <PopularCooks cooks={cooks} />
         <PopularItemsPage
           popularItems={popularItems}
@@ -73,8 +74,8 @@ export const Homepage = () => {
         />
         <UserLocation />
                 
-        <Footer />
       </main>
+        <Footer />
     </div>
   );
 };

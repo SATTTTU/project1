@@ -15,7 +15,6 @@ export const LoginForm = () => {
 	mutationConfig: {
 		onSuccess: (data) => {
 		  console.log("Login successful:", data);
-		//   navigate("/user/dashboard"); 
 		},
 		onError: (error) => {
 		  console.error("Login failed:", error);
@@ -55,7 +54,7 @@ export const LoginForm = () => {
           <button
             type="button"
             onClick={togglePasswordVisibility}
-            className="absolute right-3 top-10 text-gray-500"
+            className="absolute right-3 top-9 text-gray-500"
           >
             {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
           </button>

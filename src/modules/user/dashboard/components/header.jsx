@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   AiOutlineShoppingCart,
-  AiOutlineUser,
   AiOutlineHeart,
 } from "react-icons/ai";
 import { FaUserCircle } from "react-icons/fa";
@@ -51,7 +50,6 @@ export const Header = () => {
       // If it's already a full URL (starts with http/https)
       if (imagePath.startsWith("http")) return imagePath;
   
-      // Use your existing API_URL
       // If your API_URL already includes a trailing slash, you might need to adjust this
       const storageUrl = import.meta.env.VITE_APP_API_URL.endsWith("/")
         ? `${import.meta.env.VITE_APP_API_URL}storage/`

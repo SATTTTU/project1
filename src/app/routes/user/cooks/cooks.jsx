@@ -55,7 +55,6 @@ export const CookProfile = () => {
           </Link>
         </div>
 
-        {/* Cook Profile Section */}
         <section className="bg-white shadow-md rounded-lg p-6 flex flex-col md:flex-row items-center md:items-start gap-6">
           <img
             src={`${videoBaseUrl}${safeCook?.image_url}`}
@@ -85,7 +84,7 @@ export const CookProfile = () => {
 
         {/* Tabs */}
         <div className="mt-6">
-          <CookTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+          <CookTabs activeTab={activeTab} setActiveTab={setActiveTab} reviewCount={cook.reviews?.length} />
         </div>
 
         {/* Content */}
@@ -93,7 +92,7 @@ export const CookProfile = () => {
           {activeTab === "categories" && (
             <>
               <h2 className="text-xl font-bold text-gray-800 mb-4">Food Categories</h2>
-              <CookCategories cookId={safeCook.id} cook={safeCook} onAddToCart={handleAddToCart} />
+              <CookCategories cookId={safeCook.id}  cook={safeCook} onAddToCart={handleAddToCart} />
             </>
           )}
           {activeTab === "reviews" && (

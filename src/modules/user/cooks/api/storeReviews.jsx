@@ -7,6 +7,7 @@ const createReview = async (reviewData) => {
       ratings: reviewData.ratings, // Correct field name
       comment: reviewData.comment,
     });
+     console.log("Review", response.data)
     return response.data;
   };
 

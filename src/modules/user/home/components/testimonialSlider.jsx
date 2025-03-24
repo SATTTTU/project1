@@ -59,6 +59,7 @@ const testimonials = [
 ]
 
 export const TestimonialSlider = () => {
+  
   const [domLoaded, setDomLoaded] = useState(false)
 
   useEffect(() => {
@@ -114,7 +115,7 @@ export const TestimonialSlider = () => {
                           alt={testimonial.name}
                           width={50}
                           height={50}
-                          className="rounded-full mr-4"
+                          className="rounded-full mr-4 lg:h-[50px] lg:w-[50px]"
                         />
                         <div>
                           <h3 className="font-semibold">{testimonial.name}</h3>

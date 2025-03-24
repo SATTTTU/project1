@@ -26,7 +26,6 @@ export const userRoutes = [
 							return { Component: RegisterPage };
 						},
 						// ErrorBoundary: AppRootErrorBoundary,
-
 					},
 					{
 						path: paths.user.login.path,
@@ -93,7 +92,7 @@ export const userRoutes = [
 						},
 					},
 					{
-						element: <ProtectedRoute  allowedRoles={["user"]}/>, 
+						element: <ProtectedRoute allowedRoles={["user"]} />,
 						children: [
 							{
 								path: paths.user.dashboard.path,
@@ -104,7 +103,14 @@ export const userRoutes = [
 									return { Component: Homepage };
 								},
 							},
-							
+							{
+								path: paths.user.cart.path,
+								lazy: async () => {
+									const { Cart } = await import("../../routes/user/cart/cart");
+									return { Component: Cart };
+								},
+							},
+
 							{
 								path: paths.user.changePassword.path,
 								lazy: async () => {
@@ -112,13 +118,6 @@ export const userRoutes = [
 										"../../routes/user/auth/change-password"
 									);
 									return { Component: ChangePassword };
-								},
-							},
-							{
-								path: paths.user.cart.path,
-								lazy: async () => {
-									const { Cart } = await import("../../routes/user/cart/cart");
-									return { Component: Cart };
 								},
 							},
 

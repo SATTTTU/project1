@@ -47,14 +47,14 @@ export const HeroSlider = () => {
 
       <div className="relative w-full h-full">
         <button
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white rounded-full p-2 transition-colors"
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover:bg-black/50 text-white rounded-full p-2 transition-colors"
           onClick={() => swiperInstance?.slidePrev()}
           aria-label="Previous slide"
         >
           <ChevronLeft className="h-6 w-6" />
         </button>
         <button
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white rounded-full p-2 transition-colors"
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover:bg-black/50 text-white rounded-full p-2 transition-colors"
           onClick={() => swiperInstance?.slideNext()}
           aria-label="Next slide"
         >
