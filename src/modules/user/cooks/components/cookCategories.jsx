@@ -8,7 +8,6 @@ import { useCategoryMenuItems } from "../api/getCategoryMenu";
 export const CookCategories = ({ cookId,menuId, onAddToCart }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  // Fetch menu items using the custom hook
   const { data: menuItems, isLoading, error } = useCategoryItems(cookId);
   const { data: Items } = useCategoryMenuItems(menuId);
   console.log("menu vitra item",Items)
@@ -20,7 +19,6 @@ export const CookCategories = ({ cookId,menuId, onAddToCart }) => {
   if (error) return <p className="text-red-500">Error fetching menu items.</p>;
   if (!menuItems || menuItems.length === 0) return <p>No menu items found.</p>;
 
-  // Group dishes by category
   const categoriesMap = menuItems.reduce((acc, dish) => {
     const category = dish.name || "Other";
     if (!acc[category]) {
@@ -30,7 +28,6 @@ export const CookCategories = ({ cookId,menuId, onAddToCart }) => {
     return acc;
   }, {});
 
-  // Convert to array for rendering
   const categories = Object.keys(categoriesMap).map((name) => ({
     name,
     dishes: categoriesMap[name],

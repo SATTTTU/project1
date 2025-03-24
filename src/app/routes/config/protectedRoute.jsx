@@ -34,10 +34,10 @@ const ProtectedRoute = ({ allowedRoles = [] }) => {
     if (!hasRequiredRole) {
       // Redirect based on user type and current path
       if (user?.type === "cook" && location.pathname.startsWith("/admin")) {
-        return <Navigate to="/cook/dashboard" replace state={{ from: location }} />;
+        return <Navigate to="/cook/homepage" replace state={{ from: location }} />;
       }
       if (user?.type === "cook" && location.pathname.startsWith("/user")) {
-        return <Navigate to="/cook/dashboard" replace state={{ from: location }} />;
+        return <Navigate to="/cook/homepage" replace state={{ from: location }} />;
       }
       if (user?.type === "admin" && location.pathname.startsWith("/cook")) {
         return <Navigate to="/admin/dashboard" replace state={{ from: location }} />;
@@ -55,7 +55,7 @@ const ProtectedRoute = ({ allowedRoles = [] }) => {
       // Default redirects based on user type
       const defaultRedirects = {
         admin: "/admin/dashboard",
-        cook: "/cook/dashboard",
+        cook: "/cook/homepage",
         user: "/user/dashboard"
       };
       

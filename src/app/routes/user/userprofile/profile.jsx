@@ -29,6 +29,7 @@ const ProfileLayout = () => {
 	}, [location]);
 
 	const handleLogout = () => {
+		localStorage.clear();
 		navigate("/");
 	};
 

@@ -5,7 +5,7 @@ import { usePopularDishes } from "../api/get-items";
 
 export const PopularItemsPage = () => {
 	const { data: menuItems, isLoading, error } = usePopularDishes();
-	console.log("data", menuItems)
+	console.log("data for all ", menuItems)
 
   // ✅ Mutation to add item to the cart
   const addToCartMutation = useMutation({

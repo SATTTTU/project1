@@ -1,31 +1,21 @@
-import { api } from "@/lib/api-client";
-import { clearCart } from "@/store/cart/cart";
-import { useMutation } from "@tanstack/react-query";
-import { useDispatch, useSelector } from "react-redux";
+import { useMutation } from "@tanstack/react-query"
+import { api } from "@/lib/api-client"
 
-const checkout = async (cartItems) => {
+export const processCheckout = async (cartData) => {
   try {
-    const response = await api.post("/api/checkout", { items: cartItems });
-    console.log("Checkout Successful:", response.data);
-    return response.data;
+    const response = await api.post("/api/checkout", cartData)
+    console.log("checkout ", response.data)
+    return response.data
   } catch (error) {
-    console.error("Checkout Error:", error.response?.data || error.message);
-    throw error; // Ensure error is propagated
+    console.error("Checkout error:", error)
+    throw new Error("Failed to process checkout")
   }
-};
+}
 
-export const useCheckout = ({ mutationConfig } = {}) => {
-  const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart.items);
-
+export const useCheckout = (mutationConfig = {}) => {
   return useMutation({
-    mutationFn: () => checkout(cartItems),
-    onSuccess: () => {
-      dispatch(clearCart()); // Clear cart after successful checkout
-    },
-    onError: (error) => {
-      console.error("Checkout failed:", error);
-    },
+    mutationFn: processCheckout,
     ...mutationConfig,
-  });
-};
+  })
+}
+

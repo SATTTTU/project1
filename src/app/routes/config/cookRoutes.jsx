@@ -53,6 +53,16 @@ export const cookRoutes = [
             ErrorBoundary: AppRootErrorBoundary,
           },
           {
+            path: paths.cook.pendingPage.path,
+            lazy: async () => {
+              const { PendingPageroute } = await import(
+                "../cook/auth/pendingpage"
+              );
+              return { Component: PendingPageroute };
+            },
+            ErrorBoundary: AppRootErrorBoundary,
+          },
+          {
             path: paths.cook.resetPassword.path,
             lazy: async () => {
               const { ResetPasswordRoute } = await import(
@@ -133,16 +143,7 @@ export const cookRoutes = [
                 },
                 ErrorBoundary: AppRootErrorBoundary,
               },
-              {
-                path: paths.cook.pendingPage.path,
-                lazy: async () => {
-                  const { PendingPageroute } = await import(
-                    "../cook/auth/pendingpage"
-                  );
-                  return { Component: PendingPageroute };
-                },
-                ErrorBoundary: AppRootErrorBoundary,
-              },
+              
             ],
           },
         ],
