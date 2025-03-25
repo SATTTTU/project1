@@ -1,28 +1,63 @@
-import { api } from "@/lib/api-client"
 import { useMutation } from "@tanstack/react-query"
+import { api } from "@/lib/api-client"
 
-const payment = async (userData) => {
+// Function to verify payment with Khalti
+export const verifyPayment = async (paymentData) => {
   try {
-    const response = await api.post("/api/verify-payment", userData)
-    console.log("payment", response.data)
+    console.log("Verifying payment with data:", paymentData)
+
+    // Ensure we have the required fields
+    if (!paymentData.pidx) {
+      throw new Error("Missing payment ID (pidx)")
+    }
+
+    // Send verification data to your backend
+    const response = await api.post("/api/verify-payment", paymentData)
+
+    // Check if response exists and has data
+    if (!response || !response.data) {
+      throw new Error("Empty response from verification server")
+    }
+
+    console.log("Payment verification response:", response.data)
+
+    // Store verified transaction data for order success page
+    if (response.data.success) {
+      localStorage.setItem(
+        "verified_transaction",
+        JSON.stringify({
+          ...paymentData,
+          ...response.data,
+          verified: true,
+        }),
+      )
+    }
+
     return response.data
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Payment verification failed.")
+    // Improved error handling
+    console.error("Payment verification error:", error)
+
+    // Extract error message from response if available
+    const errorMessage =
+      error.response?.data?.message || error.response?.data?.error || error.message || "Payment verification failed"
+
+    throw new Error(errorMessage)
   }
 }
 
-export const useVerifyPayment = ({ mutationConfig } = {}) => {
-  const mutation = useMutation({
-    mutationFn: payment,
+// React Query hook for verifying payment
+export const useVerifyPayment = (mutationConfig = {}) => {
+  return useMutation({
+    mutationFn: verifyPayment,
     ...mutationConfig,
+    onError: (error) => {
+      console.error("Verification mutation error:", error)
+      // Call the provided onError if it exists
+      if (mutationConfig.onError) {
+        mutationConfig.onError(error)
+      }
+    },
   })
-
-  return {
-    mutateAsync: mutation.mutateAsync,
-    isLoading: mutation.isPending,
-    error: mutation.error,
-    isError: mutation.isError,
-    isSuccess: mutation.isSuccess,
-  }
 }
 

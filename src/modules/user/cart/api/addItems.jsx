@@ -5,7 +5,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 export const storeCartItem = async ({ menu_item_id, quantity }) => {
   try {
     const response = await api.post("/api/baskets/store", { menu_item_id, quantity })
-    return response.data.items // Return full updated cart
+    console.log("basket ", response.data)
+    return response.data.items
   } catch (error) {
     throw new Error(error.response?.data?.message || "Failed to add item to cart.")
   }

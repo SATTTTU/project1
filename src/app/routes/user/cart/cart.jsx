@@ -8,7 +8,6 @@ import { OrderConfirmation } from "@/modules/user/cart/components/orderConfirmat
 import { EmptyCart } from "@/modules/user/cart/components/emptyCart"
 import { CartHeader } from "@/modules/user/cart/components/cartheader"
 import { CartItems } from "@/modules/user/cart/components/cartItems"
-import { OrderSummary } from "@/modules/user/cart/components/orderSummary"
 import { useCheckout } from "@/modules/user/cart/api/checkout"
 import { CartSummary } from "@/modules/user/cart/components/cartSummary"
 

@@ -1,28 +1,39 @@
 import { useMutation } from "@tanstack/react-query"
 import { api } from "@/lib/api-client"
 
-// Function to create a payment with Khalti
 export const processCheckout = async (checkoutData) => {
   try {
-    // Send checkout data to your backend
+    console.log("Making checkout API request with data:", checkoutData)
+
     const response = await api.post("/api/checkout", checkoutData)
 
-    // Log the response for debugging
-    console.log("Khalti payment creation response:", response.data)
+    if (!response?.data) {
+      throw new Error("Invalid response from server")
+    }
 
-    // Return the response data which should contain payment_url
+    console.log("Checkout API response data:", response.data)
+
     return response.data
   } catch (error) {
-    console.error("Checkout error:", error)
-    throw new Error(error.response?.data?.message || "Failed to process checkout")
+    console.error("Checkout API error:", error)
+
+    const errorMessage =
+      error.response?.data?.message || error.response?.data?.error || error.message || "Failed to process checkout"
+
+    throw new Error(errorMessage)
   }
 }
 
-// React Query hook for checkout
 export const useCheckout = (mutationConfig = {}) => {
   return useMutation({
     mutationFn: processCheckout,
     ...mutationConfig,
+    onError: (error) => {
+      console.error("Checkout mutation error:", error)
+      if (mutationConfig.onError) {
+        mutationConfig.onError(error)
+      }
+    },
   })
 }
 

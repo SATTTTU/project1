@@ -1,13 +1,12 @@
-"use client"
 
 import { useEffect, useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
-// import { useVerifyPayment } from "../api/verify-payment"
-import { toast } from "react-toastify"
 import { useVerifyPayment } from "../api/verify-payment"
+import { toast } from "react-toastify"
 
-export const PaymentVerify=()=> {
+export const  PaymentVerify=()=> {
   const [verificationStatus, setVerificationStatus] = useState("verifying")
+  const [errorDetails, setErrorDetails] = useState("")
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -18,38 +17,34 @@ export const PaymentVerify=()=> {
     isError,
     error,
   } = useVerifyPayment({
-    mutationConfig: {
-      onSuccess: (data) => {
-        // Handle successful verification
-        console.log("Payment verified successfully:", data)
-        setVerificationStatus("success")
+    onSuccess: (data) => {
+      console.log("Payment verification successful:", data)
+      setVerificationStatus("success")
 
-        // Clear the transaction from localStorage
-        localStorage.removeItem("khalti_transaction")
+      // Show success message
+      toast.success("Payment successful!")
 
-        // Show success message
-        toast.success("Payment successful!")
+      // Redirect to success page after a short delay
+      setTimeout(() => navigate("/order-success"), 2000)
+    },
+    onError: (error) => {
+      console.error("Payment verification failed:", error)
+      setVerificationStatus("failed")
+      setErrorDetails(error.message || "Unknown error")
 
-        // Redirect to success page after a short delay
-        setTimeout(() => navigate("/order-success"), 2000)
-      },
-      onError: (error) => {
-        // Handle verification error
-        console.error("Payment verification failed:", error)
-        setVerificationStatus("failed")
+      // Show error message
+      toast.error(error.message || "Payment verification failed")
 
-        // Show error message
-        toast.error(error.message || "Payment verification failed")
-
-        // Redirect back to cart after a short delay
-        setTimeout(() => navigate("/cart"), 3000)
-      },
+      // Redirect back to cart after a short delay
+      setTimeout(() => navigate("/cart"), 3000)
     },
   })
 
   useEffect(() => {
     const verifyTransaction = async () => {
       try {
+        console.log("Payment callback URL:", window.location.href)
+
         // Get URL parameters
         const queryParams = new URLSearchParams(location.search)
         const pidx = queryParams.get("pidx")
@@ -58,41 +53,46 @@ export const PaymentVerify=()=> {
         const mobile = queryParams.get("mobile")
         const transaction_id = queryParams.get("transaction_id")
 
-        // Get stored transaction details
-        const storedTransaction = localStorage.getItem("khalti_transaction")
-
-        if (!pidx || !storedTransaction) {
-          setVerificationStatus("failed")
-          toast.error("Invalid payment session")
-          setTimeout(() => navigate("/cart"), 3000)
-          return
-        }
-
-        const transaction = JSON.parse(storedTransaction)
-
-        // Verify if this is the same transaction we initiated
-        if (transaction.pidx !== pidx) {
-          setVerificationStatus("failed")
-          toast.error("Transaction mismatch")
-          setTimeout(() => navigate("/cart"), 3000)
-          return
-        }
-
-        // If status is already provided as failed
-        if (status === "failed") {
-          setVerificationStatus("failed")
-          toast.error("Payment was not successful")
-          setTimeout(() => navigate("/cart"), 3000)
-          return
-        }
-
-        // Prepare verification data
-        const verificationData = {
+        console.log("Payment callback parameters:", {
           pidx,
           status,
           amount,
           mobile,
           transaction_id,
+        })
+
+        // Check if we have the necessary parameters
+        if (!pidx) {
+          throw new Error("Missing payment ID (pidx) in callback URL")
+        }
+
+        // Get stored transaction details
+        const storedTransactionJson = localStorage.getItem("khalti_transaction")
+        console.log("Stored transaction:", storedTransactionJson)
+
+        if (!storedTransactionJson) {
+          throw new Error("No transaction data found. Please try again.")
+        }
+
+        const storedTransaction = JSON.parse(storedTransactionJson)
+
+        // Verify if this is the same transaction we initiated
+        if (storedTransaction.pidx !== pidx) {
+          throw new Error("Transaction mismatch. Please try again.")
+        }
+
+        // If status is already provided as failed
+        if (status === "failed") {
+          throw new Error("Payment was not successful. Please try again.")
+        }
+
+        // Prepare verification data
+        const verificationData = {
+          pidx,
+          status: status || "unknown",
+          amount: amount || storedTransaction.amount,
+          mobile: mobile || "",
+          transaction_id: transaction_id || "",
         }
 
         // Call the verification API
@@ -100,7 +100,8 @@ export const PaymentVerify=()=> {
       } catch (error) {
         console.error("Error in verification process:", error)
         setVerificationStatus("failed")
-        toast.error("Error verifying payment")
+        setErrorDetails(error.message || "Unknown error")
+        toast.error(error.message || "Error verifying payment")
         setTimeout(() => navigate("/cart"), 3000)
       }
     }
@@ -155,6 +156,7 @@ export const PaymentVerify=()=> {
               </div>
               <h2 className="text-xl font-bold text-red-600">Payment Failed</h2>
               <p className="text-gray-600 mt-2">We couldn't process your payment.</p>
+              {errorDetails && <p className="text-red-500 text-sm mt-1">{errorDetails}</p>}
               <p className="text-gray-600 mt-1">Redirecting back to cart...</p>
             </>
           )}
