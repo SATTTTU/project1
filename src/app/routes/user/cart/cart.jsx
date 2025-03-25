@@ -10,7 +10,9 @@ import { EmptyCart } from "@/modules/user/cart/components/emptyCart"
 
 export const Cart=()=> {
   const { data, isLoading, error, refetch } = useUserBasket()
-  const updatedData = Object.values(data)[0]
+
+
+
 
 
   const { updateItem, isLoading: isUpdating } = useUpdateStoreItem()
@@ -18,8 +20,8 @@ export const Cart=()=> {
 
   // Calculate cart totals
   const calculateSubtotal = () => {
-    if (!data || !data[7]?.items) return 0
-    return data[1].items.reduce((total, item) => total + (item.price * item.quantity || 0), 0)
+    if (!data || !data[0]?.items) return 0
+    return data[0].items.reduce((total, item) => total + (item.price * item.quantity || 0), 0)
   }
 
   const calculateTax = () => {
@@ -89,7 +91,7 @@ export const Cart=()=> {
   return (
     <div className="min-h-screen bg-gray-50">
 
-      <CartHeader itemCount={data[7]?.items?.length || 0} />
+      <CartHeader itemCount={data[0]?.items?.length || 0} />
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="lg:w-2/3">

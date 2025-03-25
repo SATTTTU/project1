@@ -87,7 +87,6 @@ export function CartItem({ item, onRemoveItem, isDeleting }) {
             <button
               onClick={(e) => {
                 e.preventDefault() // Prevent default to avoid page refresh
-                alert(JSON.stringify(item))
                 onRemoveItem(item.menu_item_id)
               }}
               disabled={isDeleting}
