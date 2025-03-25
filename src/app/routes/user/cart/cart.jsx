@@ -10,6 +10,9 @@ import { EmptyCart } from "@/modules/user/cart/components/emptyCart"
 
 export const Cart=()=> {
   const { data, isLoading, error, refetch } = useUserBasket()
+  const updatedData = Object.values(data)[0]
+
+
   const { updateItem, isLoading: isUpdating } = useUpdateStoreItem()
   const { mutateAsync: deleteItem, isLoading: isDeleting } = useDeleteStoreItem()
 
@@ -75,7 +78,7 @@ export const Cart=()=> {
   }
 
 
-  console.log('the data is ', data,data.items)
+
 
   if (!data ) {
     return <EmptyCart />
