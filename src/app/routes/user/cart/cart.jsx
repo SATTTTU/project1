@@ -9,76 +9,78 @@ import { CheckoutButton } from "@/modules/user/cart/components/checkoutButton"
 import { EmptyCart } from "@/modules/user/cart/components/emptyCart"
 
 export const Cart=()=> {
-  const { data, isLoading, error, refetch } = useUserBasket()
-  const updatedData = Object.values(data)[0]
+  const { data, isLoading, error, refetch } = useUserBasket();
+	const { updateItem, isLoading: isUpdating } = useUpdateStoreItem();
+	const { mutateAsync: deleteItem, isLoading: isDeleting } =
+		useDeleteStoreItem();
 
+    
 
-  const { updateItem, isLoading: isUpdating } = useUpdateStoreItem()
-  const { mutateAsync: deleteItem, isLoading: isDeleting } = useDeleteStoreItem()
+	// Calculate cart totals
+	const calculateSubtotal = () => {
+		if (!data || !data[7]?.items) return 0;
+		return data[1].items.reduce(
+			(total, item) => total + (item.price * item.quantity || 0),
+			0
+		);
+	};
 
-  // Calculate cart totals
-  const calculateSubtotal = () => {
-    if (!data || !data[7]?.items) return 0
-    return data[1].items.reduce((total, item) => total + (item.price * item.quantity || 0), 0)
-  }
+	const calculateTax = () => {
+		return calculateSubtotal() * 0.1; // 10% tax
+	};
 
-  const calculateTax = () => {
-    return calculateSubtotal() * 0.1 // 10% tax
-  }
+	const calculateShipping = () => {
+		return calculateSubtotal() > 1000 ? 0 : 100; // Free shipping over Rs. 1000
+	};
 
-  const calculateShipping = () => {
-    return calculateSubtotal() > 1000 ? 0 : 100 // Free shipping over Rs. 1000
-  }
+	const calculateTotal = () => {
+		return calculateSubtotal() + calculateTax() + calculateShipping();
+	};
 
-  const calculateTotal = () => {
-    return calculateSubtotal() + calculateTax() + calculateShipping()
-  }
+	const handleQuantityChange = async (itemId, newQuantity) => {
+		if (newQuantity < 1) return;
+		try {
+			await updateItem({ item_id: itemId, quantity: newQuantity });
+		} catch (error) {
+			console.error("Error updating quantity:", error);
+		}
+	};
 
-  const handleQuantityChange = async (itemId, newQuantity) => {
-    if (newQuantity < 1) return
-    try {
-      await updateItem({ item_id: itemId, quantity: newQuantity })
-    } catch (error) {
-      console.error("Error updating quantity:", error)
-    }
-  }
+	const handleRemoveItem = async (itemId) => {
+		try {
+			alert(itemId);
+			await deleteItem({ item_id: itemId });
+		} catch (error) {
+			console.error("Error removing item:", error);
+		}
+	};
 
-  const handleRemoveItem = async (itemId) => {
-    try {
-      alert(itemId)
-      await deleteItem({ item_id: itemId })
-    } catch (error) {
-      console.error("Error removing item:", error)
-    }
-  }
+	if (isLoading) {
+		return (
+			<div className="min-h-screen flex items-center justify-center">
+				<div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+			</div>
+		);
+	}
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-      </div>
-    )
-  }
+	if (error) {
+		return (
+			<div className="min-h-screen flex items-center justify-center">
+				<div className="bg-red-50 p-6 rounded-lg">
+					<h2 className="text-red-600 font-bold text-xl">Error loading cart</h2>
+					<p className="text-red-500">{error.message}</p>
+					<button
+						onClick={() => refetch()}
+						className="mt-4 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
+					>
+						Try Again
+					</button>
+				</div>
+			</div>
+		);
+	}
 
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="bg-red-50 p-6 rounded-lg">
-          <h2 className="text-red-600 font-bold text-xl">Error loading cart</h2>
-          <p className="text-red-500">{error.message}</p>
-          <button
-            onClick={() => refetch()}
-            className="mt-4 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
-          >
-            Try Again
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-
-
+	console.log("the data is ", data, data.items);
 
   if (!data ) {
     return <EmptyCart />
