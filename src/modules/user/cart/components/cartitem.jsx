@@ -25,9 +25,10 @@ export function CartItem({ item, onRemoveItem, isDeleting }) {
     setIsUpdating(true)
 
     try {
-      // Use setTimeout to debounce API calls
-      await updateItem({ item_id: item.item_id, quantity: newQuantity })
-    } catch (error) {
+			// Use setTimeout to debounce API calls
+			await updateItem({ item_id: item.menu_item_id, quantity: newQuantity })
+			console.log("test", item.menu_item_id, newQuantity);
+		} catch (error) {
       console.error("Failed to update quantity:", error)
       // Revert to original quantity on error
       setQuantity(item.quantity)
@@ -87,7 +88,6 @@ export function CartItem({ item, onRemoveItem, isDeleting }) {
             <button
               onClick={(e) => {
                 e.preventDefault() // Prevent default to avoid page refresh
-                alert(JSON.stringify(item))
                 onRemoveItem(item.menu_item_id)
               }}
               disabled={isDeleting}

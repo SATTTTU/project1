@@ -6,15 +6,13 @@ export const verifyPayment = async (paymentData) => {
   try {
     console.log("Verifying payment with data:", paymentData)
 
-    // Ensure we have the required fields
     if (!paymentData.pidx) {
       throw new Error("Missing payment ID (pidx)")
     }
 
-    // Send verification data to your backend
     const response = await api.post("/api/verify-payment", paymentData)
 
-    // Check if response exists and has data
+    console.log(reponse)
     if (!response || !response.data) {
       throw new Error("Empty response from verification server")
     }

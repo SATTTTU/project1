@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 // Fetch cart items from API
 export const getCartItems = async () => {
   const response = await api.get("/api/baskets/index")
+   console.log("getCart", response.data);
   return response.data
 }
 

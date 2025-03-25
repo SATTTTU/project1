@@ -1,12 +1,16 @@
 "use client"
 
-import { useState } from "react"
+import { useState,useEffect } from "react"
 import { toast } from "react-toastify"
 import { useUserBasket } from "../api/getItems"
 import { useCheckout } from "../api/checkout"
+import { useVerifyPayment } from "../api/verify-payment"
+// import {useNavigate} from "react-router"
+import {useNavigate} from "react-router-dom"
 
-export function CheckoutButton() {
+export const CheckoutButton=()=> {
   const [isProcessing, setIsProcessing] = useState(false)
+  const navigate= useNavigate();
   const { data: cartData } = useUserBasket()
 
   const { mutateAsync: processCheckout } = useCheckout({
@@ -18,15 +22,26 @@ export function CheckoutButton() {
       toast.error(error.message || "Checkout failed. Please try again.")
     },
   })
+  const { mutate: verifyPayment } = useVerifyPayment({
+    // console.log("verify",verifyPayment())
+    onSuccess: (data) => {
 
+      console.log("Payment verification successful:", data);
+      toast.success("Payment verified successfully!");
+    },
+    onError: (error) => {
+      console.error("Payment verification failed:", error);
+      toast.error("Payment verification failed. Please contact support.");
+    },
+  });
   // Calculate total amount
   const calculateTotal = () => {
-    if (!cartData || !cartData[7]?.items) return 0
-    return cartData[7].items.reduce((total, item) => total + (item.price * item.quantity || 0), 0)
+    if (!cartData || !cartData[0]?.items) return 0
+    return cartData[0].items.reduce((total, item) => total + (item.price * item.quantity || 0), 0)
   }
 
   const handleCheckout = async () => {
-    if (!cartData || !cartData[7]?.items || cartData[7].items.length === 0) {
+    if (!cartData || !cartData[0]?.items || cartData[0].items.length === 0) {
       toast.error("Your cart is empty. Add items before checking out.")
       return
     }
@@ -36,7 +51,7 @@ export function CheckoutButton() {
 
       const checkoutData = {
         // Cart items
-        items: cartData[7].items.map((item) => ({
+        items: cartData[0].items.map((item) => ({
           id: item.item_id,
           quantity: item.quantity,
         })),
@@ -114,7 +129,13 @@ export function CheckoutButton() {
       setIsProcessing(false)
     }
   }
-
+    useEffect(() => {
+    const storedPidx = localStorage.getItem("khalti_pidx");
+    if (storedPidx) {
+      verifyPayment({ pidx: storedPidx });
+    }
+    // navigate("/user/login")
+  }, [verifyPayment]);
   return (
     <button
       onClick={handleCheckout}

@@ -1,4 +1,3 @@
-
 import { useDeleteStoreItem } from "@/modules/user/cart/api/deleteItems"
 import { useUserBasket } from "@/modules/user/cart/api/getItems"
 import { useUpdateStoreItem } from "@/modules/user/cart/api/updateItems"
@@ -9,21 +8,16 @@ import { CheckoutButton } from "@/modules/user/cart/components/checkoutButton"
 import { EmptyCart } from "@/modules/user/cart/components/emptyCart"
 
 export const Cart=()=> {
-  const { data, isLoading, error, refetch } = useUserBasket();
-	const { updateItem, isLoading: isUpdating } = useUpdateStoreItem();
-	const { mutateAsync: deleteItem, isLoading: isDeleting } =
-		useDeleteStoreItem();
+  const { data, isLoading, error, refetch } = useUserBasket()
+  const { updateItem, isLoading: isUpdating } = useUpdateStoreItem()
+  const { mutateAsync: deleteItem, isLoading: isDeleting } = useDeleteStoreItem()
 
-    
-
-	// Calculate cart totals
-	const calculateSubtotal = () => {
-		if (!data || !data[7]?.items) return 0;
-		return data[1].items.reduce(
-			(total, item) => total + (item.price * item.quantity || 0),
-			0
-		);
-	};
+  console.log("data of basket", data)
+  // Calculate cart totals
+  const calculateSubtotal = () => {
+    if (!data || !data[0]?.items) return 0
+    return data[0].items.reduce((total, item) => total + (item.price * item.quantity || 0), 0)
+  }
 
 	const calculateTax = () => {
 		return calculateSubtotal() * 0.1; // 10% tax
@@ -73,7 +67,7 @@ export const Cart=()=> {
 						onClick={() => refetch()}
 						className="mt-4 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
 					>
-						Try Again
+						Try Again gjhmgygjgjhgjhgjhgf
 					</button>
 				</div>
 			</div>
@@ -82,16 +76,16 @@ export const Cart=()=> {
 
 	console.log("the data is ", data, data.items);
 
-  if (!data ) {
-    return <EmptyCart />
-  }
+	if (!data) {
+		return <div>no data</div>;
+	}
 
 
 
   return (
     <div className="min-h-screen bg-gray-50">
 
-      <CartHeader itemCount={data[7]?.items?.length || 0} />
+      <CartHeader itemCount={data[0]?.items?.length || 0} />
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="lg:w-2/3">
