@@ -21,12 +21,12 @@ export function CheckoutButton() {
 
   // Calculate total amount
   const calculateTotal = () => {
-    if (!cartData || !cartData[1]?.items) return 0
-    return cartData[1].items.reduce((total, item) => total + (item.price * item.quantity || 0), 0)
+    if (!cartData || !cartData[7]?.items) return 0
+    return cartData[7].items.reduce((total, item) => total + (item.price * item.quantity || 0), 0)
   }
 
   const handleCheckout = async () => {
-    if (!cartData || !cartData[1]?.items || cartData[1].items.length === 0) {
+    if (!cartData || !cartData[7]?.items || cartData[7].items.length === 0) {
       toast.error("Your cart is empty. Add items before checking out.")
       return
     }
@@ -36,7 +36,7 @@ export function CheckoutButton() {
 
       const checkoutData = {
         // Cart items
-        items: cartData[1].items.map((item) => ({
+        items: cartData[7].items.map((item) => ({
           id: item.item_id,
           quantity: item.quantity,
         })),

@@ -15,7 +15,7 @@ export const Cart=()=> {
 
   // Calculate cart totals
   const calculateSubtotal = () => {
-    if (!data || !data[1]?.items) return 0
+    if (!data || !data[7]?.items) return 0
     return data[1].items.reduce((total, item) => total + (item.price * item.quantity || 0), 0)
   }
 
@@ -42,6 +42,7 @@ export const Cart=()=> {
 
   const handleRemoveItem = async (itemId) => {
     try {
+      alert(itemId)
       await deleteItem({ item_id: itemId })
     } catch (error) {
       console.error("Error removing item:", error)
@@ -73,13 +74,19 @@ export const Cart=()=> {
     )
   }
 
-  if (!data || !data[1]?.items || data[1].items.length === 0) {
+
+  console.log('the data is ', data,data.items)
+
+  if (!data ) {
     return <EmptyCart />
   }
 
+
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <CartHeader itemCount={data[1]?.items?.length || 0} />
+
+      <CartHeader itemCount={data[7]?.items?.length || 0} />
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="lg:w-2/3">

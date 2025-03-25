@@ -4,16 +4,15 @@ import { api } from "@/lib/api-client"
 export const processCheckout = async (checkoutData) => {
   try {
     console.log("Making checkout API request with data:", checkoutData)
-
     const response = await api.post("/api/checkout", checkoutData)
 
-    if (!response?.data) {
+    if (!response) {
       throw new Error("Invalid response from server")
     }
 
     console.log("Checkout API response data:", response.data)
 
-    return response.data
+    return response
   } catch (error) {
     console.error("Checkout API error:", error)
 
