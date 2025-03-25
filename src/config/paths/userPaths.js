@@ -82,13 +82,13 @@ export const userPaths = {
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
-	profileContent: {
-		path: "/user/profiles",
-		getHref: (redirectTo) =>
-			`/user/profiles${
-				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
-			}`,
-	},
+	// profileContent: {
+	// 	path: "/user/profiles",
+	// 	getHref: (redirectTo) =>
+	// 		`/user/profiles${
+	// 			redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+	// 		}`,
+	// },
 	orderHistory: {
 		path: "/user/orders",
 		getHref: (redirectTo) =>

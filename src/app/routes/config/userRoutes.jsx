@@ -130,15 +130,15 @@ export const userRoutes = [
 									return { Component: ProfilePage };
 								},
 							},
-							{
-								path: paths.user.profileContent.path,
-								lazy: async () => {
-									const { MyProfile } = await import(
-										"../../../modules/user/userprofile/components/editProfile"
-									);
-									return { Component: MyProfile };
-								},
-							},
+							// {
+							// 	path: paths.user.profileContent.path,
+							// 	lazy: async () => {
+							// 		const { MyProfile } = await import(
+							// 			"../../../modules/user/userprofile/components/editProfile"
+							// 		);
+							// 		return { Component: MyProfile };
+							// 	},
+							// },
 							{
 								path: paths.user.orderHistory.path,
 								lazy: async () => {

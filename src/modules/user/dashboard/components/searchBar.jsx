@@ -4,7 +4,6 @@ import { useSearch } from "../api/search"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-// import { useStoreItem } from "../api/add-items"
 import { IoSearchOutline } from "react-icons/io5"
 import { useStoreItem } from "../../cart/api/addItems"
 

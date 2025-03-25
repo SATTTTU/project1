@@ -1,13 +1,12 @@
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
-import { storeCartItem } from "../../cart/api/addItems";
 import { usePopularDishes } from "../api/get-items";
+import { storeCartItem } from "../../cart/api/addItems";
 
 export const PopularItemsPage = () => {
 	const { data: menuItems, isLoading, error } = usePopularDishes();
 	console.log("data for all ", menuItems)
 
-  // ✅ Mutation to add item to the cart
   const addToCartMutation = useMutation({
     mutationFn: storeCartItem,
     onSuccess: () => {
@@ -72,7 +71,7 @@ export const PopularItemsPage = () => {
 
               <button
                 className="mt-4 bg-[#426B1F] text-white px-4 py-2 rounded-md w-full hover:bg-[#375a1a] transition-colors"
-                onClick={() => handleAddToCart(item.id)} // 🛒 Call API when clicked
+                onClick={() => handleAddToCart(item.id)} 
                 disabled={addToCartMutation.isLoading}
               >
                 {addToCartMutation.isLoading ? "Adding..." : "Add to Cart"}

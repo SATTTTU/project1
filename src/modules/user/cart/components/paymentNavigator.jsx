@@ -1,8 +1,6 @@
-"use client"
 
-import { getKhaltiPidx } from "@/utils/payment-utils"
+import { getKhaltiPidx, navigateToKhaltiPayment } from "@/utils/payment-utils"
 import { useState, useEffect } from "react"
-// import { getKhaltiPidx, navigateToKhaltiPayment } from "../utils/payment-utils"
 import { toast } from "react-toastify"
 
 export const PaymentNavigator=()=> {

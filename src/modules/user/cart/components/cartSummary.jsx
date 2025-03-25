@@ -28,7 +28,7 @@ export function CartSummary() {
         </div>
 
         <div className="flex justify-between font-bold text-lg mb-6">
-          <span>Subtotal:</span>
+          <span>Total:</span>
           <span>Rs. {calculateSubtotal().toFixed(2)}</span>
         </div>
 

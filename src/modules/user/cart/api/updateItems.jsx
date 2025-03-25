@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { api } from "@/lib/api-client"
 
-// API function to update the cart item
 export const updateCartItem = async ({ item_id, quantity }) => {
   try {
     const response = await api.put(`/api/baskets/update/item/${item_id}`, { quantity })
@@ -17,7 +16,6 @@ export const updateCartItem = async ({ item_id, quantity }) => {
   }
 }
 
-// React Query hook for updating cart item
 export const useUpdateStoreItem = (mutationConfig = {}) => {
   const queryClient = useQueryClient()
 

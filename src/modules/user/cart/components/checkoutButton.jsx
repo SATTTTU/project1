@@ -19,6 +19,7 @@ export function CheckoutButton() {
     },
   })
 
+  // Calculate total amount
   const calculateTotal = () => {
     if (!cartData || !cartData[1]?.items) return 0
     return cartData[1].items.reduce((total, item) => total + (item.price * item.quantity || 0), 0)
