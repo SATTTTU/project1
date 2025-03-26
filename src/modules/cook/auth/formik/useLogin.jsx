@@ -19,7 +19,7 @@ export const useLoginFormik = (config = {
       onSuccess: (data) => {
         localStorage.setItem("authToken", data.token);
         api.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
-        navigate("/user/dashboard");
+        navigate("/user/homepage");
         
         if (config?.mutationConfig?.onSuccess) {
           config.mutationConfig.onSuccess(data);
