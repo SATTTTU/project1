@@ -1,7 +1,6 @@
-import React from 'react';
-import { Upload, X, Loader } from 'lucide-react';
-import { useIntroVideo } from '../formik/usevideomanagement';
-
+import React from "react";
+import { Upload, X, Loader } from "lucide-react";
+import { useIntroVideo } from "../formik/usevideomanagement";
 
 const IntroductionVideo = ({ initialVideo }) => {
   const {
@@ -12,27 +11,29 @@ const IntroductionVideo = ({ initialVideo }) => {
     videoInputRef,
     handleVideoUpload,
     removeVideo,
-    triggerVideoUpload
+    triggerVideoUpload,
   } = useIntroVideo(initialVideo);
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
       <div className="space-y-4">
+        {/* Title & Description */}
         <div className="flex flex-col space-y-2">
           <h3 className="text-lg font-semibold">Introduction Video</h3>
           <p className="text-sm text-gray-600">
-            Upload a short video introduction (max 2 minutes) to showcase your cooking style and personality.
-            This helps customers get to know you better.
+            Upload a short video introduction (max 2 minutes) to showcase your
+            cooking style and personality. This helps customers get to know you
+            better.
           </p>
         </div>
-        
+
+        {/* Video Preview OR Upload Button */}
         {videoPreview ? (
           <div className="relative rounded-lg overflow-hidden bg-gray-100 aspect-video">
-            <video
-              src={videoPreview}
-              className="w-full h-full object-cover"
-              controls
-            />
+            {/* Video Player */}
+            <video src={videoPreview} className="w-full h-full object-cover" controls />
+
+            {/* Remove Video Button */}
             <button
               onClick={removeVideo}
               disabled={isDeleting}
@@ -41,15 +42,19 @@ const IntroductionVideo = ({ initialVideo }) => {
             >
               <X size={18} />
             </button>
+
+            {/* Uploading Overlay */}
             {isUploading && (
               <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 text-white">
                 <Loader className="animate-spin mb-2" size={24} />
                 <p className="text-sm font-medium">
-                  {uploadProgress < 100 ? 'Uploading...' : 'Processing...'}
+                  {uploadProgress < 100 ? "Uploading..." : "Processing..."}
                 </p>
                 <p className="text-sm">{uploadProgress}%</p>
               </div>
             )}
+
+            {/* Deleting Overlay */}
             {isDeleting && (
               <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 text-white">
                 <Loader className="animate-spin mb-2" size={24} />
@@ -75,6 +80,7 @@ const IntroductionVideo = ({ initialVideo }) => {
           </div>
         )}
 
+        {/* Video Tips Section */}
         <div className="bg-gray-50 p-4 rounded-lg">
           <h4 className="font-medium mb-2">Video Tips:</h4>
           <ul className="space-y-1 text-sm text-gray-600">
@@ -104,5 +110,4 @@ const IntroductionVideo = ({ initialVideo }) => {
     </div>
   );
 };
-
 export default IntroductionVideo;

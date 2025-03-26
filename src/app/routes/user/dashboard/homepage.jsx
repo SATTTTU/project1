@@ -11,6 +11,7 @@ import { CategorySection } from "@/modules/user/dashboard/components/categoriesS
 import { PromotedRestaurants } from "@/modules/user/dashboard/components/filterBadges";
 
 import UserLocation from "@/modules/user/dashboard/components/setLocation";
+import { PopularItemsPage } from "@/modules/user/dashboard/components/popularItemsSection";
 
 export const Homepage = () => {
   

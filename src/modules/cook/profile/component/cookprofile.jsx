@@ -1,60 +1,61 @@
-import React, { useState, useEffect } from "react";
-import { useCookEditFormik } from "../formik/useupdatecookprofile";
-import LocationMap from "@/components/ui/locationMap/locationmap";
-import { UsegetCookLocation } from "../api/getCookLocation";
+"use client"
 
+import { useState, useEffect } from "react"
+import { UseProfileFormik } from "../formik/useupdatecookprofile"
+import LocationMap from "@/components/ui/locationMap/locationmap"
+import { UsegetCookLocation } from "../api/getCookLocation"
 
-export const ProfileCard = () => {
-  const {mutateAsync:fetchCookLOcation}=UsegetCookLocation();
-  const { formik, isLoading } = useCookEditFormik();
-  const [imagePreview, setImagePreview] = useState("/api/placeholder/200/200");
-  const [isEditMode, setIsEditMode] = useState(false);
+export const ProfileCard = ({ userData }) => {
+  const { mutateAsync: fetchCookLocation } = UsegetCookLocation()
+  const { formik, isLoading } = UseProfileFormik()
+  const [imagePreview, setImagePreview] = useState("/api/placeholder/200/200")
+  const [isEditMode, setIsEditMode] = useState(false)
 
   useEffect(() => {
     // Set initial image preview when form is initialized
     if (formik.values.image && !(formik.values.image instanceof File)) {
-      setImagePreview(formik.values.image);
+      setImagePreview(formik.values.image)
     }
-  }, [formik.values.image]);
+  }, [formik.values.image])
 
   const handleImageChange = (event) => {
-    const file = event.target.files[0];
+    const file = event.target.files[0]
     if (file) {
       // Verify the file type
-      if (!['image/jpeg', 'image/png', 'image/jpg'].includes(file.type)) {
+      if (!["image/jpeg", "image/png", "image/jpg"].includes(file.type)) {
         // toast.error("Only JPG, JPEG, and PNG files are allowed");
-        return;
+        return
       }
-      
+
       // Store the actual file object in formik
-      formik.setFieldValue("image", file);
-      
+      formik.setFieldValue("image", file)
+
       // Create preview for UI
-      const reader = new FileReader();
+      const reader = new FileReader()
       reader.onload = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+        setImagePreview(reader.result)
+      }
+      reader.readAsDataURL(file)
     }
-  };
+  }
 
   const handleEditToggle = () => {
-    setIsEditMode(!isEditMode);
-    formik.setFieldValue("isEditing", !formik.values.isEditing);
-  };
+    setIsEditMode(!isEditMode)
+    formik.setFieldValue("isEditing", !formik.values.isEditing)
+  }
 
   const handleSubmit = (event) => {
-    event.preventDefault();
-    formik.handleSubmit(event);
-    setIsEditMode(false);
-  };
+    event.preventDefault()
+    formik.handleSubmit(event)
+    setIsEditMode(false)
+  }
 
   const handleCancel = () => {
-    setIsEditMode(false);
-    formik.setFieldValue("isEditing", false);
-    formik.resetForm();
-    setImagePreview(formik.initialValues.image);
-  };
+    setIsEditMode(false)
+    formik.setFieldValue("isEditing", false)
+    formik.resetForm()
+    setImagePreview(formik.initialValues.image)
+  }
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -63,24 +64,38 @@ export const ProfileCard = () => {
         {/* Header Gradient */}
         <div className="relative h-48 bg-gradient-to-r from-green-500 to-green-700">
           {!isEditMode && (
-            <button 
+            <button
               onClick={handleEditToggle}
               className="absolute top-4 right-4 bg-white text-gray-800 px-4 py-2 rounded-full font-medium shadow-md hover:bg-gray-100 transition-colors"
             >
               Edit Profile
             </button>
           )}
-          
+
           {/* Profile Image */}
           <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-16">
             <div className="relative">
               <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white bg-white shadow-md">
-                <img src={imagePreview} alt="Profile" className="w-full h-full object-cover" />
+                <img src={imagePreview || "/placeholder.svg"} alt="Profile" className="w-full h-full object-cover" />
               </div>
               {isEditMode && (
-                <label htmlFor="profile-pic" className="absolute bottom-0 right-0 bg-white p-2 rounded-full shadow-md cursor-pointer hover:bg-gray-100">
-                  <input type="file" id="profile-pic" className="hidden" accept="image/png,image/jpeg,image/jpg" onChange={handleImageChange} />
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-700" viewBox="0 0 20 20" fill="currentColor">
+                <label
+                  htmlFor="profile-pic"
+                  className="absolute bottom-0 right-0 bg-white p-2 rounded-full shadow-md cursor-pointer hover:bg-gray-100"
+                >
+                  <input
+                    type="file"
+                    id="profile-pic"
+                    className="hidden"
+                    accept="image/png,image/jpeg,image/jpg"
+                    onChange={handleImageChange}
+                  />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-gray-700"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
                     <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                   </svg>
                 </label>
@@ -88,7 +103,7 @@ export const ProfileCard = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Profile Content */}
         <div className="pt-20 pb-6 px-8">
           <form onSubmit={handleSubmit}>
@@ -163,17 +178,14 @@ export const ProfileCard = () => {
             </div>
 
             {formik.errors.submit && (
-              <div className="mt-4 p-3 bg-red-50 text-red-700 rounded-md text-sm">
-                {formik.errors.submit}
-              </div>
+              <div className="mt-4 p-3 bg-red-50 text-red-700 rounded-md text-sm">{formik.errors.submit}</div>
             )}
           </form>
-          <label htmlFor="">Your LOcation</label>
-          <LocationMap
-          fetchLocationFn={fetchCookLOcation}
-          title="cook location"/>
+          <label htmlFor="">Your Location</label>
+          <LocationMap fetchLocationFn={fetchCookLocation} title="cook location" />
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
+

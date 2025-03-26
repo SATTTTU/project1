@@ -1,7 +1,9 @@
 import { useState, useRef } from "react";
-
-import { useInstantLayoutTransition } from "framer-motion";
+import { toast } from "react-toastify";
 import { useDeleteIntroVideo, useUploadIntroVideo } from "../api/introvideo";
+import { videoSchema } from "./schema/videoschema";
+
+// Define Zod validation schema
 
 export const useIntroVideo = (initialVideo = null) => {
   const [videoFile, setVideoFile] = useState(null);
@@ -9,130 +11,103 @@ export const useIntroVideo = (initialVideo = null) => {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const videoInputRef = useRef(null);
-  const { toast } = useInstantLayoutTransition();
 
-  // Use the mutation hooks
-  const { mutate: uploadVideo, isLoading: isUploadLoading } = useUploadIntroVideo({
-    onSuccess: () => {
-      toast({
-        title: "Video uploaded",
-        description: "Your introduction video has been uploaded successfully",
-        variant: "success",
-      });
-      setIsUploading(false);
-      setUploadProgress(100);
-    },
-    onError: (error) => {
-      toast({
-        title: "Upload failed",
-        description: error.message || "Failed to upload video",
-        variant: "destructive",
-      });
-      setIsUploading(false);
-    },
-    onMutate: () => {
-      setIsUploading(true);
-      setUploadProgress(0);
-      // Start progress simulation
-      simulateProgress();
-    }
-  });
+  // Upload API
+  const { mutate: uploadVideo, isLoading: isUploadLoading } =
+    useUploadIntroVideo({
+      onSuccess: () => {
+        toast.success("Video uploaded successfully");
+        setIsUploading(false);
+        setUploadProgress(100);
+      },
+      onError: (error) => {
+        toast.error(error.message || "Failed to upload video");
+        setIsUploading(false);
+      },
+      onMutate: () => {
+        setIsUploading(true);
+        setUploadProgress(0);
+        simulateProgress();
+      },
+    });
 
-  const { mutate: deleteVideo, isLoading: isDeleteLoading } = useDeleteIntroVideo({
-    onSuccess: () => {
-      toast({
-        title: "Video removed",
-        description: "Your introduction video has been removed",
-        variant: "success",
-      });
-      // Clear local state
-      setVideoFile(null);
-      setVideoPreview(null);
-      setUploadProgress(0);
-    },
-    onError: (error) => {
-      toast({
-        title: "Removal failed",
-        description: error.message || "Failed to remove video",
-        variant: "destructive",
-      });
-    }
-  });
+  // Delete API
+  const { mutate: deleteVideo, isLoading: isDeleteLoading } =
+    useDeleteIntroVideo({
+      onSuccess: () => {
+        toast.success("Video removed successfully");
+        setVideoFile(null);
+        setVideoPreview(null);
+        setUploadProgress(0);
+      },
+      onError: (error) => {
+        toast.error(error.message || "Failed to remove video");
+      },
+    });
 
-  // Helper to simulate progress during upload
+  // Simulate upload progress
   const simulateProgress = () => {
     let progress = 0;
     const interval = setInterval(() => {
       progress += 5;
       setUploadProgress(progress);
-      
-      // Cap at 90% until actual completion
       if (progress >= 90) {
         clearInterval(interval);
       }
     }, 200);
-
-    // Store the interval in ref to clear it when needed
     return interval;
   };
 
-  const handleVideoUpload = (e) => {
+  // Handle file upload
+  const handleVideoUpload = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      // Check file type
-      if (!file.type.startsWith("video/")) {
-        toast({
-          title: "Invalid file type",
-          description: "Please upload a video file",
-          variant: "destructive",
-        });
-        return;
+
+    if (!file) {
+      toast.error("Please select a video file");
+      return;
+    }
+
+    try {
+      // Create FormData first
+      const formData = new FormData();
+      formData.append("video", file);
+
+      // Set video preview
+      const previewUrl = URL.createObjectURL(file);
+      setVideoPreview(previewUrl);
+      setVideoFile(file);
+
+      // Validate file using schema
+      await videoSchema.parseAsync({ video: file });
+
+      // Upload video
+      uploadVideo(formData);
+    } catch (error) {
+      console.error("Validation error:", error);
+      // Handle Zod validation errors
+      if (error.errors && error.errors.length > 0) {
+        toast.error(error.errors[0].message);
+      } else {
+        toast.error(error.message || "File validation failed");
       }
-      
-      // Create video element to check duration
-      const video = document.createElement("video");
-      video.preload = "metadata";
-      
-      video.onloadedmetadata = function () {
-        window.URL.revokeObjectURL(video.src);
-        const duration = video.duration;
-        
-        // Check if video is under 2 minutes
-        if (duration > 120) {
-          toast({
-            title: "Video too long",
-            description: "Video must be under 2 minutes",
-            variant: "destructive",
-          });
-          return;
-        }
-        
-        // Set video file and create preview URL
-        setVideoFile(file);
-        setVideoPreview(URL.createObjectURL(file));
-        
-        // Upload the file
-        const formData = new FormData();
-        formData.append("video", file);
-        uploadVideo(formData);
-      };
-      
-      video.src = URL.createObjectURL(file);
+      // Reset file input and preview
+      if (videoInputRef.current) {
+        videoInputRef.current.value = "";
+      }
+      setVideoPreview(null);
+      setVideoFile(null);
     }
   };
 
+  // Remove video
   const removeVideo = () => {
     if (videoPreview) {
-      // Call API to delete the video if it exists on the server
       deleteVideo();
     } else {
-      // Just clear the local state if it's not yet uploaded
       setVideoFile(null);
       setVideoPreview(null);
       setUploadProgress(0);
     }
-    
-    // Reset file input
     if (videoInputRef.current) {
       videoInputRef.current.value = "";
     }
@@ -144,7 +119,6 @@ export const useIntroVideo = (initialVideo = null) => {
     }
   };
 
-  // Return all the state and handlers needed by the IntroductionVideo component
   return {
     videoFile,
     videoPreview,

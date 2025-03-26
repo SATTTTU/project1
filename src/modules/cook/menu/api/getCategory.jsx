@@ -6,16 +6,14 @@ const fetchCategory = async () => {
     const response = await api.get("/api/cooks/get-menu");
     console.log("Category fetch response:", response);
 
-    // डाटा स्ट्रक्चर चेक गर्ने
     if (!response.data) {
       throw new Error("No data found in the response");
     }
 
-    // डाटा फर्म्याटिङ
     const formattedCategories = response.data.map((category) => ({
       ...category,
-      isExpanded: false, // UI को लागि आवश्यक
-      items: category.items || [], // items array नभएमा खाली array प्रयोग गर्ने
+      isExpanded: false, 
+      items: category.items || [], 
     }));
 
     return formattedCategories;

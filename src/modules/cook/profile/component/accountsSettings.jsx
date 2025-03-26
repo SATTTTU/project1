@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Lock, Mail, Eye, EyeOff, Loader2 } from 'lucide-react';
-import { useProfileForm } from '../formik/useupdatecookprofile copy';
+import { Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { usePasswordForm } from '../formik/usePasswordFormik';
 
 const AccountSettings = () => {
-
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [showPassword, setShowPassword] = useState({
     current: false,
@@ -11,12 +10,7 @@ const AccountSettings = () => {
     confirm: false
   });
 
-  const { formik, isSubmitting } =useProfileForm({
-    email: '',
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
-  });
+  const { formik, isSubmitting } = usePasswordForm();
 
   const toggleShowPassword = (field) => {
     setShowPassword({
@@ -25,13 +19,9 @@ const AccountSettings = () => {
     });
   };
 
-
-
   const handleCancelPassword = () => {
     setIsChangingPassword(false);
-    formik.setFieldValue('currentPassword', '');
-    formik.setFieldValue('newPassword', '');
-    formik.setFieldValue('confirmPassword', '');
+    formik.resetForm();
   };
 
   return (
@@ -39,9 +29,6 @@ const AccountSettings = () => {
       <h2 className="text-xl font-semibold text-gray-800 mb-6">Account Settings</h2>
 
       <div className="space-y-6">
-        {/* Email Settings */}
-       
-
         {/* Password Settings */}
         <div>
           <div className="flex items-center mb-4">
@@ -159,7 +146,8 @@ const AccountSettings = () => {
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center"
                   onClick={() => {
                     formik.handleSubmit();
-                    if (!formik.errors.currentPassword && !formik.errors.newPassword && !formik.errors.confirmPassword) {
+                    if (Object.keys(formik.errors).length === 0 && formik.dirty) {
+                      // Only close if validation passes and form is dirty
                       setIsChangingPassword(false);
                     }
                   }}
