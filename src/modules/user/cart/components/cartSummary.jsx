@@ -1,8 +1,7 @@
 import { useUserCart } from "../api/getItems"
 import { CheckoutButton } from "./checkoutButton"
-// import { CheckoutButton } from "./checkoutButton"
 
-export function CartSummary() {
+export const CartSummary=()=> {
   const { data: cartData } = useUserCart()
   console.log("baseket  k", cartData)
 

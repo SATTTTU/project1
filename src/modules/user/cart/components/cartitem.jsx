@@ -93,7 +93,7 @@ export const CartItem = ({ item, onRemoveItem, isUpdating, isDeleting }) => {
 							aria-label="Remove item"
 							type="button"
 						>
-							<Trash2 size={18} />
+							<Trash2 size={24} />
 						</button>
 					</div>
 				</div>

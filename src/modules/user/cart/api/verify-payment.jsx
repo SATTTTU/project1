@@ -1,61 +1,59 @@
-import { useMutation } from "@tanstack/react-query"
-import { api } from "@/lib/api-client"
+import { useMutation } from "@tanstack/react-query";
+import { api } from "@/lib/api-client";
 
+export const verifyPayment = async () => {
+	try {
+		const storedPidx = localStorage.getItem("khalti_pidx");
 
+		if (!storedPidx) {
+			throw new Error("Missing payment ID (pidx) in local storage");
+		}
 
-// Function to verify payment with Khalti
-export const verifyPayment = async (paymentData) => {
-  try {
-    console.log("Verifying payment with data:", paymentData)
+		const response = await api.post("/api/verify-payment", {
+			pidx: storedPidx,
+		});
+		console.log("verify", response.data);
 
-    if (!paymentData.pidx) {
-      throw new Error("Missing payment ID (pidx)")
-    }
+		if (!response || !response.data) {
+			throw new Error("Empty response from verification server");
+		}
 
-    const response = await api.post("/api/verify-payment", paymentData)
+		console.log("Payment verification response:", response.data);
 
-    if (!response || !response.data) {
-      throw new Error("Empty response from verification server")
-    }
+		if (response.data.success) {
+			localStorage.setItem(
+				"verified_transaction",
+				JSON.stringify({
+					pidx: storedPidx,
+					...response.data,
+					verified: true,
+				})
+			);
+		}
 
-    console.log("Payment verification response:", response.data)
+		return response.data;
+	} catch (error) {
+		console.error("Payment verification error:", error);
 
-    // Store verified transaction data for order success page
-    if (response.data.success) {
-      localStorage.setItem(
-        "verified_transaction",
-        JSON.stringify({
-          ...paymentData,
-          ...response.data,
-          verified: true,
-        }),
-      )
-    }
+		const errorMessage =
+			error.response?.data?.message ||
+			error.response?.data?.error ||
+			error.message ||
+			"Payment verification failed";
 
-    return response.data
-  } catch (error) {
-    console.error("Payment verification error:", error)
+		throw new Error(errorMessage);
+	}
+};
 
-    // Extract error message from response if available
-    const errorMessage =
-      error.response?.data?.message || error.response?.data?.error || error.message || "Payment verification failed"
-
-    throw new Error(errorMessage)
-  }
-}
-
-export const useVerifyPayment=(mutationConfig = {})=> {
-  return useMutation({
-    mutationFn: verifyPayment,
-    ...mutationConfig,
-    onError: (error) => {
-      console.error("Verification mutation error:", error)
-      if (mutationConfig.onError) {
-        mutationConfig.onError(error)
-      }
-    },
-  })
-}
-
-
-
+export const useVerifyPayment = (mutationConfig = {}) => {
+	return useMutation({
+		mutationFn: verifyPayment,
+		...mutationConfig,
+		onError: (error) => {
+			console.error("Verification mutation error:", error);
+			if (mutationConfig.onError) {
+				mutationConfig.onError(error);
+			}
+		},
+	});
+};

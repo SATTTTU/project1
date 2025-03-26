@@ -1,27 +1,25 @@
 import { useState, useRef } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { useUserProfileEditFormik } from "../formik/updateProfileFormik";
-// import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-// import "leaflet/dist/leaflet.css";
-// import L from "leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 import { usegetLocation } from "../../dashboard/api/get-location";
 import LocationMap from "@/components/ui/locationMap/locationmap";
 // Custom marker icon
-// const customIcon = new L.Icon({
-//   iconUrl: "https://cdn-icons-png.flaticon.com/512/484/484167.png",
-//   iconSize: [30, 30],
-// });
+const customIcon = new L.Icon({
+  iconUrl: "https://cdn-icons-png.flaticon.com/512/484/484167.png",
+  iconSize: [30, 30],
+});
 
 export const ProfileContent = () => {
   const { formik } = useUserProfileEditFormik();
   const [preview, setPreview] = useState(null);
   const fileInputRef = useRef(null);
-  // const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState(null);
 
   // Use mutation to get location
-  const { mutateAsync: fetchLocation, isLoading, isError
-
-  } = usegetLocation();
+  const { mutateAsync: fetchLocation, isLoading, isError} = usegetLocation();
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];

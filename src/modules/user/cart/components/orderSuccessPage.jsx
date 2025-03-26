@@ -10,7 +10,6 @@ export const OrderSuccess=()=> {
   })
 
   useEffect(() => {
-    // Try to get transaction details from localStorage if available
     const transactionData = localStorage.getItem("verified_transaction")
     if (transactionData) {
       try {
@@ -31,7 +30,7 @@ export const OrderSuccess=()=> {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
+      <div className="bg-white p-8 rounded-lg shadow-xl border border-slate-200 max-w-md w-full text-center">
         <div className="bg-green-100 p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -66,12 +65,11 @@ export const OrderSuccess=()=> {
           </div>
         )}
 
-        <p className="text-sm text-gray-500 mb-6">A confirmation email has been sent to your email address.</p>
 
         <div className="flex flex-col space-y-3">
           <Link
             to="/orders"
-            className="inline-block bg-purple-600 text-white font-medium px-6 py-3 rounded-md hover:bg-purple-700 transition-colors"
+            className="inline-block bg-[#426B1F] text-white font-medium px-6 py-3 rounded-md hover:bg-[#426B1F] transition-colors"
           >
             View My Orders
           </Link>

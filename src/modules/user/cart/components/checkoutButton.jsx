@@ -1,130 +1,144 @@
-"use client"
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { useCheckout } from "../api/checkout";
+import { useUserCart } from "../api/getItems";
+import { useVerifyPayment } from "../api/verify-payment";
 
-import { useState } from "react"
-import { toast } from "react-toastify"
-import { useCheckout } from "../api/checkout"
-import { useUserCart } from "../api/getItems"
+export const CheckoutButton=()=> {
+	const [isProcessing, setIsProcessing] = useState(false);
+	const { data: cartData } = useUserCart();
+	console.log("Checkout button ", cartData);
+	const { mutateAsync: verifyPayment } = useVerifyPayment();
+	const { mutateAsync: processCheckout } = useCheckout({
+		onSuccess: (data) => {
+			console.log("Checkout successful:", data);
+      debugger;
+			verifyPayment();
+		},
+		onError: (error) => {
+			console.error("Checkout error:", error);
+			toast.error(error.message || "Checkout failed. Please try again.");
+		},
+	});
 
-export function CheckoutButton() {
-  const [isProcessing, setIsProcessing] = useState(false)
-  const { data: cartData } = useUserCart()
+	// Calculate total amount
+	const calculateTotal = () => {
+		if (!cartData || !cartData[0]?.items) return 0;
+		return cartData[0].items.reduce(
+			(total, item) => total + (item.price * item.quantity || 0),
+			0
+		);
+	};
 
-  const { mutateAsync: processCheckout } = useCheckout({
-    onSuccess: (data) => {
-      console.log("Checkout successful:", data)
-    },
-    onError: (error) => {
-      console.error("Checkout error:", error)
-      toast.error(error.message || "Checkout failed. Please try again.")
-    },
-  })
+	const handleCheckout = async () => {
+		if (!cartData || !cartData[0]?.items || cartData[0].items.length === 0) {
+			toast.error("Your cart is empty. Add items before checking out.");
+			return;
+		}
 
-  // Calculate total amount
-  const calculateTotal = () => {
-    if (!cartData || !cartData[0]?.items) return 0
-    return cartData[0].items.reduce((total, item) => total + (item.price * item.quantity || 0), 0)
-  }
+		try {
+			setIsProcessing(true);
 
-  const handleCheckout = async () => {
-    if (!cartData || !cartData[0]?.items || cartData[0].items.length === 0) {
-      toast.error("Your cart is empty. Add items before checking out.")
-      return
-    }
+			const checkoutData = {
+				// Cart items
+				items: cartData[0].items.map((item) => ({
+					id: item.item_id,
+					quantity: item.quantity,
+				})),
 
-    try {
-      setIsProcessing(true)
+				// Total amount (convert to paisa for Khalti)
+				amount: Math.round(calculateTotal() * 100),
 
-      const checkoutData = {
-        // Cart items
-        items: cartData[0].items.map((item) => ({
-          id: item.item_id,
-          quantity: item.quantity,
-        })),
+				// Order details
+				purchase_order_id: `ORDER-${Date.now()}`,
+				purchase_order_name: "Food Order",
 
-        // Total amount (convert to paisa for Khalti)
-        amount: Math.round(calculateTotal() * 100),
+				// Redirect URLs
+				return_url: `${window.location.origin}/payment/callback`,
+				website_url: window.location.origin,
+			};
 
-        // Order details
-        purchase_order_id: `ORDER-${Date.now()}`,
-        purchase_order_name: "Food Order",
+			console.log("Sending checkout data:", checkoutData);
 
-        // Redirect URLs
-        return_url: `${window.location.origin}/payment/callback`,
-        website_url: window.location.origin,
-      }
+			// Use mutateAsync to get the response data
+			const response = await processCheckout(checkoutData);
 
-      console.log("Sending checkout data:", checkoutData)
+			console.log("Checkout response:", response);
 
-      // Use mutateAsync to get the response data
-      const response = await processCheckout(checkoutData)
+			// Check if response exists and has pidx
+			if (response && response.pidx) {
+				try {
+					// Store pidx directly in localStorage (as a separate item)
+					localStorage.setItem("khalti_pidx", response.pidx);
+					console.log("Stored pidx in localStorage:", response.pidx);
 
-      console.log("Checkout response:", response)
+					const transactionDetails = {
+						pidx: response.pidx,
+						expires_at: response.expires_at || null,
+						amount: Math.round(calculateTotal() * 100),
+						order_id: checkoutData.purchase_order_id,
+						timestamp: new Date().toISOString(),
+					};
 
-      // Check if response exists and has pidx
-      if (response && response.pidx) {
-        try {
-          // Store pidx directly in localStorage (as a separate item)
-          localStorage.setItem("khalti_pidx", response.pidx)
-          console.log("Stored pidx in localStorage:", response.pidx)
+					localStorage.setItem(
+						"khalti_transaction",
+						JSON.stringify(transactionDetails)
+					);
+					console.log("Stored transaction details:", transactionDetails);
 
-          const transactionDetails = {
-            pidx: response.pidx,
-            expires_at: response.expires_at || null,
-            amount: Math.round(calculateTotal() * 100),
-            order_id: checkoutData.purchase_order_id,
-            timestamp: new Date().toISOString(),
-          }
+					// Verify localStorage was set correctly
+					const storedPidx = localStorage.getItem("khalti_pidx");
+					if (!storedPidx) {
+						console.error("Failed to store pidx in localStorage");
+						toast.warning(
+							"Warning: Could not store payment information locally"
+						);
+					}
 
-          localStorage.setItem("khalti_transaction", JSON.stringify(transactionDetails))
-          console.log("Stored transaction details:", transactionDetails)
+					// IMPORTANT: Construct the correct Khalti payment URL
+					const khaltiPaymentUrl = `https://test-pay.khalti.com/?pidx=${response.pidx}`;
 
-          // Verify localStorage was set correctly
-          const storedPidx = localStorage.getItem("khalti_pidx")
-          if (!storedPidx) {
-            console.error("Failed to store pidx in localStorage")
-            toast.warning("Warning: Could not store payment information locally")
-          }
+					console.log("Redirecting to Khalti payment page:", khaltiPaymentUrl);
 
-          // IMPORTANT: Construct the correct Khalti payment URL
-          const khaltiPaymentUrl = `https://test-pay.khalti.com/?pidx=${response.pidx}`
+					// Redirect to Khalti payment page
+					window.location.href = khaltiPaymentUrl;
+				} catch (storageError) {
+					console.error("Error storing data in localStorage:", storageError);
+					toast.warning("Warning: Could not store payment information locally");
 
-          console.log("Redirecting to Khalti payment page:", khaltiPaymentUrl)
+					// Still redirect even if localStorage fails
+					window.location.href = `https://test-pay.khalti.com/?pidx=${response.pidx}`;
+				}
+			} else {
+				// More detailed error message
+				const errorMsg = "Invalid payment response from server. Missing pidx.";
+				console.error(errorMsg, { response });
+				toast.error(errorMsg);
+			}
+		} catch (error) {
+			// Improved error handling
+			const errorMsg =
+				error.response?.data?.message ||
+				error.message ||
+				"Checkout failed. Please try again.";
+			console.error("Checkout error:", error);
+			toast.error(errorMsg);
+		} finally {
+			setIsProcessing(false);
+		}
+	};
 
-          // Redirect to Khalti payment page
-          window.location.href = khaltiPaymentUrl
-        } catch (storageError) {
-          console.error("Error storing data in localStorage:", storageError)
-          toast.warning("Warning: Could not store payment information locally")
-
-          // Still redirect even if localStorage fails
-          window.location.href = `https://test-pay.khalti.com/?pidx=${response.pidx}`
-        }
-      } else {
-        // More detailed error message
-        const errorMsg = "Invalid payment response from server. Missing pidx."
-        console.error(errorMsg, { response })
-        toast.error(errorMsg)
-      }
-    } catch (error) {
-      // Improved error handling
-      const errorMsg = error.response?.data?.message || error.message || "Checkout failed. Please try again."
-      console.error("Checkout error:", error)
-      toast.error(errorMsg)
-    } finally {
-      setIsProcessing(false)
-    }
-  }
-
-  return (
-    <button
-      onClick={handleCheckout}
-      disabled={isProcessing}
-      className={`w-full bg-green-500 text-white py-3 rounded-md font-medium hover:bg-green-600 transition-colors ${
-        isProcessing ? "opacity-50 cursor-not-allowed" : ""
-      }`}
-    >
-      {isProcessing ? "Processing..." : `Pay with Khalti • Rs. ${calculateTotal().toFixed(2)}`}
-    </button>
-  )
+	return (
+		<button
+			onClick={handleCheckout}
+			disabled={isProcessing}
+			className={`w-full bg-green-500 text-white py-3 rounded-md font-medium hover:bg-green-600 transition-colors ${
+				isProcessing ? "opacity-50 cursor-not-allowed" : ""
+			}`}
+		>
+			{isProcessing
+				? "Processing..."
+				: `Pay with Khalti • Rs. ${calculateTotal().toFixed(2)}`}
+		</button>
+	);
 }
-
