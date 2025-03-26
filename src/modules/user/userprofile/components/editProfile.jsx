@@ -1,5 +1,5 @@
+import { useAdminProfileEditFormik } from "@/modules/admin/editProfile/hooks/useAdminProfileEdit";
 import React, { useState, useEffect } from "react";
-import { useAdminProfileEditFormik } from "../formik/updateProfileFormik";
 // import { useAdminProfileEditFormik } from "../hooks/useAdminProfileEdit";
 
 export const MyProfile = () => {
