@@ -1,26 +1,36 @@
 import React from "react";
-import { useMutation } from "@tanstack/react-query";
 import { usePopularDishes } from "../api/get-items";
-import { storeCartItem } from "../../cart/api/addItems";
+import { useAddCartItem } from "../../cart/api/addItems";
 
 export const PopularItemsPage = () => {
 	const { data: menuItems, isLoading, error } = usePopularDishes();
 	console.log("data for all ", menuItems)
 
-  const addToCartMutation = useMutation({
-    mutationFn: storeCartItem,
-    onSuccess: () => {
-      alert("Item added to cart successfully!");
-    },
-    onError: (error) => {
-      alert(`Failed to add item: ${error.message}`);
-    },
-  });
+  const { mutateAsync: addToCart, isLoading: isAddingToCart } = useAddCartItem()
 
-  const handleAddToCart = (menu_item_id) => {
-    addToCartMutation.mutate({ menu_item_id, quantity: 1 }); // Default quantity is 1
-  };
 
+  const handleAddToCart = async (dish) => {
+    try {
+      // setLoadingCartItem(dish.menu_item_id)
+
+      // Use our addToCart mutation
+      await addToCart({
+        menu_item_id: dish.menu_item_id,
+        quantity: 1,
+      })
+
+      toast.success(`${dish.name} added to cart! 🛒`, {
+        position: "top-right",
+      })
+    } catch (error) {
+      toast.error("Failed to add item to cart. Try again!", {
+        position: "top-right",
+      })
+      console.error("Error adding to cart:", error)
+    } finally {
+      // setLoadingCartItem(null)
+    }
+  }
   if (isLoading) {
     return (
       <div className="p-6 text-center">
@@ -69,13 +79,14 @@ export const PopularItemsPage = () => {
                 </p>
               )}
 
-              <button
-                className="mt-4 bg-[#426B1F] text-white px-4 py-2 rounded-md w-full hover:bg-[#375a1a] transition-colors"
-                onClick={() => handleAddToCart(item.id)} 
-                disabled={addToCartMutation.isLoading}
-              >
-                {addToCartMutation.isLoading ? "Adding..." : "Add to Cart"}
-              </button>
+<button
+                    className="bg-green-600 text-white py-2 px-4 rounded-md font-semibold hover:bg-green-700 transition disabled:opacity-50"
+                    onClick={() => handleAddToCart(dish)}
+                    // disabled={loadingCartItem === dish.menu_item_id}
+                    // aria-label={`Add ${dish.name} to cart`}
+                  >Add to cart
+                    {/* {loadingCartItem === dish.menu_item_id ? "Adding..." : "Add to Cart 🛒"} */}
+                  </button>
             </div>
           </div>
         ))}

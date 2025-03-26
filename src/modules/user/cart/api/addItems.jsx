@@ -1,19 +1,19 @@
 import { api } from "@/lib/api-client"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
 
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 // Function to add an item to the cart
 export const storeCartItem = async ({ menu_item_id, quantity }) => {
   try {
     const response = await api.post("/api/baskets/store", { menu_item_id, quantity })
-    console.log("basket ", response.data.items)
-    return response.data.items
+    return response.data
   } catch (error) {
     throw new Error(error.response?.data?.message || "Failed to add item to cart.")
   }
 }
 
-export const useStoreItem = () => {
+export const useAddCartItem=()=> {
   const queryClient = useQueryClient()
+  // const { toast } = useToast()
 
   return useMutation({
     mutationFn: storeCartItem,
@@ -22,39 +22,16 @@ export const useStoreItem = () => {
 
       const previousCart = queryClient.getQueryData(["cartItems"])
 
+      // Optimistically update the cart
       queryClient.setQueryData(["cartItems"], (oldData) => {
-        if (!oldData || !oldData[1]?.items) {
-          return [
-            {},
-            {
-              items: [
-                {
-                  item_id: `temp-${Date.now()}`,
-                  menu_item_id: newItem.menu_item_id,
-                  quantity: newItem.quantity,
-                  price: 0, 
-                  menu_item: {
-                    name: "Loading...",
-                    image_url: null,
-                  },
-                  isOptimistic: true,
-                },
-              ],
-            },
-          ]
-        }
-
-        return [
-          oldData[0],
-          {
-            ...oldData[1],
+        if (!oldData || !oldData.items) {
+          return {
             items: [
-              ...oldData[1].items,
               {
                 item_id: `temp-${Date.now()}`,
                 menu_item_id: newItem.menu_item_id,
                 quantity: newItem.quantity,
-                price: 0, // We don't know the price yet
+                price: 0,
                 menu_item: {
                   name: "Loading...",
                   image_url: null,
@@ -62,21 +39,39 @@ export const useStoreItem = () => {
                 isOptimistic: true,
               },
             ],
-          },
-        ]
+          }
+        }
+
+        return {
+          ...oldData,
+          items: [
+            ...oldData.items,
+            {
+              item_id: `temp-${Date.now()}`,
+              menu_item_id: newItem.menu_item_id,
+              quantity: newItem.quantity,
+              price: 0,
+              menu_item: {
+                name: "Loading...",
+                image_url: null,
+              },
+              isOptimistic: true,
+            },
+          ],
+        }
       })
 
       return { previousCart }
     },
-    onSuccess: (updatedCart) => {
-      // Update the cart with the actual data from the server
-      queryClient.setQueryData(["cartItems"], updatedCart)
+    onSuccess: (data) => {
+      queryClient.setQueryData(["cartItems"], data)
+    
     },
     onError: (error, variables, context) => {
-      // If the mutation fails, revert to the previous cart state
       if (context?.previousCart) {
         queryClient.setQueryData(["cartItems"], context.previousCart)
       }
+     
     },
     onSettled: () => {
       queryClient.invalidateQueries(["cartItems"])

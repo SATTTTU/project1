@@ -1,12 +1,14 @@
-import { useUserBasket } from "../api/getItems"
+import { useUserCart } from "../api/getItems"
 import { CheckoutButton } from "./checkoutButton"
+// import { CheckoutButton } from "./checkoutButton"
 
 export function CartSummary() {
-  const { data: cartData } = useUserBasket()
+  const { data: cartData } = useUserCart()
+  console.log("baseket  k", cartData)
 
   const calculateSubtotal = () => {
-    if (!cartData || !cartData[1]?.items) return 0
-    return cartData[1].items.reduce((total, item) => total + (item.price * item.quantity || 0), 0)
+    if (!cartData || !cartData[0]?.items) return 0
+    return cartData[0].items.reduce((total, item) => total + (item.price * item.quantity || 0), 0)
   }
 
   return (
@@ -16,8 +18,8 @@ export function CartSummary() {
 
         <div className="mb-4">
           {cartData &&
-            cartData[1]?.items &&
-            cartData[1].items.map((item) => (
+            cartData[0]?.items &&
+            cartData[0].items.map((item) => (
               <div key={item.item_id} className="flex justify-between py-2 border-b">
                 <span>
                   {item.menu_item?.name} x{item.quantity}

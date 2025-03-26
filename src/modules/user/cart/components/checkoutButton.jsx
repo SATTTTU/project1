@@ -1,17 +1,13 @@
 "use client"
 
-import { useState,useEffect } from "react"
+import { useState } from "react"
 import { toast } from "react-toastify"
-import { useUserBasket } from "../api/getItems"
 import { useCheckout } from "../api/checkout"
-import { useVerifyPayment } from "../api/verify-payment"
-// import {useNavigate} from "react-router"
-import {useNavigate} from "react-router-dom"
+import { useUserCart } from "../api/getItems"
 
-export const CheckoutButton=()=> {
+export function CheckoutButton() {
   const [isProcessing, setIsProcessing] = useState(false)
-  const navigate= useNavigate();
-  const { data: cartData } = useUserBasket()
+  const { data: cartData } = useUserCart()
 
   const { mutateAsync: processCheckout } = useCheckout({
     onSuccess: (data) => {
@@ -22,18 +18,7 @@ export const CheckoutButton=()=> {
       toast.error(error.message || "Checkout failed. Please try again.")
     },
   })
-  const { mutate: verifyPayment } = useVerifyPayment({
-    // console.log("verify",verifyPayment())
-    onSuccess: (data) => {
 
-      console.log("Payment verification successful:", data);
-      toast.success("Payment verified successfully!");
-    },
-    onError: (error) => {
-      console.error("Payment verification failed:", error);
-      toast.error("Payment verification failed. Please contact support.");
-    },
-  });
   // Calculate total amount
   const calculateTotal = () => {
     if (!cartData || !cartData[0]?.items) return 0
@@ -129,13 +114,7 @@ export const CheckoutButton=()=> {
       setIsProcessing(false)
     }
   }
-    useEffect(() => {
-    const storedPidx = localStorage.getItem("khalti_pidx");
-    if (storedPidx) {
-      verifyPayment({ pidx: storedPidx });
-    }
-    // navigate("/user/login")
-  }, [verifyPayment]);
+
   return (
     <button
       onClick={handleCheckout}

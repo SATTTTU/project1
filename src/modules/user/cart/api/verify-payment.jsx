@@ -1,6 +1,8 @@
 import { useMutation } from "@tanstack/react-query"
 import { api } from "@/lib/api-client"
 
+
+
 // Function to verify payment with Khalti
 export const verifyPayment = async (paymentData) => {
   try {
@@ -12,7 +14,6 @@ export const verifyPayment = async (paymentData) => {
 
     const response = await api.post("/api/verify-payment", paymentData)
 
-    console.log(reponse)
     if (!response || !response.data) {
       throw new Error("Empty response from verification server")
     }
@@ -33,7 +34,6 @@ export const verifyPayment = async (paymentData) => {
 
     return response.data
   } catch (error) {
-    // Improved error handling
     console.error("Payment verification error:", error)
 
     // Extract error message from response if available
@@ -44,18 +44,18 @@ export const verifyPayment = async (paymentData) => {
   }
 }
 
-// React Query hook for verifying payment
-export const useVerifyPayment = (mutationConfig = {}) => {
+export const useVerifyPayment=(mutationConfig = {})=> {
   return useMutation({
     mutationFn: verifyPayment,
     ...mutationConfig,
     onError: (error) => {
       console.error("Verification mutation error:", error)
-      // Call the provided onError if it exists
       if (mutationConfig.onError) {
         mutationConfig.onError(error)
       }
     },
   })
 }
+
+
 

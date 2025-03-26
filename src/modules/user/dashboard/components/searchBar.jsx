@@ -1,22 +1,20 @@
+"use client"
 
 import { useState, useRef, useEffect } from "react"
+import { Search, Loader2 } from "lucide-react"
+import { useAddCartItem } from "../../cart/api/addItems"
 import { useSearch } from "../api/search"
-import { useNavigate } from "react-router-dom"
-import { toast } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
-import { IoSearchOutline } from "react-icons/io5"
-import { useStoreItem } from "../../cart/api/addItems"
+// import { toast } from "react-toastify"
 
-export function SearchBar() {
+export const SearchBar=()=> {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCookId, setSelectedCookId] = useState(null)
   const [loadingCartItem, setLoadingCartItem] = useState(null)
   const [showDropdown, setShowDropdown] = useState(false)
-  const navigate = useNavigate()
   const searchRef = useRef(null)
 
   // Use our cart mutation hook
-  const { mutateAsync: addToCart, isLoading: isAddingToCart } = useStoreItem()
+  const { mutateAsync: addToCart, isLoading: isAddingToCart } = useAddCartItem()
 
   // Search query using the provided hook
   const {
@@ -36,7 +34,7 @@ export function SearchBar() {
   const handleCookClick = (cookId) => {
     setSelectedCookId(cookId)
     setShowDropdown(false)
-    navigate(`/cook/${cookId}`)
+    // router.push(`/cook/${cookId}`)
   }
 
   const handleAddToCart = async (dish) => {
@@ -49,13 +47,11 @@ export function SearchBar() {
         quantity: 1,
       })
 
-      toast.success(`${dish.name} added to cart! 🛒`, {
-        position: "top-right",
-      })
+      // toast({
+      //  "successful"
+      // })
     } catch (error) {
-      toast.error("Failed to add item to cart. Try again!", {
-        position: "top-right",
-      })
+     console.log(error)
       console.error("Error adding to cart:", error)
     } finally {
       setLoadingCartItem(null)
@@ -76,9 +72,9 @@ export function SearchBar() {
   return (
     <div className="relative p-6" ref={searchRef}>
       {/* Search Input */}
-      <div className="flex rounded-full border border-slate-300 lg:shadow-lg w-full">
+      <div className="flex rounded-full border border-slate-300 shadow-sm w-full">
         <div className="ml-4 flex items-center">
-          <IoSearchOutline className="text-gray-500" />
+          <Search className="h-5 w-5 text-gray-500" />
         </div>
         <input
           type="text"
@@ -95,7 +91,7 @@ export function SearchBar() {
         <div className="absolute left-0 mt-2 w-full max-w-2xl bg-white shadow-lg rounded-lg p-4 z-50">
           {isLoading && (
             <div className="flex justify-center p-4">
-              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
           )}
 
@@ -123,7 +119,9 @@ export function SearchBar() {
                     <img
                       src={dish.image_url || "/placeholder.svg?height=64&width=64"}
                       alt={dish.name}
-                      className="w-16 h-16 rounded-md object-cover"
+                      width={64}
+                      height={64}
+                      className="rounded-md object-cover"
                       onError={(e) => {
                         e.target.src = "/placeholder.svg?height=64&width=64"
                       }}
@@ -150,7 +148,7 @@ export function SearchBar() {
                     disabled={loadingCartItem === dish.menu_item_id}
                     aria-label={`Add ${dish.name} to cart`}
                   >
-                    {loadingCartItem === dish.menu_item_id ? "Adding..." : "Add to Cart 🛒"}
+                    {loadingCartItem === dish.menu_item_id ? "Adding..." : "Add to Cart"}
                   </button>
                 </div>
               ))}

@@ -1,71 +1,51 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { api } from "@/lib/api-client"
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { api } from "@/lib/api-client";
 
 export const updateCartItem = async ({ item_id, quantity }) => {
-  try {
-    const response = await api.put(`/api/baskets/update/item/${item_id}`, { quantity })
+	try {
+		console.log("update cart *********:", item_id, quantity);
+		const response = await api.put(`/api/baskets/update/item/${item_id}`, {
+			quantity,
+		});
+		return response.data;
+	} catch (error) {
+		console.error("Error updating cart item:", error);
+		throw new Error("Failed to update cart item.");
+	}
+};
 
-    if (!response.data || !response.data.items) {
-      throw new Error("Invalid API response")
-    }
+export const useUpdateCartItem = () => {
+	const queryClient = useQueryClient();
 
-    return response.data.items // Return the updated cart items
-  } catch (error) {
-    console.error("Error updating cart item:", error)
-    throw new Error("Failed to update cart item.")
-  }
-}
-
-export const useUpdateStoreItem = (mutationConfig = {}) => {
-  const queryClient = useQueryClient()
-
-  const mutation = useMutation({
+	return useMutation({
 		mutationFn: updateCartItem,
+		onMutate: async (item_id, quantity) => {
+			console.log("updagted mutation:", item_id, quantity);
+			await queryClient.cancelQueries(["cartItems"]);
+			const previousCart = queryClient.getQueryData(["cartItems"]);
 
-		// Optimistically update the cache before mutation
-		// onMutate: async ({ item_id, quantity }) => {
-		// await queryClient.cancelQueries(["cartItems"]) // Cancel ongoing refetches
-		// const previousCart = queryClient.getQueryData(["cartItems"]) // Get the current cart state
-		// queryClient.setQueryData(["cartItems"], (oldCart) => {
-		//   if (!oldCart || !oldCart[1]?.items) return oldCart
-		//   const updatedItems = oldCart[1].items.map((item) => (item.item_id === item_id ? { ...item, quantity } : item))
-		//   return [
-		//     oldCart[0],
-		//     {
-		//       ...oldCart[1],
-		//       items: updatedItems,
-		//     },
-		//   ]
-		// })
-		// return { previousCart }
-		// },
+			// Optimistically update the cart
+			queryClient.setQueryData(["cartItems"], (oldCart) => {
+				if (!oldCart || !oldCart.items) return oldCart;
 
-		// If the mutation fails, revert to the previous cart state
+				return {
+					...oldCart,
+					items: oldCart.items.map((item) =>
+						item.item_id === item_id ? { ...item, quantity } : item
+					),
+				};
+			});
+
+			return { previousCart };
+		},
 		onError: (error, _, context) => {
 			if (context?.previousCart) {
 				queryClient.setQueryData(["cartItems"], context.previousCart);
 			}
 		},
-
-		// After a successful API call, update the cache with the correct data
-		onSuccess: (updatedCart) => {
-			queryClient.setQueryData(["cartItems"], updatedCart);
-		},
-
-		// Always refetch to ensure data consistency
+		onSuccess: () => {},
 		onSettled: () => {
 			queryClient.invalidateQueries(["cartItems"]);
 		},
-
-		...mutationConfig,
 	});
-
-  return {
-    updateItem: mutation.mutateAsync,
-    isLoading: mutation.isPending,
-    error: mutation.error,
-    isError: mutation.isError,
-    isSuccess: mutation.isSuccess,
-  }
-}
-
+};

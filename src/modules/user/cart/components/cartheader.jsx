@@ -8,7 +8,7 @@ export const CartHeader = () => {
           <div className="flex items-center justify-between">
             <Link to="/user/dashboard" className="flex items-center">
               <img src={Logo} alt="KhanaBox" className="h-10 w-10 mr-2" />
-              <span className="text-2xl font-bold text-green-600">KhanaBox</span>
+              <span className="text-2xl font-bold text-green-600">KhajaBox</span>
             </Link>
   
             <div className="flex items-center space-x-4">

@@ -9,7 +9,8 @@ import { CiSettings } from "react-icons/ci";
 import Logo from "../../../../assets/logo.jpg";
 import { useUserLogout } from "../../auth/api/logout";
 import { useProfile } from "../../userprofile/api/getProfile";
-import { useUserBasket } from "../../cart/api/getItems";
+import { useUserBasket } from "../../cart/hooks/getCartItems";
+// import { useUserBasket } from "../../cart/api/getItems";
 
 export const Header = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);

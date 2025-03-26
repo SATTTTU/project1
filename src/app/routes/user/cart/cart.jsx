@@ -1,96 +1,84 @@
-import { useDeleteStoreItem } from "@/modules/user/cart/api/deleteItems"
-import { useUserBasket } from "@/modules/user/cart/api/getItems"
-import { useUpdateStoreItem } from "@/modules/user/cart/api/updateItems"
+import { useDeleteCartItem } from "@/modules/user/cart/api/deleteItems"
+import { useUserCart } from "@/modules/user/cart/api/getItems"
+import { useUpdateCartItem } from "@/modules/user/cart/api/updateItems"
 import { CartHeader } from "@/modules/user/cart/components/cartheader"
 import { CartItems } from "@/modules/user/cart/components/cartItems"
 import { CartSummary } from "@/modules/user/cart/components/cartSummary"
-import { CheckoutButton } from "@/modules/user/cart/components/checkoutButton"
 import { EmptyCart } from "@/modules/user/cart/components/emptyCart"
 
-export const Cart=()=> {
-  const { data, isLoading, error, refetch } = useUserBasket()
-  const { updateItem, isLoading: isUpdating } = useUpdateStoreItem()
-  const { mutateAsync: deleteItem, isLoading: isDeleting } = useDeleteStoreItem()
 
-  console.log("data of basket", data)
-  // Calculate cart totals
+export const Cart=()=> {
+  const { data, isLoading, error, refetch } = useUserCart()
+  const { updateItem, isLoading: isUpdating } = useUpdateCartItem()
+  const { mutateAsync: deleteItem, isLoading: isDeleting } = useDeleteCartItem()
+  console.log("Cart ko items", data)
+
   const calculateSubtotal = () => {
-    if (!data || !data[0]?.items) return 0
-    return data[0].items.reduce((total, item) => total + (item.price * item.quantity || 0), 0)
+    if (!data || !data[0]?.items?.length) return 0
+    return data[0]?.items?.reduce((total, item) => total + (item.price * item.quantity || 0), 0)
   }
 
-	const calculateTax = () => {
-		return calculateSubtotal() * 0.1; // 10% tax
-	};
 
-	const calculateShipping = () => {
-		return calculateSubtotal() > 1000 ? 0 : 100; // Free shipping over Rs. 1000
-	};
 
-	const calculateTotal = () => {
-		return calculateSubtotal() + calculateTax() + calculateShipping();
-	};
-
-	const handleQuantityChange = async (itemId, newQuantity) => {
-		if (newQuantity < 1) return;
-		try {
-			await updateItem({ item_id: itemId, quantity: newQuantity });
-		} catch (error) {
-			console.error("Error updating quantity:", error);
-		}
-	};
-
-	const handleRemoveItem = async (itemId) => {
-		try {
-			alert(itemId);
-			await deleteItem({ item_id: itemId });
-		} catch (error) {
-			console.error("Error removing item:", error);
-		}
-	};
-
-	if (isLoading) {
-		return (
-			<div className="min-h-screen flex items-center justify-center">
-				<div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-			</div>
-		);
+  
+  const handleQuantityChange = async (itemId, newQuantity) => {
+	if (newQuantity < 1) return;
+	try {
+	  await updateItem({ item_id: itemId, quantity: newQuantity });
+	  refetch(); // Ensure cart updates
+	} catch (error) {
+	  console.error("Error updating quantity:", error);
 	}
-
-	if (error) {
-		return (
-			<div className="min-h-screen flex items-center justify-center">
-				<div className="bg-red-50 p-6 rounded-lg">
-					<h2 className="text-red-600 font-bold text-xl">Error loading cart</h2>
-					<p className="text-red-500">{error.message}</p>
-					<button
-						onClick={() => refetch()}
-						className="mt-4 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
-					>
-						Try Again gjhmgygjgjhgjhgjhgf
-					</button>
-				</div>
-			</div>
-		);
+  };
+  
+  const handleRemoveItem = async (itemId) => {
+	try {
+	  await deleteItem({ item_id: itemId });
+	  refetch(); // Ensure item is removed
+	} catch (error) {
+	  console.error("Error removing item:", error);
 	}
+  };
+  
 
-	console.log("the data is ", data, data.items);
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    )
+  }
 
-	if (!data) {
-		return <div>no data</div>;
-	}
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="bg-red-50 p-6 rounded-lg">
+          <h2 className="text-red-600 font-bold text-xl">Error loading cart</h2>
+          <p className="text-red-500">{error.message}</p>
+          <button
+            onClick={() => refetch()}
+            className="mt-4 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    )
+  }
 
-
+  // If cart is empty
+  if (!data ) {
+    return <EmptyCart />
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
-
-      <CartHeader itemCount={data[0]?.items?.length || 0} />
+      <CartHeader itemCount={data.items?.length || 0} />
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="lg:w-2/3">
             <CartItems
-              data={data}
+              items={data}
               onQuantityChange={handleQuantityChange}
               onRemoveItem={handleRemoveItem}
               isUpdating={isUpdating}
@@ -98,7 +86,9 @@ export const Cart=()=> {
             />
           </div>
           <div className="lg:w-1/3">
-         <CartSummary/>
+            <CartSummary
+              subtotal={calculateSubtotal()}
+            />
           </div>
         </div>
       </div>

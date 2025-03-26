@@ -1,3 +1,4 @@
+
 import { useMutation } from "@tanstack/react-query"
 import { api } from "@/lib/api-client"
 
@@ -23,7 +24,7 @@ export const processCheckout = async (checkoutData) => {
   }
 }
 
-export const useCheckout = (mutationConfig = {}) => {
+export function useCheckout(mutationConfig = {}) {
   return useMutation({
     mutationFn: processCheckout,
     ...mutationConfig,
