@@ -9,7 +9,6 @@ import { categories, cooks, popularItems } from "@/modules/user/dashboard/compon
 import { PopularCooks } from "@/modules/user/dashboard/components/popularCooks";
 import { CategorySection } from "@/modules/user/dashboard/components/categoriesSection";
 import { PromotedRestaurants } from "@/modules/user/dashboard/components/filterBadges";
-
 import UserLocation from "@/modules/user/dashboard/components/setLocation";
 import { PopularItemsPage } from "@/modules/user/dashboard/components/popularItemsSection";
 
