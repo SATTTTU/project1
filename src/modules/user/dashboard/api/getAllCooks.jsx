@@ -4,6 +4,7 @@ import { api } from '@/lib/api-client';
 // API function to fetch popular cooks
 export const getPopularCooks = async () => {
   const response = await api.get('/api/get-popular-cooks');
+  console.log("popular cooks ", response.data)
   return response.data;
 };
 

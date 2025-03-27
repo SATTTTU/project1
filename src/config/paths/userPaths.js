@@ -82,13 +82,13 @@ export const userPaths = {
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
-	profileContent: {
-		path: "/user/profiles",
-		getHref: (redirectTo) =>
-			`/user/profiles${
-				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
-			}`,
-	},
+	// profileContent: {
+	// 	path: "/user/profiles",
+	// 	getHref: (redirectTo) =>
+	// 		`/user/profiles${
+	// 			redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+	// 		}`,
+	// },
 	orderHistory: {
 		path: "/user/orders",
 		getHref: (redirectTo) =>
@@ -156,6 +156,27 @@ export const userPaths = {
 		path: "/about",
 		getHref: (redirectTo) =>
 			`/about${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
+	payment: {
+		path: "/payment",
+		getHref: (redirectTo) =>
+			`/payment${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
+	orderverify: {
+		path: "/order-success",
+		getHref: (redirectTo) =>
+			`/order-success${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
+	checkoutsuccess: {
+		path: "/checkout",
+		getHref: (redirectTo) =>
+			`/checkout${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},

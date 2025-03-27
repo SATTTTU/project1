@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { FaUserCircle } from "react-icons/fa";
+import { useUserProfileEditFormik } from "../formik/updateProfileFormik";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -18,9 +19,7 @@ export const ProfileContent = () => {
   const [location, setLocation] = useState(null);
 
   // Use mutation to get location
-  const { mutateAsync: fetchLocation, isLoading, isError
-
-  } = usegetLocation();
+  const { mutateAsync: fetchLocation, isLoading, isError} = usegetLocation();
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];

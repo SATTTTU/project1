@@ -9,7 +9,8 @@ import { CiSettings } from "react-icons/ci";
 import Logo from "../../../../assets/logo.jpg";
 import { useUserLogout } from "../../auth/api/logout";
 import { useProfile } from "../../userprofile/api/getProfile";
-import { useUserBasket } from "../../cart/api/getItems";
+import { useUserBasket } from "../../cart/hooks/getCartItems";
+// import { useUserBasket } from "../../cart/api/getItems";
 
 export const Header = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -96,7 +97,8 @@ export const Header = () => {
   const userId = profile?.id;
   console.log("userId",userId)
   const { data: cartItems } = useUserBasket(userId);
-  const cartItemCount = cartItems?.length || 0;
+  
+  const cartItemCount = cartItems?.data?.length || 0;
   return (
     <div className="bg-white shadow-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-3">

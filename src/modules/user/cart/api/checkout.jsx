@@ -1,31 +1,40 @@
-import { api } from "@/lib/api-client";
-import { clearCart } from "@/store/cart/cart";
-import { useMutation } from "@tanstack/react-query";
-import { useDispatch, useSelector } from "react-redux";
 
-const checkout = async (cartItems) => {
+import { useMutation } from "@tanstack/react-query"
+import { api } from "@/lib/api-client"
+
+export const processCheckout = async (checkoutData) => {
   try {
-    const response = await api.post("/api/checkout", { items: cartItems });
-    console.log("Checkout Successful:", response.data);
-    return response.data;
+    console.log("Making checkout API request with data:", checkoutData)
+    const response = await api.post("/api/checkout", checkoutData)
+    console.log("checkout reponse",response.data)
+
+    if (!response) {
+      throw new Error("Invalid response from server")
+    }
+
+    console.log("Checkout API response data:", response.data)
+
+    return response
   } catch (error) {
-    console.error("Checkout Error:", error.response?.data || error.message);
-    throw error; // Ensure error is propagated
+    console.error("Checkout API error:", error)
+
+    const errorMessage =
+      error.response?.data?.message || error.response?.data?.error || error.message || "Failed to process checkout"
+
+    throw new Error(errorMessage)
   }
-};
+}
 
-export const useCheckout = ({ mutationConfig } = {}) => {
-  const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart.items);
-
+export function useCheckout(mutationConfig = {}) {
   return useMutation({
-    mutationFn: () => checkout(cartItems),
-    onSuccess: () => {
-      dispatch(clearCart()); // Clear cart after successful checkout
-    },
-    onError: (error) => {
-      console.error("Checkout failed:", error);
-    },
+    mutationFn: processCheckout,
     ...mutationConfig,
-  });
-};
+    onError: (error) => {
+      console.error("Checkout mutation error:", error)
+      if (mutationConfig.onError) {
+        mutationConfig.onError(error)
+      }
+    },
+  })
+}
+

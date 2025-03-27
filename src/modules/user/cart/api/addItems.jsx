@@ -1,62 +1,81 @@
-import { api } from "@/lib/api-client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { api } from "@/lib/api-client"
 
-// API Call to Store Items in Cart
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+// Function to add an item to the cart
 export const storeCartItem = async ({ menu_item_id, quantity }) => {
   try {
-    const response = await api.post("/api/baskets/store", { menu_item_id, quantity });
-    console.log("Added to cart:", response.data.items);
-    return response.data.items; // Return full updated cart
+    const response = await api.post("/api/baskets/store", { menu_item_id, quantity })
+    return response.data
   } catch (error) {
-    console.error("Error adding to cart:", error.response?.data || error.message);
-    throw new Error(error.response?.data?.message || "Failed to add item to cart.");
+    throw new Error(error.response?.data?.message || "Failed to add item to cart.")
   }
-};
+}
 
-// React Query Hook for Storing Items
-export const useStoreItem = (mutationConfig = {}) => {
-  const queryClient = useQueryClient();
+export const useAddCartItem=()=> {
+  const queryClient = useQueryClient()
+  // const { toast } = useToast()
 
-  const mutation = useMutation(storeCartItem, {
-    ...mutationConfig,
+  return useMutation({
+    mutationFn: storeCartItem,
     onMutate: async (newItem) => {
-      // Optimistic Update: Cancel Ongoing Cart Fetches
-      await queryClient.cancelQueries("cart");
+      await queryClient.cancelQueries(["cartItems"])
 
-      // Get Current Cart Data
-      const previousCart = queryClient.getQueryData("cart") || [];
+      const previousCart = queryClient.getQueryData(["cartItems"])
 
-      // Optimistically Add New Item with Temporary ID
-      queryClient.setQueryData("cart", (oldCart) => [
-        ...(oldCart || []),
-        { ...newItem, id: `temp-${Date.now()}` }, // Temporary ID for UI update
-      ]);
+      // Optimistically update the cart
+      queryClient.setQueryData(["cartItems"], (oldData) => {
+        if (!oldData || !oldData.items) {
+          return {
+            items: [
+              {
+                item_id: `temp-${Date.now()}`,
+                menu_item_id: newItem.menu_item_id,
+                quantity: newItem.quantity,
+                price: 0,
+                menu_item: {
+                  name: "Loading...",
+                  image_url: null,
+                },
+                isOptimistic: true,
+              },
+            ],
+          }
+        }
 
-      return { previousCart };
+        return {
+          ...oldData,
+          items: [
+            ...oldData.items,
+            {
+              item_id: `temp-${Date.now()}`,
+              menu_item_id: newItem.menu_item_id,
+              quantity: newItem.quantity,
+              price: 0,
+              menu_item: {
+                name: "Loading...",
+                image_url: null,
+              },
+              isOptimistic: true,
+            },
+          ],
+        }
+      })
+
+      return { previousCart }
     },
-
-    onSuccess: (updatedCart) => {
-      // ✅ Immediately Update UI with Latest Cart from API
-      queryClient.setQueryData("cart", updatedCart);
+    onSuccess: (data) => {
+      queryClient.setQueryData(["cartItems"], data)
+    
     },
-
-    onError: (error, newItem, context) => {
-      console.error("Add to cart failed:", error);
-      // ❌ Rollback to Previous Cart State on Error
-      queryClient.setQueryData("cart", context.previousCart);
+    onError: (error, variables, context) => {
+      if (context?.previousCart) {
+        queryClient.setQueryData(["cartItems"], context.previousCart)
+      }
+     
     },
-
     onSettled: () => {
-      // 🔄 Ensure Cart is Always Updated from Server
-      queryClient.invalidateQueries("cart");
+      queryClient.invalidateQueries(["cartItems"])
     },
-  });
+  })
+}
 
-  return {
-    addItem: mutation.mutateAsync, // Function to add item to cart
-    isLoading: mutation.isPending,
-    error: mutation.error,
-    isError: mutation.isError,
-    isSuccess: mutation.isSuccess,
-  };
-};

@@ -6,7 +6,7 @@ export const getPopularDishes = async () => {
   try {
     const response = await api.get("/api/get-popular-dishes");
 
-    console.log("API Response:", response.data); // Debugging
+    console.log("API Response for dishes:", response.data); // Debugging
 
     // Ensure we return the correct structure
     return response.data?.data || response.data;
@@ -18,11 +18,10 @@ export const getPopularDishes = async () => {
 
 // Query options for react-query
 export const getPopularDishesQueryOptions = () => ({
-  queryKey: ["popularDishes", "list"], // Unique key
+  queryKey: ["popularDishes", "list"], 
   queryFn: getPopularDishes,
 });
 
-// Hook to use in components
 export const usePopularDishes = (queryConfig = {}) => {
   return useQuery({
     ...getPopularDishesQueryOptions(),

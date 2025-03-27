@@ -1,212 +1,95 @@
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-	removeFromCart,
-	updateQuantity,
-	addToCart,
-} from "../../../../store/cart/cart";
-import { CartItems } from "@/modules/user/cart/components/cartItems";
+import { Modal } from "@/components/ui/modal/Modal";
+import { useDeleteCartItem } from "@/modules/user/cart/api/deleteItems";
+import { useUserCart } from "@/modules/user/cart/api/getItems";
+import { useUpdateCartItem } from "@/modules/user/cart/api/updateItems";
+import { useVerifyPayment } from "@/modules/user/cart/api/verify-payment";
 import { CartHeader } from "@/modules/user/cart/components/cartheader";
+import { CartItems } from "@/modules/user/cart/components/cartItems";
+import { CartSummary } from "@/modules/user/cart/components/cartSummary";
 import { EmptyCart } from "@/modules/user/cart/components/emptyCart";
-import { OrderConfirmation } from "@/modules/user/cart/components/orderConfirmation";
-import { useUserBasket } from "@/modules/user/cart/api/getItems";
-import { toast } from "react-toastify";
-import { useCheckout } from "@/modules/user/cart/api/checkout";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export const Cart = () => {
-	const dispatch = useDispatch();
-	const [orderComplete, setOrderComplete] = useState(false);
-	const [orderId, setOrderId] = useState(null);
+	const navigate = useNavigate();
+	const { data, isLoading, error, refetch } = useUserCart();
+	const { updateItem, isLoading: isUpdating } = useUpdateCartItem();
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const { mutateAsync: deleteItem, isLoading: isDeleting } =
+		useDeleteCartItem();
+	console.log("Cart ko items", data);
 
-
-	// Get cart items from Redux store for real-time updates
-	const reduxCartItems = useSelector((state) => state.cart.items);
-
-	// Fetch cart data from API
-	const { data, isLoading, error, refetch, mutateAsync } = useUserBasket({
-		mutationConfig: {
-			onSuccess: (data) => {
-				// This will run after successful API operations
-				console.log("Cart data updated:", data);
-			},
-		},
+	const { mutate: verifyPayment, isLoading: isVerifying } = useVerifyPayment({
+		// onSuccess: (data) => {
+		// 	console.log("Payment verified:", data);
+		// 	setIsModalOpen(false);
+		// },
+		// onError: (error) => {
+		// 	alert(`Payment Verification Failed: ${error.message}`);
+		// },
 	});
-	console.log("cart ko data", data);
 
-	// Store cart items in state for rendering
-	const [cartItems, setCartItems] = useState([]);
+	const calculateSubtotal = () => {
+		if (!data || !data[0]?.items?.length) return 0;
+		return data[0]?.items?.reduce(
+			(total, item) => total + (item.price * item.quantity || 0),
+			0
+		);
+	};
 
-	const { mutateAsync: checkoutMutation, isLoading: isCheckoutLoading } =
-		useCheckout({
-			mutationConfig: {
-				onSuccess: (data) => {
-					setOrderComplete(true);
-					setOrderId(data.orderId); // Assuming API returns an orderId
-					toast.success("Order placed successfully!");
-				},
-				onError: (error) => {
-					toast.error("Checkout failed. Please try again.");
-					console.error("Checkout Error:", error);
-				},
-			},
-		});
-
-    const handleCheckout = async () => {
-      try {
-        // Fetch the latest cart data before checkout
-        await refetch();
-    
-        // Ensure cart is not empty
-        if (!data || !data[1]?.items || data[1].items.length === 0) {
-          toast.error("Your cart is empty. Add items before proceeding.");
-          return;
-        }
-    
-        // Prepare cart data for checkout
-        const cartData = {
-          items: data[1].items.map((item) => ({
-            id: item.id,
-            quantity: item.quantity,
-          })),
-        };
-    
-        // Perform the checkout mutation
-        const response = await checkoutMutation(cartData);
-    
-        // Handle successful checkout
-        setOrderComplete(true);
-        setOrderId(response.orderId); // Assuming API returns orderId
-        toast.success("Order placed successfully!");
-    
-        // Clear the cart from Redux store
-        dispatch(removeFromCart()); // Ensure this action clears all cart items
-    
-      } catch (error) {
-        console.error("Error during checkout:", error);
-        toast.error("Checkout failed. Please try again.");
-      }
-    };
-    
-
-	// Update cart items when either Redux store or API data changes
-	useEffect(() => {
-		if (reduxCartItems && reduxCartItems.length > 0) {
-			// Prioritize Redux state for immediate updates
-			setCartItems(reduxCartItems);
-		} else if (data && data[1].items) {
-			// Fall back to API data
-			setCartItems(data[1].items);
-
-			// Sync Redux store with API data if needed
-			if (JSON.stringify(reduxCartItems) !== JSON.stringify(data[1].items)) {
-				data[1].items?.forEach((item) => {
-					dispatch(addToCart(item));
-				});
-			}
-		}
-	}, [reduxCartItems, data, dispatch]);
-
-	// Calculate subtotal dynamically
-  const calculateSubtotal = () => {
-    return cartItems.reduce((total, item) => total + (item.price * item.quantity || 0), 0).toFixed(2);
-};
-
-
-
-	// Handle quantity change with immediate update
 	const handleQuantityChange = async (itemId, newQuantity) => {
 		if (newQuantity < 1) return;
-
 		try {
-			// Update Redux store immediately for UI update
-			dispatch(updateQuantity({ productId: itemId, quantity: newQuantity }));
-
-			// Update local state immediately
-			setCartItems((prevItems) =>
-				prevItems.map((item) =>
-					item.id === itemId
-						? {
-								...item,
-								quantity: newQuantity,
-								total: item.price * newQuantity,
-						  }
-						: item
-				)
-			);
-
-			// Update backend asynchronously
-			await mutateAsync({
-				basket_item_id: itemId,
-				quantity: newQuantity,
-			});
-
-			toast.success("Quantity updated successfully");
+			await updateItem({ item_id: itemId, quantity: newQuantity });
+			refetch(); // Ensure cart updates
 		} catch (error) {
-			toast.error("Failed to update quantity");
 			console.error("Error updating quantity:", error);
-
-			// Revert changes if API fails
-			refetch();
 		}
 	};
 
-	// Handle item removal with immediate update
 	const handleRemoveItem = async (itemId) => {
 		try {
-			// Update Redux store immediately for UI update
-			dispatch(removeFromCart(itemId));
-
-			// Update local state immediately
-			setCartItems((prevItems) =>
-				prevItems.filter((item) => item.id !== itemId)
-			);
-
-			// Update backend asynchronously
-			await mutateAsync({ basket_item_id: itemId });
-
-			toast.success("Item removed from cart");
+			await deleteItem({ item_id: itemId });
+			refetch(); // Ensure item is removed
 		} catch (error) {
-			toast.error("Failed to remove item");
 			console.error("Error removing item:", error);
-
-			// Revert changes if API fails
-			refetch();
 		}
 	};
+	const [searchParams] = useSearchParams();
 
-	// Handle adding item to cart with immediate update
-	const handleAddToCart = (item) => {
-		// Update Redux store immediately
-		dispatch(addToCart(item));
+	const handleVerifyPayment = async () => {
+		const pidx = searchParams.get("pidx");
+		console.log("token", pidx); // ✅ Get pidx from search params
+		if (!pidx) {
+			alert("Missing Payment ID");
+			return;
+		}
 
-		// Update local state immediately
-		setCartItems((prevItems) => {
-			const existingItem = prevItems.find((i) => i.id === item.id);
-			if (existingItem) {
-				return prevItems.map((i) =>
-					i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-				);
-			}
-			return [...prevItems, { ...item, quantity: 1 }];
+		verifyPayment(pidx, {
+			onSuccess: (data) => {
+				console.log("Payment verified:", data);
+				navigate("/order-success")
+				setIsModalOpen(false);
+
+			},
+			onError: (error) => {
+			alert(`Payment Verification Failed: ${error.message}`);
+		},
 		});
 
-		mutateAsync({
-			menu_item_id: item.id,
-			quantity: 1,
-		}).catch((error) => {
-			console.error("Error adding item to cart:", error);
-			refetch(); // Sync with backend on error
-		});
-
-		toast.success(`${item.name} added to cart!`);
 	};
 
-	// const handleCheckout = () => {
-	//   setOrderComplete(true)
-	//   setOrderId("ORD-" + Math.floor(Math.random() * 10000))
-	// }
+	const pidx = searchParams.get("pidx");
+	console.log("window", pidx);
+	useEffect(() => {
+		const pidx = searchParams.get("pidx");
+		console.log("Window ko output", pidx);
+		if (pidx) {
+			setIsModalOpen(true);
+		}
+	}, []);
 
-	if (isLoading && cartItems.length === 0) {
+	if (isLoading) {
 		return (
 			<div className="min-h-screen flex items-center justify-center">
 				<div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
@@ -231,66 +114,50 @@ export const Cart = () => {
 		);
 	}
 
-	if (orderComplete) {
-		return <OrderConfirmation orderId={orderId} />;
-	}
-
-	if (data?.length === 0) {
-		return <EmptyCart onAddItem={handleAddToCart} />;
+	if (!data || data?.length ===0) {
+		return <EmptyCart />;
 	}
 
 	return (
 		<div className="min-h-screen bg-gray-50">
-			<CartHeader itemCount={cartItems.length} />
+			<CartHeader itemCount={data.items?.length || 0} />
 			<div className="container mx-auto px-4 py-8">
-				<div className="flex justify-between items-center mb-6">
-					<h1 className="text-2xl font-bold">Your Cart</h1>
-				</div>
-
 				<div className="flex flex-col lg:flex-row gap-8">
 					<div className="lg:w-2/3">
 						<CartItems
-							data={data}
+							items={data}
 							onQuantityChange={handleQuantityChange}
 							onRemoveItem={handleRemoveItem}
+							isUpdating={isUpdating}
+							isDeleting={isDeleting}
 						/>
 					</div>
 					<div className="lg:w-1/3">
-						<div className="bg-white rounded-lg shadow-lg overflow-hidden sticky top-20">
-							<div className="p-6">
-								<h2 className="text-lg font-bold mb-4">Order Summary</h2>
-								<div className="mb-4">
-									{data[1]?.items?.map((item) => (
-										<div
-											key={item.id}
-											className="flex justify-between py-2 border-b"
-										>
-											<span>
-												{item.name} x{item.quantity}
-											</span>
-											<span>Rs. {(item.price * item.quantity).toFixed(2)}</span>
-										</div>
-									))}
-								</div>
-								<div className="flex justify-between font-bold text-lg mb-6">
-									<span>Subtotal:</span>
-									<span>Rs. {calculateSubtotal()}</span>
-								</div>
-
-								<button
-									onClick={handleCheckout}
-									disabled={isCheckoutLoading}
-									className={`w-full bg-green-500 text-white py-3 rounded-md font-medium hover:bg-green-600 transition-colors ${
-										isCheckoutLoading ? "opacity-50 cursor-not-allowed" : ""
-									}`}
-								>
-									{isCheckoutLoading ? "Processing..." : "Proceed to Checkout"}
-								</button>
-							</div>
-						</div>
+						<CartSummary subtotal={calculateSubtotal()} />
 					</div>
 				</div>
 			</div>
+			<Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+				<div className="space-x-4 text-center">
+					<h2 className="text-lg font-bold mb-2">Checkout Successful</h2>
+					<p>Your checkout has been processed successfully!</p>
+					<button
+						onClick={handleVerifyPayment}
+						className={`mt-4 bg-[#426B1F] text-white px-4 py-2 rounded-md ${
+							isVerifying ? "opacity-50 cursor-not-allowed" : ""
+						}`}
+						disabled={isVerifying}
+					>
+						{isVerifying ? "Verifying..." : "Verify Payment"}
+					</button>
+					{/* <button
+						onClick={() => setIsModalOpen(false)}
+						className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+					>
+						Close
+					</button> */}
+				</div>
+			</Modal>
 		</div>
 	);
 };

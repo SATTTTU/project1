@@ -130,15 +130,7 @@ export const userRoutes = [
 									return { Component: ProfilePage };
 								},
 							},
-							{
-								path: paths.user.profileContent.path,
-								lazy: async () => {
-									const { MyProfile } = await import(
-										"../../../modules/user/userprofile/components/editProfile"
-									);
-									return { Component: MyProfile };
-								},
-							},
+					
 							{
 								path: paths.user.orderHistory.path,
 								lazy: async () => {
@@ -206,6 +198,34 @@ export const userRoutes = [
 									{ path: "settings", element: <SettingsContent /> },
 								],
 							},
+							{
+								path: paths.user.payment.path,
+								lazy: async () => {
+									const { PaymentVerify } = await import(
+										"../../../modules/user/cart/components/payment-verify"
+									);
+									return { Component: PaymentVerify };
+								},
+							},
+							{
+								path: paths.user.checkoutsuccess.path,
+								lazy: async () => {
+									const { PaymentVerification } = await import(
+										"../../../modules/user/cart/components/payment-verify"
+									);
+									return { Component: PaymentVerification };
+								},
+							},
+							{
+								path: paths.user.orderverify.path,
+								lazy: async () => {
+									const { OrderSuccess } = await import(
+										"../../../modules/user/cart/components/orderSuccessPage"
+									);
+									return { Component: OrderSuccess };
+								},
+							},
+							
 						],
 					},
 				],
