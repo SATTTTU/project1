@@ -3,20 +3,17 @@ import { toast } from "react-toastify";
 import { useCheckout } from "../api/checkout";
 import { useUserCart } from "../api/getItems";
 import { useNavigate } from "react-router-dom";
-// import { useVerifyPayment } from "../api/verify-payment";
 
-export const CheckoutButton=()=> {
-	const navigate = useNavigate()
+export const CheckoutButton = () => {
+	const navigate = useNavigate();
 	const [isProcessing, setIsProcessing] = useState(false);
 	const { data: cartData } = useUserCart();
 	console.log("Checkout button ", cartData);
-	// const { mutateAsync: verifyPayment } = useVerifyPayment();
 	const { mutateAsync: processCheckout } = useCheckout({
 		onSuccess: (data) => {
 			console.log("Checkout successful:", data);
-navigate("/")
-    //   debugger;
-			// verifyPayment();
+			navigate("/checkout");
+			//   debugger;
 		},
 		onError: (error) => {
 			console.error("Checkout error:", error);
@@ -24,7 +21,6 @@ navigate("/")
 		},
 	});
 
-	// Calculate total amount
 	const calculateTotal = () => {
 		if (!cartData || !cartData[0]?.items) return 0;
 		return cartData[0].items.reduce(
@@ -43,32 +39,26 @@ navigate("/")
 			setIsProcessing(true);
 
 			const checkoutData = {
-				// Cart items
 				items: cartData[0].items.map((item) => ({
 					id: item.item_id,
 					quantity: item.quantity,
 				})),
 
-				// Total amount (convert to paisa for Khalti)
 				amount: Math.round(calculateTotal() * 100),
 
-				// Order details
 				purchase_order_id: `ORDER-${Date.now()}`,
 				purchase_order_name: "Food Order",
 
-				// Redirect URLs
 				return_url: `${window.location.origin}/payment/callback`,
 				website_url: window.location.origin,
 			};
 
 			console.log("Sending checkout data:", checkoutData);
 
-			// Use mutateAsync to get the response data
 			const response = await processCheckout(checkoutData);
 
 			console.log("Checkout response:", response);
 
-			// Check if response exists and has pidx
 			if (response && response.pidx) {
 				try {
 					// Store pidx directly in localStorage (as a separate item)
@@ -89,7 +79,6 @@ navigate("/")
 					);
 					console.log("Stored transaction details:", transactionDetails);
 
-					// Verify localStorage was set correctly
 					const storedPidx = localStorage.getItem("khalti_pidx");
 					if (!storedPidx) {
 						console.error("Failed to store pidx in localStorage");
@@ -98,28 +87,23 @@ navigate("/")
 						);
 					}
 
-					// IMPORTANT: Construct the correct Khalti payment URL
 					const khaltiPaymentUrl = `https://test-pay.khalti.com/?pidx=${response.pidx}`;
 
 					console.log("Redirecting to Khalti payment page:", khaltiPaymentUrl);
 
-					// Redirect to Khalti payment page
 					window.location.href = khaltiPaymentUrl;
 				} catch (storageError) {
 					console.error("Error storing data in localStorage:", storageError);
 					toast.warning("Warning: Could not store payment information locally");
 
-					// Still redirect even if localStorage fails
 					window.location.href = `https://test-pay.khalti.com/?pidx=${response.pidx}`;
 				}
 			} else {
-				// More detailed error message
 				const errorMsg = "Invalid payment response from server. Missing pidx.";
 				console.error(errorMsg, { response });
 				toast.error(errorMsg);
 			}
 		} catch (error) {
-			// Improved error handling
 			const errorMsg =
 				error.response?.data?.message ||
 				error.message ||
@@ -144,4 +128,4 @@ navigate("/")
 				: `Pay with Khalti • Rs. ${calculateTotal().toFixed(2)}`}
 		</button>
 	);
-}
+};

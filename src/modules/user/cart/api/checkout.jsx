@@ -6,6 +6,7 @@ export const processCheckout = async (checkoutData) => {
   try {
     console.log("Making checkout API request with data:", checkoutData)
     const response = await api.post("/api/checkout", checkoutData)
+    console.log("checkout reponse",response.data)
 
     if (!response) {
       throw new Error("Invalid response from server")

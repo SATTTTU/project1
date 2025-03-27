@@ -4,6 +4,7 @@ import { api } from "@/lib/api-client";
 export const verifyPayment = async () => {
 	try {
 		const storedPidx = localStorage.getItem("khalti_pidx");
+		console.log("Stored id", storedPidx);
 
 		if (!storedPidx) {
 			throw new Error("Missing payment ID (pidx) in local storage");
@@ -12,28 +13,11 @@ export const verifyPayment = async () => {
 		const response = await api.post("/api/verify-payment", {
 			pidx: storedPidx,
 		});
-		console.log("verify", response.data);
+		console.log("verify", response);
 
-		if (!response || !response.data) {
-			throw new Error("Empty response from verification server");
-		}
-
-		console.log("Payment verification response:", response.data);
-
-		if (response.data.success) {
-			localStorage.setItem(
-				"verified_transaction",
-				JSON.stringify({
-					pidx: storedPidx,
-					...response.data,
-					verified: true,
-				})
-			);
-		}
-
-		return response.data;
+		return response;
 	} catch (error) {
-		console.error("Payment verification error:", error);
+		console.error("Payment ****** verification error:", error);
 
 		const errorMessage =
 			error.response?.data?.message ||
@@ -46,9 +30,12 @@ export const verifyPayment = async () => {
 };
 
 export const useVerifyPayment = (mutationConfig = {}) => {
+	console.log("mutation", mutationConfig);
 	return useMutation({
 		mutationFn: verifyPayment,
-		...mutationConfig,
+		onSuccess: (data) => {
+			console.log("onSuccess", data);
+		},
 		onError: (error) => {
 			console.error("Verification mutation error:", error);
 			if (mutationConfig.onError) {
@@ -57,3 +44,4 @@ export const useVerifyPayment = (mutationConfig = {}) => {
 		},
 	});
 };
+

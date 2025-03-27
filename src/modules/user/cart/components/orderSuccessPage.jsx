@@ -74,7 +74,7 @@ export const OrderSuccess=()=> {
             View My Orders
           </Link>
           <Link
-            to="/"
+            to="/user/dashboard"
             className="inline-block bg-gray-100 text-gray-800 font-medium px-6 py-3 rounded-md hover:bg-gray-200 transition-colors"
           >
             Continue Shopping

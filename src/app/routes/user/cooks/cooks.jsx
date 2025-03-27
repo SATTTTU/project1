@@ -19,7 +19,7 @@ export const CookProfile = () => {
   console.log("cook",cook)
   const [activeTab, setActiveTab] = useState("categories");
   const safeCook = cook || { categories: [], reviews: [] };
-  const videoBaseUrl = "https://khajabox-backend.dev.tai.com.np/storage/";
+  const videoBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
   const handleAddToCart = (dish) => {
     if (!dish) return;

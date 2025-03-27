@@ -1,4 +1,6 @@
-import { CartItem } from "./cartitem"
+// import { CartItem } from "./cartitem"
+
+import { CartItem } from "./cartitem";
 
 export const CartItems=({ items, onQuantityChange, onRemoveItem, isUpdating, isDeleting })=> {
   // if (!items || items.length === 0) {
@@ -8,7 +10,7 @@ export const CartItems=({ items, onQuantityChange, onRemoveItem, isUpdating, isD
   //     </div>
   //   )
   // }
-console.log("items",items[0])
+console.log("items in the cartItems", items[0]);
   return (
     <>
       <h1 className="text-2xl font-bold mb-6">Shopping Cart</h1>

@@ -167,9 +167,9 @@ export const userPaths = {
 			}`,
 	},
 	orderverify: {
-		path: "/verifyorder",
+		path: "/order-success",
 		getHref: (redirectTo) =>
-			`/verifyorder${
+			`/order-success${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
