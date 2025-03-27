@@ -39,6 +39,7 @@ export const usePasswordForm = (initialValues = {}) => {
 
   const formik = useFormik({
     initialValues: {
+
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
@@ -48,8 +49,9 @@ export const usePasswordForm = (initialValues = {}) => {
     onSubmit: async (values, helpers) => {
       try {
         await mutation.mutateAsync({
-          current_password: values.currentPassword,
-          new_password: values.newPassword,
+          oldpassword: values.currentPassword,
+          newpassword: values.newPassword,
+          confirmpassword:values.confirmPassword,
         })
 
         // Reset form after successful submission

@@ -62,9 +62,10 @@ export const useDeleteIntroVideo = (options = {}) => {
     mutationFn: deleteIntroVideo,
     onSuccess: (...args) => {
       queryClient.invalidateQueries({
-        queryKey: ["cook-profile"],
+        queryKey: ["CookProfile"],
       });
       onSuccess?.(...args);
+
     },
     onError: (error) => {
       console.error("Delete Video Error:", error);

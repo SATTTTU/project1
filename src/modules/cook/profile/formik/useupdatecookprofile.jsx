@@ -63,12 +63,13 @@ export const UseProfileFormik = () => {
     validationSchema: toFormikValidationSchema(cookprofileEditSchema),
     onSubmit: async (values, helpers) => {
       try {
+        console.log("fomik values*******", values)
         // Create FormData for file upload
         const formData = new FormData();
 
         // Add text fields
         formData.append("name", values.name);
-        formData.append("mobile", values.mobile);
+        formData.append("phone", values.mobile);
 
         // Only append the image if it's a File object
         if (values.image instanceof File) {

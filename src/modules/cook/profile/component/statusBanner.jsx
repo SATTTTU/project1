@@ -3,7 +3,8 @@ import { CheckCircle, AlertCircle, Clock } from "lucide-react"
 const StatusBanner = ({ userData = {} }) => {
   // Determine account status
   const getStatusInfo = () => {
-    const status = userData?.status || "pending"
+    const status = userData?.approval_status || "pending"
+  
 
     switch (status.toLowerCase()) {
       case "approved":

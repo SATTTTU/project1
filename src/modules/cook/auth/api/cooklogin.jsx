@@ -8,8 +8,8 @@ import { useNavigate } from "react-router-dom"
 const loginCook = async (cookData) => {
   try {
     clearAuthData()
-
     const response = await api.post("/api/cooks/login", cookData)
+   
     console.log("Cook login response:", response)
 
     // Extract token from response

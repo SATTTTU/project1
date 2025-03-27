@@ -6,6 +6,7 @@ import { videoSchema } from "./schema/videoschema";
 // Define Zod validation schema
 
 export const useIntroVideo = (initialVideo = null) => {
+  console.log("tiedfafdff:", initialVideo);
   const [videoFile, setVideoFile] = useState(null);
   const [videoPreview, setVideoPreview] = useState(initialVideo);
   const [isUploading, setIsUploading] = useState(false);
@@ -101,7 +102,7 @@ export const useIntroVideo = (initialVideo = null) => {
 
   // Remove video
   const removeVideo = () => {
-    if (videoPreview) {
+    if (videoPreview || initialVideo) {
       deleteVideo();
     } else {
       setVideoFile(null);

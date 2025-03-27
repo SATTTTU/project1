@@ -2,7 +2,8 @@ import { api } from "@/lib/api-client"
 import { useMutation } from "@tanstack/react-query"
 
 const updateCookProfile = async (cookData) => {
-  const token = localStorage.getItem("Cook_token")
+  console.log("cookdata:", cookData);
+  const token = localStorage.getItem("cook_token")
 
   if (!token) {
     throw new Error("Cook not authenticated")

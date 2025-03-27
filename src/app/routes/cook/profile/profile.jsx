@@ -10,6 +10,7 @@ import StatusBanner from "@/modules/cook/profile/component/statusBanner";
 
 export const ProfileRoute = () => {
   const { data: userData } = useProfile();
+  console.log("user/Data:", userData)
 
   return (
     <div className="flex h-screen flex-col">
@@ -19,7 +20,16 @@ export const ProfileRoute = () => {
           <ProfileHeader />
           <StatusBanner userData={userData} />
           <ProfileCard userData={userData} />
-          <IntroductionVideo initialVideo={userData?.introVideo} />
+          {/* <div className="flex justify-center items-center h-screen bg-gray-100">
+      <video controls width="600">
+        <source 
+          src="https://khajabox-bucket.s3.ap-south-1.amazonaws.com/cook_intro_videos/1743053977_67e4e499e00af.mp4" 
+          type="video/mp4"
+        />
+        Your browser does not support the video tag.
+      </video>
+    </div> */}
+          <IntroductionVideo initialVideo={userData?.intro_video_url} />
           <AchievementsExperience userData={userData} />
           <AccountSettings />
         </main>
