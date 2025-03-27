@@ -2,18 +2,21 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useCheckout } from "../api/checkout";
 import { useUserCart } from "../api/getItems";
-import { useVerifyPayment } from "../api/verify-payment";
+import { useNavigate } from "react-router-dom";
+// import { useVerifyPayment } from "../api/verify-payment";
 
 export const CheckoutButton=()=> {
+	const navigate = useNavigate()
 	const [isProcessing, setIsProcessing] = useState(false);
 	const { data: cartData } = useUserCart();
 	console.log("Checkout button ", cartData);
-	const { mutateAsync: verifyPayment } = useVerifyPayment();
+	// const { mutateAsync: verifyPayment } = useVerifyPayment();
 	const { mutateAsync: processCheckout } = useCheckout({
 		onSuccess: (data) => {
 			console.log("Checkout successful:", data);
-      debugger;
-			verifyPayment();
+navigate("/")
+    //   debugger;
+			// verifyPayment();
 		},
 		onError: (error) => {
 			console.error("Checkout error:", error);

@@ -1,8 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/lib/api-client"; // Ensure this is correctly set up
+import { api } from "@/lib/api-client"; 
 
 const updateReview = async ({ reviewId, data }) => {
-  return api.post(`/api/update-review/${reviewId}?_method=put`, data);
+  const response = await api.put(`/api/update-review/${reviewId}`, data); 
+  console.log("edit", response.data) 
+  return response.data;
 };
 
 export const useUpdateReview = (options = {}) => {
@@ -10,12 +12,13 @@ export const useUpdateReview = (options = {}) => {
   const { onSuccess, ...restConfig } = options;
 
   return useMutation({
-    mutationFn: ({ reviewId, data }) => updateReview({ reviewId, data }),
-    onSuccess: (...args) => {
+    mutationFn: updateReview, 
+    onSuccess: (updatedReview) => {
       queryClient.invalidateQueries({
-        queryKey: ["menu"], // Make sure this key matches your query keys
+        queryKey: ["menu"], 
       });
-      onSuccess?.(...args);
+
+      onSuccess?.(updatedReview);
     },
     ...restConfig,
   });

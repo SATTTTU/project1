@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { useVerifyPayment } from "../api/verify-payment";
 
-const PaymentVerification = () => {
+export const PaymentVerification = () => {
   const { mutate: verifyPayment, isLoading, isSuccess, isError, error } = useVerifyPayment({
     onSuccess: (data) => {
       console.log("Payment verified successfully:", data);
@@ -15,12 +15,11 @@ const PaymentVerification = () => {
   });
 
   useEffect(() => {
-    // Automatically verify payment if `pidx` exists in localStorage
     const storedPidx = localStorage.getItem("khalti_pidx");
     
     if (storedPidx) {
       console.log("Attempting to verify payment with pidx:", storedPidx);
-      verifyPayment();  // Trigger payment verification
+      verifyPayment();  
     }
   }, [verifyPayment]);
 
@@ -33,4 +32,3 @@ const PaymentVerification = () => {
   );
 };
 
-export default PaymentVerification;

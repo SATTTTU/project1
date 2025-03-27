@@ -82,12 +82,10 @@ export const CookProfile = () => {
           </div>
         )}
 
-        {/* Tabs */}
         <div className="mt-6">
           <CookTabs activeTab={activeTab} setActiveTab={setActiveTab} reviewCount={cook.reviews?.length} />
         </div>
 
-        {/* Content */}
         <div className="mt-8">
           {activeTab === "categories" && (
             <>

@@ -8,6 +8,7 @@ export const CookReviews = ({ id, cookName, setCook }) => {
   const [showReviewForm, setShowReviewForm] = useState(false);
   const queryClient = useQueryClient();
   const { data: reviews } = useUserReview(id); // Fetch reviews
+  console.log("REview", reviews)
 
   const handleDeleteReview = (id) => {
     // ✅ Invalidate the query to refetch the updated reviews

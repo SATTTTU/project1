@@ -208,6 +208,15 @@ export const userRoutes = [
 								},
 							},
 							{
+								path: paths.user.checkoutsuccess.path,
+								lazy: async () => {
+									const { PaymentVerification } = await import(
+										"../../../modules/user/cart/components/payment-verify"
+									);
+									return { Component: PaymentVerification };
+								},
+							},
+							{
 								path: paths.user.orderverify.path,
 								lazy: async () => {
 									const { OrderSuccess } = await import(
