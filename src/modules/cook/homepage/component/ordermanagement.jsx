@@ -1,6 +1,6 @@
 import React from "react";
 import OrderRequest from "./orderrequest";
-import ActiveOrder from "./activeorder";
+// import ActiveOrder from "./activeorder";
 
 const OrderManagement = ({ orderRequests, activeOrders }) => {
   return (
@@ -13,13 +13,13 @@ const OrderManagement = ({ orderRequests, activeOrders }) => {
         ))}
       </div>
 
-      {/* Active Orders */}
+      {/* Active Orders
       <h2 className="mb-4 text-xl font-bold">Active Orders</h2>
-      <div className="grid gap-4 mb-8">
-        {activeOrders.map((order) => (
-          <ActiveOrder key={order.id} order={order} />
-        ))}
-      </div>
+      <div className="grid gap-4 mb-8"> */}
+        {/* {activeOrders.map((order) => ( */}
+          {/* // <ActiveOrder key={order.id} order={order} /> */}
+        {/* ))} */}
+      {/* </div> */}
     </>
   );
 };

@@ -3,15 +3,16 @@ import { FiArrowLeft } from "react-icons/fi";
 import { BiCategory } from "react-icons/bi";
 import { DishCard } from "./dishCard";
 import { useCategoryItems } from "../api/getCategory";
-import { useCategoryMenuItems } from "../api/getCategoryMenu";
+// import { useMenuItem } from "../api/getCategoryMenu";
 
-export const CookCategories = ({ cookId,menuId, onAddToCart }) => {
+
+export const CookCategories = ({ cookId, onAddToCart }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   // Fetch menu items using the custom hook
   const { data: menuItems, isLoading, error } = useCategoryItems(cookId);
-  const { data: Items } = useCategoryMenuItems(menuId);
-  console.log("menu vitra item",Items)
+  // const { data: Items } = useCategoryMenuItems(menuId);
+  // console.log("items",Items)
 
 
   console.log("Fetched menu items:", menuItems);

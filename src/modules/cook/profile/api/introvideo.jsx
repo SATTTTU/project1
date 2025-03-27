@@ -1,14 +1,43 @@
 import { api } from "@/lib/api-client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export const uploadIntroVideo = (data) => {
-  return api.put("/api/cooks/upload-intro-video", data);
+export const uploadIntroVideo = async (formData) => {
+  try {
+    // Ensure formData is properly formatted
+    if (!(formData instanceof FormData)) {
+      throw new Error("Invalid form data");
+    }
+
+    // Log the formData contents for debugging
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ": " + pair[1]);
+    }
+
+    const response = await api.post("/api/cooks/upload-intro-video?_method=put", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Upload error details:", error);
+    throw new Error(error.response?.data?.message || "Failed to upload video");
+  }
+};
+
+export const deleteIntroVideo = async () => {
+  try {
+    const response = await api.delete("/api/cooks/delete-intro-video");
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Failed to delete video");
+  }
 };
 
 export const useUploadIntroVideo = (options = {}) => {
   const queryClient = useQueryClient();
-  const { onSuccess, ...restConfig } = options;
-  
+  const { onSuccess, onError, ...restConfig } = options;
+
   return useMutation({
     mutationFn: uploadIntroVideo,
     onSuccess: (...args) => {
@@ -17,27 +46,31 @@ export const useUploadIntroVideo = (options = {}) => {
       });
       onSuccess?.(...args);
     },
-    ...restConfig
+    onError: (error) => {
+      console.error("Upload Video Error:", error);
+      onError?.(error);
+    },
+    ...restConfig,
   });
-};
-
-// Delete Intro Video
-export const deleteIntroVideo = () => {
-  return api.delete("/api/cooks/delete-intro-video");
 };
 
 export const useDeleteIntroVideo = (options = {}) => {
   const queryClient = useQueryClient();
-  const { onSuccess, ...restConfig } = options;
-  
+  const { onSuccess, onError, ...restConfig } = options;
+
   return useMutation({
     mutationFn: deleteIntroVideo,
     onSuccess: (...args) => {
       queryClient.invalidateQueries({
-        queryKey: ["cook-profile"],
+        queryKey: ["CookProfile"],
       });
       onSuccess?.(...args);
+
     },
-    ...restConfig
+    onError: (error) => {
+      console.error("Delete Video Error:", error);
+      onError?.(error);
+    },
+    ...restConfig,
   });
 };

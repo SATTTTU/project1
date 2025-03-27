@@ -1,21 +1,44 @@
 import { z } from "zod";
 
-export const VideoUploadSchema = z.object({
-  file: z
-    .instanceof(File)
-    .refine((file) => {
-      // Allow multiple video formats
-      const allowedTypes = ["video/mp4", "video/quicktime", "video/webm"];
-      return allowedTypes.includes(file.type);
-    }, {
-      message: "Only MP4, MOV, or WebM files are allowed",
+export const videoSchema = z.object({
+  video: z
+    .any()
+    .refine((file) => file instanceof File, {
+      message: "A video file is required.",
     })
-    .refine((file) => file.size <= 50 * 1024 * 1024, {
-      // 50MB max file size
-      message: "File size must be under 50MB",
+    .refine((file) => file && file.type.startsWith("video/"), {
+      message: "Only video files are allowed.",
+    })
+    .refine((file) => file && file.size <= 50 * 1024 * 1024, {
+      message: "Video must be less than 50MB.",
+    })
+    .superRefine((file, ctx) => {
+      if (!file) return;
+
+      return new Promise((resolve) => {
+        const video = document.createElement("video");
+        video.preload = "metadata";
+
+        video.onloadedmetadata = function () {
+          window.URL.revokeObjectURL(video.src);
+          if (video.duration > 120) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: "Video must be under 2 minutes.",
+            });
+          }
+          resolve();
+        };
+
+        video.onerror = function () {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Invalid video file.",
+          });
+          resolve();
+        };
+
+        video.src = URL.createObjectURL(file);
+      });
     }),
-  duration: z
-    .number()
-    .positive("Duration must be greater than 0")
-    .max(60, "Video must be less than 1 minute"),
 });

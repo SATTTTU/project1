@@ -118,10 +118,10 @@ export const cookRoutes = [
               {
                 path: paths.cook.earningsPage.path,
                 lazy: async () => {
-                  const { EarningsPage } = await import(
-                    "../cook/earnings/earnings"
+                  const { WithdrawEarnings } = await import(
+                    "../../routes/cook/earnings/earnings"
                   );
-                  return { Component: EarningsPage };
+                  return { Component: WithdrawEarnings };
                 },
                 ErrorBoundary: AppRootErrorBoundary,
               },

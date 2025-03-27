@@ -108,3 +108,14 @@
 // };
 
 // export default EarningsPage;
+
+import WithdrawEarningsForm from '@/modules/cook/earnings/components/withdrawEarnings'
+import React from 'react'
+
+export const WithdrawEarnings = () => {
+  return (
+    <div>
+      <WithdrawEarningsForm/>
+    </div>
+  )
+}

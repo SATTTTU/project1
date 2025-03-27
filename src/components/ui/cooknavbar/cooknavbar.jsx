@@ -38,7 +38,7 @@ const CookNavBAr = () => {
     if (path.includes("/cook/menu")) return "/cook/menu";
     return "";
   });
-  const { logout, isLoading, isError, error } = useCookLogout();
+  const { logout, isLoading} = useCookLogout();
 
   const handleLogout = async () => {
     try {

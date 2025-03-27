@@ -3,6 +3,7 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 import { toast } from "react-toastify";
 import { itemSchema } from "./schema/itemSchema";
 import { useCreateCategoryItem } from "../api/create-category-item";
+import { useEffect } from "react";
 
 export const useItemFormik = ({
   category,
@@ -11,16 +12,20 @@ export const useItemFormik = ({
   editingItem,
   handleAddItem,
 }) => {
-  if (!category || !category.id) {
-    console.error("Invalid category provided:", category);
-    toast.error("Category is missing or invalid");
-    return;
-  }
-
   const { createCategoryItem, isLoading, error, isSuccess } = useCreateCategoryItem({
     mutationConfig: {
-      onSuccess: () => {
+      onSuccess: (updatedData) => {
         toast.success(editingItem ? "Item updated successfully" : "Item added successfully");
+
+        // ✅ Ensure newItem updates with the latest values from API response
+        setNewItem((prev) => ({
+          ...prev,
+          name: updatedData.data.name,
+          description: updatedData.data.description,
+          price: updatedData.data.price,
+          image: updatedData.data.image_url, // Use correct field name from API response
+        }));
+
         handleAddItem();
       },
       onError: (err) => {
@@ -38,36 +43,38 @@ export const useItemFormik = ({
       image: newItem?.image || null,
       category_id: category?.id || null,
     },
+    enableReinitialize: true, // ✅ Ensures Formik updates when newItem changes
     validationSchema: toFormikValidationSchema(itemSchema),
     validate: (values) => {
-      const errors = {};
       if (values.price !== undefined && values.price !== "") {
         values.price = Number(values.price);
       }
-      return errors;
+      return {};
     },
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
         const data = {
           action: editingItem ? "update" : "create",
-          id: editingItem, // Simply use editingItem directly as the ID
+          id: editingItem, 
           name: values.name,
           description: values.description,
           price: Number(values.price),
           image: values.image,
           category_id: values.category_id || category?.id,
         };
-    
+
+        console.log("Formik Values on Submit:", values);
+        console.log("Original newItem:", newItem);
         console.log("Data being sent to API:", data);
-    
-        // Ensure that the correct action is being sent
+
         if (data.action === "update" && !data.id) {
           toast.error("ID is missing for update");
           return;
         }
-    
+
         await createCategoryItem(data);
         resetForm();
+        setNewItem(null); // ✅ Ensure newItem is cleared after update
       } catch (err) {
         console.error("Error occurred:", err);
         const errorMessage = err.response?.data?.error || "An error occurred while saving the item";
@@ -76,8 +83,12 @@ export const useItemFormik = ({
         setSubmitting(false);
       }
     },
-    
   });
+
+  // ✅ Debugging: Check if Formik reinitializes properly
+  useEffect(() => {
+    console.log("Formik reinitialized with:", formik.values);
+  }, [formik.values]);
 
   return {
     formik,

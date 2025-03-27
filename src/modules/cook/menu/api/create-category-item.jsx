@@ -12,7 +12,7 @@ const createCategoryItem = async (data) => {
     // Fix the endpoint paths to match what's used in MenuTable
     const endpoint = isUpdate
       ? `/api/cooks/update-menu-item/${data.id}`  // Changed to match MenuTable format
-      : `/api/cooks/add-menu-item/${data.category_id}`; // Changed to match MenuTable format
+      : `/api/cooks/store-menu-item/${data.category_id}`; // Changed to match MenuTable format
     
     console.log("📬 API Call Method:", method, "Endpoint:", endpoint);
     
