@@ -5,16 +5,16 @@ export const userPaths = {
 	},
 
 	register: {
-		path: "/user/register",
+		path: "/register",
 		getHref: (redirectTo) =>
-			`/user/register${
+			`/register${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
 	login: {
-		path: "/user/login",
+		path: "/login",
 		getHref: (redirectTo) =>
-			`/user/login${
+			`/login${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},

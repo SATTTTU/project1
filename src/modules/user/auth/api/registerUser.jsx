@@ -4,7 +4,6 @@ import { useMutation } from "@tanstack/react-query";
 const registerUser = async (userData) => {
    const response =await api.post("/api/register", userData);
    return response.data;
-  // No need to extract .data since your interceptor already returns response.data
 };
 
 export const useUserRegister = ({ mutationConfig } = {}) => {

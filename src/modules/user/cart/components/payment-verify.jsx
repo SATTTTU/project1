@@ -19,7 +19,7 @@ export const PaymentVerification = () => {
   }, [verifyPayment]);
 
   return (
-    <div>
+    <div className="flex justify-center items-center flex-col mx-auto">
       <h2>Checkout Successful! Verifying Payment...</h2>
       {isLoading && <p>Verifying payment...</p>}
       {isError && <p style={{ color: "red" }}>Error: {error.message}</p>}

@@ -15,7 +15,7 @@ import { useUserBasket } from "../../cart/hooks/getCartItems";
 export const Header = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const profileRef = useRef(null);
-  const {  isLoading: isProfileLoading, isError } = useProfile();
+  const { mutateAsync:fetchProfileData, isLoading: isProfileLoading, isError } = useProfile();
   const { mutateAsync: logout, isLoading: isLoggingOut } = useUserLogout();
 
   useEffect(() => {
@@ -41,9 +41,9 @@ export const Header = () => {
     setShowProfileMenu(!showProfileMenu);
   };
 
-   const {
-     mutateAsync: fetchProfileData,
-   } = useProfile();
+  //  const {
+  //    mutateAsync: fetchProfileData,
+  //  } = useProfile();
 
     const getFullImageUrl = (imagePath) => {
       if (!imagePath) return "/api/placeholder/80/80";

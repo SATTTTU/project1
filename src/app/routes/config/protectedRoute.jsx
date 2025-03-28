@@ -65,14 +65,14 @@ const ProtectedRoute = ({ allowedRoles = [] }) => {
   }
 
   // Fixed logic for unauthenticated users
-  let loginPath = "/login"; // Default fallback
+  let loginPath = "/"; // Default fallback
   
   if (location.pathname.includes("/admin")) {
     loginPath = "/admin/login";
   } else if (location.pathname.includes("/cook")) {
     loginPath = "/cook/login";
-  } else if (location.pathname.includes("/user")) {
-    loginPath = "/user/login";
+  } else if (location.pathname.includes("/")) {
+    loginPath = "/login";
   }
   
   return <Navigate to={loginPath} replace state={{ from: location }} />;

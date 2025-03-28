@@ -53,7 +53,7 @@ export const Home = () => {
               Cook
             </button>
           </Link>
-          <Link to="/user/login">
+          <Link to="/login">
             <button className="bg-[#426B1F] text-white font-medium text-2xl py-4 px-8 rounded-md transition-colors">
               User
             </button>
