@@ -11,15 +11,16 @@ import "swiper/css/pagination";
 export const PopularCooks = () => {
   const { data: popularCooks } = usePopularCooks();
   console.log("cooks to be", popularCooks)
+  const imageBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
   
-  const getFullImageUrl = (imagePath) => {
-    if (!imagePath) return "/api/placeholder/80/80";
-    if (imagePath.startsWith("http")) return imagePath;
-    const storageUrl = import.meta.env.VITE_APP_API_URL.endsWith("/")
-      ? `${import.meta.env.VITE_APP_API_URL}storage/`
-      : `${import.meta.env.VITE_APP_API_URL}/storage/`;
-    return `${storageUrl}${imagePath}`;
-  };
+  // const getFullImageUrl = (imagePath) => {
+  //   if (!imagePath) return "/api/placeholder/80/80";
+  //   if (imagePath.startsWith("http")) return imagePath;
+  //   const storageUrl = import.meta.env.VITE_APP_API_URL.endsWith("/")
+  //     ? `${import.meta.env.VITE_APP_API_URL}storage/`
+  //     : `${import.meta.env.VITE_APP_API_URL}/storage/`;
+  //   return `${storageUrl}${imagePath}`;
+  // };
   return (
     <section className="p-6 mb-12 rounded-lg bg-white relative">
       <h2 className="mb-6 text-2xl font-bold text-center text-green-600">Popular Cooks</h2>
@@ -47,7 +48,7 @@ export const PopularCooks = () => {
             >
               <div className="relative mb-3 overflow-hidden w-40 h-40 md:w-50 md:h-50">
                 <img 
-                  src={getFullImageUrl(cook.image_url)} 
+                  src={`{${imageBaseUrl}${cook.image_url}`} 
                   alt={cook.name} 
                   className="w-full h-full object-cover rounded-full" 
                 />

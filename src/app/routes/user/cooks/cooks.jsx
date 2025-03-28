@@ -74,13 +74,13 @@ export const CookProfile = () => {
           </div>
         </section>
 
-        {safeCook?.intro_video_url && (
+        {/* {safeCook?.intro_video_url && ( */}
           <div className="mt-6">
             <video controls className="w-full md:w-3/4 mx-auto rounded-lg shadow-lg">
               <source src={`${videoBaseUrl}${safeCook.intro_video_url}`} type="video/mp4" />
             </video>
           </div>
-        )}
+        {/* ) */}
 
         <div className="mt-6">
           <CookTabs activeTab={activeTab} setActiveTab={setActiveTab} reviewCount={cook.reviews?.length} />

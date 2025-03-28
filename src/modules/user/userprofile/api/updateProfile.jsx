@@ -10,6 +10,7 @@ const editUserProfile = async (userData) => {
     }
   }
   const response = await api.post("/api/update-profile?_method=put", userData);
+  console.log("edit Profile", response.data)
   return response.data;
 };
 

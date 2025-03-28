@@ -34,6 +34,7 @@ export const CookCategories = ({ cookId, onAddToCart }) => {
     dishes: categoriesMap[name],
     count: categoriesMap[name].length,
   }));
+  const imageBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
   return (
     <div>
@@ -69,11 +70,11 @@ export const CookCategories = ({ cookId, onAddToCart }) => {
             >
               <div className="relative h-40">
                 <img
-                  src={category.dishes[0]?.img}
+                  src={`${imageBaseUrl}${category.image_url}`}
                   alt={category.name}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                <div className="absolute inset-0  bg-opacity-40 flex items-center justify-center">
                   <div className="text-center">
                     <BiCategory className="mx-auto text-white text-3xl mb-2" />
                     <h3 className="text-white font-bold text-lg">{category.name}</h3>

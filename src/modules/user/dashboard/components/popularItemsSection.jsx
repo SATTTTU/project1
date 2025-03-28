@@ -5,7 +5,12 @@ import { toast } from "react-toastify"; // Import toast
 
 export const PopularItemsPage = () => {
   const { data: menuItems, isLoading, error } = usePopularDishes();
+  console.log("popular dishes", menuItems)
   const { mutateAsync: addToCart, isLoading: isAddingToCart } = useAddCartItem();
+
+
+
+  const imageUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/"
 
   const handleAddToCart = async (dish) => {
     try {
@@ -42,11 +47,11 @@ export const PopularItemsPage = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {menuItems.map((item) => (
           <div key={item.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-            {item.image && (
               <div className="h-48 overflow-hidden">
-                <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                    <img src={`${imageUrl}${item?.image_url}`} alt="image" className="w-full h-full object-cover"/>
+
+                {/* <img src={item.image} alt={item.name} className="w-full h-full object-cover" /> */}
               </div>
-            )}
 
             <div className="p-4">
               <div className="flex justify-between items-start">
@@ -60,7 +65,7 @@ export const PopularItemsPage = () => {
               )}
 
               <button
-                className="bg-[#426B1F] text-white py-2 px-4 rounded-md font-semibold hover:bg-green-700 transition disabled:opacity-50 mt-4"
+                className="bg-[#426B1F] text-white  py-2 px-4 rounded-md font-semibold hover:bg-green-700 transition disabled:opacity-50 mt-4"
                 onClick={() => handleAddToCart(item)}
                 disabled={isAddingToCart}
               >

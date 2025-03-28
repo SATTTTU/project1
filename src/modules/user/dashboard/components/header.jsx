@@ -4,6 +4,7 @@ import {
   AiOutlineShoppingCart,
   AiOutlineHeart,
 } from "react-icons/ai";
+import { IoMdLogOut } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
 import { CiSettings } from "react-icons/ci";
 import Logo from "../../../../assets/logo.jpg";
@@ -15,7 +16,7 @@ import { useUserBasket } from "../../cart/hooks/getCartItems";
 export const Header = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const profileRef = useRef(null);
-  const { mutateAsync:fetchProfileData, isLoading: isProfileLoading, isError } = useProfile();
+  const {data:profile,  isLoading: isProfileLoading, isError } = useProfile();
   const { mutateAsync: logout, isLoading: isLoggingOut } = useUserLogout();
 
   useEffect(() => {
@@ -31,7 +32,7 @@ export const Header = () => {
   }, []);
 
     const [profileData, setProfileData] = useState({
-      name: "Your Name",
+      name: "Your Namesss",
       email: "yourname@gmail.com",
       image: "/api/placeholder/80/80",
       image_url: null,
@@ -41,61 +42,25 @@ export const Header = () => {
     setShowProfileMenu(!showProfileMenu);
   };
 
-  //  const {
-  //    mutateAsync: fetchProfileData,
-  //  } = useProfile();
 
-    const getFullImageUrl = (imagePath) => {
-      if (!imagePath) return "/api/placeholder/80/80";
-  
-      // If it's already a full URL (starts with http/https)
-      if (imagePath.startsWith("http")) return imagePath;
-  
-      // If your API_URL already includes a trailing slash, you might need to adjust this
-      const storageUrl = import.meta.env.VITE_APP_API_URL.endsWith("/")
-        ? `${import.meta.env.VITE_APP_API_URL}storage/`
-        : `${import.meta.env.VITE_APP_API_URL}/storage/`;
-      return `${storageUrl}${imagePath}`;
-    };
-  
-    useEffect(() => {
-      const loadProfileData = async () => {
-        try {
-          const data = await fetchProfileData();
-          if (data) {
-            setProfileData({
-              name: data.name || "Your Name",
-              email: data.email || "yourname@gmail.com",
-              image: data.image || "/api/placeholder/80/80",
-              image_url: data.image_url || null,
-              isOnline: data.isOnline !== undefined ? data.isOnline : true,
-            });
-          }
-        } catch (err) {
-          console.error("Failed to load profile data:", err);
-        }
-      }
-      loadProfileData();
-    }, [fetchProfileData]);
 
-    const profileImageSrc = profileData.image_url
-    ? getFullImageUrl(profileData.image_url)
-    : profileData.image || "/api/placeholder/80/80";
+    const imageUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/"
+  
+
 
 
   const handleLogout = async () => {
     try {
       await logout();
       localStorage.clear();
-      window.location.href = "/user/login"; // Redirect to login page
+      window.location.href = "/login"; // Redirect to login page
     } catch (error) {
       console.error("Logout failed", error);
     }
   };
 
-  const { data: profile } = useProfile();
   const userId = profile?.id;
-  console.log("userId",userId)
+  console.log("user image",profile?.image_url)
   const { data: cartItems } = useUserBasket(userId);
   
   const cartItemCount = cartItems?.data?.length || 0;
@@ -109,9 +74,7 @@ export const Header = () => {
           </Link>
 
           <div className="flex items-center space-x-4">
-            {/* <button className="px-4 py-1.5 border border-gray-300 rounded-full text-sm hover:bg-gray-50 transition-colors">
-              Track Order
-            </button> */}
+         
 
             <Link
               to="/user/cart"
@@ -136,8 +99,8 @@ export const Header = () => {
               {showProfileMenu && (
                 <div className="absolute right-0 lg:p-2 mt-2 w-48 bg-white rounded-md shadow-xl py-1 z-50 border border-slate-200">
                   <div className="px-4 flex flex-col items-center justify-center py-3 border-b border-slate-200">
-                    {/* <FaUserCircle className="text-3xl text-[#426B1F]" /> */}
-                    <img src={profileImageSrc} alt="image" />
+                   
+                    <img src={`${imageUrl}${profile?.image_url}`} alt="image" className="rounded-full lg:h-30 w-30 h-30  mb-4"/>
                     {isProfileLoading ? (
                       <p className="text-sm text-gray-500">Loading...</p>
                     ) : isError ? (
@@ -145,10 +108,10 @@ export const Header = () => {
                     ) : (
                       <>
                         <p className="text-sm font-medium text-gray-900">
-                          {profileData.name}
+                          {profile.name}
                         </p>
                         <p className="text-xs text-gray-500 truncate">
-                          {profileData.email}
+                          {profile.email}
                         </p>
                       </>
                     )}
@@ -191,8 +154,8 @@ export const Header = () => {
                   <button
                     onClick={handleLogout}
                     disabled={isLoggingOut}
-                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-200 rounded-sm"
-                  >
+                    className="w-full flex text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-200 rounded-sm"
+                  > <IoMdLogOut className="size-5 mr-3"/>
                     {isLoggingOut ? "Logging out..." : "Sign Out"}
                   </button>
                 </div>

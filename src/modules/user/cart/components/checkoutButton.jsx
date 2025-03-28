@@ -119,7 +119,7 @@ export const CheckoutButton = () => {
 		<button
 			onClick={handleCheckout}
 			disabled={isProcessing}
-			className={`w-full bg-green-500 text-white py-3 rounded-md font-medium hover:bg-green-600 transition-colors ${
+			className={`w-full bg-[#426B1F] text-white py-3 rounded-md font-medium transition-colors ${
 				isProcessing ? "opacity-50 cursor-not-allowed" : ""
 			}`}
 		>
