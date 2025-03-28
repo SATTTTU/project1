@@ -1,5 +1,6 @@
 // src/pages/Cook/Orders/OrderPage.jsx
 import CookNavBAr from "@/components/ui/cooknavbar/cooknavbar";
+import { useAllOrders } from "@/modules/cook/orders/api/getAllOrders";
 import { OrdersList } from "@/modules/cook/orders/component/orderlist";
 import { OrdersHeader } from "@/modules/cook/orders/component/ordersheader";
 import { useOrders } from "@/modules/cook/orders/component/useorder";
@@ -8,6 +9,9 @@ import React, { useState } from "react";
 export const OrderPage = () => {
   const [filterStatus, setFilterStatus] = useState("Ongoing");
   const { orders, updateOrderStatus } = useOrders();
+
+  const {data:currentorders} = useAllOrders();
+  console.log("current orders",currentorders)
 
   // Filter orders based on status
   const filteredOrders =
@@ -31,6 +35,7 @@ export const OrderPage = () => {
           />
 
           <OrdersList
+
             filteredOrders={filteredOrders}
             updateOrderStatus={updateOrderStatus}
           />

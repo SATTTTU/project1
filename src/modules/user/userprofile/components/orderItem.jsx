@@ -54,14 +54,12 @@ export const OrderItem = ({ order }) => {
 							<div>
 								<span className="font-medium">{item?.menu_item?.name}</span>
 							</div>
-              <div>
-
+							<div>
 								<span className="text-gray-500 ml-2">x{item.quantity}</span>
-              </div>
-              <div>
-
-							<span>{item.price}</span>
-              </div>
+							</div>
+							<div>
+								<span>{item.price}</span>
+							</div>
 						</div>
 					))}
 				</div>

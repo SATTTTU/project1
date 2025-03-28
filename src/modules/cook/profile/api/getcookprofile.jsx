@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 const fetchCookProfile = async () => {
   const response = await api.get("/api/cooks/get-profile");
+  console.log("cook profile", response.data)
 
   return response.data;
 };
