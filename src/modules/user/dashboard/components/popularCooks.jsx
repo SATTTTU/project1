@@ -10,21 +10,14 @@ import "swiper/css/pagination";
 
 export const PopularCooks = () => {
   const { data: popularCooks } = usePopularCooks();
-  console.log("cooks to be", popularCooks)
   const imageBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
-  
-  // const getFullImageUrl = (imagePath) => {
-  //   if (!imagePath) return "/api/placeholder/80/80";
-  //   if (imagePath.startsWith("http")) return imagePath;
-  //   const storageUrl = import.meta.env.VITE_APP_API_URL.endsWith("/")
-  //     ? `${import.meta.env.VITE_APP_API_URL}storage/`
-  //     : `${import.meta.env.VITE_APP_API_URL}/storage/`;
-  //   return `${storageUrl}${imagePath}`;
-  // };
+
   return (
-    <section className="p-6 mb-12 rounded-lg bg-white relative">
-      <h2 className="mb-6 text-2xl font-bold text-center text-green-600">Popular Cooks</h2>
-      
+    <section className="p-10 bg-slate-100 mb-12   relative">
+      <h2 className="mb-6 text-2xl font-semibold text-center text-[#426B1F] tracking-wide">
+        Popular Cooks
+      </h2>
+
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={20}
@@ -44,21 +37,20 @@ export const PopularCooks = () => {
           <SwiperSlide key={index}>
             <Link
               to={`/cook/${cook.id}`}
-              className="flex flex-col items-center border border-slate-300 p-4 transition-transform transform bg-blue rounded-sm w-40 md:w-50 shadow-md hover:scale-105 hover:shadow-xl"
+              className="flex flex-col items-center justify-center border border-gray-200 p-4 bg-white rounded-xl shadow-lg hover:scale-105 hover:shadow-2xl transition-all duration-300"
             >
-              <div className="relative mb-3 overflow-hidden w-40 h-40 md:w-50 md:h-50">
-                <img 
-                  src={`{${imageBaseUrl}${cook.image_url}`} 
-                  alt={cook.name} 
-                  className="w-full h-full object-cover rounded-full" 
+              <div className="relative mb-4 overflow-hidden rounded-full w-40 h-40 md:w-48 md:h-48 border-1 border-green-600">
+                <img
+                  src={`${imageBaseUrl}${cook.image_url}`}
+                  alt={cook.name}
+                  className="w-full h-full object-cover rounded-full"
                 />
               </div>
-              <span className="text-sm font-medium text-gray-800 sm:text-base">{cook.name}</span>
-              
-              <div className="flex items-center text-yellow-500 mr-2">
-                <FiStar className="fill-current" />
-                <span className="ml-1 font-medium">{cook.rating}</span>
-              </div>
+              <span className="text-sm font-bold text-gray-800 text-center sm:text-base mb-2">
+                {cook.name}
+              </span>
+
+            
             </Link>
           </SwiperSlide>
         ))}

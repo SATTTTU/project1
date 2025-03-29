@@ -13,7 +13,7 @@ export const SearchBar=()=> {
   const searchRef = useRef(null)
 
   // Use our cart mutation hook
-  const { mutateAsync: addToCart, isLoading: isAddingToCart } = useAddCartItem()
+  const { mutateAsync: addToCart } = useAddCartItem()
 
   // Search query using the provided hook
   const {
