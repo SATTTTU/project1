@@ -74,7 +74,7 @@ export const Footer = () => {
                         <Link to="#" className="hover:text-green-600">
                           Pricing
                         </Link>
-                        <span>Do not sell or share my personal information</span>
+                       
                       </div>
                     </div>
                   </div>
