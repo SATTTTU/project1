@@ -1,8 +1,12 @@
+import { useCurrentOrders } from "../api/currentOrders";
 import { useAllOrders } from "../api/getAllOrders";
 import { EmptyOrder } from "./emptyOrder";
 import { OrderItem } from "./orderItem";
 const OrdersContent = () => {
 	const { data: orders } = useAllOrders();
+	const { data: currentorders } = useCurrentOrders();
+	console.log("current orders", currentorders)
+
 
 	return (
 		<div>

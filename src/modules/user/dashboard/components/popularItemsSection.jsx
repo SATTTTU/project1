@@ -60,11 +60,11 @@ export const PopularItemsPage = () => {
     <div className="container mx-auto p-4">
       <h2 className="text-2xl font-bold mb-6 text-center">Our Popular Dishes</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
         {itemsToShow.map((item) => (
           <div
             key={item.id}
-            className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+            className="bg-white rounded-lg shadow-xl border border-slate-200 overflow-hidden hover:shadow-lg transition-shadow"
           >
             <div className="h-48 overflow-hidden">
               <img
@@ -100,10 +100,10 @@ export const PopularItemsPage = () => {
       </div>
 
       {visibleItems < menuItems.length && (
-        <div className="text-center mt-6">
+        <div className="text-end mt-6">
           <button
             onClick={handleLoadMore}
-            className="bg-green-600 text-white py-2 px-4 rounded-md font-semibold hover:bg-green-700 transition"
+            className="bg-[#426B1F] text-white py-2 px-4 rounded-md font-semibold hover:bg-green-700 transition"
             disabled={isAddingToCart}
           >
             {isAddingToCart ? "Loading..." : "Load More"}

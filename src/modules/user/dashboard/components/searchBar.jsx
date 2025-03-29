@@ -1,21 +1,18 @@
-
 import { useState, useRef, useEffect } from "react"
-import { Search, Loader2 } from "lucide-react"
+import { Search, Loader2} from "lucide-react"
 import { useAddCartItem } from "../../cart/api/addItems"
 import { useSearch } from "../api/search"
-// import { toast } from "react-toastify"
+import { FiStar } from "react-icons/fi"
 
-export const SearchBar=()=> {
+export const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCookId, setSelectedCookId] = useState(null)
   const [loadingCartItem, setLoadingCartItem] = useState(null)
   const [showDropdown, setShowDropdown] = useState(false)
   const searchRef = useRef(null)
 
-  // Use our cart mutation hook
   const { mutateAsync: addToCart } = useAddCartItem()
 
-  // Search query using the provided hook
   const {
     data: searchResults,
     isLoading,
@@ -33,31 +30,19 @@ export const SearchBar=()=> {
   const handleCookClick = (cookId) => {
     setSelectedCookId(cookId)
     setShowDropdown(false)
-    // router.push(`/cook/${cookId}`)
   }
 
   const handleAddToCart = async (dish) => {
     try {
       setLoadingCartItem(dish.menu_item_id)
-
-      // Use our addToCart mutation
-      await addToCart({
-        menu_item_id: dish.menu_item_id,
-        quantity: 1,
-      })
-
-      // toast({
-      //  "successful"
-      // })
+      await addToCart({ menu_item_id: dish.menu_item_id, quantity: 1 })
     } catch (error) {
-     console.log(error)
       console.error("Error adding to cart:", error)
     } finally {
       setLoadingCartItem(null)
     }
   }
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -67,11 +52,11 @@ export const SearchBar=()=> {
     document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
+
   const imageUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
   return (
     <div className="relative p-6" ref={searchRef}>
-      {/* Search Input */}
       <div className="flex rounded-full border border-slate-300 shadow-sm w-full">
         <div className="ml-4 flex items-center">
           <Search className="h-5 w-5 text-gray-500" />
@@ -86,7 +71,6 @@ export const SearchBar=()=> {
         />
       </div>
 
-      {/* Search Results Popup */}
       {showDropdown && (
         <div className="absolute left-0 mt-2 w-full max-w-2xl bg-white shadow-lg rounded-lg p-4 z-50">
           {isLoading && (
@@ -112,24 +96,21 @@ export const SearchBar=()=> {
               {searchResults.map((dish) => (
                 <div
                   key={dish.menu_item_id}
-                  className="p-3 border-b hover:bg-gray-100 transition flex items-center justify-between"
+                  className="p-3 border-b border-slate-200 hover:bg-gray-100 transition flex items-center justify-between"
                 >
-                  {/* Dish Info */}
                   <div className="flex items-center space-x-4">
-                    <img
-                     src={`${imageUrl}${dish?.image_url}`}
+                  <img
+                      src={`${imageUrl}${dish?.image_url}`}
                       alt={dish.name}
-                      width={64}
-                      height={80}
-                      className="rounded-full "
+                      className="w-20 h-20 object-cover rounded-lg shadow-md hover:scale-105 transition-transform"
                       onError={(e) => {
-                        e.target.src = "/placeholder.svg?height=64&width=64"
+                        e.target.src = "/placeholder.svg";
                       }}
                     />
                     <div>
                       <h2 className="text-lg font-semibold">{dish.name}</h2>
                       <p className="text-gray-600">
-                        Cook:{" "}
+                        Cook: {" "}
                         <button
                           className="font-medium text-blue-500 hover:underline cursor-pointer"
                           onClick={() => handleCookClick(dish.cook_id)}
@@ -138,12 +119,20 @@ export const SearchBar=()=> {
                         </button>
                       </p>
                       <p className="text-gray-800 font-bold">Rs. {dish.price}</p>
+                      <div className="flex items-center mt-1">
+                        {[...Array(5)].map((_, index) => (
+                          <FiStar
+                            key={index}
+                            className={`h-5 w-5 ${index < Math.round(dish.average_rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
+                          />
+                        ))}
+                        {/* <span className="ml-2 text-gray-700">({dish.average_rating})</span> */}
+                      </div>
                     </div>
                   </div>
 
-                  {/* Add to Cart Button */}
                   <button
-                    className="bg-green-600 text-white py-2 px-4 rounded-md font-semibold hover:bg-green-700 transition disabled:opacity-50"
+                    className="bg-[#426B1F] text-white py-2 px-4 rounded-md font-semibold hover:bg-green-700 transition disabled:opacity-50"
                     onClick={() => handleAddToCart(dish)}
                     disabled={loadingCartItem === dish.menu_item_id}
                     aria-label={`Add ${dish.name} to cart`}
@@ -159,4 +148,3 @@ export const SearchBar=()=> {
     </div>
   )
 }
-

@@ -1,27 +1,30 @@
-// src/pages/Cook/Orders/OrderPage.jsx
 import CookNavBAr from "@/components/ui/cooknavbar/cooknavbar";
-import { useAllOrders } from "@/modules/cook/orders/api/getAllOrders";
 import { OrdersList } from "@/modules/cook/orders/component/orderlist";
 import { OrdersHeader } from "@/modules/cook/orders/component/ordersheader";
-import { useOrders } from "@/modules/cook/orders/component/useorder";
 import React, { useState } from "react";
+import { useAllOrders } from "@/modules/cook/orders/api/getAllOrders";
 
 export const OrderPage = () => {
-  const [filterStatus, setFilterStatus] = useState("Ongoing");
-  const { orders, updateOrderStatus } = useOrders();
+  const [filterStatus, setFilterStatus] = useState("pending");
 
-  const {data:currentorders} = useAllOrders();
-  console.log("current orders",currentorders)
+  const { data: currentOrders, isLoading, isError } = useAllOrders();
 
-  // Filter orders based on status
+  if (isLoading) {
+    return <div className="text-center p-4">Loading orders...</div>;
+  }
+
+  if (isError) {
+    return <div className="text-center p-4 text-red-500">Error fetching orders</div>;
+  }
+
+  console.log("Current Orders:", currentOrders);
+
+  const statusOptions = ["all", "pending", "accepted", "preparing", "out-for-delivery", "delivered", "cancelled"];
+
   const filteredOrders =
-    filterStatus === "All"
-      ? orders
-      : orders.filter((order) =>
-          filterStatus === "Ongoing"
-            ? order.status === "Ongoing" || order.status === "Preparing"
-            : order.status === filterStatus
-        );
+    filterStatus === "all"
+      ? currentOrders
+      : currentOrders.filter((order) => order.status === filterStatus);
 
   return (
     <div className="flex h-screen flex-col">
@@ -29,16 +32,10 @@ export const OrderPage = () => {
 
       <div className="flex flex-1 overflow-hidden">
         <main className="flex-1 overflow-auto p-4 md:p-6 bg-gray-50">
-          <OrdersHeader
-            filterStatus={filterStatus}
-            setFilterStatus={setFilterStatus}
-          />
+          <OrdersHeader filterStatus={filterStatus} setFilterStatus={setFilterStatus} statusOptions={statusOptions} />
 
-          <OrdersList
-
-            filteredOrders={filteredOrders}
-            updateOrderStatus={updateOrderStatus}
-          />
+          {/* Orders List */}
+          <OrdersList filteredOrders={filteredOrders} />
         </main>
       </div>
     </div>

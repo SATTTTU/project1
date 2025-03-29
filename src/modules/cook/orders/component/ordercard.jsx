@@ -6,6 +6,7 @@ import { OrderItems } from "./orderitems";
 import { OrderActions } from "./orderactions";
 
 export const OrderCard = ({ order, updateOrderStatus }) => {
+  console.log("All orders", order)
   return (
     <div className="rounded-lg border bg-white shadow-sm overflow-hidden">
       <OrderHeader order={order} />

@@ -37,17 +37,16 @@ export const Header = () => {
 		try {
 			await logout();
 			localStorage.clear();
-			window.location.href = "/login"; // Redirect to login page
+			window.location.href = "/login";
 		} catch (error) {
 			console.error("Logout failed", error);
 		}
 	};
 
 	const userId = profile?.id;
-	console.log("user image", profile?.image_url);
 	const { data: cartItems } = useUserBasket(userId);
-
 	const cartItemCount = cartItems?.data?.length || 0;
+
 	return (
 		<div className="bg-white shadow-sm sticky top-0 z-50">
 			<div className="container mx-auto px-4 py-3">
@@ -58,10 +57,7 @@ export const Header = () => {
 					</Link>
 
 					<div className="flex items-center space-x-4">
-						<Link
-							to="/user/cart"
-							className="relative p-1 hover:bg-gray-100 rounded-full transition-colors"
-						>
+						<Link to="/user/cart" className="relative p-1 hover:bg-gray-100 rounded-full transition-colors">
 							<AiOutlineShoppingCart className="text-3xl text-[#426B1F]" />
 							{cartItemCount > 0 && (
 								<span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
@@ -71,81 +67,45 @@ export const Header = () => {
 						</Link>
 
 						<div className="relative" ref={profileRef}>
-							<button
-								onClick={toggleProfileMenu}
-								className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-							>
+							<button onClick={toggleProfileMenu} className="p-1 hover:bg-gray-100 rounded-full transition-colors">
 								<FaUserCircle className="text-3xl text-[#426B1F] cursor-pointer" />
 							</button>
 
 							{showProfileMenu && (
-								<div className="absolute right-0 lg:p-2 mt-2 w-48 bg-white rounded-md shadow-xl py-1 z-50 border border-slate-200">
-									<div className="px-4 flex flex-col items-center justify-center py-3 border-b border-slate-200">
-										<img
-											src={`${imageUrl}${profile?.image_url}`}
-											alt="image"
-											className="rounded-full lg:h-30 w-30 h-30  mb-4"
-										/>
+								<div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl py-3 z-50 border border-gray-200">
+									<div className="px-6 flex flex-col items-center text-center py-4 border-b border-gray-200">
+										<img src={`${imageUrl}${profile?.image_url}`} alt="profile" className="rounded-full h-16 w-16 mb-3 border-2 border-gray-300" />
 										{isProfileLoading ? (
 											<p className="text-sm text-gray-500">Loading...</p>
 										) : isError ? (
-											<p className="text-sm text-red-500">
-												Error loading profile
-											</p>
+											<p className="text-sm text-red-500">Error loading profile</p>
 										) : (
 											<>
-												<p className="text-sm font-medium text-gray-900">
-													{profile.name}
-												</p>
-												<p className="text-xs text-gray-500 truncate">
-													{profile.email}
-												</p>
+												<p className="text-lg font-semibold text-gray-900">{profile.name}</p>
+												<p className="text-sm text-gray-500 truncate">{profile.email}</p>
 											</>
 										)}
 									</div>
 
-									<Link
-										to="/profile"
-										className="flex items-center px-4 py-2 text-sm text-gray-900 hover:bg-gray-200 rounded-sm"
-									>
-										<FaUserCircle className="mr-3 h-5 w-5 " />
-										Your Profile
-									</Link>
+									<div className="flex flex-col py-2">
+										<Link to="/profile" className="px-6 py-2 text-gray-700 hover:bg-gray-100 rounded-md flex items-center">
+											<FaUserCircle className="mr-3" /> Your Profile
+										</Link>
+										<Link to="/profile/order" className="px-6 py-2 text-gray-700 hover:bg-gray-100 rounded-md flex items-center">
+											<AiOutlineShoppingCart className="mr-3" /> Your Orders
+										</Link>
+										<Link to="/profile/wishlist" className="px-6 py-2 text-gray-700 hover:bg-gray-100 rounded-md flex items-center">
+											<AiOutlineHeart className="mr-3" /> Wishlist
+										</Link>
+										<Link to="/profile/settings" className="px-6 py-2 text-gray-700 hover:bg-gray-100 rounded-md flex items-center">
+											<CiSettings className="mr-3" /> Settings
+										</Link>
+									</div>
 
-									<Link
-										to="/profile/order"
-										className="flex items-center px-4 py-2 text-sm text-gray-900 hover:bg-gray-200 rounded-sm"
-									>
-										<AiOutlineShoppingCart className="mr-3 h-5 w-5 " />
-										Your Orders
-									</Link>
+									<div className="border-t border-gray-200 my-2"></div>
 
-									<Link
-										to="/profile/wishlist"
-										className="flex items-center px-4 py-2 text-sm text-gray-900 hover:bg-gray-200 rounded-sm"
-									>
-										<AiOutlineHeart className="mr-3 h-5 w-5 " />
-										Wishlist
-									</Link>
-
-									<Link
-										to="/profile/settings"
-										className="flex items-center px-4 py-2 text-sm text-gray-900 hover:bg-gray-200 rounded-sm"
-									>
-										<CiSettings className="mr-3 h-5 w-5 " />
-										Settings
-									</Link>
-
-									<div className="border-t border-slate-200 my-1"></div>
-
-									<button
-										onClick={handleLogout}
-										disabled={isLoggingOut}
-										className="w-full flex text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-200 rounded-sm"
-									>
-										{" "}
-										<IoMdLogOut className="size-5 mr-3" />
-										{isLoggingOut ? "Logging out..." : "Sign Out"}
+									<button onClick={handleLogout} disabled={isLoggingOut} className="w-full px-6 py-2 text-red-600 hover:bg-gray-100 flex items-center">
+										<IoMdLogOut className="mr-3" /> {isLoggingOut ? "Logging out..." : "Sign Out"}
 									</button>
 								</div>
 							)}

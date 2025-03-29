@@ -1,5 +1,5 @@
 import React from "react";
-import { FiStar } from "react-icons/fi";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { usePopularCooks } from "../api/getAllCooks";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -13,7 +13,7 @@ export const PopularCooks = () => {
   const imageBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
   return (
-    <section className="p-10 bg-slate-100 mb-12   relative">
+    <section className="p-10 bg-slate-100 mb-12 relative group">
       <h2 className="mb-6 text-2xl font-semibold text-center text-[#426B1F] tracking-wide">
         Popular Cooks
       </h2>
@@ -22,7 +22,10 @@ export const PopularCooks = () => {
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={20}
         slidesPerView={5}
-        navigation
+        navigation={{
+          nextEl: ".swiper-button-next", // matches the class name for next button
+          prevEl: ".swiper-button-prev", // matches the class name for prev button
+        }}
         pagination={{ clickable: true, el: ".custom-pagination" }}
         autoplay={{ delay: 3000 }}
         breakpoints={{
@@ -49,14 +52,22 @@ export const PopularCooks = () => {
               <span className="text-sm font-bold text-gray-800 text-center sm:text-base mb-2">
                 {cook.name}
               </span>
-
-            
             </Link>
           </SwiperSlide>
         ))}
       </Swiper>
 
       <div className="custom-pagination absolute bottom-[-20px] left-1/2 transform -translate-x-1/2 flex space-x-2"></div>
+
+      <button
+        className="swiper-button-prev flex items-center justify-center !w-12 !h-12 md:!w-14 md:!h-16 !left-[-20px] sm:!left-[-30px] md:!left-[-20px] opacity-100 group-hover:opacity-100 transition-opacity duration-300 rounded-full shadow-lg absolute top-1/2 transform -translate-y-1/2 z-10"
+      >
+      </button>
+
+      <button
+        className="swiper-button-next flex items-center justify-center !w-12 !h-12 md:!w-14 md:!h-16 !right-[-20px] sm:!right-[-30px] md:!right-[-30px] opacity-100 group-hover:opacity-100 transition-opacity duration-300 rounded-full shadow-lg absolute top-1/2 transform -translate-y-1/2 z-10"
+      >
+      </button>
     </section>
   );
 };
