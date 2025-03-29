@@ -67,6 +67,7 @@ export const SearchBar=()=> {
     document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
+  const imageUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
   return (
     <div className="relative p-6" ref={searchRef}>
@@ -116,11 +117,11 @@ export const SearchBar=()=> {
                   {/* Dish Info */}
                   <div className="flex items-center space-x-4">
                     <img
-                      src={dish.image_url || "/placeholder.svg?height=64&width=64"}
+                     src={`${imageUrl}${dish?.image_url}`}
                       alt={dish.name}
                       width={64}
-                      height={64}
-                      className="rounded-md object-cover"
+                      height={80}
+                      className="rounded-full "
                       onError={(e) => {
                         e.target.src = "/placeholder.svg?height=64&width=64"
                       }}

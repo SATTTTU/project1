@@ -1,88 +1,66 @@
 import { useState } from "react";
-import { FiArrowLeft } from "react-icons/fi";
 import { BiCategory } from "react-icons/bi";
-import { DishCard } from "./dishCard";
+import { FiArrowLeft } from "react-icons/fi";
 import { useCategoryItems } from "../api/getCategory";
-// import { useMenuItem } from "../api/getCategoryMenu";
-
+import { useCategoryMenuItems } from "../api/getCategoryMenu";
+import { DishCard } from "./DishCard";
 
 export const CookCategories = ({ cookId, onAddToCart }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
+  // Fetch all categories
   const { data: menuItems, isLoading, error } = useCategoryItems(cookId);
-  // const { data: Items } = useCategoryMenuItems(menuId);
-  // console.log("items",Items)
+  console.log("cateory",menuItems)
 
+  // Fetch menu items inside selected category
+  const { data: categoryDishes, isLoading: isLoadingDishes } =
+    useCategoryMenuItems(selectedCategory, { enabled: !!selectedCategory });
 
-  console.log("Fetched menu items:", menuItems);
+    console.log("menu items inside category", categoryDishes)
 
-  if (isLoading) return <p>Loading menu items...</p>;
-  if (error) return <p className="text-red-500">Error fetching menu items.</p>;
-  if (!menuItems || menuItems.length === 0) return <p>No menu items found.</p>;
-
-  const categoriesMap = menuItems.reduce((acc, dish) => {
-    const category = dish.name || "Other";
-    if (!acc[category]) {
-      acc[category] = [];
-    }
-    acc[category].push(dish);
-    return acc;
-  }, {});
-
-  const categories = Object.keys(categoriesMap).map((name) => ({
-    name,
-    dishes: categoriesMap[name],
-    count: categoriesMap[name].length,
-  }));
-  const imageBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
+  if (isLoading) return <p>Loading categories...</p>;
+  if (error) return <p className="text-red-500">Error fetching categories.</p>;
+  if (!menuItems || menuItems.length === 0) return <p>No categories found.</p>;
 
   return (
     <div>
       {selectedCategory ? (
+        // Show dishes when a category is selected
         <div>
           <div className="flex items-center mb-6">
             <button
               onClick={() => setSelectedCategory(null)}
               className="mr-3 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
             >
-              <FiArrowLeft />
+              <FiArrowLeft size={24}/>
             </button>
-            <h3 className="text-xl font-semibold">{selectedCategory}</h3>
-            <span className="ml-2 text-sm text-gray-500">
-              ({categoriesMap[selectedCategory].length}{" "}
-              {categoriesMap[selectedCategory].length === 1 ? "item" : "items"})
-            </span>
+            {/* <h3 className="text-xl font-semibold">Back to Category</h3> */}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {categoriesMap[selectedCategory].map((dish) => (
-              <DishCard key={dish.id} menu_id={dish.id} dish={dish} onAddToCart={onAddToCart} />
-            ))}
-          </div>
+          {isLoadingDishes ? (
+            <p>Loading dishes...</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {categoryDishes?.map((dish) => (
+                <DishCard key={dish.id} dish={dish} menu_id={dish.id} onAddToCart={onAddToCart} />
+              ))}
+            </div>
+          )}
         </div>
       ) : (
+        // Show categories if no category is selected
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {categories.map((category, index) => (
+          {menuItems.map((category) => (
             <div
-              key={index}
-              onClick={() => setSelectedCategory(category.name)}
+              key={category.id}
+              onClick={() => setSelectedCategory(category.id)}
               className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
             >
-              <div className="relative h-40">
-                <img
-                  src={`${imageBaseUrl}${category.image_url}`}
-                  alt={category.name}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0  bg-opacity-40 flex items-center justify-center">
-                  <div className="text-center">
-                    <BiCategory className="mx-auto text-white text-3xl mb-2" />
-                    <h3 className="text-white font-bold text-lg">{category.name}</h3>
-                    <p className="text-white text-sm">
-                      {category.count} {category.count === 1 ? "dish" : "dishes"}
-                    </p>
-                  </div>
-                </div>
+              <div className="relative h-40 flex items-center justify-center bg-gray-200">
+                <BiCategory className="text-gray-600 text-4xl" />
+              </div>
+              <div className="p-4 text-center">
+                <h3 className="text-lg font-semibold">{category.name}</h3>
               </div>
             </div>
           ))}

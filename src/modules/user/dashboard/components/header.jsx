@@ -75,7 +75,7 @@ export const Header = () => {
 								onClick={toggleProfileMenu}
 								className="p-1 hover:bg-gray-100 rounded-full transition-colors"
 							>
-								<FaUserCircle className="text-3xl text-[#426B1F]" />
+								<FaUserCircle className="text-3xl text-[#426B1F] cursor-pointer" />
 							</button>
 
 							{showProfileMenu && (
