@@ -12,7 +12,7 @@ export const CheckoutButton = () => {
 	const { mutateAsync: processCheckout } = useCheckout({
 		onSuccess: (data) => {
 			console.log("Checkout successful:", data);
-			navigate("/checkout");
+			// navigate("/checkout");
 			//   debugger;
 		},
 		onError: (error) => {
@@ -65,19 +65,9 @@ export const CheckoutButton = () => {
 					localStorage.setItem("khalti_pidx", response.pidx);
 					console.log("Stored pidx in localStorage:", response.pidx);
 
-					const transactionDetails = {
-						pidx: response.pidx,
-						expires_at: response.expires_at || null,
-						amount: Math.round(calculateTotal() * 100),
-						order_id: checkoutData.purchase_order_id,
-						timestamp: new Date().toISOString(),
-					};
+	
 
-					localStorage.setItem(
-						"khalti_transaction",
-						JSON.stringify(transactionDetails)
-					);
-					console.log("Stored transaction details:", transactionDetails);
+				
 
 					const storedPidx = localStorage.getItem("khalti_pidx");
 					if (!storedPidx) {
@@ -96,7 +86,7 @@ export const CheckoutButton = () => {
 					console.error("Error storing data in localStorage:", storageError);
 					toast.warning("Warning: Could not store payment information locally");
 
-					window.location.href = `https://test-pay.khalti.com/?pidx=${response.pidx}`;
+					// window.location.href = `https://test-pay.khalti.com/?pidx=${response.pidx}`;
 				}
 			} else {
 				const errorMsg = "Invalid payment response from server. Missing pidx.";
@@ -119,7 +109,7 @@ export const CheckoutButton = () => {
 		<button
 			onClick={handleCheckout}
 			disabled={isProcessing}
-			className={`w-full bg-green-500 text-white py-3 rounded-md font-medium hover:bg-green-600 transition-colors ${
+			className={`w-full bg-[#426B1F] text-white py-3 rounded-md font-medium transition-colors ${
 				isProcessing ? "opacity-50 cursor-not-allowed" : ""
 			}`}
 		>

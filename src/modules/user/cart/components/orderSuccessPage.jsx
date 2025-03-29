@@ -8,12 +8,7 @@ export const OrderSuccess=()=> {
     const navigate = useNavigate();
       const [isModalOpen, setIsModalOpen] = useState(false);
     
-  
-  // const [orderDetails, setOrderDetails] = useState({
-  //   orderId: null,
-  //   amount: null,
-  //   date: new Date().toLocaleDateString(),
-  // })
+
   const { mutate: verifyPayment, isLoading: isVerifying } = useVerifyPayment({});
   const [searchParams] = useSearchParams();
 
@@ -28,7 +23,7 @@ export const OrderSuccess=()=> {
       verifyPayment(pidx, {
         onSuccess: (data) => {
           console.log("Payment verified:", data);
-          navigate("/order-success")
+          navigate("/user/order-success");
           setIsModalOpen(false);
   
         },

@@ -11,7 +11,7 @@ export const PromotedRestaurants = () => {
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
       <RestaurantCard 
         image={Category1}
-        discount="-40%"
+        discount="40%"
         category="BURGERS"
         name="Chef Burgers"
         location="London"
@@ -19,7 +19,7 @@ export const PromotedRestaurants = () => {
 
       <RestaurantCard 
         image={Grand}
-        discount="-30%"
+        discount="30%"
         category="CAFÉ"
         name="Grand Al Café"
         location="London"
@@ -27,7 +27,7 @@ export const PromotedRestaurants = () => {
 
       <RestaurantCard 
         image={Lunch}
-        discount="-17%"
+        discount="17%"
         category="CAFÉ"
         name="Buttered Café"
         location="London"

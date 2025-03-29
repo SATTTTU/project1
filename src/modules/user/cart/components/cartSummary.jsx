@@ -11,7 +11,7 @@ export const CartSummary=()=> {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+    <div className="bg-white rounded-lg  mt-13 shadow-lg overflow-hidden">
       <div className="p-6">
         <h2 className="text-lg font-bold mb-4">Order Summary</h2>
 
