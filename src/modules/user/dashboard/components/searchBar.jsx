@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect } from "react"
-import { Search, Loader2} from "lucide-react"
+import { Search, Loader2 } from "lucide-react"
 import { useAddCartItem } from "../../cart/api/addItems"
 import { useSearch } from "../api/search"
 import { FiStar } from "react-icons/fi"
+import { toast, ToastContainer } from 'react-toastify'; // Import toast and ToastContainer
+import 'react-toastify/dist/ReactToastify.css'; // Add the CSS for toast
 
 export const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState("")
@@ -36,8 +38,10 @@ export const SearchBar = () => {
     try {
       setLoadingCartItem(dish.menu_item_id)
       await addToCart({ menu_item_id: dish.menu_item_id, quantity: 1 })
+      toast.success(`${dish.name} added to cart!`, { autoClose: 2000 }); // Toast for success
     } catch (error) {
       console.error("Error adding to cart:", error)
+      toast.error("Failed to add item to cart.", { autoClose: 2000 }); // Toast for error
     } finally {
       setLoadingCartItem(null)
     }
@@ -99,7 +103,7 @@ export const SearchBar = () => {
                   className="p-3 border-b border-slate-200 hover:bg-gray-100 transition flex items-center justify-between"
                 >
                   <div className="flex items-center space-x-4">
-                  <img
+                    <img
                       src={`${imageUrl}${dish?.image_url}`}
                       alt={dish.name}
                       className="w-20 h-20 object-cover rounded-lg shadow-md hover:scale-105 transition-transform"
@@ -126,7 +130,6 @@ export const SearchBar = () => {
                             className={`h-5 w-5 ${index < Math.round(dish.average_rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
                           />
                         ))}
-                        {/* <span className="ml-2 text-gray-700">({dish.average_rating})</span> */}
                       </div>
                     </div>
                   </div>
@@ -145,6 +148,8 @@ export const SearchBar = () => {
           )}
         </div>
       )}
+
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={true} />
     </div>
   )
 }

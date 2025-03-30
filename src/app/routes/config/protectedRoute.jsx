@@ -45,7 +45,7 @@ const ProtectedRoute = ({ allowedRoles = [] }) => {
       if (user?.type === "admin" && location.pathname.startsWith("/user")) {
         return <Navigate to="/admin/dashboard" replace state={{ from: location }} />;
       }
-      if (user?.type === "user" && location.pathname.startsWith("/user")) {
+      if (user?.type === "user" && location.pathname.startsWith("/admin")) {
         return <Navigate to="/user/dashboard" replace state={{ from: location }} />;
       }
       if (user?.type === "user" && location.pathname.startsWith("/cook")) {

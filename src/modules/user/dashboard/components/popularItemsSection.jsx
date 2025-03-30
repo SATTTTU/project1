@@ -9,7 +9,7 @@ export const PopularItemsPage = () => {
   const imageUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
   // State to manage the number of dishes shown
-  const [visibleItems, setVisibleItems] = useState(6);
+  const [visibleItems, setVisibleItems] = useState(4);
 
   const handleAddToCart = async (dish) => {
     try {
@@ -53,14 +53,13 @@ export const PopularItemsPage = () => {
     );
   }
 
-  // Slice the menuItems array to display only the visible items
   const itemsToShow = menuItems.slice(0, visibleItems);
 
   return (
     <div className="container mx-auto p-4">
       <h2 className="text-2xl font-bold mb-6 text-center">Our Popular Dishes</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7">
         {itemsToShow.map((item) => (
           <div
             key={item.id}
@@ -76,8 +75,10 @@ export const PopularItemsPage = () => {
 
             <div className="p-4">
               <div className="flex justify-between items-start">
-                <h3 className="text-xl font-bold">{item.name}</h3>
+                <h3 className="text-2xl font-bold">{item.name}</h3>
+
               </div>
+        <p className="text-gray-600 text-sm mb-3 hover:text-green-600">By {item.cook_name}</p>
 
               {item.description && (
                 <p className="text-gray-600 mt-2 text-sm">
@@ -103,10 +104,10 @@ export const PopularItemsPage = () => {
         <div className="text-end mt-6">
           <button
             onClick={handleLoadMore}
-            className="bg-[#426B1F] text-white py-2 px-4 rounded-md font-semibold hover:bg-green-700 transition"
+            className="text-[#426B1F] bg-gray-200 py-2 px-4 rounded-md font-semibold transition"
             disabled={isAddingToCart}
           >
-            {isAddingToCart ? "Loading..." : "Load More"}
+            {isAddingToCart ? "Loading..." : "Load More..."}
           </button>
         </div>
       )}

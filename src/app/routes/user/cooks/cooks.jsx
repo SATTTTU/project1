@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import { toast } from "react-toastify";
@@ -15,11 +15,23 @@ import { AboutTab } from "@/modules/user/cooks/components/aboutTab";
 export const CookProfile = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { data: cook, isLoading, isError } = useGetSingleCook(id);
-  console.log("cook",cook)
+  const { data: cookData, isLoading, isError } = useGetSingleCook(id);
+
+  // const [cook, setCook] = useState(null); 
+  const [cook, setCook] = useState({
+    reviews: [], 
+    reviewCount: 0,
+  });
+  
   const [activeTab, setActiveTab] = useState("categories");
-  const safeCook = cook || { categories: [], reviews: [] };
+
   const videoBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
+
+  useEffect(() => {
+    if (cookData) {
+      setCook(cookData); 
+    }
+  }, [cookData]);
 
   const handleAddToCart = (dish) => {
     if (!dish) return;
@@ -57,53 +69,53 @@ export const CookProfile = () => {
 
         <section className="bg-white shadow-md rounded-lg p-6 flex flex-col md:flex-row items-center md:items-start gap-6">
           <img
-            src={`${videoBaseUrl}${safeCook?.image_url}`}
-            alt={safeCook?.name || "Cook Profile"}
+            src={`${videoBaseUrl}${cook?.image_url}`}
+            alt={cook?.name || "Cook Profile"}
             className="w-40 h-40 rounded-full object-cover border-4 border-green-500 shadow-md"
           />
           <div className="flex-1 text-center md:text-left">
-            <h2 className="text-2xl font-bold text-gray-800">{safeCook.name || "Unknown Cook"}</h2>
-            <p className="text-gray-600">{safeCook.email || "No email available"}</p>
+            <h2 className="text-2xl font-bold text-gray-800">{cook?.name || "Unknown Cook"}</h2>
+            <p className="text-gray-600">{cook?.email || "No email available"}</p>
             <p
               className={`mt-2 px-4 py-2 text-sm font-semibold rounded-full inline-block shadow-md ${
-                safeCook.available_status === "online" ? "bg-green-100 text-green-700" : "bg-gray-200 text-gray-600"
+                cook?.available_status === "online" ? "bg-green-100 text-green-700" : "bg-gray-200 text-gray-600"
               }`}
             >
-              {safeCook.available_status || "Unavailable"}
+              {cook?.available_status || "Unavailable"}
             </p>
           </div>
         </section>
 
-        {/* {safeCook?.intro_video_url && ( */}
+        {cook?.intro_video_url && (
           <div className="mt-6">
             <video controls className="w-full md:w-3/4 mx-auto rounded-lg shadow-lg">
-              <source src={`${videoBaseUrl}${safeCook.intro_video_url}`} type="video/mp4" />
+              <source src={`${videoBaseUrl}${cook.intro_video_url}`} type="video/mp4" />
             </video>
           </div>
-        {/* ) */}
+        )}
 
         <div className="mt-6">
-          <CookTabs activeTab={activeTab} setActiveTab={setActiveTab} reviewCount={cook.reviews?.length} />
+          <CookTabs activeTab={activeTab} setActiveTab={setActiveTab} reviewCount={cook?.reviews?.length} />
         </div>
 
         <div className="mt-8">
           {activeTab === "categories" && (
             <>
               <h2 className="text-xl font-bold text-gray-800 mb-4">Food Categories</h2>
-              <CookCategories cookId={safeCook.id}  cook={safeCook} onAddToCart={handleAddToCart} />
+              <CookCategories cookId={cook?.id} cook={cook} onAddToCart={handleAddToCart} />
             </>
           )}
           {activeTab === "reviews" && (
             <CookReviews
-            id={safeCook.id}
-              reviews={safeCook.reviews}
-              reviewCount={safeCook.reviewCount || 0}
-              cookId={safeCook.id}
-              cookName={safeCook.name}
-              setCook={() => {}}
+              id={cook?.id}
+              reviews={cook?.reviews}
+              reviewCount={cook?.reviewCount || 0}
+              cookId={cook?.id}
+              cookName={cook?.name}
+              setCook={setCook} 
             />
           )}
-          {activeTab === "about" && <AboutTab cook={safeCook} />}
+          {activeTab === "about" && <AboutTab cook={cook} />}
         </div>
       </main>
     </div>

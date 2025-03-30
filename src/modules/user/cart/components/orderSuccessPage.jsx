@@ -107,7 +107,7 @@ export const OrderSuccess=()=> {
             to="/orders"
             className="inline-block bg-[#426B1F] text-white font-medium px-6 py-3 rounded-md hover:bg-[#426B1F] transition-colors"
           >
-            View My Orderss
+            View My Orders
           </Link>
           <Link
             to="/user/dashboard"

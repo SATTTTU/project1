@@ -1,17 +1,13 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useUpdateCartItem } from "../api/updateItems";
-// import { useUpdateCartItem } from "../api/updateItems"
-// import Image from "next/image"
+
 
 export const CartItem = ({ item, onRemoveItem, isUpdating, isDeleting }) => {
 	const { mutateAsync } = useUpdateCartItem();
 	const [quantity, setQuantity] = useState(item.quantity);
 	console.log("cart ma ", item);
 
-	// Update local state when item prop changes
 	useEffect(() => {
 		setQuantity(item.quantity);
 	}, [item.quantity]);
@@ -24,29 +20,20 @@ export const CartItem = ({ item, onRemoveItem, isUpdating, isDeleting }) => {
 				item_id: item.basket_item_id,
 				quantity: newQuantity,
 			});
-			// await mutateAsync({ item_id: itemId, quantity: newQuantity });
 		} catch (error) {
 			console.error("Error updating quantity:", error);
 		}
 	};
 
-	const getFullImageUrl = (imagePath) => {
-		if (!imagePath) return "/placeholder.svg?height=80&width=80";
-		if (imagePath.startsWith("http")) return imagePath;
-		return `/placeholder.svg?height=80&width=80`;
-	};
+	const imageUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
 	return (
 		<div className="flex flex-col sm:flex-row items-center py-4 border-b last:border-b-0">
 			<div className="sm:w-24 w-full mb-4 sm:mb-0 sm:mr-6">
 				<img
-					src={
-						getFullImageUrl(item?.menu_item?.image_url) || "/placeholder.svg"
-					}
-					alt={item?.menu_item?.name || "Product image"}
-					width={80}
-					height={80}
-					className="w-full h-24 object-cover rounded"
+					src={`${imageUrl}${item?.menu_item?.image_url}`}
+					alt="image"
+					className="w-full h-26 object-cover"
 				/>
 			</div>
 
