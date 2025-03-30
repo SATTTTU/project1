@@ -20,6 +20,7 @@ import {
   FaUtensils,
 } from "react-icons/fa";
 import { useCookLogout } from "@/modules/cook/auth/api/cooklogout";
+import { useProfile } from "@/modules/cook/profile/api/getcookprofile";
 
 const CookNavBAr = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -27,6 +28,8 @@ const CookNavBAr = () => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
+  const {data:cook}= useProfile();
+  console.log("cookss***",cook.name)
   const [activeItem, setActiveItem] = useState(() => {
     // Initialize based on current path
     const path = location.pathname;
@@ -101,7 +104,7 @@ const CookNavBAr = () => {
             className="flex items-center gap-2 text-xl font-bold text-[#426B1F] cursor-pointer"
           >
             <ChefHat className="h-7 w-7" />
-            <span>KhanaBox</span>
+            <span>KhajaBox</span>
           </Link>
         </div>
 
@@ -176,8 +179,8 @@ const CookNavBAr = () => {
               className="flex items-center gap-2 rounded-full p-1 pl-2 hover:bg-gray-100 transition-colors"
             >
               <div className="hidden md:block text-right mr-2">
-                <div className="text-sm font-medium">Chef Ramesh</div>
-                <div className="text-xs text-gray-500">Head Cook</div>
+                <div className="text-lg font-medium">{cook.name}</div>
+                <div className="text-xs text-gray-500">Cook</div>
               </div>
               <div className="h-8 w-8 rounded-full bg-[#426B1F] text-white flex items-center justify-center">
                 <User className="h-5 w-5" />

@@ -1,13 +1,11 @@
-// src/api/getEarnings.js
 import { api } from "@/lib/api-client";
 import { useQuery } from "@tanstack/react-query";
 
-// Fetch Earnings API
 const getAllEarnings = async () => {
   try {
     const response = await api.get("/api/cooks/earnings");
-    console.log("earningssss:", response.data);  // Log the earnings data
-    return response;  // Return the earnings data
+    console.log("earningssss:", response.data);  
+    return response;  
   } catch (error) {
     console.error("Error fetching earnings:", error);
     throw new Error("Unable to fetch earnings");  // Throw an error if the request fails
