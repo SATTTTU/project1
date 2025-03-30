@@ -3,7 +3,7 @@ import { UseSetCookStatus } from "../api/availableStatus"; // Import the custom 
 
 const DashboardHeader = ({ isOnline, setIsOnline, earnings }) => {
   // Use the custom hook to set the cook's availability status
-  const { mutate: setCookStatus, isLoading, isError } = UseSetCookStatus(); // 'mutate' should be renamed to 'setCookStatus'
+  const { mutate: setCookStatus, isLoading} = UseSetCookStatus(); // 'mutate' should be renamed to 'setCookStatus'
 
   // Function to handle the button click and update cook's status
   const handleToggleStatus = () => {
@@ -27,13 +27,12 @@ const DashboardHeader = ({ isOnline, setIsOnline, earnings }) => {
           className={`px-4 py-2 rounded-full cursor-pointer font-medium ${
             isOnline ? "bg-[#426B1F] text-white" : "bg-gray-200 text-gray-700"
           }`}
-          disabled={isLoading} // Disable button while API is loading
+          disabled={isLoading} 
         >
           {isOnline ? "Available" : "Go Online"}
         </button>
       </div>
 
-      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-green-50 p-4 rounded-lg border border-green-100">
           <p className="text-sm text-gray-600">Today's Earnings</p>
