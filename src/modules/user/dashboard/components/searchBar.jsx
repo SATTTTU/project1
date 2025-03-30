@@ -3,8 +3,8 @@ import { Search, Loader2 } from "lucide-react"
 import { useAddCartItem } from "../../cart/api/addItems"
 import { useSearch } from "../api/search"
 import { FiStar } from "react-icons/fi"
-import { toast, ToastContainer } from 'react-toastify'; // Import toast and ToastContainer
-import 'react-toastify/dist/ReactToastify.css'; // Add the CSS for toast
+import { toast, ToastContainer } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css'; 
 
 export const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState("")
