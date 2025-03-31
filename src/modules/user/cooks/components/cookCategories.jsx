@@ -48,7 +48,6 @@ export const CookCategories = ({ cookId, onAddToCart }) => {
           )}
         </div>
       ) : (
-        // Show categories if no category is selected
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {menuItems.map((category) => (
             <div
