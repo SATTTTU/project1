@@ -3,7 +3,7 @@ import { BiCategory } from "react-icons/bi";
 import { FiArrowLeft } from "react-icons/fi";
 import { useCategoryItems } from "../api/getCategory";
 import { useCategoryMenuItems } from "../api/getCategoryMenu";
-import { DishCard } from "./DishCard";
+import { DishCard } from "./dishCard";
 
 export const CookCategories = ({ cookId, onAddToCart }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
