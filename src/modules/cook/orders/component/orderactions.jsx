@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useUpdateOrderStatus } from "../api/updateOrders";
 
@@ -7,15 +8,18 @@ export const OrderActions = ({ order }) => {
 
   const handleUpdateStatus = (e) => {
     const status = e.target.value;
-    setNewStatus(status); // Update local state
+    setNewStatus(status);
     updateStatus({ order_id: order.order_id, status });
   };
 
   // Define possible status transitions
   const statusActions = {
     pending: [
-      { label: "Start Preparing", status: "preparing" },
+      { label: "Accept Order", status: "accepted" },
       { label: "Cancel Order", status: "cancelled" },
+    ],
+    accepted: [
+      { label: "Start Preparing", status: "preparing" },
     ],
     preparing: [
       { label: "Out for Delivery", status: "out-for-delivery" },
@@ -27,7 +31,6 @@ export const OrderActions = ({ order }) => {
 
   return (
     <div className="mt-4 pt-4 border-t flex flex-wrap gap-2">
-      {/* Render dropdown for status selection */}
       <select
         value={newStatus}
         onChange={handleUpdateStatus}
@@ -41,7 +44,6 @@ export const OrderActions = ({ order }) => {
         ))}
       </select>
 
-      {/* Status messages */}
       {order.status === "delivered" && (
         <span className="text-green-600 font-medium">Order completed successfully!</span>
       )}
@@ -50,4 +52,4 @@ export const OrderActions = ({ order }) => {
       )}
     </div>
   );
-};
+};npm 

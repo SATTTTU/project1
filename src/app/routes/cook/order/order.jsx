@@ -34,7 +34,6 @@ export const OrderPage = () => {
         <main className="flex-1 overflow-auto p-4 md:p-6 bg-gray-50">
           <OrdersHeader filterStatus={filterStatus} setFilterStatus={setFilterStatus} statusOptions={statusOptions} />
 
-          {/* Orders List */}
           <OrdersList filteredOrders={filteredOrders} />
         </main>
       </div>

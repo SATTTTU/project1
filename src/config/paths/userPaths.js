@@ -180,6 +180,13 @@ export const userPaths = {
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
+	currentorders: {
+		path: "/user/currentorders",
+		getHref: (redirectTo) =>
+			`/user/currentorders${
+				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+			}`,
+	},
 	token: {
 		path: "/api/password/reset/:token",
 		getHref: (redirectTo) =>

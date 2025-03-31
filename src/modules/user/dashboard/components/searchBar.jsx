@@ -70,13 +70,13 @@ export const SearchBar = () => {
           placeholder="Search for dishes..."
           value={searchTerm}
           onChange={handleInputChange}
-          className="w-full sm:w-96 md:w-[500px] lg:w-[600px] xl:w-[700px] p-3 text-lg focus:outline-none transition-all duration-200 rounded-full"
+          className=" w-96 md:w-[400px] lg:w-[500px] xl:w-[600px] p-3 text-lg focus:outline-none transition-all duration-200 rounded-full"
           aria-label="Search for dishes"
         />
       </div>
 
       {showDropdown && (
-        <div className="absolute left-0 mt-2 w-full max-w-2xl bg-white shadow-lg rounded-lg p-4 z-50">
+        <div className="absolute left-0 mt-2 w-full max-w-2xl bg-white shadow-xl border border-slate-200 rounded-lg p-4 z-50">
           {isLoading && (
             <div className="flex justify-center p-4">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />

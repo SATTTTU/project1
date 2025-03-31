@@ -10,15 +10,11 @@ const updateOrderStatus = async ({ order_id, status }) => {
     return response.data;
   } catch (error) {
     console.error("Error updating order status:", error);
-
-    // Extract server error message if available
     const errorMessage =
       error.response?.data?.message || "Failed to update order status. Please try again.";
     throw new Error(errorMessage);
   }
 };
-
-// Custom hook to update order status
 export const useUpdateOrderStatus = () => {
   const queryClient = useQueryClient();
 
@@ -26,29 +22,24 @@ export const useUpdateOrderStatus = () => {
     mutationFn: updateOrderStatus,
     onMutate: async ({ order_id, status }) => {
       console.log("Mutating order status:", order_id, status);
-
-      await queryClient.cancelQueries(["orders"]);
+      await queryClient.cancelQueries({ queryKey: ["orders"] });
       const previousOrders = queryClient.getQueryData(["orders"]);
-
-      // Optimistically update order status
       queryClient.setQueryData(["orders"], (oldOrders) => {
         if (!oldOrders || !Array.isArray(oldOrders)) return oldOrders;
-
         return oldOrders.map((order) =>
           order.id === order_id ? { ...order, status } : order
         );
       });
-
       return { previousOrders };
     },
-    onError: (error, _, context) => {
+    onError: (error, variables, context) => {
       console.error("Mutation error:", error.message);
       if (context?.previousOrders) {
         queryClient.setQueryData(["orders"], context.previousOrders);
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["orders"]); // Refresh orders list
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
     },
   });
 };

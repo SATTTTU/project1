@@ -225,7 +225,15 @@ export const userRoutes = [
 									return { Component: OrderSuccess };
 								},
 							},
-							
+							{
+								path: paths.user.currentorders.path,
+								lazy: async () => {
+									const { OrderList } = await import(
+										"../../../modules/user/cart/components/orderList"
+									);
+									return { Component: OrderList };
+								},
+							},
 						],
 					},
 				],

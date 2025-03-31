@@ -3,18 +3,22 @@ import { useEffect, useState } from "react"
 import { Link,useNavigate, useSearchParams } from "react-router-dom"
 import { useVerifyPayment } from "../api/verify-payment";
 import { Modal } from "@/components/ui/modal/Modal";
+// import { useCurrentOrders } from "../api/currentOrders";
 
 export const OrderSuccess=()=> {
     const navigate = useNavigate();
       const [isModalOpen, setIsModalOpen] = useState(false);
     
+// const {data:orders}= useCurrentOrders();
+// console.log("Current ***", orders
 
+// )
   const { mutate: verifyPayment, isLoading: isVerifying } = useVerifyPayment({});
   const [searchParams] = useSearchParams();
 
     const handleVerifyPayment = async () => {
       const pidx = searchParams.get("pidx");
-      console.log("token", pidx); // ✅ Get pidx from search params
+      console.log("token", pidx); 
       if (!pidx) {
         alert("Missing Payment ID");
         return;
@@ -104,7 +108,7 @@ export const OrderSuccess=()=> {
 
         <div className="flex flex-col space-y-3">
           <Link
-            to="/orders"
+            to="/user/currentorders"
             className="inline-block bg-[#426B1F] text-white font-medium px-6 py-3 rounded-md hover:bg-[#426B1F] transition-colors"
           >
             View My Orders

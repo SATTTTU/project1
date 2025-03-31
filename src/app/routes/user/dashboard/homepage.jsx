@@ -62,7 +62,7 @@ export const Homepage = () => {
               
             />
           </div>
-          <PromotedRestaurants/>
+          {/*<PromotedRestaurants/>*/}
         </section>
         {/* <CategorySection categories={categories}/> */}
         <PopularCooks cooks={cooks} />

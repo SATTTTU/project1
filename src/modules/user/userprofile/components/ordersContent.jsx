@@ -1,4 +1,4 @@
-import { useCurrentOrders } from "../api/currentOrders";
+import { useCurrentOrders } from "../../cart/api/currentOrders";
 import { useAllOrders } from "../api/getAllOrders";
 import { EmptyOrder } from "./emptyOrder";
 import { OrderItem } from "./orderItem";
