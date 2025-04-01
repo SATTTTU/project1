@@ -1,10 +1,10 @@
-"use client"
+
 
 import { useState, useEffect, useRef } from "react"
 import { AiOutlineShoppingCart } from "react-icons/ai"
 import { Link } from "react-router-dom"
 
-const CartBadge = ({ cartItems, isLoading }) => {
+export const CartBadge = ({ cartItems, isLoading }) => {
   const [cartItemCount, setCartItemCount] = useState(cartItems?.length || 0)
   const [isAnimating, setIsAnimating] = useState(false)
   const prevCountRef = useRef(cartItemCount)
@@ -47,5 +47,4 @@ const CartBadge = ({ cartItems, isLoading }) => {
   )
 }
 
-export default CartBadge
 

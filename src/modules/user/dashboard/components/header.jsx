@@ -11,7 +11,7 @@ import { useUserLogout } from "../../auth/api/logout"
 import { useProfile } from "../../userprofile/api/getProfile"
 import { useUserCart } from "../../cart/api/getItems"
 import { SearchBar } from "./searchBar"
-import CartBadge from "./cart-badge"
+import { CartBadge } from "./cartBadge"
 
 export const Header = ({ navigate, popularItems, categories, cooks }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false)
