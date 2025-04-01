@@ -1,25 +1,17 @@
-// import { Modal } from "@/components/ui/modal/Modal";
 import { useDeleteCartItem } from "@/modules/user/cart/api/deleteItems";
 import { useUserCart } from "@/modules/user/cart/api/getItems";
 import { useUpdateCartItem } from "@/modules/user/cart/api/updateItems";
-// import { useVerifyPayment } from "@/modules/user/cart/api/verify-payment";
 import { CartHeader } from "@/modules/user/cart/components/cartheader";
 import { CartItems } from "@/modules/user/cart/components/cartItems";
 import { CartSummary } from "@/modules/user/cart/components/cartSummary";
 import { EmptyCart } from "@/modules/user/cart/components/emptyCart";
-// import { useEffect, useState } from "react";
-// import { useNavigate, useSearchParams } from "react-router-dom";
 
 export const Cart = () => {
-	// const navigate = useNavigate();
 	const { data, isLoading, error, refetch } = useUserCart();
 	const { updateItem, isLoading: isUpdating } = useUpdateCartItem();
-	// const [isModalOpen, setIsModalOpen] = useState(false);
 	const { mutateAsync: deleteItem, isLoading: isDeleting } =
 		useDeleteCartItem();
 	console.log("Cart ko items", data);
-
-	// const { mutate: verifyPayment, isLoading: isVerifying } = useVerifyPayment({});
 
 	const calculateSubtotal = () => {
 		if (!data || !data[0]?.items?.length) return 0;
@@ -33,7 +25,7 @@ export const Cart = () => {
 		if (newQuantity < 1) return;
 		try {
 			await updateItem({ item_id: itemId, quantity: newQuantity });
-			refetch(); // Ensure cart updates
+			refetch();
 		} catch (error) {
 			console.error("Error updating quantity:", error);
 		}
@@ -42,44 +34,11 @@ export const Cart = () => {
 	const handleRemoveItem = async (itemId) => {
 		try {
 			await deleteItem({ item_id: itemId });
-			refetch(); // Ensure item is removed
+			refetch();
 		} catch (error) {
 			console.error("Error removing item:", error);
 		}
 	};
-	// const [searchParams] = useSearchParams();
-
-	// const handleVerifyPayment = async () => {
-	// 	const pidx = searchParams.get("pidx");
-	// 	console.log("token", pidx); // ✅ Get pidx from search params
-	// 	if (!pidx) {
-	// 		alert("Missing Payment ID");
-	// 		return;
-	// 	}
-
-	// 	verifyPayment(pidx, {
-	// 		onSuccess: (data) => {
-	// 			console.log("Payment verified:", data);
-	// 			navigate("/order-success")
-	// 			setIsModalOpen(false);
-
-	// 		},
-	// 		onError: (error) => {
-	// 		alert(`Payment Verification Failed: ${error.message}`);
-	// 	},
-	// 	});
-
-	// };
-
-	// const pidx = searchParams.get("pidx");
-	// console.log("window", pidx);
-	// useEffect(() => {
-	// 	const pidx = searchParams.get("pidx");
-	// 	console.log("Window ko output", pidx);
-	// 	if (pidx) {
-	// 		setIsModalOpen(true);
-	// 	}
-	// }, []);
 
 	if (isLoading) {
 		return (
@@ -106,7 +65,7 @@ export const Cart = () => {
 		);
 	}
 
-	if (!data || data?.length ===0) {
+	if (!data || data?.length === 0) {
 		return <EmptyCart />;
 	}
 
@@ -129,22 +88,6 @@ export const Cart = () => {
 					</div>
 				</div>
 			</div>
-			{/* <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-				<div className="space-x-4 text-center">
-					<h2 className="text-lg font-bold mb-2">Checkout Successful</h2>
-					<p>Your checkout has been processed successfully!</p>
-					<button
-						onClick={handleVerifyPayment}
-						className={`mt-4 bg-[#426B1F] text-white px-4 py-2 rounded-md ${
-							isVerifying ? "opacity-50 cursor-not-allowed" : ""
-						}`}
-						disabled={isVerifying}
-					>
-						{isVerifying ? "Verifying..." : "Verify Payment"}
-					</button>
-					
-				</div>
-			</Modal> */}
 		</div>
 	);
 };

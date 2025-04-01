@@ -8,10 +8,8 @@ import { DishCard } from "./dishCard";
 export const CookCategories = ({ cookId, onAddToCart }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  // Fetch all categories
   const { data: menuItems, isLoading, error } = useCategoryItems(cookId);
 
-  // Fetch menu items inside selected category
   const { data: categoryDishes, isLoading: isLoadingDishes } = useCategoryMenuItems(selectedCategory, { enabled: !!selectedCategory });
 
   if (isLoading) return <div className="text-center py-8">Loading categories...</div>;
@@ -23,12 +21,11 @@ export const CookCategories = ({ cookId, onAddToCart }) => {
   return (
     <div className="p-4">
       {selectedCategory ? (
-        // Show dishes when a category is selected
         <div>
           <div className="flex items-center mb-6">
             <button
               onClick={() => setSelectedCategory(null)}
-              className="mr-3 p-3 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors"
+              className="mr-3 p-3 bg-[#426B1F] text-white rounded-full hover:bg-green-700 transition-colors"
             >
               <FiArrowLeft size={24} />
             </button>

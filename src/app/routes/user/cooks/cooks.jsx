@@ -60,7 +60,7 @@ export const CookProfile = () => {
       <main className="container mx-auto px-6 py-8">
         <div className="mb-4">
           <Link
-            to="/user/dashboard"
+            to="/dashboard"
             className="flex items-center text-gray-700 hover:text-green-600 transition"
           >
             <FiArrowLeft className="mr-2" /> Back to Home

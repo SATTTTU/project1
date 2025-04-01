@@ -9,7 +9,7 @@ export const EmptyCart = () => {
       <div className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            <Link to="/user/dashboard" className="flex items-center">
+            <Link to="/dashboard" className="flex items-center">
               <img src={Logo} alt="KhanaBox" className="h-10 w-10 mr-2" />
               <span className="text-3xl font-bold text-green-600">KhajaBox</span>
             </Link>
@@ -23,7 +23,7 @@ export const EmptyCart = () => {
           <h2 className="text-2xl font-bold mb-4">Your cart is empty</h2>
           <p className="text-gray-600 mb-8">Looks like you haven't added any items to your cart yet.</p>
           <Link
-            to="/user/dashboard"
+            to="/dashboard"
             className="inline-flex items-center px-6 py-3 bg-[#426B1F] text-white rounded-lg hover:bg-green-700"
           >
             <FiArrowLeft className="mr-2" />

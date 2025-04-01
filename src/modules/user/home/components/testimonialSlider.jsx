@@ -67,9 +67,9 @@ export const TestimonialSlider = () => {
   }, [])
 
   return (
-    <section className="py-16 px-4 md:px-8 lg:px-16 bg-gray-50">
+    <section className="py-8 px-4 md:px-8 lg:px-16 bg-gray-50">
       <div className="container mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-6">Customer Reviews</h2>
+        <h2 className="text-3xl font-bold text-center text-[#426B1F] mb-6">Customer Reviews</h2>
         <div className="relative px-4 py-4">
           {domLoaded && (
             <Swiper
@@ -130,7 +130,7 @@ export const TestimonialSlider = () => {
                                 />
                               ))}
                             </div>
-                            <span className="text-xs text-gray-500">{testimonial.testimonialCount} testimonials</span>
+                            {/* <span className="text-xs text-gray-500">{testimonial.testimonialCount} testimonials</span> */}
                           </div>
                         </div>
                       </div>

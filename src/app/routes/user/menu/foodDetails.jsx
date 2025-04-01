@@ -9,14 +9,13 @@ import { useMenuItemsInfo } from "@/modules/user/cooks/api/getMenuItemsInfo";
 import { useState } from "react";
 import { useUpdateCartItem } from "@/modules/user/cart/api/updateItems";
 import { Header } from "@/modules/user/dashboard/components/header";
-// import { useMenuItemsInfo } from "@/api/menu"; // Import your API hook
 
 export const FoodDetails = () => {
   const { id } = useParams();
 
-  // Fetch food details using API hook
   const { data: food, isLoading, error } = useMenuItemsInfo(id);
-    const { updateItem, isLoading: isUpdating } = useUpdateCartItem();
+  console.log("food details ", food)
+    const { updateItem } = useUpdateCartItem();
   
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -78,7 +77,7 @@ export const FoodDetails = () => {
       <main className="container mx-auto px-4 py-6">
         <div className="mb-6">
           <Link
-            to="/user/dashboard"
+            to="/dashboard"
             className="inline-flex items-center text-gray-600 hover:text-green-600 transition-colors"
           >
             <FiArrowLeft className="mr-2" />

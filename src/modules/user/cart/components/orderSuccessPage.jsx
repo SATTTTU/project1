@@ -27,7 +27,7 @@ export const OrderSuccess=()=> {
       verifyPayment(pidx, {
         onSuccess: (data) => {
           console.log("Payment verified:", data);
-          navigate("/user/order-success");
+          navigate("/order-success");
           setIsModalOpen(false);
   
         },
@@ -108,13 +108,13 @@ export const OrderSuccess=()=> {
 
         <div className="flex flex-col space-y-3">
           <Link
-            to="/user/currentorders"
+            to="/currentorders"
             className="inline-block bg-[#426B1F] text-white font-medium px-6 py-3 rounded-md hover:bg-[#426B1F] transition-colors"
           >
             View My Orders
           </Link>
           <Link
-            to="/user/dashboard"
+            to="/dashboard"
             className="inline-block bg-gray-100 text-gray-800 font-medium px-6 py-3 rounded-md hover:bg-gray-200 transition-colors"
             >
             Continue Shopping

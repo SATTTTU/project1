@@ -26,7 +26,7 @@ export const Header = () => {
 					<div className="flex items-center">
 						<Link to="/" className="flex items-center justify-center">
 							<span className="text-[#426B1F] text-xl md:text-2xl font-bold flex items-center">
-								<img src={Logo} alt="logo" className="h-8 md:h-9 w-auto mr-2" />
+								<img src={Logo} alt="logo" className="h-8 md:h-10 lg:w-10  w-auto " />
 								<div className="pt-2 text-4xl">KhajaBox</div>
 							</span>
 						</Link>
@@ -37,15 +37,15 @@ export const Header = () => {
 							smooth={true}
 							duration={500}
 							to="/about"
-							className="text-white cursor-pointer text-sm lg:text-base hover:text-green-400 transition-colors font-medium tracking-wide"
+							className=" text-[#426B1F] cursor-pointer text-sm lg:text-xl hover:text-green-400 transition-colors font-medium tracking-wide"
 						>
 							About Us
 						</ScrollLink>
 						<Link
 							to="/authpage"
-							className="text-white bg-[#426B1F] hover:bg-green-800 px-5 py-2 rounded-lg shadow-lg transition-all duration-300 text-sm lg:text-base font-medium tracking-wide border "
+							className="text-white bg-[#426B1F] hover:bg-green-800 px-5 py-2 rounded-lg shadow-lg transition-all duration-300 text-sm lg:text-xl font-medium tracking-wide border "
 						>
-							Login/Registers
+							Login/Register
 						</Link>
 					</div>
 

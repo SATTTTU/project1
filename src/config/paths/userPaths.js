@@ -19,66 +19,66 @@ export const userPaths = {
 			}`,
 	},
 	forgotPassword: {
-		path: "/user/forgotpassword",
+		path: "/forgotpassword",
 		getHref: (redirectTo) =>
-			`/user/forgotpassword${
+			`/forgotpassword${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
 	resetPassword: {
-		path: "/user/resetpassword",
+		path: "/resetpassword",
 		getHref: (redirectTo) =>
-			`/user/resetpassword${
+			`/resetpassword${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
 	changePassword: {
-		path: "/user/changepassword",
+		path: "/changepassword",
 		getHref: (redirectTo) =>
-			`/user/changepassword${
+			`/changepassword${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
 	emailVerification: {
-		path: "/user/verification",
+		path: "/verification",
 		getHref: (redirectTo) =>
-			`/user/verification${
+			`/verification${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
 	dashboard: {
-		path: "/user/dashboard",
+		path: "/dashboard",
 		getHref: (redirectTo) =>
-			`/user/dashboard${
+			`/dashboard${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
 
 	cart: {
-		path: "/user/cart",
+		path: "/cart",
 		getHref: (redirectTo) =>
-			`/user/cart${
+			`/cart${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
 	checkout: {
-		path: "/user/checkout",
+		path: "/checkout",
 		getHref: (redirectTo) =>
-			`/user/checkout${
+			`/checkout${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
 	profileEdit: {
-		path: "/user/profileEdit",
+		path: "/profileEdit",
 		getHref: (redirectTo) =>
-			`/user/profileEdit${
+			`/profileEdit${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
 	profile: {
-		path: "/user/profile",
+		path: "/profile",
 		getHref: (redirectTo) =>
-			`/user/profile${
+			`/profile${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
@@ -90,9 +90,9 @@ export const userPaths = {
 	// 		}`,
 	// },
 	orderHistory: {
-		path: "/user/orders",
+		path: "/orders",
 		getHref: (redirectTo) =>
-			`/user/orders${
+			`/orders${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
@@ -104,9 +104,9 @@ export const userPaths = {
 			}`,
 	},
 	setting: {
-		path: "/user/setting",
+		path: "/setting",
 		getHref: (redirectTo) =>
-			`/user/setting${
+			`/setting${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
@@ -167,9 +167,9 @@ export const userPaths = {
 			}`,
 	},
 	orderverify: {
-		path: "/user/order-success",
+		path: "/order-success",
 		getHref: (redirectTo) =>
-			`/user/order-success${
+			`/order-success${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},
@@ -181,9 +181,9 @@ export const userPaths = {
 			}`,
 	},
 	currentorders: {
-		path: "/user/currentorders",
+		path: "/currentorders",
 		getHref: (redirectTo) =>
-			`/user/currentorders${
+			`/currentorders${
 				redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
 			}`,
 	},

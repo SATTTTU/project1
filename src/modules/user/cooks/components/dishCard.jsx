@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify"; // Import toast for notifications
+import { toast } from "react-toastify"; 
 import { useAddCartItem } from "../../cart/api/addItems";
 
 export const DishCard = ({ dish }) => {
-  console.log("dishes", dish)
+  console.log("dishes888", dish)
   const navigate = useNavigate();
   const { mutateAsync: addToCart, isLoading: isAddingToCart } = useAddCartItem(); // Destructure the mutation function and loading state
   const imageUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
@@ -15,10 +15,8 @@ export const DishCard = ({ dish }) => {
         quantity: 1,
       });
 
-      // Show success notification
       toast.success(`${dish.name} added to cart! 🛒`);
     } catch (error) {
-      // Show error notification
       toast.error("Failed to add item to cart. Try again!");
       console.error("Error adding to cart:", error);
     }
@@ -27,7 +25,7 @@ export const DishCard = ({ dish }) => {
   return (
     <div
       className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer"
-      onClick={() => navigate(`/food/${dish.id}`)} // Navigate on click
+      onClick={() => navigate(`/food/${dish.id}`)} 
     >
       <img
         src={`${imageUrl}${dish?.image_url}`}
@@ -43,11 +41,11 @@ export const DishCard = ({ dish }) => {
           <span className="text-lg font-bold">Rs. {dish.price}</span>
           <button
             onClick={(e) => {
-              e.stopPropagation(); // Prevent navigation when clicking the button
-              handleAddToCart(dish); // Add to cart when button is clicked
+              e.stopPropagation(); 
+              handleAddToCart(dish); 
             }}
             className="px-4 py-2 bg-[#426B1F] text-white rounded-lg transition-colors"
-            disabled={isAddingToCart} // Disable button when adding to cart
+            disabled={isAddingToCart} 
           >
             {isAddingToCart ? "Adding..." : "Add to Cart"}
           </button>

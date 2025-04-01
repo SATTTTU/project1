@@ -7,7 +7,7 @@ export const getMenuItems = async (menuitem_Id) => {
     throw new Error('menu ID is required');
   }
   
-  const response = await api.get(`/api/cooks/get-menu-item/${menuitem_Id}`);
+  const response = await api.get(`/api/cooks/get-menu-item-detail/${menuitem_Id}`);
   console.log("menuitems details", response.data)
   return response.data;
 };
