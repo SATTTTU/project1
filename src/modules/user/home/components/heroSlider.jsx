@@ -2,7 +2,7 @@
 import { useState } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Header } from "./header"
-import MainImage from "../../../../assets/bg.jpg"
+import MainImage from "../../../../assets/bgg.jpg"
 import { Swiper, SwiperSlide } from "swiper/react"
 import "swiper/css"
 import "swiper/css/pagination"
@@ -83,17 +83,17 @@ export const HeroSlider = () => {
         >
           {heroSlides.map((slide) => (
             <SwiperSlide key={slide.id} className="relative">
-              <div className="absolute inset-0 bg-black/50 z-0 w-full max-w-full overflow-hidden"></div>
+              <div className="absolute inset-0 z-0 w-full max-w-full overflow-hidden"></div>
               <img
                 src={slide.image || "/placeholder.svg"}
                 alt={`${slide.title}`}
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0  w-full h-full object-cover "
               />
               <div className="absolute inset-0 z-10 flex items-center justify-center">
                 <div className="container mx-auto px-4">
                   <div className="max-w-2xl mx-auto text-center">
                     <h1 className="text-4xl md:text-4xl lg:text-5xl font-bold text-[#426B1F] mb-4">{slide.title}</h1>
-                    <p className=" text-lg md:text-xl text-[#426B1F] mb-6">{slide.subtitle}</p>
+                    <p className=" text-lg md:text-xl mb-6 text-[#426B1F]">{slide.subtitle}</p>
                   
                   </div>
                 </div>
