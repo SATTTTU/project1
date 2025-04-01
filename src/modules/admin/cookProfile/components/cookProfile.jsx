@@ -78,7 +78,7 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
   console.log("Cook Data:", cookData)
   
   // Base URL for images
-  const baseUrl = import.meta.env.VITE_APP_API_URL; // Get from env or adjust as needed
+  const baseUrl = import.meta.env.VITE_BUCKET_URL; // Get from env or adjust as needed
   console.log("first",baseUrl)
   
   // Function to get full image URL
@@ -87,8 +87,9 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
     // Check if the path already includes http:// or https://
     if (path.startsWith('http://') || path.startsWith('https://')) {
       return path;
+      
     }
-    return `${baseUrl}/storage/${path}`;
+    return `${baseUrl}/${path}`;
   };
 
   const cook = cookData

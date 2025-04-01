@@ -6,10 +6,10 @@ import { SettingsCard } from "./settings";
 import { useAdminProfile } from "../api/getprofile";
 import ConfirmModal from "@/components/ui/admin/confirmmodel/confirmmodel";
 import { useAdminLogout } from "../../dashboard/api/logout";
+
 export const ProfileCard = () => {
   const [notificationsAllowed, setNotificationsAllowed] = useState(true);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-
   const [showSettings, setShowSettings] = useState(false);
   const [profileData, setProfileData] = useState({
     name: "Your Name",
@@ -18,12 +18,14 @@ export const ProfileCard = () => {
     image_url: null,
     isOnline: true,
   });
+
   const { mutateAsync: logout } = useAdminLogout();
+  
   const handleLogout = async () => {
     try {
       await logout();
       localStorage.clear();
-      window.location.href = "/admin/login"; // Redirect
+      window.location.href = "/admin/login";
     } catch (error) {
       console.error("Logout failed", error);
     }
@@ -36,19 +38,37 @@ export const ProfileCard = () => {
     isError,
   } = useAdminProfile();
 
-  // Function to get the full image URL
-   const getFullImageUrl = (imagePath) => {
+  // Improved getFullImageUrl function with comprehensive logging
+  const getFullImageUrl = (imagePath) => {
+    
+
+    // If no image path, return placeholder
     if (!imagePath) return "/api/placeholder/80/80";
-
-    // If it's already a full URL (starts with http/https)
+  
+    // If already a full URL, return as is
     if (imagePath.startsWith("http")) return imagePath;
+  
+    // Try multiple methods to get bucket URL
+    const bucketUrl = 
+      import.meta.env.VITE_BUCKET_URL || 
+      import.meta.env.BUCKET_URL || 
+      import.meta.env.VITE_BUCKET_URL || 
+      
 
-    // Use your existing API_URL
-    // If your API_URL already includes a trailing slash, you might need to adjust this
-    const storageUrl = import.meta.env.VITE_APP_API_URL.endsWith("/")
-      ? `${import.meta.env.VITE_APP_API_URL}storage/`
-      : `${import.meta.env.VITE_APP_API_URL}/storage/`;
-    return `${storageUrl}${imagePath}`;
+    // Log the resolved bucket URL
+    console.log("Resolved Bucket URL:", bucketUrl);
+  
+    // If no bucket URL found, return placeholder
+    if (!bucketUrl) {
+      console.error("No bucket URL found in environment variables");
+      return "/api/placeholder/80/80";
+    }
+  
+    // Construct and log final image URL
+    const finalImageUrl = `${bucketUrl.endsWith("/") ? bucketUrl : bucketUrl + "/"}${imagePath}`;
+    console.log("Final Constructed Image URL:", finalImageUrl);
+  
+    return finalImageUrl;
   };
 
   useEffect(() => {

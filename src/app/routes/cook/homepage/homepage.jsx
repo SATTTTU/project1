@@ -15,7 +15,6 @@ export const Homepage = () => {
     activeTab,
     setActiveTab,
     orderRequests,
-    activeOrders,
     foodItems,
     earnings,
   } = useHomepage();
@@ -40,7 +39,6 @@ export const Homepage = () => {
           {activeTab === "orders" && (
             <OrderManagement
               orderRequests={orderRequests}
-              activeOrders={activeOrders}
             />
           )}
 

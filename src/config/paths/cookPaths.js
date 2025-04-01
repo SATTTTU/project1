@@ -1,3 +1,4 @@
+
 export const cookPaths = {
   root: {
     path: "/cook",
@@ -24,6 +25,14 @@ export const cookPaths = {
         redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
       }`,
   },
+  cookmap: {
+    path: "/cook/realmap",
+    getHref: (redirectTo) =>
+      `/cook/realmap${
+        redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
+      }`,
+  },
+
   pendingPage: {
     path: "/cook/underReview",
     getHref: (redirectTo) =>

@@ -13,16 +13,35 @@ export const useAdminProfileEditFormik = () => {
   
   // Function to get the full image URL
   const getFullImageUrl = (imagePath) => {
-    if (!imagePath) return "/api/placeholder/200/200";
     
-    // If it's already a full URL (starts with http/https)
-    if (imagePath.startsWith('http')) return imagePath;
-    
-    // Use your existing API_URL
-    const storageUrl = import.meta.env.VITE_APP_API_URL.endsWith('/') 
-      ? `${import.meta.env.VITE_APP_API_URL}storage/` 
-      : `${import.meta.env.VITE_APP_API_URL}/storage/`;
-    return `${storageUrl}${imagePath}`;
+
+    // If no image path, return placeholder
+    if (!imagePath) return "/api/placeholder/80/80";
+  
+    // If already a full URL, return as is
+    if (imagePath.startsWith("http")) return imagePath;
+  
+    // Try multiple methods to get bucket URL
+    const bucketUrl = 
+      import.meta.env.VITE_BUCKET_URL || 
+      import.meta.env.BUCKET_URL || 
+      import.meta.env.VITE_BUCKET_URL || 
+      
+
+    // Log the resolved bucket URL
+    console.log("Resolved Bucket URL:", bucketUrl);
+  
+    // If no bucket URL found, return placeholder
+    if (!bucketUrl) {
+      console.error("No bucket URL found in environment variables");
+      return "/api/placeholder/80/80";
+    }
+  
+    // Construct and log final image URL
+    const finalImageUrl = `${bucketUrl.endsWith("/") ? bucketUrl : bucketUrl + "/"}${imagePath}`;
+    console.log("Final Constructed Image URL:", finalImageUrl);
+  
+    return finalImageUrl;
   };
 
   useEffect(() => {
