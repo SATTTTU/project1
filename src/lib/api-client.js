@@ -155,7 +155,7 @@ function saveUserData(userType, token) {
       }
     } else if (userType === "user") {
       if (!safeSetItem(STORAGE_KEYS.USER_TOKEN, token)) {
-        throw new Error("Failed to save user token"); // Fixed: Changed from "cook" to "user"
+        throw new Error("Failed to save user token"); 
       }
     } else {
       throw new Error(`Invalid user type: ${userType}`);

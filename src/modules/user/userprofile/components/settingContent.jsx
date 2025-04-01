@@ -11,7 +11,7 @@ const SettingsContent = () => {
           <div className="bg-gray-50 p-6 rounded-lg">
             <h3 className="text-lg font-medium mb-4">Account Settings</h3>
   
-            <div className="space-y-4">
+            {/* <div className="space-y-4">
               <ToggleSetting
                 title="Email Notifications"
                 description="Receive order updates and promotions"
@@ -19,13 +19,13 @@ const SettingsContent = () => {
               />
   
             
-            </div>
+            </div> */}
           </div>
   
 {/* <ChangePassword/>
  */}
  <ChangePasswordForm/>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          {/* <div className="bg-gray-50 p-6 rounded-lg">
             <h3 className="text-lg font-medium mb-4">Privacy Settingssss</h3>
   
             <div className="space-y-4">
@@ -41,7 +41,7 @@ const SettingsContent = () => {
                 defaultChecked={true}
               />
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     );

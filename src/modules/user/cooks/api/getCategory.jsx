@@ -8,7 +8,6 @@ export const getCategory = async (cookId) => {
   }
   
   const response = await api.get(`/api/cooks/menus-and-items/${cookId}`);
-  console.log("menu",response.data)
   return response.data;
 };
 

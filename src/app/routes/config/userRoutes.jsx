@@ -26,7 +26,6 @@ export const userRoutes = [
 							return { Component: RegisterPage };
 						},
 						// ErrorBoundary: AppRootErrorBoundary,
-
 					},
 					{
 						path: paths.user.login.path,
@@ -93,7 +92,7 @@ export const userRoutes = [
 						},
 					},
 					{
-						element: <ProtectedRoute  allowedRoles={["user"]}/>, 
+						element: <ProtectedRoute allowedRoles={["user"]} />,
 						children: [
 							{
 								path: paths.user.dashboard.path,
@@ -104,7 +103,14 @@ export const userRoutes = [
 									return { Component: Homepage };
 								},
 							},
-							
+							{
+								path: paths.user.cart.path,
+								lazy: async () => {
+									const { Cart } = await import("../../routes/user/cart/cart");
+									return { Component: Cart };
+								},
+							},
+
 							{
 								path: paths.user.changePassword.path,
 								lazy: async () => {
@@ -112,13 +118,6 @@ export const userRoutes = [
 										"../../routes/user/auth/change-password"
 									);
 									return { Component: ChangePassword };
-								},
-							},
-							{
-								path: paths.user.cart.path,
-								lazy: async () => {
-									const { Cart } = await import("../../routes/user/cart/cart");
-									return { Component: Cart };
 								},
 							},
 
@@ -131,15 +130,7 @@ export const userRoutes = [
 									return { Component: ProfilePage };
 								},
 							},
-							{
-								path: paths.user.profileContent.path,
-								lazy: async () => {
-									const { MyProfile } = await import(
-										"../../../modules/user/userprofile/components/editProfile"
-									);
-									return { Component: MyProfile };
-								},
-							},
+					
 							{
 								path: paths.user.orderHistory.path,
 								lazy: async () => {
@@ -206,6 +197,42 @@ export const userRoutes = [
 									{ path: "wishlist", element: <WishlistContent /> },
 									{ path: "settings", element: <SettingsContent /> },
 								],
+							},
+							{
+								path: paths.user.payment.path,
+								lazy: async () => {
+									const { PaymentVerify } = await import(
+										"../../../modules/user/cart/components/payment-verify"
+									);
+									return { Component: PaymentVerify };
+								},
+							},
+							{
+								path: paths.user.checkoutsuccess.path,
+								lazy: async () => {
+									const { PaymentVerification } = await import(
+										"../../../modules/user/cart/components/payment-verify"
+									);
+									return { Component: PaymentVerification };
+								},
+							},
+							{
+								path: paths.user.orderverify.path,
+								lazy: async () => {
+									const { OrderSuccess } = await import(
+										"../../../modules/user/cart/components/orderSuccessPage"
+									);
+									return { Component: OrderSuccess };
+								},
+							},
+							{
+								path: paths.user.currentorders.path,
+								lazy: async () => {
+									const { OrderList } = await import(
+										"../../../modules/user/cart/components/orderList"
+									);
+									return { Component: OrderList };
+								},
 							},
 						],
 					},

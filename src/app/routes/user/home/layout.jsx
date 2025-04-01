@@ -6,7 +6,7 @@ import { TestimonialSlider } from "@/modules/user/home/components/testimonialSli
 export const Layout = () => {
 	return (
 		<>
-			<div className="overflow-y-hidden">
+			<div className=" w-screen overflow-x-hidden max-w-full ">
 				<HeroSlider />
 
 				<About />

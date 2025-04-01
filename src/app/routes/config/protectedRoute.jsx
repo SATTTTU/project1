@@ -45,18 +45,18 @@ const ProtectedRoute = ({ allowedRoles = [] }) => {
       if (user?.type === "admin" && location.pathname.startsWith("/user")) {
         return <Navigate to="/admin/dashboard" replace state={{ from: location }} />;
       }
-      if (user?.type === "user" && location.pathname.startsWith("/user")) {
-        return <Navigate to="/user/dashboard" replace state={{ from: location }} />;
+      if (user?.type === "user" && location.pathname.startsWith("/admin")) {
+        return <Navigate to="/dashboard" replace state={{ from: location }} />;
       }
       if (user?.type === "user" && location.pathname.startsWith("/cook")) {
-        return <Navigate to="/user/dashboard" replace state={{ from: location }} />;
+        return <Navigate to="/dashboard" replace state={{ from: location }} />;
       }
       
       // Default redirects based on user type
       const defaultRedirects = {
         admin: "/admin/dashboard",
         cook: "/cook/homepage",
-        user: "/user/dashboard"
+        user: "/dashboard"
       };
       
       return <Navigate to={defaultRedirects[user?.type] || "/"} replace state={{ from: location }} />;
@@ -71,8 +71,8 @@ const ProtectedRoute = ({ allowedRoles = [] }) => {
     loginPath = "/admin/login";
   } else if (location.pathname.includes("/cook")) {
     loginPath = "/cook/login";
-  } else if (location.pathname.includes("/user")) {
-    loginPath = "/user/login";
+  } else if (location.pathname.includes("/")) {
+    loginPath = "/login";
   }
   
   return <Navigate to={loginPath} replace state={{ from: location }} />;

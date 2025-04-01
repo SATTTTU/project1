@@ -1,15 +1,14 @@
-// src/components/Orders/OrdersHeader.jsx
 import React from "react";
 
-export const OrdersHeader = ({ filterStatus, setFilterStatus }) => {
+export const OrdersHeader = ({ filterStatus, setFilterStatus, statusOptions }) => {
   return (
     <div className="flex justify-between items-center mb-6">
       <div>
         <h1 className="text-2xl font-bold">Orders</h1>
         <p className="text-sm text-gray-500">
-          {filterStatus === "Ongoing"
+          {filterStatus === "pending"
             ? "Currently active orders"
-            : `${filterStatus} orders`}
+            : `${filterStatus.charAt(0).toUpperCase() + filterStatus.slice(1)} orders`}
         </p>
       </div>
 
@@ -19,11 +18,11 @@ export const OrdersHeader = ({ filterStatus, setFilterStatus }) => {
           onChange={(e) => setFilterStatus(e.target.value)}
           className="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#426B1F] focus:outline-none focus:ring-1 focus:ring-[#426B1F]"
         >
-          <option value="Ongoing">Ongoing & Preparing</option>
-          <option value="Ready">Ready</option>
-          <option value="Completed">Completed</option>
-          <option value="Cancelled">Cancelled</option>
-          <option value="All">All Orders</option>
+          {statusOptions.map((status) => (
+            <option key={status} value={status}>
+              {status === "all" ? "All Orders" : status.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())}
+            </option>
+          ))}
         </select>
       </div>
     </div>

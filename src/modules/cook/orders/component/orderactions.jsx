@@ -1,55 +1,55 @@
-// src/components/Orders/OrderActions.jsx
-import React from "react";
 
-export const OrderActions = ({ order, updateOrderStatus }) => {
+import React, { useState } from "react";
+import { useUpdateOrderStatus } from "../api/updateOrders";
+
+export const OrderActions = ({ order }) => {
+  const { mutate: updateStatus, isLoading } = useUpdateOrderStatus();
+  const [newStatus, setNewStatus] = useState(order.status);
+
+  const handleUpdateStatus = (e) => {
+    const status = e.target.value;
+    setNewStatus(status);
+    updateStatus({ order_id: order.order_id, status });
+  };
+
+  // Define possible status transitions
+  const statusActions = {
+    pending: [
+      { label: "Accept Order", status: "accepted" },
+      { label: "Cancel Order", status: "cancelled" },
+    ],
+    accepted: [
+      { label: "Start Preparing", status: "preparing" },
+    ],
+    preparing: [
+      { label: "Out for Delivery", status: "out-for-delivery" },
+    ],
+    "out-for-delivery": [
+      { label: "Mark as Delivered", status: "delivered" },
+    ],
+  };
+
   return (
     <div className="mt-4 pt-4 border-t flex flex-wrap gap-2">
-      {order.status === "Ongoing" && (
-        <>
-          <button
-            onClick={() => updateOrderStatus(order.id, "Preparing")}
-            className="rounded-md bg-yellow-500 px-4 py-2 text-white hover:bg-yellow-600"
-          >
-            Start Preparing
-          </button>
-          <button
-            onClick={() => updateOrderStatus(order.id, "Cancelled")}
-            className="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600"
-          >
-            Cancel Order
-          </button>
-        </>
-      )}
+      <select
+        value={newStatus}
+        onChange={handleUpdateStatus}
+        disabled={isLoading}
+        className="rounded-md px-4 py-2"
+      >
+        {statusActions[order.status]?.map((action) => (
+          <option key={action.status} value={action.status}>
+            {action.label}
+          </option>
+        ))}
+      </select>
 
-      {order.status === "Preparing" && (
-        <button
-          onClick={() => updateOrderStatus(order.id, "Ready")}
-          className="rounded-md bg-purple-500 px-4 py-2 text-white hover:bg-purple-600"
-        >
-          Mark as Ready
-        </button>
+      {order.status === "delivered" && (
+        <span className="text-green-600 font-medium">Order completed successfully!</span>
       )}
-
-      {order.status === "Ready" && (
-        <button
-          onClick={() => updateOrderStatus(order.id, "Completed")}
-          className="rounded-md bg-[#426B1F] px-4 py-2 text-white hover:bg-[#365818]"
-        >
-          Complete Order
-        </button>
-      )}
-
-      {order.status === "Completed" && (
-        <span className="text-green-600 font-medium">
-          Order completed successfully!
-        </span>
-      )}
-
-      {order.status === "Cancelled" && (
-        <span className="text-red-600 font-medium">
-          Order has been cancelled
-        </span>
+      {order.status === "cancelled" && (
+        <span className="text-red-600 font-medium">Order has been cancelled</span>
       )}
     </div>
   );
-};
+};npm 

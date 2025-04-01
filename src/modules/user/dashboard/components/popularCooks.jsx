@@ -1,5 +1,5 @@
 import React from "react";
-import { FiStar } from "react-icons/fi";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { usePopularCooks } from "../api/getAllCooks";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -10,17 +10,22 @@ import "swiper/css/pagination";
 
 export const PopularCooks = () => {
   const { data: popularCooks } = usePopularCooks();
-  console.log("cooks to be", popularCooks)
+  const imageBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
   return (
-    <section className="p-6 mb-12 rounded-lg bg-white relative">
-      <h2 className="mb-6 text-2xl font-bold text-center text-green-600">Popular Cooks</h2>
-      
+    <section className="p-10 bg-slate-100 mb-12 relative group">
+      <h2 className="mb-6 text-2xl font-semibold text-center text-[#426B1F] tracking-wide">
+        Popular Cooks
+      </h2>
+
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={20}
         slidesPerView={5}
-        navigation
+        navigation={{
+          nextEl: ".swiper-button-next", // matches the class name for next button
+          prevEl: ".swiper-button-prev", // matches the class name for prev button
+        }}
         pagination={{ clickable: true, el: ".custom-pagination" }}
         autoplay={{ delay: 3000 }}
         breakpoints={{
@@ -35,27 +40,34 @@ export const PopularCooks = () => {
           <SwiperSlide key={index}>
             <Link
               to={`/cook/${cook.id}`}
-              className="flex flex-col items-center border border-slate-300 p-4 transition-transform transform bg-blue rounded-sm w-40 md:w-50 shadow-md hover:scale-105 hover:shadow-xl"
+              className="flex flex-col items-center justify-center border border-gray-200 p-4 bg-white rounded-xl shadow-lg hover:scale-105 hover:shadow-2xl transition-all duration-300"
             >
-              <div className="relative mb-3 overflow-hidden w-40 h-40 md:w-50 md:h-50">
-                <img 
-                  src={cook.img_url} 
-                  alt={cook.name} 
-                  className="w-full h-full object-cover rounded-full" 
+              <div className="relative mb-4 overflow-hidden rounded-full w-40 h-40 md:w-48 md:h-48 border-1 border-green-600">
+                <img
+                  src={`${imageBaseUrl}${cook.image_url}`}
+                  alt={cook.name}
+                  className="w-full h-full object-cover rounded-full"
                 />
               </div>
-              <span className="text-sm font-medium text-gray-800 sm:text-base">{cook.name}</span>
-              
-              <div className="flex items-center text-yellow-500 mr-2">
-                <FiStar className="fill-current" />
-                <span className="ml-1 font-medium">{cook.rating}</span>
-              </div>
+              <span className="text-sm font-bold text-gray-800 text-center sm:text-base mb-2">
+                {cook.name}
+              </span>
             </Link>
           </SwiperSlide>
         ))}
       </Swiper>
 
       <div className="custom-pagination absolute bottom-[-20px] left-1/2 transform -translate-x-1/2 flex space-x-2"></div>
+
+      <button
+        className="swiper-button-prev flex items-center justify-center !w-12 !h-12 md:!w-14 md:!h-16 !left-[-20px] sm:!left-[-30px] md:!left-[-20px] opacity-100 group-hover:opacity-100 transition-opacity duration-300 rounded-full shadow-lg absolute top-1/2 transform -translate-y-1/2 z-10"
+      >
+      </button>
+
+      <button
+        className="swiper-button-next flex items-center justify-center !w-12 !h-12 md:!w-14 md:!h-16 !right-[-20px] sm:!right-[-30px] md:!right-[-30px] opacity-100 group-hover:opacity-100 transition-opacity duration-300 rounded-full shadow-lg absolute top-1/2 transform -translate-y-1/2 z-10"
+      >
+      </button>
     </section>
   );
 };

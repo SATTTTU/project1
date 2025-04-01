@@ -7,25 +7,14 @@ import { profileEditSchema } from "./schema/updateSchema";
 
 export const useUserProfileEditFormik = () => {
   const { mutateAsync: editProfile, isLoading: isEditing } = UpdateProfile();
-  const { data: profileData, isLoading: isFetching } = useProfile(); // ✅ Correctly use `useQuery`
-
-  const getFullImageUrl = (imagePath) => {
-    if (!imagePath) return "/api/placeholder/200/200";
-    if (imagePath.startsWith("http")) return imagePath;
-    const storageUrl = import.meta.env.VITE_APP_API_URL.endsWith("/")
-      ? `${import.meta.env.VITE_APP_API_URL}storage/`
-      : `${import.meta.env.VITE_APP_API_URL}/storage/`;
-    return `${storageUrl}${imagePath}`;
-  };
+  const { data: profileData, isLoading: isFetching } = useProfile(); 
 
   const formik = useFormik({
     initialValues: {
       name: profileData?.name || "John Doe",
       email: profileData?.email || "johndoe@example.com",
       mobile: profileData?.mobile || "",
-      image: profileData?.image_url
-        ? getFullImageUrl(profileData.image_url)
-        : "/api/placeholder/200/200",
+      image: profileData?.image_url || "",
     },
     enableReinitialize: true,
     validationSchema: toFormikValidationSchema(profileEditSchema),
@@ -40,7 +29,6 @@ export const useUserProfileEditFormik = () => {
         await editProfile(formData);
         toast.success("Successfully updated profile");
       } catch (err) {
-        console.error("Update error:", err?.response?.data || err);
         helpers.setErrors({
           submit: err?.response?.data?.message || "An error occurred",
         });

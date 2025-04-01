@@ -1,4 +1,4 @@
-import {Link }from "react-router-dom"
+import {Link} from "react-router-dom"
 import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
 import { Link as ScrollLink } from "react-scroll";
@@ -22,14 +22,12 @@ export const Header = () => {
 	return (
 		<div className="absolute top-0 left-0 right-0 z-50">
 			<div className="container mx-auto px-4">
-				<div className="flex justify-between  items-center h-16 md:h-20">
+				<div className="flex justify-between items-center h-16 md:h-20   bg-opacity-20 rounded-b-lg px-4 md:px-6">
 					<div className="flex items-center">
-						<Link to="/" className="flex items-center justify-center ">
-							<span className="text-[#426B1F] text-2xl md:text-3xl font-bold flex justify-center items-center">
-								<span className="inline-block">
-									<img src={Logo} alt="logo" className="lg:w-10 w-10 " />
-								</span>
-								KhajaBox
+						<Link to="/" className="flex items-center justify-center">
+							<span className="text-[#426B1F] text-xl md:text-2xl font-bold flex items-center">
+								<img src={Logo} alt="logo" className="h-8 md:h-10 lg:w-10  w-auto " />
+								<div className="pt-2 text-4xl">KhajaBox</div>
 							</span>
 						</Link>
 					</div>
@@ -39,38 +37,38 @@ export const Header = () => {
 							smooth={true}
 							duration={500}
 							to="/about"
-							className="text-white cursor-pointer lg:text-xl hover:text-green-400 transition-colors text-sm font-medium"
+							className=" text-[#426B1F] cursor-pointer text-sm lg:text-xl hover:text-green-400 transition-colors font-medium tracking-wide"
 						>
 							About Us
 						</ScrollLink>
 						<Link
 							to="/authpage"
-							className="text-white lg:text-xl hover:text-green-400 transition-colors text-sm font-medium"
+							className="text-white bg-[#426B1F] hover:bg-green-800 px-5 py-2 rounded-lg shadow-lg transition-all duration-300 text-sm lg:text-xl font-medium tracking-wide border "
 						>
-							Login/Registerss
+							Login/Register
 						</Link>
 					</div>
 
 					<div className="md:hidden flex items-center">
 						<button
 							onClick={() => setIsMenuOpen(!isMenuOpen)}
-							className="text-white focus:outline-none"
+							className="text-white bg-[#426B1F] p-2 rounded-md shadow-lg hover:bg-green-600 transition-colors duration-300 focus:outline-none border border-green-400"
 							aria-label={isMenuOpen ? "Close menu" : "Open menu"}
 							aria-expanded={isMenuOpen}
 						>
 							{isMenuOpen ? (
-								<X className="h-6 w-6" />
+								<X className="h-5 w-5" />
 							) : (
-								<Menu className="h-6 w-6" />
+								<Menu className="h-5 w-5" />
 							)}
 						</button>
 					</div>
 				</div>
 
 				<div
-					className={`md:hidden transition-all bg-white rounded-xl  duration-300 overflow-hidden ${
+					className={`md:hidden transition-all bg-black bg-opacity-70 backdrop-blur-md rounded-xl duration-300 overflow-hidden mt-2 ${
 						isMenuOpen
-							? "max-h-60 opacity-100 py-4  backdrop-blur-sm"
+							? "max-h-60 opacity-100 py-4 shadow-xl"
 							: "max-h-0 opacity-0 py-0"
 					}`}
 				>
@@ -79,7 +77,7 @@ export const Header = () => {
 							to="/about"
 							smooth={true}
 							duration={500}
-							className=" hover:text-bg-[#426B1F] transition-colors text-sm font-medium"
+							className="text-white hover:text-green-400 transition-colors text-xs font-medium tracking-wide"
 							onClick={() => setIsMenuOpen(false)}
 						>
 							About Us
@@ -87,7 +85,7 @@ export const Header = () => {
 
 						<Link
 							to="/authpage"
-							className="bg-[#426B1F] hover:bg-green-700 text-white px-4 py-2 rounded-md transition-colors text-sm font-medium inline-block w-full text-center"
+							className="bg-[#426B1F] hover:bg-green-600 text-white px-4 py-2 rounded-md transition-all duration-300 text-xs font-medium inline-block w-full text-center shadow-lg border border-green-400"
 							onClick={() => setIsMenuOpen(false)}
 						>
 							Login/Signup
@@ -98,4 +96,3 @@ export const Header = () => {
 		</div>
 	);
 };
-

@@ -10,7 +10,7 @@ import StatusBanner from "@/modules/cook/profile/component/statusBanner";
 
 export const ProfileRoute = () => {
   const { data: userData } = useProfile();
-  console.log("user/Data:", userData)
+  console.log("cook ko profile Data:", userData)
 
   return (
     <div className="flex h-screen flex-col">

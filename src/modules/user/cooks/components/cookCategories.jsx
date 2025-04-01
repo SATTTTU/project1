@@ -1,89 +1,65 @@
 import { useState } from "react";
-import { FiArrowLeft } from "react-icons/fi";
 import { BiCategory } from "react-icons/bi";
-import { DishCard } from "./dishCard";
+import { FiArrowLeft } from "react-icons/fi";
 import { useCategoryItems } from "../api/getCategory";
-import { useMenuItem } from "../api/getCategoryMenu";
+import { useCategoryMenuItems } from "../api/getCategoryMenu";
+import { DishCard } from "./dishCard";
 
-
-export const CookCategories = ({ cookId,menuId, onAddToCart }) => {
+export const CookCategories = ({ cookId, onAddToCart }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  // Fetch menu items using the custom hook
   const { data: menuItems, isLoading, error } = useCategoryItems(cookId);
-  const { data: Items } = useMenuItem(menuId);
-  console.log("items",Items)
 
+  const { data: categoryDishes, isLoading: isLoadingDishes } = useCategoryMenuItems(selectedCategory, { enabled: !!selectedCategory });
 
-  console.log("Fetched menu items:", menuItems);
+  if (isLoading) return <div className="text-center py-8">Loading categories...</div>;
+  if (error) return <p className="text-red-500 text-center py-8">Error fetching categories.</p>;
+  if (!menuItems || menuItems.length === 0) return <p className="text-center py-8">No categories found.</p>;
 
-  if (isLoading) return <p>Loading menu items...</p>;
-  if (error) return <p className="text-red-500">Error fetching menu items.</p>;
-  if (!menuItems || menuItems.length === 0) return <p>No menu items found.</p>;
-
-  // Group dishes by category
-  const categoriesMap = menuItems.reduce((acc, dish) => {
-    const category = dish.name || "Other";
-    if (!acc[category]) {
-      acc[category] = [];
-    }
-    acc[category].push(dish);
-    return acc;
-  }, {});
-
-  // Convert to array for rendering
-  const categories = Object.keys(categoriesMap).map((name) => ({
-    name,
-    dishes: categoriesMap[name],
-    count: categoriesMap[name].length,
-  }));
+  const imageBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
   return (
-    <div>
+    <div className="p-4">
       {selectedCategory ? (
         <div>
           <div className="flex items-center mb-6">
             <button
               onClick={() => setSelectedCategory(null)}
-              className="mr-3 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
+              className="mr-3 p-3 bg-[#426B1F] text-white rounded-full hover:bg-green-700 transition-colors"
             >
-              <FiArrowLeft />
+              <FiArrowLeft size={24} />
             </button>
-            <h3 className="text-xl font-semibold">{selectedCategory}</h3>
-            <span className="ml-2 text-sm text-gray-500">
-              ({categoriesMap[selectedCategory].length}{" "}
-              {categoriesMap[selectedCategory].length === 1 ? "item" : "items"})
-            </span>
+            <h3 className="text-2xl font-semibold text-gray-800">Back to Categories</h3>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {categoriesMap[selectedCategory].map((dish) => (
-              <DishCard key={dish.id} menu_id={dish.id} dish={dish} onAddToCart={onAddToCart} />
-            ))}
-          </div>
+          {isLoadingDishes ? (
+            <div className="flex justify-center py-8">
+              <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-indigo-500"></div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {categoryDishes?.map((dish) => (
+                <DishCard key={dish.id} dish={dish} menu_id={dish.id} onAddToCart={onAddToCart} />
+              ))}
+            </div>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {categories.map((category, index) => (
+          {menuItems.map((category) => (
             <div
-              key={index}
-              onClick={() => setSelectedCategory(category.name)}
-              className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+              key={category.id}
+              onClick={() => setSelectedCategory(category.id)}
+              className="bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-shadow transform hover:scale-105"
             >
-              <div className="relative h-40">
+              <div className="relative h-60">
                 <img
-                  src={category.dishes[0]?.img}
+                  src={`${imageBaseUrl}${category?.items[0]?.image_url}`}
                   alt={category.name}
-                  className="w-full h-full object-cover"
+                  className="object-cover w-full h-full transition-transform duration-300 ease-in-out transform hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                  <div className="text-center">
-                    <BiCategory className="mx-auto text-white text-3xl mb-2" />
-                    <h3 className="text-white font-bold text-lg">{category.name}</h3>
-                    <p className="text-white text-sm">
-                      {category.count} {category.count === 1 ? "dish" : "dishes"}
-                    </p>
-                  </div>
+                <div className="absolute inset-0 bg-green-700 bg-opacity-40 flex justify-center items-center text-white text-2xl font-semibold opacity-0 hover:opacity-100 transition-opacity duration-300">
+                  {category.name}
                 </div>
               </div>
             </div>

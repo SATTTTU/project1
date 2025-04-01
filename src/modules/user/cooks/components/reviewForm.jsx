@@ -37,10 +37,9 @@ export const ReviewForm = ({ cookId, setShowReviewForm, setCook, onReviewSubmit 
         comment: reviewComment,
       });
 
-      // Optimistically update UI
       setCook((prevCook) => ({
         ...prevCook,
-        reviews: [newReview, ...prevCook.reviews],
+        reviews: [newReview, ...(prevCook.reviews || [])],
         reviewCount: prevCook.reviewCount + 1,
       }));
 
@@ -53,7 +52,7 @@ export const ReviewForm = ({ cookId, setShowReviewForm, setCook, onReviewSubmit 
       });
 
       if (onReviewSubmit) {
-        onReviewSubmit(newReview); // ✅ Refresh reviews after submission
+        onReviewSubmit(newReview); 
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to submit review. Try again later.");
@@ -70,7 +69,6 @@ export const ReviewForm = ({ cookId, setShowReviewForm, setCook, onReviewSubmit 
       </div>
 
       <form onSubmit={handleReviewSubmit}>
-        {/* Star Rating */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">Rating</label>
           <div className="flex items-center">
@@ -90,7 +88,6 @@ export const ReviewForm = ({ cookId, setShowReviewForm, setCook, onReviewSubmit 
           {reviewErrors.ratings && <p className="mt-1 text-sm text-red-600">{reviewErrors.ratings}</p>}
         </div>
 
-        {/* Review Comment */}
         <div className="mb-4">
           <label htmlFor="reviewComment" className="block text-sm font-medium text-gray-700 mb-2">
             Your Review
@@ -101,12 +98,11 @@ export const ReviewForm = ({ cookId, setShowReviewForm, setCook, onReviewSubmit 
             value={reviewComment}
             onChange={(e) => setReviewComment(e.target.value)}
             placeholder="Share your experience..."
-            className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-green-200 focus:border-transparent"
           ></textarea>
           {reviewErrors.comment && <p className="mt-1 text-sm text-red-600">{reviewErrors.comment}</p>}
         </div>
 
-        {/* Submit Button */}
         <div className="flex justify-end">
           <button
             type="button"
@@ -117,7 +113,7 @@ export const ReviewForm = ({ cookId, setShowReviewForm, setCook, onReviewSubmit 
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+            className="px-4 py-2 bg-[#426B1F] text-white rounded-md hover:bg-green-700"
             disabled={isLoading}
           >
             {isLoading ? "Submitting..." : "Submit Review"}

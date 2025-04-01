@@ -2,7 +2,7 @@
 import { useState } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Header } from "./header"
-import MainImage from "../../../../assets/UserImages/bac.jpg"
+import MainImage from "../../../../assets/bgg.jpg"
 import { Swiper, SwiperSlide } from "swiper/react"
 import "swiper/css"
 import "swiper/css/pagination"
@@ -38,7 +38,7 @@ export const HeroSlider = () => {
   ]
 
   return (
-    <header className="relative w-full h-screen overflow-hidden">
+    <header className="relative w-full h-screen overflow-x-hidden">
       <div className="absolute top-0 left-0 right-0 z-50">
         <div className="container mx-auto px-2">
           <Header />
@@ -47,14 +47,14 @@ export const HeroSlider = () => {
 
       <div className="relative w-full h-full">
         <button
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white rounded-full p-2 transition-colors"
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover:bg-black/50 text-white rounded-full p-2 transition-colors"
           onClick={() => swiperInstance?.slidePrev()}
           aria-label="Previous slide"
         >
           <ChevronLeft className="h-6 w-6" />
         </button>
         <button
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white rounded-full p-2 transition-colors"
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover:bg-black/50 text-white rounded-full p-2 transition-colors"
           onClick={() => swiperInstance?.slideNext()}
           aria-label="Next slide"
         >
@@ -83,17 +83,17 @@ export const HeroSlider = () => {
         >
           {heroSlides.map((slide) => (
             <SwiperSlide key={slide.id} className="relative">
-              <div className="absolute inset-0 bg-black/50 z-0"></div>
+              <div className="absolute inset-0 z-0 w-full max-w-full overflow-hidden"></div>
               <img
                 src={slide.image || "/placeholder.svg"}
                 alt={`${slide.title}`}
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0  w-full h-full object-cover "
               />
               <div className="absolute inset-0 z-10 flex items-center justify-center">
                 <div className="container mx-auto px-4">
                   <div className="max-w-2xl mx-auto text-center">
-                    <h1 className="text-4xl md:text-4xl lg:text-5xl font-bold text-white mb-4">{slide.title}</h1>
-                    <p className="text-white text-lg md:text-2xl mb-6">{slide.subtitle}</p>
+                    <h1 className="text-4xl md:text-4xl lg:text-5xl font-bold text-[#426B1F] mb-4">{slide.title}</h1>
+                    <p className=" text-lg md:text-xl mb-6 text-[#426B1F]">{slide.subtitle}</p>
                   
                   </div>
                 </div>

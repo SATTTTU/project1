@@ -32,7 +32,7 @@ export const useLoginFormik = () => {
 
         toast.success("Login successfully");
         formik.resetForm();
-        navigate("/user/dashboard")
+        navigate("/dashboard");
       } catch (err) {
         console.error("Login Error:", err); // Debugging
         const errorMessage =
