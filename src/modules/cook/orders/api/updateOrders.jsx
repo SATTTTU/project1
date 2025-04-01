@@ -1,11 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api-client";
 
-// API call to update the order status
 const updateOrderStatus = async ({ order_id, status }) => {
   try {
     console.log("Updating order:", order_id, "Status:", status);
-    const response = await api.put(`/api/cooks/orders/${order_id}/update`, { status });
+    const response = await api.put(`/api/cooks/orders/${order_id}/update`, { newStatus:status });
     console.log("OrderStatus", response.data);
     return response.data;
   } catch (error) {

@@ -79,7 +79,7 @@ export const LoginForm = () => {
       <button
         type="submit"
 		disabled={isLoggingIn || !formik.isValid || formik.isSubmitting}
-        className="w-full bg-[#426B1F] text-white py-2 rounded-md hover:bg-[#436b1fe5] transition mt-4"
+        className="w-full bg-[#426B1F] text-white py-2 text-lg rounded-md hover:bg-[#436b1fe5] transition mt-4"
       >
         Sign in
       </button>
@@ -87,7 +87,7 @@ export const LoginForm = () => {
       <p className="text-md mt-3 text-center text-black mb-6">
         Don't have an account?{" "}
         <button
-          onClick={() => navigate("/user/register")}
+          onClick={() => navigate("/register")}
           className="text-green-700 font-medium hover:underline"
         >
           Register now

@@ -7,7 +7,7 @@ export const cookRoutes = [
   {
     path: paths.cook.root.path,
     element: <Outlet />,
-    ErrorBoundary: AppRootErrorBoundary,
+    // ErrorBoundary: AppRootErrorBoundary,
     children: [
       {
         element: <AuthRoot />,
@@ -103,7 +103,7 @@ export const cookRoutes = [
                   const { OrderPage } = await import("../cook/order/order");
                   return { Component: OrderPage };
                 },
-                ErrorBoundary: AppRootErrorBoundary,
+                // ErrorBoundary: AppRootErrorBoundary,
               },
               {
                 path: paths.cook.cookProfile.path,

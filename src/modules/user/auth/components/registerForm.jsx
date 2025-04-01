@@ -77,7 +77,7 @@ export const RegisterForm = () => {
       <button
         type="submit"
         disabled={isRegistering || !formik.isValid || formik.isSubmitting}
-        className="bg-[#426B1F] text-white px-4 py-2 rounded-md mt-6 w-full hover:bg-[#5c9429] transition  disabled:cursor-not-allowed"
+        className="bg-[#426B1F] text-white px-4 py-2 rounded-md mt-6 w-full text-lg hover:bg-[#5c9429] transition  disabled:cursor-not-allowed"
       >
         {isRegistering ? "Signing Up..." : "Sign Up"}
       </button>
@@ -85,7 +85,7 @@ export const RegisterForm = () => {
       <p className="text-md mt-3 text-center text-black mb-6">
         Already have an account?{" "}
         <Link
-          to="/user/login"
+          to="/login"
           className="text-green-700 font-medium hover:underline"
         >
           Login Now

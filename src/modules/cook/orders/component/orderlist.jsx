@@ -1,8 +1,8 @@
-// src/components/Orders/OrdersList.jsx
 import React from "react";
 import { OrderCard } from "./ordercard";
 
 export const OrdersList = ({ filteredOrders, updateOrderStatus }) => {
+  console.log("Filter status", filteredOrders)
   return (
     <div className="space-y-4">
       {filteredOrders.length === 0 ? (
@@ -11,11 +11,7 @@ export const OrdersList = ({ filteredOrders, updateOrderStatus }) => {
         </div>
       ) : (
         filteredOrders.map((order) => (
-          <OrderCard
-            key={order.id}
-            order={order}
-            updateOrderStatus={updateOrderStatus}
-          />
+          <OrderCard key={order.id} order={order} updateOrderStatus={updateOrderStatus} />
         ))
       )}
     </div>

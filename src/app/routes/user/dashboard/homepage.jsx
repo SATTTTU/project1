@@ -4,12 +4,7 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../../../../store/cart/cart";
 import { Header } from "@/modules/user/dashboard/components/header";
 import { Footer } from "@/modules/user/dashboard/components/footer";
-import { SearchBar } from "@/modules/user/dashboard/components/searchBar";
-import {
-  categories,
-  cooks,
-  popularItems,
-} from "@/modules/user/dashboard/components/data";
+
 import { PopularCooks } from "@/modules/user/dashboard/components/popularCooks";
 import { PromotedRestaurants } from "@/modules/user/dashboard/components/filterBadges";
 import UserLocation from "@/modules/user/dashboard/components/setLocation";
@@ -17,6 +12,7 @@ import { PopularItemsPage } from "@/modules/user/dashboard/components/popularIte
 import { DashSlider } from "@/modules/user/dashboard/components/dashboardSlider";
 import LocationMap from "@/components/ui/locationMap/locationmap";
 import { usegetLocation } from "@/modules/user/dashboard/api/get-location";
+// import NotificationComponent from "@/modules/user/dashboard/components/notifications";
 
 export const Homepage = () => {
   const dispatch = useDispatch();
@@ -53,26 +49,25 @@ export const Homepage = () => {
     <div className="min-h-screen w-screen bg-gray-50">
       <Header
         navigate={navigate}
-        popularItems={popularItems}
-        categories={categories}
-        cooks={cooks}
+        // popularItems={popularItems}
+        // categories={categories}
+        // cooks={cooks}
         handleAddToCart={handleAddToCart}
       />
-
+{/* <NotificationComponent/> */}
       <main className="container mx-auto ">
         <section className="mb-8 ">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
             <DashSlider />
           </div>
 
-          <PopularCooks cooks={cooks} />
+          <PopularCooks />
 
           <div className="bg-white shadow-md overflow-hidden p-6 mb-8">
             <h2 className="text-3xl font-semibold text-center mb-6 text-gray-800">
               Popular Items
             </h2>
             <PopularItemsPage
-              popularItems={popularItems}
               handleAddToCart={handleAddToCart}
               addedToCart={addedToCart}
             />
