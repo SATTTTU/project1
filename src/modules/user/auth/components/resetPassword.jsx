@@ -18,17 +18,19 @@ export const ResetPasswordForm = () => {
 			<p className="text-gray-400">
 				Choose a strong password that you’ll use across all your services.
 			</p>
-			<div>
-        <label className="block text-sm font-medium">Email</label>
-        <input
-          type="email"
-          name="email"
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          className="w-full px-4 py-2 border rounded-md"
-        />
-        {formik.errors.email && <p className="text-red-500">{formik.errors.email}</p>}
-      </div>
+			{/* <div>
+				<label className="block text-sm font-medium">Email</label>
+				<input
+					type="email"
+					name="email"
+					value={formik.values.email}
+					onChange={formik.handleChange}
+					className="w-full px-4 py-2 border rounded-md"
+				/>
+				{formik.errors.email && (
+					<p className="text-red-500">{formik.errors.email}</p>
+				)}
+			</div> */}
 			<div className="space-y-2 relative">
 				<Label htmlFor="password">New Password</Label>
 				<Input
@@ -39,7 +41,11 @@ export const ResetPasswordForm = () => {
 					value={formik.values.password}
 					onChange={formik.handleChange}
 					onBlur={formik.handleBlur}
-					className={`w-full ${formik.touched.password && formik.errors.password ? "border-red-500" : ""}`}
+					className={`w-full ${
+						formik.touched.password && formik.errors.password
+							? "border-red-500"
+							: ""
+					}`}
 				/>
 				<button
 					type="button"
@@ -63,18 +69,30 @@ export const ResetPasswordForm = () => {
 					value={formik.values.password_confirmation}
 					onChange={formik.handleChange}
 					onBlur={formik.handleBlur}
-					className={`w-full ${formik.touched.password_confirmation && formik.errors.password_confirmation ? "border-red-500" : ""}`}
+					className={`w-full ${
+						formik.touched.password_confirmation &&
+						formik.errors.password_confirmation
+							? "border-red-500"
+							: ""
+					}`}
 				/>
 				<button
 					type="button"
 					onClick={() => setShowConfirmPassword((prev) => !prev)}
 					className="absolute right-3 top-12 transform -translate-y-1/2 text-gray-500"
 				>
-					{showConfirmPassword ? <IoEyeOffSharp size={20} /> : <FaEye size={20} />}
+					{showConfirmPassword ? (
+						<IoEyeOffSharp size={20} />
+					) : (
+						<FaEye size={20} />
+					)}
 				</button>
-				{formik.touched.password_confirmation && formik.errors.password_confirmation && (
-					<div className="text-red-500 text-sm">{formik.errors.password_confirmation}</div>
-				)}
+				{formik.touched.password_confirmation &&
+					formik.errors.password_confirmation && (
+						<div className="text-red-500 text-sm">
+							{formik.errors.password_confirmation}
+						</div>
+					)}
 			</div>
 
 			<button

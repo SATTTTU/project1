@@ -128,10 +128,10 @@ function saveUserData(userType, token) {
     console.log(`Saving ${userType} data to localStorage`);
 
     // Clear all existing tokens first
-    safeRemoveItem(STORAGE_KEYS.ADMIN_TOKEN);
-    safeRemoveItem(STORAGE_KEYS.COOK_TOKEN);
-    safeRemoveItem(STORAGE_KEYS.USER_TOKEN);
-    safeRemoveItem(STORAGE_KEYS.AUTH_TOKEN);
+    // safeRemoveItem(STORAGE_KEYS.ADMIN_TOKEN);
+    // safeRemoveItem(STORAGE_KEYS.COOK_TOKEN);
+    // safeRemoveItem(STORAGE_KEYS.USER_TOKEN);
+    // safeRemoveItem(STORAGE_KEYS.AUTH_TOKEN);
 
     // Set the user type and active user
     if (

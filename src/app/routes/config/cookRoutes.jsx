@@ -7,7 +7,7 @@ export const cookRoutes = [
   {
     path: paths.cook.root.path,
     element: <Outlet />,
-    // ErrorBoundary: AppRootErrorBoundary,
+    ErrorBoundary: AppRootErrorBoundary,
     children: [
       {
         element: <AuthRoot />,

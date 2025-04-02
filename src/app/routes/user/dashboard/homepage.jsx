@@ -54,7 +54,6 @@ export const Homepage = () => {
         // cooks={cooks}
         handleAddToCart={handleAddToCart}
       />
-{/* <NotificationComponent/> */}
       <main className="container mx-auto ">
         <section className="mb-8 ">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
