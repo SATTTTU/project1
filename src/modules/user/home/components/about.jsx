@@ -1,6 +1,6 @@
 import React from "react";
 import AboutImage from "../../../../assets/About.jpg";
-import { motion } from "framer-motion"; // For smooth animations
+import { motion } from "framer-motion"; 
 
 export const About = () => {
 	return (
@@ -18,20 +18,19 @@ export const About = () => {
 						<img
 							src={AboutImage}
 							alt="Chef preparing food"
-							className="w-full h-[450px] object-cover rounded-lg shadow-lg"
+							className="w-full h-[450px] md:w-[600px] md:h-[400px] object-cover lg:rounded-xl shadow-lg"
 						/>
 					</motion.div>
 
-					{/* Text Section with Animation */}
 					<motion.div
 						initial={{ opacity: 0, x: 50 }}
 						whileInView={{ opacity: 1, x: 0 }}
 						transition={{ duration: 0.5 }}
 					>
-						<h2 className="text-3xl  font-bold text-[#426B1F] mt-44 mb-6 lg:mt-0">
+						<h2 className="text-3xl  font-bold text-[#426B1F] mt-44 md:mt-22 mb-6 lg:mt-0">
 							About Us
 						</h2>
-						<p className="text-gray-700 text-lg md:text-xl leading-relaxed mb-4">
+						<p className="text-gray-700 text-lg md:text-lg leading-relaxed mb-4">
 							At <span className="font-semibold text-[#426B1F]">KhajaBox</span>, we bring restaurant-quality meals to your doorstep with 
 							the convenience of a cloud kitchen. Whether you’re craving local flavors, 
 							international cuisines, or healthy meal options, we have something for everyone.

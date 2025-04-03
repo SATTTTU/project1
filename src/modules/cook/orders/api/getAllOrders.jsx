@@ -9,8 +9,8 @@ const getAllOrders = async () => {
 
 export const useAllOrders = (queryConfig = {}) => {
   return useQuery({
-    queryKey: ["currentOrders"], 
-    queryFn: getAllOrders,
-    ...queryConfig, 
-  });
+		queryKey: ["orders"],
+		queryFn: getAllOrders,
+		...queryConfig,
+	});
 };

@@ -3,16 +3,12 @@ import { useEffect, useState } from "react"
 import { Link,useNavigate, useSearchParams } from "react-router-dom"
 import { useVerifyPayment } from "../api/verify-payment";
 import { Modal } from "@/components/ui/modal/Modal";
-// import { useCurrentOrders } from "../api/currentOrders";
 
 export const OrderSuccess=()=> {
     const navigate = useNavigate();
       const [isModalOpen, setIsModalOpen] = useState(false);
     
-// const {data:orders}= useCurrentOrders();
-// console.log("Current ***", orders
 
-// )
   const { mutate: verifyPayment, isLoading: isVerifying } = useVerifyPayment({});
   const [searchParams] = useSearchParams();
 
@@ -48,24 +44,7 @@ export const OrderSuccess=()=> {
       }
     }, []);
 
-  // useEffect(() => {
-  //   const transactionData = localStorage.getItem("verified_transaction")
-  //   if (transactionData) {
-  //     try {
-  //       const parsedData = JSON.parse(transactionData)
-  //       setOrderDetails({
-  //         orderId: parsedData.transaction_id || parsedData.pidx,
-  //         amount: parsedData.amount ? (parsedData.amount / 100).toFixed(2) : null,
-  //         date: new Date().toLocaleDateString(),
-  //       })
 
-  //       // Clear the data after using it
-  //       localStorage.removeItem("verified_transaction")
-  //     } catch (error) {
-  //       console.error("Error parsing transaction data:", error)
-  //     }
-  //   }
-  // }, [])
 
   return (
     <>
@@ -88,22 +67,7 @@ export const OrderSuccess=()=> {
           Thank you for your purchase. Your order has been received and is being processed.
         </p>
 
-        {/* {orderDetails.orderId && (
-          <div className="bg-gray-50 p-4 rounded-md my-4 text-left">
-            <p className="font-medium mb-2">Order Details:</p>
-            <p className="text-sm text-gray-600">
-              Order ID: <span className="font-medium">{orderDetails.orderId}</span>
-            </p>
-            {orderDetails.amount && (
-              <p className="text-sm text-gray-600">
-                Amount: <span className="font-medium">Rs. {orderDetails.amount}</span>
-              </p>
-            )}
-            <p className="text-sm text-gray-600">
-              Date: <span className="font-medium">{orderDetails.date}</span>
-            </p>
-          </div>
-        )} */}
+     
 
 
         <div className="flex flex-col space-y-3">

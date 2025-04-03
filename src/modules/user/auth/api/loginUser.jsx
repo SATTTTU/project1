@@ -6,35 +6,39 @@ const loginUser = async (userData) => {
     clearAuthData();
 
     const response = await api.post("/api/login", userData);
-    console.log("user login response:", response.data);
+    console.log("User login response:", response.data);
 
-    const token = response.token || response.data?.token;
+    const token = response.data?.token;
+    console.log("token****", token);
+    const userId = response.data?.user?.id;
 
-    if (!token) {
-      throw new Error("No token received from server");
+    if (!token || !userId) {
+      throw new Error("No token or user ID received from server");
     }
 
-    // Save user data with token
     saveUserData("user", token);
+    localStorage.setItem("user_id", userId); // Store userId separately
 
-    // Verify token was saved
     const savedToken = localStorage.getItem("user_token");
-    if (!savedToken || savedToken === "undefined") {
-      throw new Error("Failed to save token to localStorage");
+    const savedUserId = localStorage.getItem("user_id");
+
+    if (!savedToken || !savedUserId || savedToken === "undefined") {
+      throw new Error("Failed to save token or user ID to localStorage");
     }
 
-    console.log("✅ Usertoken stored successfully in localStorage");
+    console.log("✅ User token and ID stored successfully in localStorage");
 
-    // Add a delay to confirm token is not cleared immediately
+    // Debugging: Delay check to confirm persistence
     setTimeout(() => {
-      const confirmedToken = localStorage.getItem("user_token");
-      console.log("Token after 1 second:", confirmedToken);
+      console.log("Token after 1 second:", localStorage.getItem("user_token"));
+      console.log("User ID after 1 second:", localStorage.getItem("user_id"));
     }, 1000);
 
     return {
       ...response,
       token,
       user: {
+        id: userId,
         type: "user",
       },
     };

@@ -3,7 +3,6 @@ import { AppRootErrorBoundary, AuthRoot } from "../app/root";
 import { Outlet } from "react-router-dom";
 import ProfileLayout from "../user/userprofile/profile";
 import { ProfileContent } from "@/modules/user/userprofile/components/profileContent";
-import WishlistContent from "@/modules/user/userprofile/components/wishlistContent";
 import SettingsContent from "@/modules/user/userprofile/components/settingContent";
 import OrdersContent from "@/modules/user/userprofile/components/ordersContent";
 import ProtectedRoute from "./protectedRoute";
@@ -11,7 +10,7 @@ export const userRoutes = [
 	{
 		path: paths.user.root.path,
 		element: <Outlet />,
-		// ErrorBoundary: AppRootErrorBoundary,
+		ErrorBoundary: AppRootErrorBoundary,
 		children: [
 			{
 				element: <AuthRoot />,
@@ -194,9 +193,8 @@ export const userRoutes = [
 								children: [
 									{ path: "", element: <ProfileContent /> },
 									{ path: "order", element: <OrdersContent /> },
-									{ path: "wishlist", element: <WishlistContent /> },
 									{ path: "settings", element: <SettingsContent /> },
-								],
+								]
 							},
 							{
 								path: paths.user.payment.path,

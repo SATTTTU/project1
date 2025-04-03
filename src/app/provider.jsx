@@ -5,6 +5,9 @@ import { Provider } from "react-redux";
 import { store } from "@/store/cart/index";
 import { ToastContainer } from "react-toastify";
 import { AuthProvider } from "@/hooks/context/useAuth";
+import { NotificationProvider } from "./notification-provider";
+// import NotificationProvider from "./notification-provider";
+// import { CartProvider } from "@/hooks/context/cart-context";
 
 export const AppProvider = ({ children }) => {
 	const [queryClient] = useState(
@@ -16,10 +19,14 @@ export const AppProvider = ({ children }) => {
 
 	return (
 		<AuthProvider>
-		<QueryClientProvider client={queryClient}>
-			<Provider store={store}>{children}</Provider>
-			<ToastContainer/>
-		</QueryClientProvider>
+			<QueryClientProvider client={queryClient}>
+				{/* <CartProvider> */}
+				<NotificationProvider>
+					<Provider store={store}>{children}</Provider>
+				</NotificationProvider>
+				<ToastContainer />
+				{/* </CartProvider> */}
+			</QueryClientProvider>
 		</AuthProvider>
 	);
 };

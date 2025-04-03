@@ -26,7 +26,7 @@ const LogoutForm = () => {
         <form onSubmit={formik.handleSubmit}>
             <button
                 type="submit"
-                className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-200 rounded-sm"
+                className="flex items-center px-4 py-2 text-lg text-red-600 hover:bg-gray-200 rounded-sm"
                 disabled={isLoading}
             >
                 {isLoading ? "Logging out..." : "Sign out"}

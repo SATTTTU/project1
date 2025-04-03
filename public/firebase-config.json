@@ -1,11 +1,11 @@
 {"firebaseConfig" : {
-   "apiKey":"AIzaSyCC4KqLSeysNjV5HtK0XDeHHNni3mvWSKc",
-   "authDomain": "web-push-notification-e8ee8.firebaseapp.com",
-   "projectId": "web-push-notification-e8ee8",
-    "storageBucket":"web-push-notification-e8ee8.firebasestorage.app",
-    "messagingSenderId": "868240512125",
-   "appId": "1:868240512125:web:99acd3c4bb00e5f2b14d14",
-   "measurementId":"G-BGY4RJ9929"
+   "apiKey":"AIzaSyDR_FuEnmCC_YQ4tKkcqKw1ZoUZu_oX6YM",
+   "authDomain": "push-notification-5c643.firebaseapp.com",
+   "projectId": "push-notification-5c643",
+    "storageBucket":"push-notification-5c643.firebasestorage.app",
+    "messagingSenderId": "681608989318",
+   "appId": "1:681608989318:web:576fd6efe54322d0931f07",
+   "measurementId":"G-Q8CJ1DVC4M"
 
 }
 }

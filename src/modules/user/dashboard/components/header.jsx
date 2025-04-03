@@ -61,7 +61,7 @@ export const Header = ({ navigate, popularItems, categories, cooks }) => {
         <div className="flex items-center justify-between ">
           {/* Logo and Navigation */}
           <Link to="/dashboard" className="flex items-center">
-            <img src={Logo || "/placeholder.svg"} alt="Khajabox" className="h-10 w-10 mr-2" />
+            <img src={Logo} alt="Khajabox" className="h-10 w-10 mr-2" />
             <span className="text-3xl font-bold text-[#426B1F]">Khajabox</span>
           </Link>
 

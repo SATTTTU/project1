@@ -28,52 +28,66 @@ const ProtectedRoute = ({ allowedRoles = [] }) => {
   }
 
   if (isAuthenticated) {
-    const hasRequiredRole =
-      allowedRoles.length === 0 || allowedRoles.includes(user?.type);
-    
-    if (!hasRequiredRole) {
-      // Redirect based on user type and current path
-      if (user?.type === "cook" && location.pathname.startsWith("/admin")) {
-        return <Navigate to="/cook/homepage" replace state={{ from: location }} />;
-      }
-      if (user?.type === "cook" && location.pathname.startsWith("/user")) {
-        return <Navigate to="/cook/homepage" replace state={{ from: location }} />;
-      }
-      if (user?.type === "admin" && location.pathname.startsWith("/cook")) {
-        return <Navigate to="/admin/dashboard" replace state={{ from: location }} />;
-      }
-      if (user?.type === "admin" && location.pathname.startsWith("/user")) {
-        return <Navigate to="/admin/dashboard" replace state={{ from: location }} />;
-      }
-      if (user?.type === "user" && location.pathname.startsWith("/admin")) {
-        return <Navigate to="/dashboard" replace state={{ from: location }} />;
-      }
-      if (user?.type === "user" && location.pathname.startsWith("/cook")) {
-        return <Navigate to="/dashboard" replace state={{ from: location }} />;
-      }
-      
-      // Default redirects based on user type
-      const defaultRedirects = {
-        admin: "/admin/dashboard",
-        cook: "/cook/homepage",
-        user: "/dashboard"
-      };
-      
-      return <Navigate to={defaultRedirects[user?.type] || "/"} replace state={{ from: location }} />;
-    }
-    return <Outlet />;
-  }
+		const hasRequiredRole =
+			allowedRoles.length === 0 || allowedRoles.includes(user?.type);
 
-  // Fixed logic for unauthenticated users
-  let loginPath = "/login"; // Default fallback
-  
-  if (location.pathname.includes("/admin")) {
-    loginPath = "/admin/login";
-  } else if (location.pathname.includes("/cook")) {
-    loginPath = "/cook/login";
-  } else if (location.pathname.includes("/")) {
-    loginPath = "/login";
-  }
+		if (!hasRequiredRole) {
+			// Redirect based on user type and current path
+			if (user?.type === "cook" && location.pathname.startsWith("/admin")) {
+				return (
+					<Navigate to="/cook/homepage" replace state={{ from: location }} />
+				);
+			}
+			if (user?.type === "cook" && location.pathname.startsWith("/user")) {
+				return (
+					<Navigate to="/cook/homepage" replace state={{ from: location }} />
+				);
+			}
+			if (user?.type === "admin" && location.pathname.startsWith("/cook")) {
+				return (
+					<Navigate to="/admin/dashboard" replace state={{ from: location }} />
+				);
+			}
+			if (user?.type === "admin" && location.pathname.startsWith("/user")) {
+				return (
+					<Navigate to="/admin/dashboard" replace state={{ from: location }} />
+				);
+			}
+			if (user?.type === "user" && location.pathname.startsWith("/admin")) {
+				return <Navigate to="/dashboard" replace state={{ from: location }} />;
+			}
+			if (user?.type === "user" && location.pathname.startsWith("/cook")) {
+				return <Navigate to="/dashboard" replace state={{ from: location }} />;
+			}
+
+			// Default redirects based on user type
+			const defaultRedirects = {
+				admin: "/admin/dashboard",
+				cook: "/cook/homepage",
+				user: "/dashboard",
+			};
+
+			return (
+				<Navigate
+					to={defaultRedirects[user?.type] || "/"}
+					replace
+					state={{ from: location }}
+				/>
+			);
+		}
+		return <Outlet />;
+	}
+
+	// Fixed logic for unauthenticated users
+	let loginPath = "/login"; // Default fallback
+
+	if (location.pathname.includes("/admin")) {
+		loginPath = "/admin/login";
+	} else if (location.pathname.includes("/cook")) {
+		loginPath = "/cook/login";
+	} else if (location.pathname.includes("/user")) {
+		loginPath = "/login";
+	}
   
   return <Navigate to={loginPath} replace state={{ from: location }} />;
 };

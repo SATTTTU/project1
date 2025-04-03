@@ -1,13 +1,16 @@
 import { AppRouter } from "./router";
+// import { useEffect } from "react";
 import { AppProvider } from "./provider";
-import { CartProvider } from "@/hooks/context/cart-context";
+// import { generateToken } from "@/config/firebase";
 
 export const App = () => {
+	// useEffect(() => {
+	// 	generateToken();
+	// }, []);
+
 	return (
 		<AppProvider>
-			<CartProvider>
-				<AppRouter />
-			</CartProvider>
+			<AppRouter />
 		</AppProvider>
 	);
 };

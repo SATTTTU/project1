@@ -5,7 +5,7 @@ export const useChangeAuth = () => {
 
   const logout = () => {
     localStorage.removeItem("user_token"); 
-    localStorage.removeItem("authToken"); 
+    // localStorage.removeItem("authToken"); 
     navigate("/login"); 
   };
 
