@@ -46,7 +46,7 @@ export const Homepage = () => {
   };
 
   return (
-    <div className="min-h-screen w-screen bg-gray-50">
+    <div className="min-h-screen w-screen bg-gray-50 w-screen overflow-x-hidden max-w-full">
       <Header
         navigate={navigate}
         // popularItems={popularItems}

@@ -47,7 +47,7 @@ export const Home = () => {
           className="absolute inset-0 w-full h-full object-cover z-0"
         />
         <div className="relative z-10 text-center text-[#426B1F] space-x-8">
-<p className="text-2xl mb-10 text-center flex justify-center items-center mx-auto">Login as </p>
+<p className="text-2xl mb-10 text-center flex justify-center items-center mx-auto">Login/Register as </p>
           <Link to="/cook/login">
             <button className="bg-[#426B1F] cursor-pointer text-white font-medium text-xl py-4 px-8 rounded-md transition-colors">
               Cook

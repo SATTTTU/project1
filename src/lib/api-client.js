@@ -87,7 +87,8 @@ function getToken() {
       console.log("Retrieved admin token from localStorage");
       return token;
     } else if (userType === "cook") {
-      const token = localStorage.getItem(STORAGE_KEYS.COOK_TOKEN);
+      const token = localStorage.getItem(STORAGE_KEYS.COOK_TOKEN) ||
+      localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
 
       if (!token || token === "undefined") {
         console.warn("⚠️ Cook token is undefined or invalid");
@@ -97,7 +98,8 @@ function getToken() {
       console.log("Retrieved cook token from localStorage");
       return token;
     } else if (userType === "user") {
-      const token = localStorage.getItem(STORAGE_KEYS.USER_TOKEN);
+      const token = localStorage.getItem(STORAGE_KEYS.USER_TOKEN) ||
+      localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
 
       if (!token || token === "undefined") {
         console.warn("⚠️ User token is undefined or invalid"); // Fixed: Changed from "user" to "User"
@@ -127,36 +129,17 @@ function saveUserData(userType, token) {
 
     console.log(`Saving ${userType} data to localStorage`);
 
-    // Clear all existing tokens first
-    // safeRemoveItem(STORAGE_KEYS.ADMIN_TOKEN);
-    // safeRemoveItem(STORAGE_KEYS.COOK_TOKEN);
-    // safeRemoveItem(STORAGE_KEYS.USER_TOKEN);
-    // safeRemoveItem(STORAGE_KEYS.AUTH_TOKEN);
-
     // Set the user type and active user
-    if (
-      !safeSetItem(STORAGE_KEYS.USER_TYPE, userType) ||
-      !safeSetItem(STORAGE_KEYS.ACTIVE_USER, userType)
-    ) {
-      throw new Error("Failed to save user type");
-    }
+    safeSetItem(STORAGE_KEYS.USER_TYPE, userType);
+    safeSetItem(STORAGE_KEYS.ACTIVE_USER, userType);
 
-    // Set a common AUTH_TOKEN for all user types for consistency
-    safeSetItem(STORAGE_KEYS.AUTH_TOKEN, token);
-
-    // Set the specific token based on user type
+    // Store the token for the specific user type
     if (userType === "admin") {
-      if (!safeSetItem(STORAGE_KEYS.ADMIN_TOKEN, token)) {
-        throw new Error("Failed to save admin token");
-      }
+      safeSetItem(STORAGE_KEYS.ADMIN_TOKEN, token);
     } else if (userType === "cook") {
-      if (!safeSetItem(STORAGE_KEYS.COOK_TOKEN, token)) {
-        throw new Error("Failed to save cook token");
-      }
+      safeSetItem(STORAGE_KEYS.COOK_TOKEN, token);
     } else if (userType === "user") {
-      if (!safeSetItem(STORAGE_KEYS.USER_TOKEN, token)) {
-        throw new Error("Failed to save user token"); 
-      }
+      safeSetItem(STORAGE_KEYS.USER_TOKEN, token);
     } else {
       throw new Error(`Invalid user type: ${userType}`);
     }
@@ -165,11 +148,10 @@ function saveUserData(userType, token) {
     return true;
   } catch (error) {
     console.error("Error saving user data:", error);
-    // Clear any partial data on error
-    clearAuthData();
     throw error;
   }
 }
+
 
 function authRequestInterceptor(config) {
   try {
@@ -227,12 +209,12 @@ api.interceptors.response.use(
 
 function clearAuthData() {
   try {
-    safeRemoveItem(STORAGE_KEYS.USER_TYPE);
-    safeRemoveItem(STORAGE_KEYS.ADMIN_TOKEN);
-    safeRemoveItem(STORAGE_KEYS.COOK_TOKEN);
-    safeRemoveItem(STORAGE_KEYS.USER_TOKEN);
-    safeRemoveItem(STORAGE_KEYS.ACTIVE_USER);
-    safeRemoveItem(STORAGE_KEYS.AUTH_TOKEN);
+    // safeRemoveItem(STORAGE_KEYS.USER_TYPE);
+    // safeRemoveItem(STORAGE_KEYS.ADMIN_TOKEN);
+    // safeRemoveItem(STORAGE_KEYS.COOK_TOKEN);
+    // safeRemoveItem(STORAGE_KEYS.USER_TOKEN);
+    // safeRemoveItem(STORAGE_KEYS.ACTIVE_USER);
+    // safeRemoveItem(STORAGE_KEYS.AUTH_TOKEN);
 
     console.log("🔒 All auth data cleared from localStorage");
   } catch (error) {

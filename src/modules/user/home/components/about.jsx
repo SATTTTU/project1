@@ -18,7 +18,7 @@ export const About = () => {
 						<img
 							src={AboutImage}
 							alt="Chef preparing food"
-							className="w-full h-[450px] md:w-[500px] md:h-[450px] object-cover lg:rounded-xl shadow-lg"
+							className="w-full h-[450px] md:w-[600px] md:h-[400px] object-cover lg:rounded-xl shadow-lg"
 						/>
 					</motion.div>
 

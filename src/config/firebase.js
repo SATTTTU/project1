@@ -73,13 +73,13 @@ export const requestForToken = async () => {
   }
 };
 
-
 onMessage(messaging, (payload) => {
-  const { notification } = payload;
-  if (notification) {
-    new Notification(notification.title || "Notification", {
-      body: notification.body,
-      icon: notification.icon || "/default-icon.png",
-    });
-  }
+	console.log("payload**", payload);
+	const { notification } = payload;
+	if (notification) {
+		new Notification(notification.title || "Notification", {
+			body: notification.body,
+			icon: notification.icon || "/default-icon.png",
+		});
+	}
 });
