@@ -1,17 +1,17 @@
 import { useState } from "react";
-import { Link} from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { InputField } from "@/components/ui/inputfield/InputField";
 import { useUserRegisterFormik } from "../formik/useRegister";
 
 export const RegisterForm = () => {
-    // const navigate= useNavigate();
+    const navigate= useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const { formik, isRegistering } = useUserRegisterFormik({
     mutationConfig: {
       onSuccess: (data) => {
         console.log("Registration successful:", data);
-        // navigate("/user/login"); 
+        navigate("/login"); 
       },
       onError: (error) => {
         console.error("Registration failed:", error);
