@@ -1,6 +1,6 @@
 // LoginPage.jsx - Main container component
 import React from "react";
-import authimage from "../../../../assets/background1.jpg";
+import authimage from "../../../../assets/login.jpg";
 import { LoginForm } from "@/modules/cook/auth/components/loginpage";
 import AuthSidebar from "@/components/ui/cookui/cooksidebar/cooksidebar";
 
@@ -20,8 +20,8 @@ export const Login = () => {
         image={authimage}
         buttonText="Sign Up Now"
         buttonLink="/cook/preregister"
-        title="Welcome Back to Chef Connect"
-        subtitle="Login to access your dashboard and start managing your culinary services."
+        title="Welcome to Khajabox, Chef!"
+subtitle="Your culinary journey starts here. Log in to manage your kitchen, connect with food lovers, and bring your signature dishes to life."
       />
     </div>
   );

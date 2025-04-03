@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Sidebar } from "../sideBar/sidebar";
 import {
   FaClock,
   FaDollarSign,
@@ -21,7 +20,7 @@ import {
 } from "react-icons/fa";
 import { useCookLogout } from "@/modules/cook/auth/api/cooklogout";
 import { useProfile } from "@/modules/cook/profile/api/getcookprofile";
-
+import khajaboxlogo from "@/assets/unnamed.png"; 
 const CookNavBAr = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [count, setCount] = useState(3);
@@ -96,16 +95,22 @@ const CookNavBAr = () => {
           >
             <Menu className="h-6 w-6" />
             <span className="sr-only">Toggle sidebar</span>
-            <Sidebar sidebarOpen={sidebarOpen} />
+           
           </button>
+        
+       
 
-          <Link
-            to="/cook/homepage"
-            className="flex items-center gap-2 text-xl font-bold text-[#426B1F] cursor-pointer"
-          >
-            <ChefHat className="h-7 w-7" />
-            <span>KhajaBox</span>
-          </Link>
+<Link
+  to="/cook/homepage"
+  className="flex items-center gap-2 text-xl font-bold text-[#426B1F] hover:text-[#2d4e14] transition duration-200"
+>
+  <img
+    src={khajaboxlogo}
+    alt="KhajaBox Logo"
+    className="h-8 w-auto"
+  />
+  <span>KhajaBox</span>
+</Link>
         </div>
 
         {/* Search box */}
@@ -180,7 +185,7 @@ const CookNavBAr = () => {
             >
               <div className="hidden md:block text-right mr-2">
                 <div className="text-lg font-medium">{cook?.name}</div>
-                <div className="text-xs text-gray-500">Cook</div>
+                
               </div>
               <div className="h-8 w-8 rounded-full bg-[#426B1F] text-white flex items-center justify-center">
                 <User className="h-5 w-5" />

@@ -140,15 +140,15 @@ export const userRoutes = [
 								},
 							},
 
-							{
-								path: paths.user.setting.path,
-								lazy: async () => {
-									const { ProfilePage } = await import(
-										"../../../modules/user/userprofile/components/settingContent"
-									);
-									return { Component: ProfilePage };
-								},
-							},
+							// {
+							// 	path: paths.user.setting.path,
+							// 	lazy: async () => {
+							// 		const { ProfilePage } = await import(
+							// 			"../../../modules/user/userprofile/components/settingContent"
+							// 		);
+							// 		return { Component: ProfilePage };
+							// 	},
+							// },
 
 							{
 								path: paths.user.cookDetails.path,

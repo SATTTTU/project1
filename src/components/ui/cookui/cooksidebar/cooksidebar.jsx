@@ -41,7 +41,7 @@ const AuthSidebar = ({ image, title, subtitle, buttonText, buttonLink }) => {
         <div className="mt-6">
           <Link
             to={buttonLink}
-            className="bg-white text-black px-8 py-3 rounded hover:bg-gray-100 transition-colors"
+            className="bg-white text-black px-8 py-3 rounded hover:bg-[#426B1F] hover:text-white transition-colors"
           >
             {buttonText}
           </Link>
