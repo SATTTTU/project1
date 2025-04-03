@@ -28,7 +28,6 @@ const loginUser = async (userData) => {
 
     console.log("✅ User token and ID stored successfully in localStorage");
 
-    // Debugging: Delay check to confirm persistence
     setTimeout(() => {
       console.log("Token after 1 second:", localStorage.getItem("user_token"));
       console.log("User ID after 1 second:", localStorage.getItem("user_id"));
@@ -44,7 +43,6 @@ const loginUser = async (userData) => {
     };
   } catch (error) {
     console.error("Login error:", error);
-    // Clear any partial auth data on error
     clearAuthData();
     throw error;
   }

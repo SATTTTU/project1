@@ -83,12 +83,12 @@ const ReviewCard = ({ review, setCook }) => {
         </div>
 
         <div className="flex gap-2">
-          <button onClick={() => setIsEditing(true)} className="text-blue-500 hover:text-blue-700">
+          <button onClick={() => setIsEditing(true)} className="text-blue-500 hover:text-blue-700 cursor-pointer">
             <FiEdit className="text-xl" />
           </button>
           <button
             onClick={handleDelete}
-            className="text-red-500 hover:text-red-700"
+            className="text-red-500 hover:text-red-700 cursor-pointer"
             disabled={isDeleting}
           >
             {isDeleting ? "Deleting..." : <FiTrash className="text-xl" />}
@@ -99,7 +99,7 @@ const ReviewCard = ({ review, setCook }) => {
       {isEditing ? (
         <div className="mt-3">
           <textarea
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded cursor-pointer"
             value={editedComment}
             onChange={(e) => setEditedComment(e.target.value)}
           />

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { usePopularDishes } from "../api/get-items";
 import { useAddCartItem } from "../../cart/api/addItems";
 import { toast } from "react-toastify"; 
 import Dishes from "../../../../assets/defaultDishes.jpg"; 
+import { useAllDishes } from "../../menu/api/allDishes";
 
-export const PopularItemsPage = () => {
-  const { data: menuItems, isLoading, error } = usePopularDishes();
+export const AllDishes = () => {
+  const { data: menuItems, isLoading, error } = useAllDishes();
+  console.log("All dishes", menuItems)
   const { mutateAsync: addToCart, isLoading: isAddingToCart } = useAddCartItem();
   const imageUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 

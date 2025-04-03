@@ -67,7 +67,7 @@ export const RegisterForm = () => {
           <button
             type="button"
             onClick={togglePasswordVisibility}
-            className="absolute right-3 top-12 transform -translate-y-1/2 text-gray-500"
+            className="absolute right-3 top-12 transform -translate-y-1/2 text-gray-500 cursor-pointer"
           >
             {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
           </button>
@@ -77,7 +77,7 @@ export const RegisterForm = () => {
       <button
         type="submit"
         disabled={isRegistering || !formik.isValid || formik.isSubmitting}
-        className="bg-[#426B1F] text-white px-4 py-2 rounded-md mt-6 w-full text-lg hover:bg-[#5c9429] transition  disabled:cursor-not-allowed"
+        className="bg-[#426B1F] text-white px-4 py-2 rounded-md mt-6 w-full text-lg cursor-pointer hover:bg-[#5c9429] transition  disabled:cursor-not-allowed"
       >
         {isRegistering ? "Signing Up..." : "Sign Up"}
       </button>

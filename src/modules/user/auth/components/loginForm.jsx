@@ -54,7 +54,7 @@ export const LoginForm = () => {
 					<button
 						type="button"
 						onClick={togglePasswordVisibility}
-						className="absolute right-3 top-9 text-gray-500"
+						className="absolute right-3 top-9 text-gray-500 cursor-pointer"
 					>
 						{showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
 					</button>
@@ -82,7 +82,7 @@ export const LoginForm = () => {
 			<button
 				type="submit"
 				disabled={isLoggingIn || !formik.isValid || formik.isSubmitting}
-				className="w-full bg-[#426B1F] text-white py-2 text-lg rounded-md hover:bg-[#436b1fe5] transition mt-4"
+				className="w-full bg-[#426B1F] cursor-pointer text-white py-2 text-lg rounded-md hover:bg-[#436b1fe5] transition mt-4"
 			>
 				Sign in
 			</button>
@@ -91,7 +91,7 @@ export const LoginForm = () => {
 				Don't have an account?{" "}
 				<button
 					onClick={() => navigate("/register")}
-					className="text-green-700 font-medium hover:underline"
+					className="text-green-700 font-medium hover:underline cursor-pointer"
 				>
 					Register now
 				</button>

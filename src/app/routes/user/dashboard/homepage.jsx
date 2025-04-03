@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../../../../store/cart/cart";
 import { Header } from "@/modules/user/dashboard/components/header";
 import { Footer } from "@/modules/user/dashboard/components/footer";
-
 import { PopularCooks } from "@/modules/user/dashboard/components/popularCooks";
 import { PromotedRestaurants } from "@/modules/user/dashboard/components/filterBadges";
 import UserLocation from "@/modules/user/dashboard/components/setLocation";
@@ -12,21 +11,18 @@ import { PopularItemsPage } from "@/modules/user/dashboard/components/popularIte
 import { DashSlider } from "@/modules/user/dashboard/components/dashboardSlider";
 import LocationMap from "@/components/ui/locationMap/locationmap";
 import { usegetLocation } from "@/modules/user/dashboard/api/get-location";
-// import NotificationComponent from "@/modules/user/dashboard/components/notifications";
 
 export const Homepage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const [addedToCart, setAddedToCart] = useState(null);
-  const { mutateAsync: fetchLocation} = usegetLocation();
+  const { mutateAsync: fetchLocation } = usegetLocation();
 
   useEffect(() => {
     if (addedToCart) {
       const timer = setTimeout(() => {
         setAddedToCart(null);
       }, 1500);
-
       return () => clearTimeout(timer);
     }
   }, [addedToCart]);
@@ -41,43 +37,45 @@ export const Homepage = () => {
         img: item.img,
       })
     );
-
     setAddedToCart(item.productId);
   };
 
   return (
-    <div className="min-h-screen w-screen bg-gray-50 w-screen overflow-x-hidden max-w-full">
-      <Header
-        navigate={navigate}
-        // popularItems={popularItems}
-        // categories={categories}
-        // cooks={cooks}
-        handleAddToCart={handleAddToCart}
-      />
-      <main className="container mx-auto ">
-        <section className="mb-8 ">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+    <div className="min-h-screen bg-gray-50 w-full overflow-x-hidden">
+      <Header navigate={navigate} handleAddToCart={handleAddToCart} />
+
+      <main className="container mx-auto px-4 md:px-6 lg:px-8 py-6">
+        <section className="mb-8">
+          {/* Slider Section */}
+          <div className="mb-6">
             <DashSlider />
           </div>
 
-          <PopularCooks />
-
-          <div className="bg-white shadow-md overflow-hidden p-6 mb-8">
-            <h2 className="text-3xl font-semibold text-center mb-6 text-gray-800">
-              Popular Items
+          {/* Popular Items */}
+          <div className="bg-white shadow-lg rounded-lg p-6 mb-8">
+            <h2 className="text-2xl font-semibold text-center text-gray-800 mb-4 text-center md:text-left">
+              Popular Dishes
             </h2>
-            <PopularItemsPage
-              handleAddToCart={handleAddToCart}
-              addedToCart={addedToCart}
-            />
+            <PopularItemsPage handleAddToCart={handleAddToCart} addedToCart={addedToCart} />
           </div>
 
-          <div className="bg-white p-4 rounded-lg shadow-md mb-8">
-            <h3 className="text-2xl font-medium mb-4 text-gray-800">
+          {/* Popular Cooks */}
+          <div className="bg-white shadow-lg rounded-lg p-6 mb-8">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center md:text-left">
+              Top Cooks
+            </h2>
+            <PopularCooks />
+          </div>
+
+          {/* Set Location Section */}
+          <div className="bg-white p-6 rounded-lg shadow-lg mb-8 flex flex-col gap-6">
+            <h3 className="text-2xl font-semibold text-gray-800 text-center md:text-left">
               Set Your Location
             </h3>
             <UserLocation />
-            <LocationMap fetchLocationFn={fetchLocation} title="your location" />
+            <div className="h-72 w-full rounded-lg overflow-hidden shadow-md">
+              <LocationMap fetchLocationFn={fetchLocation} title="Your Location" />
+            </div>
           </div>
         </section>
       </main>
