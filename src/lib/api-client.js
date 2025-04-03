@@ -225,7 +225,7 @@ function clearAuthData() {
 
 // Helper function to get current user type
 function getCurrentUserType() {
-  return localStorage.getItem(STORAGE_KEYS.USER_TYPE) || null;
+  return localStorage.getItem('active_user') || null;
 }
 
 export { saveUserData, getToken, clearAuthData, getCurrentUserType };
