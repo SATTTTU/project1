@@ -61,7 +61,7 @@ export const MyProfile = () => {
           {!isEditMode && (
             <button 
               onClick={handleEditToggle}
-              className="absolute top-4 right-4 bg-white text-gray-800 px-4 py-2 rounded-full font-medium shadow-md hover:bg-gray-100 transition-colors"
+              className="absolute cursor-pointer top-4 right-4 bg-white text-gray-800 px-4 py-2 rounded-full font-medium shadow-md hover:bg-gray-100 transition-colors"
             >
               Edit Profile
             </button>
@@ -143,13 +143,13 @@ export const MyProfile = () => {
                   <button
                     type="button"
                     onClick={handleCancel}
-                    className="flex-1 py-2 px-4 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                    className="flex-1 py-2 px-4 cursor-pointer border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                    className="flex-1 py-2 px-4 cursor-pointer bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                     disabled={isLoading}
                   >
                     {isLoading ? "Saving..." : "Save Changes"}
