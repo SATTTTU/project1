@@ -15,6 +15,7 @@ export const rootRoutes = [
     path: "/user",
     element: <Navigate to={paths.user.root.path} />,
   },
+ 
   
 
   // {

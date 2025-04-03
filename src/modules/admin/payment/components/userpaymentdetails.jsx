@@ -12,7 +12,10 @@ export const TransactionRow = ({ tx }) => {
       <td className="p-3">{tx.id}</td>
       <td className="p-3">{tx.date}</td>
       <td className="p-3">{tx.description}</td>
-      <td className="p-3 font-medium" style={{ color: tx.amount.startsWith("+") ? "#16A34A" : "#DC2626" }}>
+      <td
+        className="p-3 font-medium"
+        style={{ color: String(tx.amount).startsWith("+") ? "#16A34A" : "#DC2626" }}
+      >
         {tx.amount}
       </td>
       <td className="p-3">

@@ -6,7 +6,7 @@ import { Header } from "@/modules/user/dashboard/components/header";
 import { Footer } from "@/modules/user/dashboard/components/footer";
 import { PopularCooks } from "@/modules/user/dashboard/components/popularCooks";
 import { PromotedRestaurants } from "@/modules/user/dashboard/components/filterBadges";
-import UserLocation from "@/modules/user/dashboard/components/setLocation";
+import {UserLocation} from "@/modules/user/dashboard/components/setLocation";
 import { PopularItemsPage } from "@/modules/user/dashboard/components/popularItemsSection";
 import { DashSlider } from "@/modules/user/dashboard/components/dashboardSlider";
 import LocationMap from "@/components/ui/locationMap/locationmap";

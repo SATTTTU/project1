@@ -143,6 +143,16 @@ export const cookRoutes = [
                 },
                 ErrorBoundary: AppRootErrorBoundary,
               },
+              {
+                path: paths.cook.cookmap.path,
+                lazy: async () => {
+                  const { CustomerDeliveryTracker } = await import(
+                    "../../../components/layout/realtime-map/realtime-map"
+                  );
+                  return { Component: CustomerDeliveryTracker };
+                },
+                ErrorBoundary: AppRootErrorBoundary,
+              },
               
             ],
           },
