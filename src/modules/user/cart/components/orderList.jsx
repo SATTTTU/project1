@@ -55,12 +55,12 @@ export const OrderList = () => {
                     Grand Total: Rs. {totalOrderPrice.toFixed(2)}
                   </p>
 
-                  {/* <Link
-                    to={`/orders/${order.id}`}
+                  <Link
+                    to={`/track-order/${order?.order_id}`}
                     className="text-blue-500 hover:underline mt-4 inline-block"
                   >
-                    View Details
-                  </Link> */}
+                    Track Order
+                  </Link>
                 </li>
               );
             })}

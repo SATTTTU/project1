@@ -76,7 +76,7 @@ const DirectRoute = ({ from, to }) => {
   return null;
 };
 
-export const RiderPage = ({ orderId }) => {
+export const RiderPages = ({ orderId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [orderData, setOrderData] = useState(null);

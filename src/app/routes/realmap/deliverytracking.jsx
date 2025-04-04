@@ -45,6 +45,7 @@ const DeliveryTracking = ({ orderId }) => {
   const [socket] = useState(() => io("http://localhost:3000"));
 
   const getOrderData = async () => {
+    console.log("first",orderId)
     try {
       const response = await fetch(
         `https://khajabox-backend.dev.tai.com.np/api/get-order-ride-by-id/${orderId}`
@@ -55,17 +56,17 @@ const DeliveryTracking = ({ orderId }) => {
       const orderRideData = result.data[0];
       setOrderData(orderRideData);
       console.log("Order data:", orderRideData);
-      setOrderStatus(orderRideData.status || "received");
+      setOrderStatus(orderRideData?.status || "received");
   
       // Set locations - accessing the nested structure correctly
-      if (orderRideData.pickup_location_id) {
+      if (orderRideData?.pickup_location_id) {
         setCookLocation({
           lat: parseFloat(orderRideData.pickup_location_id.latitude),
           lng: parseFloat(orderRideData.pickup_location_id.longitude),
         });
       }
   
-      if (orderRideData.drop_location_id) {
+      if (orderRideData?.drop_location_id) {
         setUserLocation({
           lat: parseFloat(orderRideData.drop_location_id.latitude),
           lng: parseFloat(orderRideData.drop_location_id.longitude),

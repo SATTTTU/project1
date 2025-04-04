@@ -153,14 +153,23 @@ export const cookRoutes = [
               //   },
               //   ErrorBoundary: AppRootErrorBoundary,
               // },
-              {
-                path:"/cook/order-tracking/:orderId",
-                lazy: async () => {
-                  const { OrderTrackingRoute } = await import("../../routes/realmap/map")
-                  return { Component: OrderTrackingRoute }
-                },
-                ErrorBoundary: AppRootErrorBoundary,
-              },
+            // In your route configuration
+{
+  path: "/cook/order-tracking/:orderId",
+  lazy: async () => {
+    try {
+      const { OrderTrackingRoute } = await import("../../routes/realmap/map");
+      return { Component: OrderTrackingRoute };
+    } catch (error) {
+      console.error("Failed to load OrderTrackingRoute:", error);
+      return {
+        Component: () => <div>Failed to load tracking component</div>
+      };
+    }
+  },
+  ErrorBoundary: AppRootErrorBoundary,
+}
+              
               
             ],
           },

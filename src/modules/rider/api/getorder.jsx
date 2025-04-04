@@ -9,7 +9,7 @@ const fetchUserOrder = async () => {
   }
 
   try {
-    const response = await api.get(`/api/riders/get-order-rides-by-id/${id}`, {
+    const response = await api.get(`/api/riders/get-order-rides`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

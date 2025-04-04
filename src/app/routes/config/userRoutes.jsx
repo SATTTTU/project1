@@ -264,12 +264,12 @@ export const userRoutes = [
 								},
 							},
 							{
-								path: "/track-order",
+								path: "/track-order/:orderId",
 								lazy: async () => {
-									const { UserLocation } = await import(
-										"../../../modules/user/userLocation/userLocation"
+									const { UserTrackingRoute } = await import(
+										"../../../modules/user/cart/components/param"
 									);
-									return { Component: UserLocation };
+									return { Component: UserTrackingRoute };
 								},
 							},
 

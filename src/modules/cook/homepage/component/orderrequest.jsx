@@ -1,21 +1,27 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const OrderRequestCard = ({ order, updateOrderStatus }) => {
+export const OrderRequestCard = ({ order, updateOrderStatus }) => {
   const [status, setStatus] = useState(order.status);
-  console.log("orders*****", order)
+  const navigate = useNavigate();
 
   const handleStatusChange = (event) => {
     const newStatus = event.target.value;
     setStatus(newStatus);
-    updateOrderStatus(order.id, newStatus); // Call the function passed as a prop to update status
+    updateOrderStatus(order.order_id, newStatus); // ✅ use order.order_id here
   };
-  const navigate = useNavigate();
-  
+
   const handleTrackOrder = () => {
-    // Updated to use order.id instead of order.order_id
-    if (order && order.id) {
-      navigate(`/cook/order-tracking/${order.id}`);
+    if (order && order.order_id) {
+      console.log("Order object:", order);
+      console.log("Order ID:", order.order_id);
+      console.log(`Navigating to: /cook/order-tracking/${order.order_id}`);
+      
+      // Try with both string and number formats
+      const orderId = order.order_id.toString();
+      console.log("Navigating with ID type:", typeof orderId);
+      
+      navigate(`/cook/order-tracking/${orderId}`);
     } else {
       console.error("Cannot track order - missing order ID", order);
     }
@@ -26,7 +32,7 @@ const OrderRequestCard = ({ order, updateOrderStatus }) => {
       <div className="flex items-start">
         <img
           src={order.image || "/placeholder.svg"}
-          alt={order.items[0] || "Customer"}
+          alt="Customer"
           className="h-20 w-20 rounded-md object-cover mr-4"
         />
         <div className="flex-1">
@@ -42,9 +48,7 @@ const OrderRequestCard = ({ order, updateOrderStatus }) => {
               {order.status === "preparing" ? "Preparing" : "Ready for Pickup"}
             </span>
           </div>
-          <p className="text-sm text-gray-600 mt-1">
-            <span className="font-medium">Items:</span> {items}
-          </p>
+
           <div className="grid grid-cols-2 gap-1 mt-1">
             <p className="text-sm text-gray-600">
               <span className="font-medium">Accepted:</span> {order.timeAccepted}
@@ -53,9 +57,10 @@ const OrderRequestCard = ({ order, updateOrderStatus }) => {
               <span className="font-medium">Delivery in:</span> {order.estimatedDelivery}
             </p>
             <p className="text-sm font-medium text-[#426B1F]">
-              Total: ₹{order.total?.toFixed(2)}
+              Total: ₹{parseFloat(order.total).toFixed(2)}
             </p>
           </div>
+
           <div className="mt-3 flex gap-2">
             {order.status === "preparing" ? (
               <button className="flex items-center cursor-pointer rounded-md bg-green-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-green-700">
@@ -93,5 +98,3 @@ const OrderRequestCard = ({ order, updateOrderStatus }) => {
     </div>
   );
 };
-
-export default OrderRequestCard;

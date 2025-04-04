@@ -35,66 +35,84 @@ const createCustomIcon = (color) =>
 const MapUpdater = ({ center }) => {
   const map = useMap();
   useEffect(() => {
-    if (center) {
+    if (center && center.lat && center.lng) {
       map.setView(center, 15);
     }
   }, [center, map]);
   return null;
 };
 
-const static_order_detail = {
-  order_id: 181,
-  order_ride_id: 6,
-  status: "assigned",
-  rider_id: 2,
-  drop_location_id: {
-    user: {
-      id: 7,
-      name: "Indraa",
-      email: "indralimbu324@gmail.com",
-      image_url: "user_profile_image/1743559840_67ec9ca0f3b79.jpg",
-    },
-    latitude: "27.68486218",
-    longitude: "85.33990067",
-  },
-  pickup_location_id: {
-    id: 6,
-    latitude: "27.68862700",
-    longitude: "85.34393300",
-    cook: {
-      id: 3,
-      name: "Alka Rai",
-      email: "Alka@gmail.com",
-    },
-  },
-};
-
-export const UserLocation = ({ orderId = "order-123" }) => {
-  // Static locations for user and cook
-  const userLocation = { lat: 27.688627, lng: 85.343933 };
-  const cookLocation = { lat: 27.4, lng: 85.3 };
-
+export const UserLocation = ({ orderId }) => {
+  const [orderData, setOrderData] = useState(null);
+  const [cookLocation, setCookLocation] = useState(null);
+  const [userLocation, setUserLocation] = useState(null);
   const [riderLocation, setRiderLocation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [orderStatus, setOrderStatus] = useState("received");
   const [socket] = useState(() => io("localhost:3000"));
   const [restaurantRoute, setRestaurantRoute] = useState([]);
   const [riderRoute, setRiderRoute] = useState([]);
 
-  // Format room ID consistently across all components
-  const getRoomId = (id) => `order-${id}`;
+  const getOrderData = async () => {
+    try {
+      const response = await fetch(
+        `https://khajabox-backend.dev.tai.com.np/api/get-order-ride-by-id/${orderId}`
+      );
+      const result = await response.json();
+      
+      if (!result.data || !result.data[0]) {
+        throw new Error("No order data found");
+      }
 
-  socket.emit("join room", 123);
+      const orderRideData = result.data[0];
+      setOrderData(orderRideData);
+      setOrderStatus(orderRideData?.status || "received");
+  
+      // Set locations with validation
+      if (orderRideData?.pickup_location_id?.latitude && orderRideData?.pickup_location_id?.longitude) {
+        setCookLocation({
+          lat: parseFloat(orderRideData.pickup_location_id.latitude),
+          lng: parseFloat(orderRideData.pickup_location_id.longitude),
+        });
+      }
+  
+      if (orderRideData?.drop_location_id?.latitude && orderRideData?.drop_location_id?.longitude) {
+        setUserLocation({
+          lat: parseFloat(orderRideData.drop_location_id.latitude),
+          lng: parseFloat(orderRideData.drop_location_id.longitude),
+        });
+      }
+    } catch (err) {
+      console.error("Error fetching order:", err);
+      setError("Failed to load order data.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    socket.on("rider location", (data) => {
-      console.log("rider location", data);
-      setRiderLocation(data);
-    });
-  }, [socket]);
+    getOrderData();
+  }, [orderId]);
 
-  // Fetch road-based route between two points using OSRM
+  useEffect(() => {
+    const roomId = `order-${orderId}`;
+    socket.emit("join room", roomId);
+
+    socket.on("rider location", (data) => {
+      if (data?.lat && data?.lng) {
+        setRiderLocation(data);
+      }
+    });
+
+    return () => {
+      socket.off("rider location");
+    };
+  }, [socket, orderId]);
+
   const fetchRoute = async (start, end) => {
+    if (!start?.lat || !start?.lng || !end?.lat || !end?.lng) return [];
+    
     try {
       const response = await fetch(
         `https://router.project-osrm.org/route/v1/driving/${start.lng},${start.lat};${end.lng},${end.lat}?overview=full&geometries=geojson`
@@ -102,7 +120,6 @@ export const UserLocation = ({ orderId = "order-123" }) => {
       const data = await response.json();
 
       if (data.routes && data.routes.length > 0) {
-        // OSRM returns coordinates as [lng, lat], but Leaflet needs [lat, lng]
         return data.routes[0].geometry.coordinates.map((coord) => [
           coord[1],
           coord[0],
@@ -111,45 +128,32 @@ export const UserLocation = ({ orderId = "order-123" }) => {
       return [
         [start.lat, start.lng],
         [end.lat, end.lng],
-      ]; // Fallback to direct line
+      ];
     } catch (error) {
       console.error("Error fetching route:", error);
       return [
         [start.lat, start.lng],
         [end.lat, end.lng],
-      ]; // Fallback to direct line
+      ];
     }
   };
 
   useEffect(() => {
-    // Fetch route from restaurant to customer
-    fetchRoute(cookLocation, userLocation).then((route) => {
-      setRestaurantRoute(route);
-    });
+    if (cookLocation && userLocation) {
+      fetchRoute(cookLocation, userLocation).then(setRestaurantRoute);
+    }
+  }, [cookLocation, userLocation]);
 
-    // Join the room using consistent roomId format
-    const roomId = getRoomId(orderId);
+  useEffect(() => {
+    if (riderLocation && userLocation) {
+      fetchRoute(riderLocation, userLocation).then(setRiderRoute);
+    }
+  }, [riderLocation, userLocation]);
 
-    // Listen for rider location updates
-
-    // Set a timeout to stop loading if we don't get rider data
-    const timeout = setTimeout(() => {
-      if (!riderLocation) {
-        setLoading(false);
-      }
-    }, 5000);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [orderId]);
-
-  // Calculate ETA between two points
   const calculateETA = (from, to) => {
-    if (!from || !to) return "Unknown";
+    if (!from?.lat || !from?.lng || !to?.lat || !to?.lng) return "Unknown";
 
-    // Simple distance calculation (in km) using Haversine formula
-    const R = 6371; // Earth's radius in km
+    const R = 6371;
     const dLat = ((to.lat - from.lat) * Math.PI) / 180;
     const dLon = ((to.lng - from.lng) * Math.PI) / 180;
     const a =
@@ -160,15 +164,9 @@ export const UserLocation = ({ orderId = "order-123" }) => {
         Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distance = R * c;
-
-    // Assuming average speed of 30 km/h
     const timeInMinutes = (distance / 30) * 60;
 
-    if (timeInMinutes < 1) {
-      return "Less than 1 minute";
-    }
-
-    return `~${Math.round(timeInMinutes)} minutes`;
+    return timeInMinutes < 1 ? "Less than 1 minute" : `~${Math.round(timeInMinutes)} minutes`;
   };
 
   if (loading) {
@@ -190,6 +188,10 @@ export const UserLocation = ({ orderId = "order-123" }) => {
     );
   }
 
+  // Default center if userLocation is not available
+  const defaultCenter = { lat: 27.7172, lng: 85.324 }; // Kathmandu coordinates as fallback
+  const mapCenter = userLocation || cookLocation || defaultCenter;
+
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       <div className="bg-pink-600 text-white p-4 shadow-md">
@@ -199,10 +201,13 @@ export const UserLocation = ({ orderId = "order-123" }) => {
 
       <div className="p-4 bg-white shadow-sm">
         <div className="mb-2 font-medium">Your Location:</div>
-        <div className="text-gray-500 text-xs mb-3">
-          Coordinates: {userLocation.lat.toFixed(6)},{" "}
-          {userLocation.lng.toFixed(6)}
-        </div>
+        {userLocation ? (
+          <div className="text-gray-500 text-xs mb-3">
+            Coordinates: {userLocation.lat.toFixed(6)}, {userLocation.lng.toFixed(6)}
+          </div>
+        ) : (
+          <div className="text-gray-500 text-xs mb-3">Location not available</div>
+        )}
 
         {riderLocation && (
           <div className="mt-3 p-2 bg-blue-50 rounded-md">
@@ -222,100 +227,82 @@ export const UserLocation = ({ orderId = "order-123" }) => {
       </div>
 
       <div className="flex-grow relative">
-        <MapContainer
-          center={[userLocation.lat, userLocation.lng]}
-          zoom={15}
-          style={{ height: "100%", width: "100%" }}
-        >
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          />
-
-         {riderLocation && <Marker
-            position={[
-              riderLocation.lat,
-              riderLocation.lng,
-            ]}
-            icon={createCustomIcon("blue")}
+        {mapCenter.lat && mapCenter.lng ? (
+          <MapContainer
+            center={[mapCenter.lat, mapCenter.lng]}
+            zoom={15}
+            style={{ height: "100%", width: "100%" }}
           >
-            <Popup>
-              <div>
-                <strong>Rider</strong>
-              </div>
-            </Popup>
-          </Marker>}
-
-          <Marker
-            position={[
-              static_order_detail.drop_location_id.latitude,
-              static_order_detail.drop_location_id.longitude,
-            ]}
-            icon={createCustomIcon("#EC4899")}
-          >
-            <Popup>
-              <div>
-                <strong>You (Customer)</strong>
-              </div>
-            </Popup>
-          </Marker>
-
-          {/* Cook marker */}
-          <Marker
-            position={[
-              static_order_detail.pickup_location_id.latitude,
-              static_order_detail.pickup_location_id.longitude,
-            ]}
-            icon={createCustomIcon("#10B981")}
-          >
-            <Popup>
-              <div>
-                <strong>Restaurant</strong>
-              </div>
-            </Popup>
-          </Marker>
-
-          {/* Restaurant to customer route */}
-          {restaurantRoute.length > 0 && (
-            <Polyline
-              positions={restaurantRoute}
-              color="#10B981"
-              weight={4}
-              opacity={0.7}
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
-          )}
 
-          {/* Rider marker and route */}
-          {riderLocation && (
-            <>
+            {riderLocation?.lat && riderLocation?.lng && (
               <Marker
                 position={[riderLocation.lat, riderLocation.lng]}
-                icon={createCustomIcon("#2563EB")}
+                icon={createCustomIcon("blue")}
               >
                 <Popup>
                   <div>
                     <strong>Rider</strong>
-                    <br />
-                    ETA: {calculateETA(riderLocation, userLocation)}
                   </div>
                 </Popup>
               </Marker>
+            )}
 
-              {/* Rider to customer route */}
-              {riderRoute.length > 0 && (
-                <Polyline
-                  positions={riderRoute}
-                  color="#2563EB"
-                  weight={4}
-                  opacity={0.7}
-                  dashArray="5,10"
-                />
-              )}
-            </>
-          )}
+            {userLocation?.lat && userLocation?.lng && (
+              <Marker
+                position={[userLocation.lat, userLocation.lng]}
+                icon={createCustomIcon("#EC4899")}
+              >
+                <Popup>
+                  <div>
+                    <strong>You (Customer)</strong>
+                  </div>
+                </Popup>
+              </Marker>
+            )}
 
-          <MapUpdater center={userLocation} />
-        </MapContainer>
+            {cookLocation?.lat && cookLocation?.lng && (
+              <Marker
+                position={[cookLocation.lat, cookLocation.lng]}
+                icon={createCustomIcon("#10B981")}
+              >
+                <Popup>
+                  <div>
+                    <strong>Restaurant</strong>
+                  </div>
+                </Popup>
+              </Marker>
+            )}
+
+            {restaurantRoute.length > 0 && (
+              <Polyline
+                positions={restaurantRoute}
+                color="#10B981"
+                weight={4}
+                opacity={0.7}
+              />
+            )}
+
+            {riderRoute.length > 0 && (
+              <Polyline
+                positions={riderRoute}
+                color="#2563EB"
+                weight={4}
+                opacity={0.7}
+                dashArray="5,10"
+              />
+            )}
+
+            <MapUpdater center={userLocation || cookLocation} />
+          </MapContainer>
+        ) : (
+          <div className="flex items-center justify-center h-full bg-gray-100">
+            <p className="text-gray-500">Map cannot be loaded - invalid location data</p>
+          </div>
+        )}
 
         <div className="absolute bottom-4 right-4 z-50 bg-white p-2 rounded-md shadow-md text-xs">
           <div className="flex items-center mb-1">

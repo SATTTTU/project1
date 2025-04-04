@@ -9,9 +9,9 @@ export const riderPaths = {
         `/rider/login${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
     },
     home: {
-      path: "home", // <-- Use relative path
+      path: "/rider/main/:orderId", // <-- Use relative path
       getHref: (redirectTo) =>
-        `/rider/home${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
+        `/rider/main/:orderId${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
     },
   };
   

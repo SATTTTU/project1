@@ -1,4 +1,3 @@
-"use client";
 
 import DeliveryTracking from "@/app/routes/realmap/deliverytracking";
 import { api } from "@/lib/api-client";
@@ -91,4 +90,3 @@ export const CustomerDeliveryTracker = ({ orderId }) => {
   );
 };
 
-export default CustomerDeliveryTracker;

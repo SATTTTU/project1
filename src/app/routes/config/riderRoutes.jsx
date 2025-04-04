@@ -26,7 +26,7 @@ export const riderRoutes = [
             path: paths.rider.home.path, // Relative path (no leading "/")
             lazy: async () => {
               const { RiderPage } = await import(
-                "../../../modules/rider/components/riderPage"
+                "../../../modules/rider/components/paramPage"
               );
               return { Component: RiderPage };
             },
@@ -35,10 +35,10 @@ export const riderRoutes = [
           {
             path: '/rider/main', // Relative path (no leading "/")
             lazy: async () => {
-              const { RiderPage } = await import(
-                "../../../modules/rider/components/riderPage"
+              const { OrderListPage } = await import(
+                "../../../modules/rider/components/orderListPage"
               );
-              return { Component: RiderPage };
+              return { Component: OrderListPage };
             },
             ErrorBoundary: AppRootErrorBoundary,
           },

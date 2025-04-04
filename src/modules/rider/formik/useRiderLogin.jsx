@@ -30,7 +30,7 @@ export const useRiderLoginFormik = () => {
 
         toast.success("Login successful");
         formik.resetForm();
-        navigate("/rider/home"); // Redirect to the Rider Dashboard
+        navigate("/rider/main"); // Redirect to the Rider Dashboard
       } catch (err) {
         console.error("Rider Login Error:", err);
         const errorMessage =
