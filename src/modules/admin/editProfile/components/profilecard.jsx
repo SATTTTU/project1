@@ -6,10 +6,10 @@ import { SettingsCard } from "./settings";
 import { useAdminProfile } from "../api/getprofile";
 import ConfirmModal from "@/components/ui/admin/confirmmodel/confirmmodel";
 import { useAdminLogout } from "../../dashboard/api/logout";
+
 export const ProfileCard = () => {
   const [notificationsAllowed, setNotificationsAllowed] = useState(true);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-
   const [showSettings, setShowSettings] = useState(false);
   const [profileData, setProfileData] = useState({
     name: "Your Name",
@@ -18,12 +18,14 @@ export const ProfileCard = () => {
     image_url: null,
     isOnline: true,
   });
+
   const { mutateAsync: logout } = useAdminLogout();
+  
   const handleLogout = async () => {
     try {
       await logout();
       localStorage.clear();
-      window.location.href = "/admin/login"; // Redirect
+      window.location.href = "/admin/login";
     } catch (error) {
       console.error("Logout failed", error);
     }
@@ -36,19 +38,37 @@ export const ProfileCard = () => {
     isError,
   } = useAdminProfile();
 
-  // Function to get the full image URL
-   const getFullImageUrl = (imagePath) => {
+  // Improved getFullImageUrl function with comprehensive logging
+  const getFullImageUrl = (imagePath) => {
+    
+
+    // If no image path, return placeholder
     if (!imagePath) return "/api/placeholder/80/80";
-
-    // If it's already a full URL (starts with http/https)
+  
+    // If already a full URL, return as is
     if (imagePath.startsWith("http")) return imagePath;
+  
+    // Try multiple methods to get bucket URL
+    const bucketUrl = 
+      import.meta.env.VITE_BUCKET_URL || 
+      import.meta.env.BUCKET_URL || 
+      import.meta.env.VITE_BUCKET_URL || 
+      
 
-    // Use your existing API_URL
-    // If your API_URL already includes a trailing slash, you might need to adjust this
-    const storageUrl = import.meta.env.VITE_APP_API_URL.endsWith("/")
-      ? `${import.meta.env.VITE_APP_API_URL}storage/`
-      : `${import.meta.env.VITE_APP_API_URL}/storage/`;
-    return `${storageUrl}${imagePath}`;
+    // Log the resolved bucket URL
+    console.log("Resolved Bucket URL:", bucketUrl);
+  
+    // If no bucket URL found, return placeholder
+    if (!bucketUrl) {
+      console.error("No bucket URL found in environment variables");
+      return "/api/placeholder/80/80";
+    }
+  
+    // Construct and log final image URL
+    const finalImageUrl = `${bucketUrl.endsWith("/") ? bucketUrl : bucketUrl + "/"}${imagePath}`;
+    console.log("Final Constructed Image URL:", finalImageUrl);
+  
+    return finalImageUrl;
   };
 
   useEffect(() => {
@@ -82,7 +102,7 @@ export const ProfileCard = () => {
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 300 }}
-      className="w-72 bg-white shadow-2xl rounded-3xl border-2 border-gray-100 overflow-hidden relative"
+      className="w-72 bg-white rounded-3xl border-2 border-gray-100 overflow-hidden relative"
     >
       {/* Profile Header */}
       <div className="bg-gradient-to-r from-green-500 to-green-700 text-white p-6">
@@ -106,7 +126,7 @@ export const ProfileCard = () => {
               <img
                 src={profileImageSrc}
                 alt="Profile"
-                className="w-20 h-20 rounded-full border-4 border-white shadow-lg object-cover"
+                className="w-20 h-20 rounded-full  object-cover"
               />
               {profileData.isOnline && (
                 <span className="absolute bottom-0 right-0 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></span>
@@ -182,7 +202,7 @@ export const ProfileCard = () => {
 
       {/* Show Settings Card if clicked */}
       {showSettings && (
-        <div className="absolute top-0 left-0 w-full h-full bg-white shadow-lg rounded-3xl p-4 ">
+        <div className="absolute top-0 left-0 w-full h-full bg-white rounded-3xl p-4 ">
           <button
             onClick={() => setShowSettings(false)}
             className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors"

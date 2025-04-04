@@ -82,66 +82,69 @@ const earningIncrease = earningsLoading || earningsError
     <div className="flex h-screen bg-gray-100 font-sans">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="bg-white shadow-sm p-4 flex items-center justify-between relative">
-          <div className="flex-1 max-w-lg relative">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="w-[1/2] pl-8 pr-4 ml-10 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          <div className="flex items-center gap-6 ml-4">
-            <div className="relative">
-              <Link onClick={toggleNotifications} className="relative">
-                <IoIosNotifications className="text-2xl text-gray-600 hover:text-green-500 transition" />
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center">
-                  {notifications.length}
-                </span>
-              </Link>
-
-              <AnimatePresence>
-                {showNotifications && (
-                  <motion.div
-                    ref={notificationRef}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 z-50"
-                  >
-                    <h2 className="text-lg font-semibold mb-2">Notifications</h2>
-                    {notifications.map((notification) => (
-                      <div key={notification.id} className="p-2 hover:bg-gray-100 rounded-md cursor-pointer">
-                        {notification.message}
-                      </div>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-            
-            <div className="relative">
-              <ProfileAvatar onClick={toggleProfile} />
-              
-              <AnimatePresence>
-                {showProfile && (
-                  <motion.div
-                    ref={profileRef}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-2 bg-white shadow-lg rounded-lg p-4 z-50"
-                  >
-                    <ProfileCard />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
-        </header>
-
+      <header className="bg-white shadow-sm p-4 flex items-center justify-between relative">
+  <div className="flex items-center">
+    {/* Your logo or other left-aligned content would go here */}
+  </div>
+  
+  <div className="flex items-center gap-6">
+    <div className="relative max-w-lg">
+      <input
+        type="text"
+        placeholder="Search..."
+        className="w-full pl-8 pr-4 py-2 border border-gray-200 rounded-lg "
+      />
+    </div>
+    
+    <div className="relative">
+      <Link onClick={toggleNotifications} className="relative">
+        <IoIosNotifications className="text-2xl text-gray-600 hover:text-green-500 transition" />
+        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center">
+          {notifications.length}
+        </span>
+      </Link>
+      
+      <AnimatePresence>
+        {showNotifications && (
+          <motion.div
+            ref={notificationRef}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 z-50"
+          >
+            <h2 className="text-lg font-semibold mb-2">Notifications</h2>
+            {notifications.map((notification) => (
+              <div key={notification.id} className="p-2 hover:bg-gray-100 rounded-md cursor-pointer">
+                {notification.message}
+              </div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+    
+    <div className="relative">
+      <ProfileAvatar onClick={toggleProfile} />
+      
+      <AnimatePresence>
+        {showProfile && (
+          <motion.div
+            ref={profileRef}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="absolute right-0  bg-white  rounded-lg  z-50"
+          >
+            <ProfileCard />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  </div>
+</header>
         <main className="flex-1 overflow-y-auto p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
             {dashboardStats.map((stat, index) => (

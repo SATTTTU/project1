@@ -33,11 +33,11 @@ export const CookLocation = () => {
       const { latitude, longitude } = position.coords;
       setLocation({ latitude, longitude });
 
-      const API_KEY =
-        "5b3ce3597851110001cf6248087e3cc0d26b4e2ebca5a1787d6fc142";
+      const ROUTE = import.meta.env.VITE_ROUTE_API_KEY;
+      console.log(ROUTE);
 
       const response = await axios.get(
-        `https://api.openrouteservice.org/geocode/reverse?point.lat=${latitude}&point.lon=${longitude}&api_key=${API_KEY}`
+        `https://api.openrouteservice.org/geocode/reverse?point.lat=${latitude}&point.lon=${longitude}&api_key=${ROUTE}`
       );
 
       if (!response.data.features.length) {

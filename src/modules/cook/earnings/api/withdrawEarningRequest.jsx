@@ -1,8 +1,6 @@
 import { api } from "@/lib/api-client";
 import { useMutation } from "@tanstack/react-query";
 
-// Fixing async and await
-// eslint-disable-next-line react-refresh/only-export-components
 const WithdrawEarningsRequest = async (cookdata) => {
   const response = await api.post("/api/cooks/withdraw-request", cookdata);
   return response.data; // Return response data

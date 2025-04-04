@@ -4,6 +4,8 @@ import { Loader2 } from "lucide-react";
 
 const ProtectedRoute = ({ allowedRoles = [] }) => {
   const { isAuthenticated, loading, user } = useAuth();
+
+
   const location = useLocation();
 
   if (import.meta.env.MODE === "development") {
@@ -26,6 +28,8 @@ const ProtectedRoute = ({ allowedRoles = [] }) => {
       </div>
     );
   }
+
+
 
   if (isAuthenticated) {
 		const hasRequiredRole =

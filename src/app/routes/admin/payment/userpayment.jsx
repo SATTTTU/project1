@@ -12,13 +12,15 @@ import { FaArrowLeft } from "react-icons/fa";
 
 export const UserPaymentRoute = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("This Month");
-  const { filteredTransactions, filteredStats, stats } = usePaymentData("user", selectedPeriod);
+
+  // ✅ Fetch filtered transactions & stats using the updated hook
+  const { filteredTransactions, filteredStats, isLoading, isError } = usePaymentData("user", selectedPeriod);
 
   const columns = ["ID", "Date", "Description", "Amount", "Status", "Actions"];
   const periodOptions = ["Today", "This Week", "This Month", "This Quarter", "This Year"];
 
   return (
-    <div className="flex">
+    <div className="flex h-screen bg-gray-100 font-sans">
       {/* Sidebar */}
       <Sidebar />
 
@@ -41,32 +43,25 @@ export const UserPaymentRoute = () => {
           />
         </div>
 
-        {/* Stats Section with added Payment Settings Card */}
+        {/* Stats Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard
-            title={`User Revenue (${selectedPeriod})`}
+            title="Total Revenue"
             value={filteredStats.revenue}
             count={`${filteredTransactions.filter((t) => t.amount.startsWith("+")).length} transactions`}
             icon={<DollarSign size={24} className="text-green-600" />}
             color="green"
           />
           <StatCard
-            title={`Pending User Payments (${selectedPeriod})`}
+            title="Pending Transactions"
             value={filteredStats.pending}
-            count={`${filteredTransactions.filter((t) => t.status === "Processing").length} transactions pending`}
+            count={`${filteredTransactions.filter((t) => t.status === "Processing").length} pending`}
             icon={<CreditCard size={24} className="text-orange-600" />}
             color="orange"
           />
-          <StatCard
-            title="Total Users"
-            value={stats.userCount}
-            count="+24 new this week"
-            icon={<Users size={24} className="text-blue-600" />}
-            color="blue"
-          />
-          
-          {/* Payment Settings Configuration Card */}
-          <Link to="/admin/payment-setting" className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border-l-4 border-purple-500">
+
+          {/* Payment Settings Card */}
+          <Link to="/admin/payment-setting" className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="p-6 flex flex-col h-full justify-between">
               <div className="flex justify-between items-start">
                 <h3 className="text-lg font-semibold text-gray-800">Payment Settings</h3>
@@ -84,20 +79,20 @@ export const UserPaymentRoute = () => {
 
         {/* Transactions Table */}
         <div className="p-4 bg-white rounded-xl shadow-md">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-gray-800">User Transactions ({selectedPeriod})</h2>
-            <Link
-              to="/admin/all-user-transactions"
-              className="text-sm text-blue-600 hover:text-blue-800 flex items-center"
-            >
-              View All <ChevronRight size={16} />
-            </Link>
-          </div>
-          <Table
-            columns={columns}
-            data={filteredTransactions}
-            renderRow={(tx, index) => <TransactionRow key={index} tx={tx} />}
-          />
+          <h2 className="text-xl font-bold text-gray-800">User Transactions ({selectedPeriod})</h2>
+
+          {/* Loading & Error Handling */}
+          {isLoading ? (
+            <p className="text-gray-500 text-center py-6">Loading transactions...</p>
+          ) : isError ? (
+            <p className="text-red-500 text-center py-6">Error loading transactions.</p>
+          ) : (
+            <Table
+              columns={columns}
+              data={filteredTransactions}
+              renderRow={(tx, index) => <TransactionRow key={index} tx={tx} />}
+            />
+          )}
         </div>
       </div>
     </div>

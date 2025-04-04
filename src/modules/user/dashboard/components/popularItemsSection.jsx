@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { usePopularDishes } from "../api/get-items";
 import { useAddCartItem } from "../../cart/api/addItems";
-import { toast } from "react-toastify"; // Import toast
+import { toast } from "react-toastify"; 
+import Dishes from "../../../../assets/defaultDishes.jpg"; 
 
 export const PopularItemsPage = () => {
   const { data: menuItems, isLoading, error } = usePopularDishes();
   const { mutateAsync: addToCart, isLoading: isAddingToCart } = useAddCartItem();
   const imageUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
-  // State to manage the number of dishes shown
   const [visibleItems, setVisibleItems] = useState(4);
 
   const handleAddToCart = async (dish) => {
@@ -17,40 +17,27 @@ export const PopularItemsPage = () => {
         menu_item_id: dish.menu_item_id,
         quantity: 1,
       });
-
-      // ✅ Show success notification
       toast.success(`${dish.name} added to cart! 🛒`);
     } catch (error) {
-      // ❌ Show error notification
       toast.error("Failed to add item to cart. Try again!");
       console.error("Error adding to cart:", error);
     }
   };
 
   const handleLoadMore = () => {
-    setVisibleItems((prev) => prev + 6); // Load 6 more items
+    setVisibleItems((prev) => prev + 6);
   };
 
   if (isLoading) {
-    return (
-      <div className="p-6 text-center animate-pulse">Loading menu items...</div>
-    );
+    return <div className="p-6 text-center animate-pulse">Loading menu items...</div>;
   }
 
   if (error) {
-    return (
-      <div className="p-6 text-center text-red-500">
-        Error loading menu items: {error.message}
-      </div>
-    );
+    return <div className="p-6 text-center text-red-500">Error loading menu items: {error.message}</div>;
   }
 
   if (!menuItems || menuItems.length === 0) {
-    return (
-      <div className="p-6 text-center">
-        No menu items available at the moment.
-      </div>
-    );
+    return <div className="p-6 text-center">No menu items available at the moment.</div>;
   }
 
   const itemsToShow = menuItems.slice(0, visibleItems);
@@ -61,24 +48,19 @@ export const PopularItemsPage = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7">
         {itemsToShow.map((item) => (
-          <div
-            key={item.id}
-            className="bg-white rounded-lg shadow-xl border border-slate-200 overflow-hidden hover:shadow-lg transition-shadow"
-          >
-            <div className="h-48 overflow-hidden">
+          <div key={item.id} className="bg-white rounded-lg shadow-xl border border-slate-200 overflow-hidden hover:shadow-lg transition-shadow">
+            <div className="h-50 overflow-hidden">
               <img
-                src={`${imageUrl}${item?.image_url}`}
-                alt="image"
+                src={item?.image_url ? `${imageUrl}${item.image_url}` : Dishes} 
+                alt={item.name || "Dish Image"}
                 className="w-full h-full object-cover"
+                onError={(e) => (e.target.src = Dishes)} // Use Dishes image if load fails
               />
             </div>
 
             <div className="p-4">
-              <div className="flex justify-between items-start">
-                <h3 className="text-2xl font-bold">{item.name}</h3>
-
-              </div>
-        <p className="text-gray-600 text-sm mb-3 hover:text-green-600">By {item.cook_name}</p>
+              <h3 className="text-2xl font-bold">{item.name}</h3>
+              <p className="text-gray-600 text-sm mb-3 hover:text-green-600">By {item.cook_name}</p>
 
               {item.description && (
                 <p className="text-gray-600 mt-2 text-sm">
@@ -89,7 +71,7 @@ export const PopularItemsPage = () => {
               )}
 
               <button
-                className="bg-[#426B1F] text-white py-2 px-4 rounded-md font-semibold hover:bg-green-700 transition disabled:opacity-50 mt-4"
+                className="bg-[#426B1F] text-white py-2 px-4 rounded-md font-semibold hover:bg-green-700 transition disabled:opacity-50 mt-4 cursor-pointer"
                 onClick={() => handleAddToCart(item)}
                 disabled={isAddingToCart}
               >

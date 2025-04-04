@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "../../../../assets/logo.jpg";
+import Logo from "../../../../assets/unnamed.png";
 import { Link } from "react-router-dom";
 import {
 	FaFacebookF,
@@ -22,23 +22,22 @@ export const Footer = () => {
 								<img
 									src={Logo}
 									alt="KhanaBox Logo"
-									width={40}
-									height={40}
+									width={30}
+									height={30}
 									className=""
 								/>
-								<span className="text-2xl font-bold text-[#426B1F] ">
+								<span className="text-2xl font-bold text-[#0e9300] ">
 									KhajaBox
 								</span>
 							</Link>
 							<p className="text-sm text-gray-600 mb-4">Company # 000000-445</p>
 							<p className="text-sm text-gray-600">Copyright 2023</p>
 							<div className="flex space-x-4 mt-4">
-								{/* Social media icons would go here */}
 							</div>
 						</div>
 
 						<div className="col-span-1">
-							<h3 className="text-xl font-semibold mb-4 text-[#426B1F]">
+							<h3 className="text-xl font-semibold mb-4 text-[#0e9300]">
 								Legal Pages
 							</h3>
 							<ul className="space-y-2">
@@ -56,7 +55,7 @@ export const Footer = () => {
 						</div>
 
 						<div className="col-span-1">
-							<h3 className="text-xl font-semibold text-[#426B1F] mb-4">
+							<h3 className="text-xl font-semibold text-[#0e9300] mb-4">
 								Important Links
 							</h3>
 							<ul className="space-y-2">
@@ -81,7 +80,7 @@ export const Footer = () => {
 							</ul>
 						</div>
 						<div className="col-span-1 lg:text-center">
-							<h3 className="text-xl font-semibold  text-[#426B1F]">
+							<h3 className="text-xl font-semibold  text-[#0e9300]">
 								Contact Us
 							</h3>
 							<p className="mt-2 text-gray-600">Email: support@Khajabox.com</p>

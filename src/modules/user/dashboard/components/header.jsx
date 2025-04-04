@@ -6,17 +6,18 @@ import { IoMdLogOut } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
 import { CiSettings } from "react-icons/ci";
 import { AiOutlineShoppingCart } from "react-icons/ai";
-import Logo from "../../../../assets/logo.jpg";
+import Logo from "../../../../assets/unnamed.png";
 import { useUserLogout } from "../../auth/api/logout";
 import { useProfile } from "../../userprofile/api/getProfile";
 import { useUserCart } from "../../cart/api/getItems";
 import { SearchBar } from "./searchBar";
 import { CartBadge } from "./cartBadge";
-// import {Profile} from "../../../../assets/"
+import  Profile  from "../../../../assets/defaultProfile.jpg";
 
 export const Header = ({ navigate, popularItems, categories, cooks }) => {
 	const [showProfileMenu, setShowProfileMenu] = useState(false);
 	const profileRef = useRef(null);
+	const imageBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
 	const { data: profile, isLoading: isProfileLoading, isError } = useProfile();
 	const { mutateAsync: logout, isLoading: isLoggingOut } = useUserLogout();
@@ -61,12 +62,11 @@ export const Header = ({ navigate, popularItems, categories, cooks }) => {
 	};
 
 	return (
-		<div className="bg-white shadow-sm sticky top-0 z-50">
-			<div className="container mx-auto px-4">
-				<div className="flex items-center justify-between ">
-					{/* Logo and Navigation */}
+		<div className="bg-white shadow-sm sticky top-0 z-50 ">
+			<div className="container mx-auto px-4 ">
+				<div className="flex items-center justify-between lg:py-4">
 					<Link to="/dashboard" className="flex items-center">
-						<img src={Logo} alt="Khajabox" className="h-10 w-10 mr-2" />
+						<img src={Logo} alt="Khajabox" className="h-8 w-8 mr-2" />
 						<span className="text-3xl font-bold text-[#426B1F]">Khajabox</span>
 					</Link>
 
@@ -80,10 +80,8 @@ export const Header = ({ navigate, popularItems, categories, cooks }) => {
 					</div>
 
 					<div className="flex items-center space-x-4">
-						{/* Cart Badge */}
 						<CartBadge cartItems={cartItems} isLoading={isCartLoading} />
 
-						{/* Profile Menu */}
 						<div className="relative" ref={profileRef}>
 							<button
 								onClick={toggleProfileMenu}
@@ -97,9 +95,9 @@ export const Header = ({ navigate, popularItems, categories, cooks }) => {
 									<div className="px-6 flex flex-col items-center text-center py-4 border-b border-gray-200">
 										<img
 											src={
-												profile?.image_url
-													? `https://khajabox-bucket.s3.ap-south-1.amazonaws.com/${profile.image_url}`
-													: "https://via.placeholder.com/150/cccccc/000000?text=User"
+												profile.image_url
+													? `${imageBaseUrl}${profile.image_url}`
+													: Profile
 											}
 											alt="profile"
 											className="rounded-full h-16 w-16 mb-3 border-2 border-gray-300"

@@ -62,7 +62,7 @@ export const ReviewForm = ({ cookId, setShowReviewForm, setCook, onReviewSubmit 
   return (
     <div className="bg-gray-50 rounded-lg shadow-md p-6 mb-8">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold">Write a Review</h3>
+        <h3 className="text-lg font-semibold cursor-pointer">Write a Review</h3>
         <button onClick={() => setShowReviewForm(false)} className="text-gray-500 hover:text-gray-700">
           ✖
         </button>

@@ -9,17 +9,18 @@ import { WithdrawalRequestMessage } from "@/components/ui/withdrawalrequest/with
 import { CookTransactionTable } from "@/modules/admin/payment/components/cookpaymentdetails";
 import { StatCard } from "@/modules/admin/payment/components/statcard";
 import { Sidebar } from "@/components/ui/admin/aside/aside";
+import { useGetAllWithdrawRequests } from "@/modules/admin/payment/api/getWithdrawRequest";
 
 export const CookPaymentRoute = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("This Month");
   const { 
     filteredTransactions, 
-    withdrawRequests, 
     stats, 
-    handleApprove, 
-    handleReject, 
-    handleArchive 
   } = usePaymentData("cook", selectedPeriod);
+ const{
+ onApprove, onReject, onArchive
+ }=WithdrawalRequestMessage()
+  const { data: transactions = [] } = useGetAllWithdrawRequests();
   
   const periodOptions = ["This Month", "This Year"];
   
@@ -48,19 +49,19 @@ export const CookPaymentRoute = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
             <StatCard
               title="Total Payouts"
-              value={stats.totalCookPayout}
+              value={stats?.totalCookPayout}
               icon={<DollarSign size={20} className="text-blue-600" />}
               color="blue"
             />
             <StatCard
               title="Pending Payments"
-              value={stats.pendingCookPayments}
+              value={stats?.pendingCookPayments}
               icon={<CreditCard size={20} className="text-yellow-600" />}
               color="yellow"
             />
             <StatCard
               title="Total Cooks"
-              value={stats.cookCount}
+              value={stats?.cookCount}
               icon={<Users size={20} className="text-green-600" />}
               color="green"
             />
@@ -77,24 +78,21 @@ export const CookPaymentRoute = () => {
               />
             </div>
             
-            {/* Pending Withdrawals */}
-            {withdrawRequests.length > 0 ? (
-              <div className="space-y-4 mb-8">
-                {withdrawRequests.map((request) => (
-                  <WithdrawalRequestMessage
-                    key={request.id}
-                    request={request}
-                    onApprove={handleApprove}
-                    onReject={handleReject}
-                    onArchive={handleArchive}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="p-6 text-center bg-white rounded-lg shadow-sm border border-gray-100 mb-8">
-                <p className="text-gray-500">No pending withdrawal requests</p>
-              </div>
-            )}
+            <div className="space-y-4">
+      {transactions.length > 0 ? (
+        transactions.map((value) => (
+          <WithdrawalRequestMessage
+            key={value.id}
+            request={value}
+            onApprove={onApprove}
+            onReject={onReject}
+            onArchive={onArchive}
+          />
+        ))
+      ) : (
+        <p>No withdrawal requests found.</p>
+      )}
+    </div>
             
             {/* Transaction History */}
             <div>

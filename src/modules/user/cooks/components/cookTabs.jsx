@@ -4,7 +4,7 @@ export const CookTabs = ({ activeTab, setActiveTab, reviewCount }) => {
         <div className="flex overflow-x-auto">
           <button
             onClick={() => setActiveTab("categories")}
-            className={`px-4 py-2 font-medium text-sm whitespace-nowrap ${
+            className={`px-4 py-2 font-medium text-sm whitespace-nowrap cursor-pointer${
               activeTab === "categories"
                 ? "text-green-600 border-b-2 border-green-600"
                 : "text-gray-600 hover:text-green-600"
@@ -15,18 +15,18 @@ export const CookTabs = ({ activeTab, setActiveTab, reviewCount }) => {
   
           <button
             onClick={() => setActiveTab("reviews")}
-            className={`px-4 py-2 font-medium text-sm whitespace-nowrap ${
+            className={`px-4 py-2 font-medium text-sm whitespace-nowrap cursor-pointer${
               activeTab === "reviews"
                 ? "text-green-600 border-b-2 border-green-600"
                 : "text-gray-600 hover:text-green-600"
             }`}
           >
-            Reviews ({reviewCount})
+            Reviews 
           </button>
   
           <button
             onClick={() => setActiveTab("about")}
-            className={`px-4 py-2 font-medium text-sm whitespace-nowrap ${
+            className={`px-4 py-2 font-medium text-sm whitespace-nowrap cursor-pointer ${
               activeTab === "about"
                 ? "text-green-600 border-b-2 border-green-600"
                 : "text-gray-600 hover:text-green-600"

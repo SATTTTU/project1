@@ -54,7 +54,7 @@ export const LoginForm = () => {
 					<button
 						type="button"
 						onClick={togglePasswordVisibility}
-						className="absolute right-3 top-9 text-gray-500"
+						className="absolute right-3 top-9 text-gray-500 cursor-pointer"
 					>
 						{showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
 					</button>
@@ -91,7 +91,7 @@ export const LoginForm = () => {
 				Don't have an account?{" "}
 				<button
 					onClick={() => navigate("/register")}
-					className="text-green-700 font-medium hover:underline"
+					className="text-green-700 font-medium hover:underline cursor-pointer"
 				>
 					Register now
 				</button>

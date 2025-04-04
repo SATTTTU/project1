@@ -27,11 +27,11 @@ export const About = () => {
 						whileInView={{ opacity: 1, x: 0 }}
 						transition={{ duration: 0.5 }}
 					>
-						<h2 className="text-3xl  font-bold text-[#426B1F] mt-44 md:mt-22 mb-6 lg:mt-0">
+						<h2 className="text-3xl  font-bold text-[#0e9300] mt-44 md:mt-22 mb-6 lg:mt-0">
 							About Us
 						</h2>
-						<p className="text-gray-700 text-lg md:text-lg leading-relaxed mb-4">
-							At <span className="font-semibold text-[#426B1F]">KhajaBox</span>, we bring restaurant-quality meals to your doorstep with 
+						<p className="text-gray-700 text-lg md:text-xl leading-relaxed mb-4">
+							At <span className="font-semibold text-[#0e9300]">KhajaBox</span>, we bring restaurant-quality meals to your doorstep with 
 							the convenience of a cloud kitchen. Whether you’re craving local flavors, 
 							international cuisines, or healthy meal options, we have something for everyone.
 						</p>

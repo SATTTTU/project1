@@ -7,6 +7,9 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import defaultAvatar from "../../../../assets/defaultProfile.jpg"; 
+
+
 
 export const PopularCooks = () => {
   const { data: popularCooks } = usePopularCooks();
@@ -23,8 +26,8 @@ export const PopularCooks = () => {
         spaceBetween={20}
         slidesPerView={5}
         navigation={{
-          nextEl: ".swiper-button-next", // matches the class name for next button
-          prevEl: ".swiper-button-prev", // matches the class name for prev button
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
         }}
         pagination={{ clickable: true, el: ".custom-pagination" }}
         autoplay={{ delay: 3000 }}
@@ -44,9 +47,13 @@ export const PopularCooks = () => {
             >
               <div className="relative mb-4 overflow-hidden rounded-full w-40 h-40 md:w-48 md:h-48 border-1 border-green-600">
                 <img
-                  src={`${imageBaseUrl}${cook.image_url}`}
+                  src={cook.image_url ? `${imageBaseUrl}${cook.image_url}` : defaultAvatar}
                   alt={cook.name}
                   className="w-full h-full object-cover rounded-full"
+                  onError={(e) => {
+                    e.target.onerror = null; // Prevent infinite loop
+                    e.target.src = defaultAvatar; // Fallback to default avatar
+                  }}
                 />
               </div>
               <span className="text-sm font-bold text-gray-800 text-center sm:text-base mb-2">

@@ -6,9 +6,7 @@ export const CookProfileRoute = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   
-  const handleBack = () => {
-    navigate(-1);
-  };
+ 
   
   const handleStatusChange = (cookId, newStatus) => {
     console.log(`Status changed for cook ${cookId} to ${newStatus}`);
@@ -19,12 +17,12 @@ export const CookProfileRoute = () => {
       <Sidebar />
       <div className="flex-1 p-8 overflow-auto">
         <div className="mb-4">
-          <button 
+          {/* <button 
             onClick={handleBack} 
             className="flex items-center px-3 py-2 text-gray-600 hover:text-gray-800 bg-white rounded-md shadow-sm"
           >
             ← Back
-          </button>
+          </button> */}
         </div>
         <div className="bg-white rounded-lg shadow-sm p-6">
           <CookProfileDetails 
