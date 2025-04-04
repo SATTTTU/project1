@@ -8,7 +8,7 @@ export const CookLocation = () => {
   const [place, setPlace] = useState("");
   const [city, setCity] = useState("");
   const [address, setAddress] = useState("");
-  
+
   // Status states
   const [locationError, setLocationError] = useState("");
   const [backendError, setBackendError] = useState("");
@@ -24,7 +24,9 @@ export const CookLocation = () => {
   // Check permission status and handle previously denied permissions
   const checkPermissionStatus = async () => {
     if (!("permissions" in navigator)) {
-      console.log("Permissions API not supported, will try geolocation directly");
+      console.log(
+        "Permissions API not supported, will try geolocation directly"
+      );
       return "unknown";
     }
 
@@ -37,7 +39,7 @@ export const CookLocation = () => {
         console.log("Permission status changed to:", result.state);
         setPermissionStatus(result.state);
       };
-      
+
       return result.state;
     } catch (error) {
       console.error("Error checking permission:", error);
@@ -79,18 +81,20 @@ export const CookLocation = () => {
     setLocationError("");
     setBackendError("");
     setIsLoading(true);
-    
+
     // If this is a retry attempt, try to request permission first
     if (retryAttempt) {
       const currentStatus = await checkPermissionStatus();
       console.log("Current permission status on retry:", currentStatus);
-      
+
       if (currentStatus === "denied") {
-        setLocationError("Location access is denied. Please enable location in your browser settings and refresh the page.");
+        setLocationError(
+          "Location access is denied. Please enable location in your browser settings and refresh the page."
+        );
         setIsLoading(false);
         return;
       }
-      
+
       const permissionGranted = await requestPermission();
       if (!permissionGranted) {
         setLocationError("Could not get permission for location access.");
@@ -105,11 +109,13 @@ export const CookLocation = () => {
           resolve,
           (error) => {
             console.error("Geolocation error:", error.code, error.message);
-            
+
             if (error.code === 1) {
               // Permission denied
               setPermissionStatus("denied");
-              setLocationError("Location access was denied. Please enable location access in your browser settings and refresh the page.");
+              setLocationError(
+                "Location access was denied. Please enable location access in your browser settings and refresh the page."
+              );
             } else if (error.code === 2) {
               setLocationError("Location information is unavailable.");
             } else if (error.code === 3) {
@@ -117,7 +123,7 @@ export const CookLocation = () => {
             } else {
               setLocationError(error.message || "Error getting location.");
             }
-            
+
             reject(error);
           },
           {
@@ -133,7 +139,7 @@ export const CookLocation = () => {
       setLocation({ latitude, longitude });
       setPermissionStatus("granted");
 
-      const ROUTE = import.meta.env.VITE_ROUTE_API_KEY;
+      const ROUTE = import.meta.env.VITE_ORS_API_KEY;
       console.log("Using API key:", ROUTE ? "Available" : "Not available");
 
       const response = await axios.get(
@@ -146,7 +152,8 @@ export const CookLocation = () => {
 
       const properties = response.data.features[0].properties;
       const placeName = properties.label;
-      const cityName = properties.locality || properties.region || properties.country;
+      const cityName =
+        properties.locality || properties.region || properties.country;
       const street = properties.street || "";
       const locality = properties.locality || "";
       const region = properties.region || "";
@@ -172,7 +179,7 @@ export const CookLocation = () => {
       setIsLocationFetched(true);
     } catch (error) {
       console.error("Error in fetching location:", error);
-      
+
       if (error.response?.status === 400) {
         setBackendError("Your location is already stored.");
         localStorage.setItem("locationSaved", "true");
@@ -190,19 +197,21 @@ export const CookLocation = () => {
     const initializeLocation = async () => {
       // First check permission status
       const initialPermission = await checkPermissionStatus();
-      
+
       // Skip if location is already fetched
       if (isLocationFetched) {
         console.log("Location already saved, skipping fetch");
         return;
       }
-      
+
       // If permission is already denied, show appropriate message
       if (initialPermission === "denied") {
-        setLocationError("Location access is denied. Please enable location in your browser settings and refresh the page.");
+        setLocationError(
+          "Location access is denied. Please enable location in your browser settings and refresh the page."
+        );
         return;
       }
-      
+
       // Fetch location
       await fetchLocation();
     };
@@ -230,32 +239,32 @@ export const CookLocation = () => {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Cook Location</h1>
-      
+
       {isLoading && (
         <div className="text-center py-4">
           <div className="inline-block h-6 w-6 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
           <p className="mt-2 text-gray-600">Processing location data...</p>
         </div>
       )}
-      
+
       {isSuccess && (
         <div className="p-4 bg-green-50 border border-green-200 rounded-md mb-4">
           <p className="text-green-800">Location sent successfully!</p>
         </div>
       )}
-      
+
       {isError && (
         <div className="p-4 bg-red-50 border border-red-200 rounded-md mb-4">
           <p className="text-red-800">Error: {error.message}</p>
         </div>
       )}
-      
+
       {backendError && (
         <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-md mb-4">
           <p className="text-yellow-800">{backendError}</p>
         </div>
       )}
-      
+
       {locationError && (
         <div className="p-4 bg-red-50 border border-red-200 rounded-md mb-4">
           <p className="text-red-800">{locationError}</p>
@@ -263,23 +272,28 @@ export const CookLocation = () => {
             onClick={handleRetryLocation}
             className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
           >
-            {permissionStatus === "denied" ? "Update Settings & Try Again" : "Try Again"}
+            {permissionStatus === "denied"
+              ? "Update Settings & Try Again"
+              : "Try Again"}
           </button>
         </div>
       )}
-      
+
       {location && (
         <div className="p-4 bg-blue-50 border border-blue-200 rounded-md">
           <h3 className="font-medium mb-2">Location Details</h3>
           <div className="space-y-1">
-            <p>Latitude: {location.latitude?.toFixed(6)}, Longitude: {location.longitude?.toFixed(6)}</p>
+            <p>
+              Latitude: {location.latitude?.toFixed(6)}, Longitude:{" "}
+              {location.longitude?.toFixed(6)}
+            </p>
             {place && <p>Place: {place}</p>}
             {city && <p>City: {city}</p>}
             {address && <p>Address: {address}</p>}
           </div>
         </div>
       )}
-      
+
       {!location && !locationError && !isLoading && (
         <div className="p-4 bg-gray-50 border border-gray-200 rounded-md">
           <p className="text-gray-800">Fetching your location...</p>
