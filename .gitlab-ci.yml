@@ -16,14 +16,14 @@ build:
     paths:
       - dist/
   tags:
-    - intern-runner
+    - builder
 
 deploy:
   image: amazon/aws-cli
   dependencies:
     - build
   tags:
-    - intern-runner
+    - deploy
   stage: deploy
   script:
     - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_DEV
@@ -32,3 +32,4 @@ deploy:
     - aws s3 sync ./dist/ s3://khajabox-frontend/
   only:
     - setup
+
