@@ -5,13 +5,14 @@ import { useSearch } from "../api/search"
 import { FiStar } from "react-icons/fi"
 import { toast, ToastContainer } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css'; 
+import { useNavigate } from "react-router-dom"
 
 export const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCookId, setSelectedCookId] = useState(null)
   const [loadingCartItem, setLoadingCartItem] = useState(null)
   const [showDropdown, setShowDropdown] = useState(false)
   const searchRef = useRef(null)
+  const navigate = useNavigate()
 
   const { mutateAsync: addToCart } = useAddCartItem()
 
@@ -29,19 +30,14 @@ export const SearchBar = () => {
     setShowDropdown(e.target.value.length > 0)
   }
 
-  const handleCookClick = (cookId) => {
-    setSelectedCookId(cookId)
-    setShowDropdown(false)
-  }
-
   const handleAddToCart = async (dish) => {
     try {
       setLoadingCartItem(dish.menu_item_id)
       await addToCart({ menu_item_id: dish.menu_item_id, quantity: 1 })
-      toast.success(`${dish.name} added to cart!`, { autoClose: 2000 }); // Toast for success
+      toast.success(`${dish.name} added to cart!`, { autoClose: 2000 });
     } catch (error) {
       console.error("Error adding to cart:", error)
-      toast.error("Failed to add item to cart.", { autoClose: 2000 }); // Toast for error
+      toast.error("Failed to add item to cart.", { autoClose: 2000 });
     } finally {
       setLoadingCartItem(null)
     }
@@ -70,7 +66,7 @@ export const SearchBar = () => {
           placeholder="Search for dishes..."
           value={searchTerm}
           onChange={handleInputChange}
-          className=" w-96 md:w-[400px] lg:w-[500px] xl:w-[600px] p-3 text-lg focus:outline-none transition-all duration-200 rounded-full"
+          className="w-96 md:w-[400px] lg:w-[500px] xl:w-[600px] p-3 text-lg focus:outline-none transition-all duration-200 rounded-full"
           aria-label="Search for dishes"
         />
       </div>
@@ -100,24 +96,40 @@ export const SearchBar = () => {
               {searchResults.map((dish) => (
                 <div
                   key={dish.menu_item_id}
-                  className="p-3 border-b border-slate-200 hover:bg-gray-100 transition flex items-center justify-between"
+                  className="p-3 border-b border-slate-200 hover:bg-gray-100 transition flex items-center justify-between cursor-pointer"
+                  onClick={() => navigate(`/food/${dish.menu_item_id}`)}
                 >
                   <div className="flex items-center space-x-4">
                     <img
                       src={`${imageUrl}${dish?.image_url}`}
                       alt={dish.name}
                       className="w-20 h-20 object-cover rounded-lg shadow-md hover:scale-105 transition-transform"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        navigate(`/food/${dish.menu_item_id}`)
+                      }}
                       onError={(e) => {
-                        e.target.src = "/placeholder.svg";
+                        e.target.src = "/placeholder.svg"
                       }}
                     />
                     <div>
-                      <h2 className="text-lg font-semibold">{dish.name}</h2>
+                      <h2
+                        className="text-lg font-semibold text-blue-700 hover:underline"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          navigate(`/food/${dish.menu_item_id}`)
+                        }}
+                      >
+                        {dish.name}
+                      </h2>
                       <p className="text-gray-600">
-                        Cook: {" "}
+                        Cook:{" "}
                         <button
                           className="font-medium text-blue-500 hover:underline cursor-pointer"
-                          onClick={() => handleCookClick(dish.cook_id)}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            navigate(`/cook/${dish.cook_id}`)
+                          }}
                         >
                           {dish.cook_name}
                         </button>
@@ -127,7 +139,11 @@ export const SearchBar = () => {
                         {[...Array(5)].map((_, index) => (
                           <FiStar
                             key={index}
-                            className={`h-5 w-5 ${index < Math.round(dish.average_rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
+                            className={`h-5 w-5 ${
+                              index < Math.round(dish.average_rating)
+                                ? "text-yellow-400 fill-yellow-400"
+                                : "text-gray-300"
+                            }`}
                           />
                         ))}
                       </div>
@@ -136,7 +152,10 @@ export const SearchBar = () => {
 
                   <button
                     className="bg-[#426B1F] text-white py-2 px-4 rounded-md font-semibold hover:bg-green-700 transition disabled:opacity-50"
-                    onClick={() => handleAddToCart(dish)}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleAddToCart(dish)
+                    }}
                     disabled={loadingCartItem === dish.menu_item_id}
                     aria-label={`Add ${dish.name} to cart`}
                   >

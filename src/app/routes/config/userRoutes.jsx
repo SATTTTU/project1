@@ -13,7 +13,7 @@ export const userRoutes = [
 	{
 		path: paths.user.root.path,
 		element: <Outlet />,
-		ErrorBoundary: AppRootErrorBoundary,
+		// ErrorBoundary: AppRootErrorBoundary,
 		children: [
 			{
 				element: <AuthRoot />,
@@ -180,6 +180,7 @@ export const userRoutes = [
 									return { Component: FoodDetails };
 								},
 							},
+						
 							{
 								path: paths.user.categoryFoodDetails.path,
 								lazy: async () => {

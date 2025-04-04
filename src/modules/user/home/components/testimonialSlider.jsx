@@ -83,6 +83,9 @@ export const TestimonialSlider = () => {
                           <h3 className="font-bold text-xl text-gray-800">
                             {testimonial.user.name}
                           </h3>
+                          <h2 className="font-bold text-md text-green-500">To:  
+                            {testimonial.cook.name}
+                          </h2>
                           <div className="flex mt-1">
                             {[...Array(5)].map((_, i) => (
                               <Star
