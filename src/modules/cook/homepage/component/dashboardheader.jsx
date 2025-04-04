@@ -3,12 +3,14 @@ import { UseSetCookStatus } from "../api/availableStatus"; // Import the custom 
 import { useAllTimeEarnings } from "../api/alltimeEarnings";
 import { useWeeklyEarnings } from "../api/weeklyEarnings";
 import { useDailyEarnings } from "../api/dailyEarnings";
+import { usePendingPayout } from "../api/pendingpayout";
 
 const DashboardHeader = ({ isOnline, setIsOnline}) => {
   const { mutate: setCookStatus, isLoading} = UseSetCookStatus(); // 'mutate' should be renamed to 'setCookStatus'
 const {data:earnings}= useAllTimeEarnings();
 const {data:weeklyearnings}= useWeeklyEarnings();
 const {data:dailyearnings}= useDailyEarnings();
+const {data:pending} = usePendingPayout();
 
 
 console.log("earnings*****", earnings);
@@ -53,7 +55,7 @@ console.log("earnings*****", earnings);
         </div>
         <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
           <p className="text-sm text-gray-600">Pending Payout</p>
-          {/* <h3 className="text-xl font-bold">₹{earnings.pendingPayout}</h3> */}
+          <h3 className="text-xl font-bold">Rs. {pending}</h3>
         </div>
       </div>
     </div>

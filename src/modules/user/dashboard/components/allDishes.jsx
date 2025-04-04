@@ -15,7 +15,7 @@ export const AllDishes = () => {
   const handleAddToCart = async (dish) => {
     try {
       await addToCart({
-        menu_item_id: dish.menu_item_id,
+        menu_item_id: dish.id,
         quantity: 1,
       });
       toast.success(`${dish.name} added to cart! 🛒`);

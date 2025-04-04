@@ -1,113 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 
-const OrderRequestCard = ({ order }) => {
-  // Ensure order.items is an array before calling join
-  const items = Array.isArray(order.items) ? order.items.join(", ") : "No items available";
+const OrderRequestCard = ({ order, updateOrderStatus }) => {
+  const [status, setStatus] = useState(order.status);
+  console.log("orders*****", order)
+
+  const handleStatusChange = (event) => {
+    const newStatus = event.target.value;
+    setStatus(newStatus);
+    updateOrderStatus(order.id, newStatus); // Call the function passed as a prop to update status
+  };
 
   return (
-    <div className="rounded-lg bg-white p-4 shadow-md hover:shadow-lg transition-all">
-      <div className="flex items-start">
-        <img
-          src={order.image || "/placeholder.svg"}
-          alt={order.items[0] || "Customer"}
-          className="h-20 w-20 rounded-md object-cover mr-4"
-        />
-        <div className="flex-1">
-          <div className="flex justify-between">
-            <h3 className="font-semibold">{order.customerName}</h3>
-            <span
-              className={`px-3 py-1 text-xs rounded-full ${
-                order.status === "preparing"
-                  ? "bg-yellow-100 text-yellow-800"
-                  : "bg-green-100 text-green-800"
-              }`}
-            >
-              {order.status === "preparing" ? "Preparing" : "Ready for Pickup"}
-            </span>
-          </div>
-          <p className="text-sm text-gray-600 mt-1">
-            <span className="font-medium">Items:</span> {items}
-          </p>
-          <div className="grid grid-cols-2 gap-1 mt-1">
-            <p className="text-sm text-gray-600">
-              <span className="font-medium">Accepted:</span> {order.timeAccepted}
-            </p>
-            <p className="text-sm text-gray-600">
-              <span className="font-medium">Delivery in:</span> {order.estimatedDelivery}
-            </p>
-            <p className="text-sm font-medium text-[#426B1F]">
-              Total: ₹{order.total.toFixed(2)}
-            </p>
-          </div>
-          <div className="mt-3 flex gap-2">
-            {order.status === "preparing" ? (
-              <button className="flex items-center cursor-pointer rounded-md bg-green-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-green-700">
-                Mark as Ready
-              </button>
-            ) : (
-              <button className="flex items-center cursor-pointer rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700">
-                Start Preparing
-              </button>
-            )}
-            <button className="flex items-center cursor-pointer rounded-md bg-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-300">
-              View Details
-            </button>
-          </div>
-        </div>
+    <div className="bg-white p-4 rounded-lg shadow-lg">
+      <div className="flex justify-between items-center">
+        <h3 className="text-lg font-bold">{order.customerName}</h3>
+        <span className="text-sm text-gray-500">{order.time}</span>
       </div>
-      <div className="grid grid-cols-3 gap-2 text-sm text-gray-600 mt-3">
-        <div className="flex items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4 mr-1"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <span>{order.time}</span>
-        </div>
-        <div className="flex items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4 mr-1"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-            />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-          <span>{order.distance}</span>
-        </div>
-        <div className="flex items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4 mr-1"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"
-            />
-          </svg>
-          <span>{order.paymentMethod}</span>
-        </div>
+      <div className="mt-2">
+        <p className="text-gray-700">{order.items}</p>
+        <p className="text-gray-500">Payment: {order.paymentMethod}</p>
+        <p className="text-xl font-bold mt-2">Total: ${order.total.toFixed(2)}</p>
+      </div>
+
+      <div className="mt-4">
+        <select
+          value={status}
+          onChange={handleStatusChange}
+          className="w-full p-2 border border-gray-300 rounded-md"
+        >
+          <option value="pending">Pending</option>
+          <option value="accepted">Accepted</option>
+          <option value="preparing">Preparing</option>
+          <option value="out-for-delivery">Out for Delivery</option>
+          <option value="delivered">Delivered</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
       </div>
     </div>
   );

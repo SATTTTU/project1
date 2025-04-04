@@ -5,25 +5,16 @@ export const OrderDetails = ({ order }) => {
 
   const { user, address, status, timeRemaining, items = [] } = order;
 
-  // Calculate total price of all items
-  const totalPrice = items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+  const totalPrice = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   return (
-    <div className="flex flex-col md:flex-row md:justify-between p-4 border-b">
-      {/* User & Address Section */}
-      <div className="mb-4 md:mb-0">
-        <h3 className="font-medium">{user?.name || "Unknown User"}</h3>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border-b border-slate-300">
+      <div className="mb-4">
+        <h3 className="font-medium text-lg">{user?.name || "Unknown User"}</h3>
         <p className="text-sm text-gray-500">{address || "No address provided"}</p>
-
-        {/* Time Remaining Indicator for Ongoing or Preparing Orders */}
         {(status === "Ongoing" || status === "Preparing") && timeRemaining && (
           <div className="mt-2 flex items-center text-sm text-[#426B1F]">
-            <svg
-              className="mr-1 h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
+            <svg className="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -38,9 +29,8 @@ export const OrderDetails = ({ order }) => {
         )}
       </div>
 
-      {/* Order Summary Section */}
       <div className="text-right">
-        <p className="text-lg font-bold">₹{totalPrice.toFixed(2)}</p>
+        <p className="text-xl font-bold">₹{totalPrice.toFixed(2)}</p>
         <p className="text-xs text-gray-500">{items.length} item{items.length !== 1 ? "s" : ""}</p>
       </div>
     </div>

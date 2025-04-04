@@ -86,7 +86,7 @@ export const Footer = () => {
 							<p className="mt-2 text-gray-600">Email: support@Khajabox.com</p>
 							<p className="text-gray-600">Phone: +1 (234) 567-890</p>
 
-							<div className="flex   space-x-4 mt-4 lg:justify-center lg:items-center">
+							<div className="flex   space-x-4 mt-4 lg:justify-center justify-center lg:items-center">
 								<a href="#" className="hover:text-gray-300">
 									<FaFacebookF size={20} />
 								</a>
