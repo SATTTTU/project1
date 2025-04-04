@@ -6,11 +6,11 @@ import { api } from "@/lib/api-client";
 import { loginSchema } from "./schema/authschema";
 import { useCookLogin } from "../api/cooklogin";
 
-export const useLoginFormik = (config = { 
-  mutationConfig: { 
-    onSuccess: undefined, 
-    onError: undefined 
-  } 
+export const useLoginFormik = (config = {
+  mutationConfig: {
+    onSuccess: undefined,
+    onError: undefined
+  }
 }) => {
   const navigate = useNavigate();
   
@@ -54,10 +54,20 @@ export const useLoginFormik = (config = {
         helpers.setStatus({ success: false });
         
         if (err instanceof AxiosError && err.response) {
-          const message = err.response?.data?.message || "Login failed";
-          helpers.setErrors({ submit: message });
+          // Check for specific error messages from the backend
+          const errorMessage = err.response?.data?.error || err.response?.data?.message || "Login failed";
+          
+          // Identify which field should display the error based on error message
+          if (errorMessage.toLowerCase().includes('password')) {
+            helpers.setFieldError('password', errorMessage);
+          } else if (errorMessage.toLowerCase().includes('email') || errorMessage.toLowerCase().includes('user')) {
+            helpers.setFieldError('email', errorMessage);
+          } else {
+            // Generic error goes to the password field for login form
+            helpers.setFieldError('password', errorMessage);
+          }
         } else {
-          helpers.setErrors({ submit: "An unexpected error occurred" });
+          helpers.setFieldError('password', "An unexpected error occurred");
         }
       } finally {
         helpers.setSubmitting(false);

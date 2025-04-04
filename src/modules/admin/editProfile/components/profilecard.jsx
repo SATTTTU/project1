@@ -102,7 +102,7 @@ export const ProfileCard = () => {
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 300 }}
-      className="w-72 bg-white shadow-2xl rounded-3xl border-2 border-gray-100 overflow-hidden relative"
+      className="w-72 bg-white rounded-3xl border-2 border-gray-100 overflow-hidden relative"
     >
       {/* Profile Header */}
       <div className="bg-gradient-to-r from-green-500 to-green-700 text-white p-6">
@@ -126,7 +126,7 @@ export const ProfileCard = () => {
               <img
                 src={profileImageSrc}
                 alt="Profile"
-                className="w-20 h-20 rounded-full border-4 border-white shadow-lg object-cover"
+                className="w-20 h-20 rounded-full  object-cover"
               />
               {profileData.isOnline && (
                 <span className="absolute bottom-0 right-0 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></span>
@@ -202,7 +202,7 @@ export const ProfileCard = () => {
 
       {/* Show Settings Card if clicked */}
       {showSettings && (
-        <div className="absolute top-0 left-0 w-full h-full bg-white shadow-lg rounded-3xl p-4 ">
+        <div className="absolute top-0 left-0 w-full h-full bg-white rounded-3xl p-4 ">
           <button
             onClick={() => setShowSettings(false)}
             className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors"

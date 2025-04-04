@@ -1,17 +1,17 @@
 import { useState } from "react";
-import { Link} from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { InputField } from "@/components/ui/inputfield/InputField";
 import { useUserRegisterFormik } from "../formik/useRegister";
 
 export const RegisterForm = () => {
-    // const navigate= useNavigate();
+    const navigate= useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const { formik, isRegistering } = useUserRegisterFormik({
     mutationConfig: {
       onSuccess: (data) => {
         console.log("Registration successful:", data);
-        // navigate("/user/login"); 
+        navigate("/login"); 
       },
       onError: (error) => {
         console.error("Registration failed:", error);
@@ -67,7 +67,7 @@ export const RegisterForm = () => {
           <button
             type="button"
             onClick={togglePasswordVisibility}
-            className="absolute right-3 top-12 transform -translate-y-1/2 text-gray-500"
+            className="absolute right-3 top-12 transform -translate-y-1/2 text-gray-500 cursor-pointer"
           >
             {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
           </button>
@@ -76,8 +76,8 @@ export const RegisterForm = () => {
 
       <button
         type="submit"
-        disabled={isRegistering || !formik.isValid || formik.isSubmitting}
-        className="bg-[#426B1F] text-white px-4 py-2 rounded-md mt-6 w-full hover:bg-[#5c9429] transition  disabled:cursor-not-allowed"
+        // disabled={isRegistering || !formik.isValid || formik.isSubmitting}
+        className="bg-[#426B1F] text-white px-4 py-2 rounded-md mt-6 w-full text-lg cursor-pointer hover:bg-[#5c9429] transition  disabled:cursor-not-allowed"
       >
         {isRegistering ? "Signing Up..." : "Sign Up"}
       </button>
@@ -85,7 +85,7 @@ export const RegisterForm = () => {
       <p className="text-md mt-3 text-center text-black mb-6">
         Already have an account?{" "}
         <Link
-          to="/user/login"
+          to="/login"
           className="text-green-700 font-medium hover:underline"
         >
           Login Now

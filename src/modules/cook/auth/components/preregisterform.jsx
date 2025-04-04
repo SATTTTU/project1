@@ -54,7 +54,7 @@ export const PreRegisterForm = () => {
   
   return (
     <div className="bg-white p-8 rounded-lg  w-full max-w-md">
-      <h2 className="text-2xl font-bold mb-6 text-center">Create Account</h2>
+      <h2 className="text-3xl text-[#426B1F] font-bold mb-6 text-center">Sign up as cook</h2>
       
       {formik.status && !formik.status.success && (
         <div className="bg-red-100 p-3 rounded mb-4 text-red-700">
@@ -113,7 +113,7 @@ export const PreRegisterForm = () => {
       
       <p className="mt-4 text-center text-gray-600">
         Already have an account?{" "}
-        <Link to="/cook/login" className="text-blue-600 hover:underline">
+        <Link to="/cook/login" className="text-[#426B1F] hover:underline">
           Login Now
         </Link>
       </p>

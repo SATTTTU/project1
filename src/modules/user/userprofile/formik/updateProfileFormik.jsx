@@ -11,8 +11,8 @@ export const useUserProfileEditFormik = () => {
 
   const formik = useFormik({
     initialValues: {
-      name: profileData?.name || "John Doe",
-      email: profileData?.email || "johndoe@example.com",
+      name: profileData?.name || "",
+      email: profileData?.email || "",
       mobile: profileData?.mobile || "",
       image: profileData?.image_url || "",
     },
@@ -21,11 +21,27 @@ export const useUserProfileEditFormik = () => {
     onSubmit: async (values, helpers) => {
       try {
         const formData = new FormData();
-        formData.append("name", values.name);
-        formData.append("mobile", values.mobile);
+
+        // Append only if the field has a non-empty value
+        if (values.name.trim()) {
+          formData.append("name", values.name.trim());
+        }
+        if (values.email.trim()) {
+          formData.append("email", values.email.trim());
+        }
+        if (values.mobile.trim()) {
+          formData.append("mobile", values.mobile.trim());
+        }
         if (values.image instanceof File) {
           formData.append("image", values.image);
         }
+
+        // Prevent empty submission
+        if ([...formData.keys()].length === 0) {
+          toast.warning("Nothing to update.");
+          return;
+        }
+
         await editProfile(formData);
         toast.success("Successfully updated profile");
       } catch (err) {

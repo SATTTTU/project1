@@ -2,60 +2,48 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useVerifyPayment } from "../api/verify-payment";
 import { Modal } from "@/components/ui/modal/Modal";
-// import socketService from "@/modules/Socket"; // ✅ Import Socket Service
 
-export const OrderSuccess = () => {
-  const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [orderId, setOrderId] = useState(null); // ✅ Store orderId after API response
+export const OrderSuccess=()=> {
+    const navigate = useNavigate();
+      const [isModalOpen, setIsModalOpen] = useState(false);
+    
+
+  const { mutate: verifyPayment, isLoading: isVerifying } = useVerifyPayment({});
   const [searchParams] = useSearchParams();
 
-  // API call for verifying payment
-  const { mutate: verifyPayment, isLoading: isVerifying } = useVerifyPayment({
-    onSuccess: (data) => {
-      console.log("Payment verified:", data);
-
-      if (data?.orderId) {
-        setOrderId(data.orderId);
-        socketService.emit("joinRoom", { roomId: data.orderId }); // ✅ Join socket room
+    const handleVerifyPayment = async () => {
+      const pidx = searchParams.get("pidx");
+      console.log("token", pidx); 
+      if (!pidx) {
+        alert("Missing Payment ID");
+        return;
       }
-
-      setIsModalOpen(false);
-      navigate("/order-success");
-    },
-    onError: (error) => {
-      alert(`Payment Verification Failed: ${error.message}`);
-    },
-  });
-
-  useEffect(() => {
-    // ✅ Listen for real-time order updates
-    if (orderId) {
-      socketService.on("orderStatusUpdated", (data) => {
-        console.log("Real-time Order Status Update:", data);
-        if (data.orderId === orderId && data.status === "confirmed") {
-          handleVerifyPayment(); // ✅ Trigger verification when status updates
-        }
+  
+      verifyPayment(pidx, {
+        onSuccess: (data) => {
+          console.log("Payment verified:", data);
+          navigate("/order-success");
+          setIsModalOpen(false);
+  
+        },
+        onError: (error) => {
+        alert(`Payment Verification Failed: ${error.message}`);
+      },
       });
-    }
-
-    // Cleanup on unmount
-    return () => {
-      socketService.off("orderStatusUpdated");
+  
     };
-  }, [orderId]);
+  
+    const pidx = searchParams.get("pidx");
+    console.log("window", pidx);
+    useEffect(() => {
+      const pidx = searchParams.get("pidx");
+      console.log("Window ko output", pidx);
+      if (pidx) {
+        setIsModalOpen(true);
+      }
+    }, []);
 
-  const handleVerifyPayment = async () => {
-    const transactionId = searchParams.get("transactionId"); // Use transactionId if needed
-    console.log("Verifying order:", orderId);
 
-    if (!orderId) {
-      alert("Missing Order ID");
-      return;
-    }
-
-    verifyPayment({ orderId, transactionId }); // ✅ Send orderId to API
-  };
 
   return (
     <>
@@ -73,10 +61,13 @@ export const OrderSuccess = () => {
             </svg>
           </div>
 
-          <h2 className="text-2xl font-bold mb-4">Order Confirmed!</h2>
-          <p className="text-gray-600 mb-4">
-            Thank you for your purchase. Your order has been received and is being processed.
-          </p>
+        <h2 className="text-2xl font-bold mb-4">Order Confirmed!</h2>
+        <p className="text-gray-600 mb-4">
+          Thank you for your purchase. Your order has been received and is being processed.
+        </p>
+
+     
+
 
           <div className="flex flex-col space-y-3">
             <Link

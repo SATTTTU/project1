@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const fetchUserOrders = async () => {
   const response = await api.get(`/api/cooks/orders/index`); 
+  console.log("All orders", response.data)
   return response.data;
 };
 

@@ -1,13 +1,19 @@
 import { AppRouter } from "./router";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+// import { useEffect } from "react";
 import { AppProvider } from "./provider";
-import { CartProvider } from "@/hooks/context/cart-context";
+// import { generateToken } from "@/config/firebase";
 
 export const App = () => {
+	// useEffect(() => {
+	// 	generateToken();
+	// }, []);
+
 	return (
 		<AppProvider>
-			<CartProvider>
-				<AppRouter />
-			</CartProvider>
+			<AppRouter />
 		</AppProvider>
 	);
 };

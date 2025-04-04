@@ -1,55 +1,40 @@
-
-import React, { useState } from "react";
+import React from "react";
 import { useUpdateOrderStatus } from "../api/updateOrders";
 
-export const OrderActions = ({ order }) => {
+const statuses = [
+  "pending",
+  "accepted",
+  "preparing",
+  "out-for-delivery",
+  "delivered",
+  "cancelled",
+];
+
+export const OrderStatusUpdate = ({ order, updateOrderStatus }) => {
   const { mutate: updateStatus, isLoading } = useUpdateOrderStatus();
-  const [newStatus, setNewStatus] = useState(order.status);
 
-  const handleUpdateStatus = (e) => {
-    const status = e.target.value;
-    setNewStatus(status);
-    updateStatus({ order_id: order.order_id, status });
-  };
+  const handleStatusChange = (event) => {
+    const newStatus = event.target.value;
 
-  // Define possible status transitions
-  const statusActions = {
-    pending: [
-      { label: "Accept Order", status: "accepted" },
-      { label: "Cancel Order", status: "cancelled" },
-    ],
-    accepted: [
-      { label: "Start Preparing", status: "preparing" },
-    ],
-    preparing: [
-      { label: "Out for Delivery", status: "out-for-delivery" },
-    ],
-    "out-for-delivery": [
-      { label: "Mark as Delivered", status: "delivered" },
-    ],
+    updateOrderStatus(order.order_id, newStatus);
+
+    updateStatus({ order_id: order.order_id, status: newStatus });
   };
 
   return (
-    <div className="mt-4 pt-4 border-t flex flex-wrap gap-2">
+    <div className="mt-4">
       <select
-        value={newStatus}
-        onChange={handleUpdateStatus}
+        value={order.status}
+        onChange={handleStatusChange}
         disabled={isLoading}
-        className="rounded-md px-4 py-2"
+        className="px-4 py-2 text-sm font-semibold border border-gray-300 rounded-md w-full md:w-auto focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
-        {statusActions[order.status]?.map((action) => (
-          <option key={action.status} value={action.status}>
-            {action.label}
+        {statuses.map((status) => (
+          <option key={status} value={status.toLowerCase()}>
+            {status}
           </option>
         ))}
       </select>
-
-      {order.status === "delivered" && (
-        <span className="text-green-600 font-medium">Order completed successfully!</span>
-      )}
-      {order.status === "cancelled" && (
-        <span className="text-red-600 font-medium">Order has been cancelled</span>
-      )}
     </div>
   );
-};npm 
+};

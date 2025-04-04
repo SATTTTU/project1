@@ -8,7 +8,6 @@ export const LoginForm = () => {
   const navigate = useNavigate();
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [apiError, setApiError] = useState("");
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
@@ -35,17 +34,12 @@ export const LoginForm = () => {
         if (data.token) {
           localStorage.setItem('authToken', data.token);
         }
-        
       },
       onError: (error) => {
         console.error("Login failed:", error);
         
-        // Extract the error message from the API response
-        if (error.response && error.response.data && error.response.data.error) {
-          setApiError(error.response.data.error);
-        } else {
-          setApiError("Login failed. Please try again.");
-        }
+        // Error handling is now done in the useLoginFormik hook
+        // We don't need to do anything here as formik will handle displaying errors
       },
     },
   });
@@ -54,13 +48,6 @@ export const LoginForm = () => {
     <form onSubmit={formik.handleSubmit} className="space-y-6">
       <div className="text-center mb-6">
       </div>
-      
-      {apiError && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-          <strong className="font-bold">Error: </strong>
-          <span className="block sm:inline">{apiError}</span>
-        </div>
-      )}
 
       <div className="space-y-4">
         <InputField

@@ -20,7 +20,7 @@ export const UserPaymentRoute = () => {
   const periodOptions = ["Today", "This Week", "This Month", "This Quarter", "This Year"];
 
   return (
-    <div className="flex">
+    <div className="flex h-screen bg-gray-100 font-sans">
       {/* Sidebar */}
       <Sidebar />
 
@@ -61,7 +61,7 @@ export const UserPaymentRoute = () => {
           />
 
           {/* Payment Settings Card */}
-          <Link to="/admin/payment-setting" className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border-l-4 border-purple-500">
+          <Link to="/admin/payment-setting" className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="p-6 flex flex-col h-full justify-between">
               <div className="flex justify-between items-start">
                 <h3 className="text-lg font-semibold text-gray-800">Payment Settings</h3>

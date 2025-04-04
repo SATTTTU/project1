@@ -5,7 +5,7 @@ import { FaCookie } from "react-icons/fa";
 import { TbReportSearch } from "react-icons/tb";
 import { FiLogOut, FiMenu } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
-import logo from "../../../../assets/logo.jpg";
+import logo from "@/assets/unnamed.png";
 import ConfirmModal from "../confirmmodel/confirmmodel";
 import { useAdminLogout } from "@/modules/admin/dashboard/api/logout";
 import { toast } from "react-toastify";
@@ -56,7 +56,7 @@ export const Sidebar = () => {
       >
         {/* Header */}
         <Link to="/user/home" className="flex items-center p-6">
-          <div className="h-12 w-12 flex items-center justify-center">
+          <div className="h-5 w-10 flex items-center justify-center">
             <img src={logo} alt="Logo" />
           </div>
           <span className="text-3xl font-bold text-green-600">KhajaBox</span>
