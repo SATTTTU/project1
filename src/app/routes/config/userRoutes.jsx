@@ -1,11 +1,14 @@
 import { paths } from "../../../config/paths";
 import { AppRootErrorBoundary, AuthRoot } from "../app/root";
 import { Outlet } from "react-router-dom";
-import ProfileLayout from "../user/userprofile/profile";
-import { ProfileContent } from "@/modules/user/userprofile/components/profileContent";
-import SettingsContent from "@/modules/user/userprofile/components/settingContent";
-import OrdersContent from "@/modules/user/userprofile/components/ordersContent";
 import ProtectedRoute from "./protectedRoute";
+
+// Remove static imports of these components
+// import ProfileLayout from "../user/userprofile/profile";
+// import { ProfileContent } from "@/modules/user/userprofile/components/profileContent";
+// import SettingsContent from "@/modules/user/userprofile/components/settingContent";
+// import OrdersContent from "@/modules/user/userprofile/components/ordersContent";
+
 export const userRoutes = [
 	{
 		path: paths.user.root.path,
@@ -189,11 +192,38 @@ export const userRoutes = [
 
 							{
 								path: "/profile",
-								element: <ProfileLayout />,
+								lazy: async () => {
+									const { default: ProfileLayout } = await import("../user/userprofile/profile");
+									return { Component: ProfileLayout };
+								},
 								children: [
-									{ path: "", element: <ProfileContent /> },
-									{ path: "order", element: <OrdersContent /> },
-									{ path: "settings", element: <SettingsContent /> },
+									{ 
+										path: "", 
+										lazy: async () => {
+											const { ProfileContent } = await import(
+												"../../../modules/user/userprofile/components/profileContent"
+											);
+											return { Component: ProfileContent };
+										}
+									},
+									{ 
+										path: "order", 
+										lazy: async () => {
+											const { OrdersContent } = await import(
+												"../../../modules/user/userprofile/components/ordersContent"
+											);
+											return { Component: OrdersContent };
+										}
+									},
+									{ 
+										path: "settings", 
+										lazy: async () => {
+											const { default: SettingsContent } = await import(
+												"../../../modules/user/userprofile/components/settingContent"
+											);
+											return { Component: SettingsContent };
+										}
+									}
 								]
 							},
 							{
