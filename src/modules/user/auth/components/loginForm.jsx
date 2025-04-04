@@ -12,8 +12,8 @@ export const LoginForm = () => {
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   const {formik, isLoggingIn } = useLoginFormik({
-	mutationConfig: {
-		onSuccess: (data) => {
+	  mutationConfig: {
+		  onSuccess: (data) => {
 		  console.log("Login successful:", data);
 		},
 		onError: (error) => {
@@ -81,7 +81,7 @@ export const LoginForm = () => {
 
 			<button
 				type="submit"
-				disabled={isLoggingIn || !formik.isValid || formik.isSubmitting}
+				// disabled={isLoggingIn || !formik.isValid || formik.isSubmitting}
 				className="w-full bg-[#426B1F] text-white py-2 text-lg rounded-md hover:bg-[#436b1fe5] transition mt-4"
 			>
 				Sign in
