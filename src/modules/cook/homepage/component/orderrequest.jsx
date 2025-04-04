@@ -1,8 +1,19 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const OrderRequestCard = ({ order }) => {
   // Ensure order.items is an array before calling join
   const items = Array.isArray(order.items) ? order.items.join(", ") : "No items available";
+  const navigate = useNavigate();
+  
+  const handleTrackOrder = () => {
+    // Updated to use order.id instead of order.order_id
+    if (order && order.id) {
+      navigate(`/cook/order-tracking/${order.id}`);
+    } else {
+      console.error("Cannot track order - missing order ID", order);
+    }
+  };
 
   return (
     <div className="rounded-lg bg-white p-4 shadow-md hover:shadow-lg transition-all">
@@ -36,7 +47,7 @@ const OrderRequestCard = ({ order }) => {
               <span className="font-medium">Delivery in:</span> {order.estimatedDelivery}
             </p>
             <p className="text-sm font-medium text-[#426B1F]">
-              Total: ₹{order.total.toFixed(2)}
+              Total: ₹{order.total?.toFixed(2)}
             </p>
           </div>
           <div className="mt-3 flex gap-2">
@@ -49,8 +60,11 @@ const OrderRequestCard = ({ order }) => {
                 Start Preparing
               </button>
             )}
-            <button className="flex items-center cursor-pointer rounded-md bg-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-300">
-              View Details
+            <button 
+              onClick={handleTrackOrder}
+              className="flex items-center cursor-pointer rounded-md bg-gray-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700"
+            >
+              Track Order
             </button>
           </div>
         </div>

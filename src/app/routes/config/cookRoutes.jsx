@@ -143,13 +143,21 @@ export const cookRoutes = [
                 },
                 ErrorBoundary: AppRootErrorBoundary,
               },
+              // {
+              //   path: paths.cook.cookmap.path,
+              //   lazy: async () => {
+              //     const { CustomerDeliveryTracker } = await import(
+              //       "../../../components/layout/realtime-map/realtime-map"
+              //     );
+              //     return { Component: CustomerDeliveryTracker };
+              //   },
+              //   ErrorBoundary: AppRootErrorBoundary,
+              // },
               {
-                path: paths.cook.cookmap.path,
+                path:"/cook/order-tracking/:orderId",
                 lazy: async () => {
-                  const { CustomerDeliveryTracker } = await import(
-                    "../../../components/layout/realtime-map/realtime-map"
-                  );
-                  return { Component: CustomerDeliveryTracker };
+                  const { OrderTrackingRoute } = await import("../../routes/realmap/map")
+                  return { Component: OrderTrackingRoute }
                 },
                 ErrorBoundary: AppRootErrorBoundary,
               },

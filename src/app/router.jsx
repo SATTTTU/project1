@@ -4,14 +4,18 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { adminRoutes, cookRoutes, rootRoutes } from "./routes/config";
 import { notFoundRoute } from "./routes/config/notFoundRoutes";
 import { userRoutes } from "./routes/config/userRoutes";
+import { riderRoutes } from "./routes/config/riderRoutes";
+import { socketRoute } from "./routes/config/socketRoutes";
 
 const createAppRouter = () => {
   return createBrowserRouter([
-    ...adminRoutes, 
-    ...rootRoutes, 
+    ...adminRoutes,
+    ...rootRoutes,
     ...cookRoutes,
-    ...userRoutes, 
+    ...userRoutes,
     ...notFoundRoute,
+    ...riderRoutes,
+    ...socketRoute,
   ]);
 };
 

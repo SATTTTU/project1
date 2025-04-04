@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom"
 
 const loginCook = async (cookData) => {
   try {
-    clearAuthData()
+    // clearAuthData()
     const response = await api.post("/api/cooks/login", cookData)
    
     console.log("Cook login response:", response)
