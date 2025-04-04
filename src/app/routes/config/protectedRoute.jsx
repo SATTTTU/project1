@@ -36,7 +36,6 @@ const ProtectedRoute = ({ allowedRoles = [] }) => {
 			allowedRoles.length === 0 || allowedRoles.includes(user?.type);
 
 		if (!hasRequiredRole) {
-			// Redirect based on user type and current path
 			if (user?.type === "cook" && location.pathname.startsWith("/admin")) {
 				return (
 					<Navigate to="/cook/homepage" replace state={{ from: location }} />

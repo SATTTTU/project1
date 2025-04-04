@@ -1,17 +1,24 @@
 import React from "react";
 import { UseSetCookStatus } from "../api/availableStatus"; // Import the custom hook
+import { useAllTimeEarnings } from "../api/alltimeEarnings";
+import { useWeeklyEarnings } from "../api/weeklyEarnings";
+import { useDailyEarnings } from "../api/dailyEarnings";
+import { usePendingPayout } from "../api/pendingpayout";
 
-const DashboardHeader = ({ isOnline, setIsOnline, earnings }) => {
-  // Use the custom hook to set the cook's availability status
+const DashboardHeader = ({ isOnline, setIsOnline}) => {
   const { mutate: setCookStatus, isLoading} = UseSetCookStatus(); // 'mutate' should be renamed to 'setCookStatus'
+const {data:earnings}= useAllTimeEarnings();
+const {data:weeklyearnings}= useWeeklyEarnings();
+const {data:dailyearnings}= useDailyEarnings();
+const {data:pending} = usePendingPayout();
 
+
+console.log("earnings*****", earnings);
   // Function to handle the button click and update cook's status
   const handleToggleStatus = () => {
-    // Toggle the status between available and busy (online or offline)
     const newStatus = !isOnline;
     setIsOnline(newStatus);  // Update the local state
     
-    // Call the mutation to update the status in the backend
     setCookStatus({ available_status: newStatus ? "online" : "busy" }); // Pass the status correctly
   };
 
@@ -36,19 +43,19 @@ const DashboardHeader = ({ isOnline, setIsOnline, earnings }) => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-green-50 p-4 rounded-lg border border-green-100">
           <p className="text-sm text-gray-600">Today's Earnings</p>
-          <h3 className="text-xl font-bold">₹{earnings.today}</h3>
+          <h3 className="text-xl font-bold">Rs. {dailyearnings}</h3>
         </div>
         <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
           <p className="text-sm text-gray-600">This Week</p>
-          <h3 className="text-xl font-bold">₹{earnings.thisWeek}</h3>
+          <h3 className="text-xl font-bold">Rs. {weeklyearnings}</h3>
         </div>
         <div className="bg-purple-50 p-4 rounded-lg border border-purple-100">
-          <p className="text-sm text-gray-600">This Month</p>
-          <h3 className="text-xl font-bold">₹{earnings.thisMonth}</h3>
+          <p className="text-sm text-gray-600">Total's Earnings</p>
+          <h3 className="text-xl font-bold">Rs. {earnings}</h3>
         </div>
         <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
           <p className="text-sm text-gray-600">Pending Payout</p>
-          <h3 className="text-xl font-bold">₹{earnings.pendingPayout}</h3>
+          <h3 className="text-xl font-bold">Rs. {pending}</h3>
         </div>
       </div>
     </div>

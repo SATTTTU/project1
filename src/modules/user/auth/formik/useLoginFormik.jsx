@@ -34,10 +34,11 @@ export const useLoginFormik = () => {
         formik.resetForm();
         navigate("/dashboard");
       } catch (err) {
-        console.error("Login Error:", err); // Debugging
+        console.error("Login Error:", err); 
         const errorMessage =
-          err?.response?.data?.message || "An error occurred";
+        err?.response.data.error || "An error occurred";
         helpers.setErrors({ submit: errorMessage });
+        console.log("err", err.response.data.error)
         toast.error(errorMessage);
       }
     },

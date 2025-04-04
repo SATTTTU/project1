@@ -25,7 +25,7 @@ const TabNavigation = ({ activeTab, setActiveTab }) => {
           >
             Your Menu
           </button>
-          <button
+          {/* <button
             className={`py-4 px-6 font-medium text-sm ${
               activeTab === "insights"
                 ? "border-b-2 border-[#426B1F] text-[#426B1F]"
@@ -34,7 +34,7 @@ const TabNavigation = ({ activeTab, setActiveTab }) => {
             onClick={() => setActiveTab("insights")}
           >
             Insights & Analytics
-          </button>
+          </button> */}
         </nav>
       </div>
     </div>

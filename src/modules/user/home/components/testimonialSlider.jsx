@@ -1,153 +1,126 @@
-import { useState, useEffect } from "react"
-import { Star } from "lucide-react"
-import { Swiper, SwiperSlide } from "swiper/react"
-import "swiper/css"
-import "swiper/css/pagination"
-import "swiper/css/navigation"
-import { Pagination, Navigation, Autoplay } from "swiper/modules"
-import Customer1 from "../../../../assets/UserImages/person1.jpg"
-import Customer2 from "../../../../assets/UserImages/person2.jpg"
-import Customer3 from "../../../../assets/UserImages/person3.jpg"
-import Customer4 from "../../../../assets/UserImages/person3.jpg"
+import { useState, useEffect } from "react";
+import { Star } from "lucide-react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import { Pagination, Navigation, Autoplay } from "swiper/modules";
+import { motion } from "framer-motion";
 
-import Customer5 from "../../../../assets/UserImages/person3.jpg"
-
-
-
-
-const testimonials = [
-  {
-    id: 1,
-    name: "Sarah Johnson",
-    image:Customer1,
-    rating: 5,
-    testimonialCount: 120,
-    text: "The positive impact was undoubtedly the efficiency of the service. The speed moved me to tears. The delivery was fast and the food was up to the usual McDonald's standard – hot and satisfying.",
-  },
-  {
-    id: 2,
-    name: "Michael Chen",
-    image: Customer2,
-    rating: 5,
-    testimonialCount: 245,
-    text: "The positive impact was undoubtedly the efficiency of the service. The speed moved me to tears. The delivery was fast and the food was up to the usual McDonald's standard – hot and satisfying.",
-  },
-  {
-    id: 3,
-    name: "Emily Rodriguez",
-    image: Customer3,
-    rating: 5,
-    testimonialCount: 189,
-    text: "The positive impact was undoubtedly the efficiency of the service. The speed moved me to tears. The delivery was fast and the food was up to the usual McDonald's standard – hot and satisfying.",
-  },
-  {
-    id: 4,
-    name: "David Wilson",
-    image: Customer5,
-    rating: 5,
-    testimonialCount: 156,
-    text: "Fresh, organic produce that tastes amazing! The delivery is always on time and the quality is consistently excellent. I've recommended KhanaBox to all my friends.",
-  },
-  {
-    id: 5,
-    name: "Priya Patel",
-    image: Customer4,
-    rating: 5,
-    testimonialCount: 210,
-    text: "I love that I can support local farmers while getting premium organic food. The subscription service is flexible and the mobile app makes ordering so convenient.",
-  },
-]
+import { useAllReviews } from "../api/listAllReview";
+import defaultAvatar from "../../../../assets/defaultProfile.jpg";
 
 export const TestimonialSlider = () => {
-  
-  const [domLoaded, setDomLoaded] = useState(false)
+  const { data: testimonials } = useAllReviews();
+  const imageBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
+  const [domLoaded, setDomLoaded] = useState(false);
 
   useEffect(() => {
-    setDomLoaded(true)
-  }, [])
+    setDomLoaded(true);
+  }, []);
 
   return (
-    <section className="py-8 px-4 md:px-8 lg:px-16 bg-gray-50">
+    <section className="py-10 px-4 md:px-8 lg:px-16 bg-gradient-to-br from-[#f5fff5] to-[#e1ffe1]">
       <div className="container mx-auto">
-        <h2 className="text-3xl font-bold text-center text-[#0e9300] mb-6">Customer Reviews</h2>
-        <div className="relative px-4 py-4">
+        <h2 className="text-4xl font-extrabold text-center text-[#0e9300] mb-10">
+          What Our Customers Say
+        </h2>
+
+        <div className="relative">
           {domLoaded && (
             <Swiper
               slidesPerView={1}
-              spaceBetween={20}
+              spaceBetween={30} // Increased the space between the cards
               pagination={{
                 clickable: true,
                 dynamicBullets: true,
-                el: ".testimonial-pagination", 
+                el: ".testimonial-pagination",
               }}
               navigation={{
                 nextEl: ".swiper-button-next",
                 prevEl: ".swiper-button-prev",
               }}
               autoplay={{
-                delay: 5000,
+                delay: 4000,
                 disableOnInteraction: false,
               }}
               breakpoints={{
                 640: {
                   slidesPerView: 1,
-                  spaceBetween: 20,
                 },
                 768: {
                   slidesPerView: 2,
-                  spaceBetween: 30,
                 },
                 1024: {
                   slidesPerView: 3,
-                  spaceBetween: 30,
                 },
               }}
               modules={[Pagination, Navigation, Autoplay]}
               className="testimonial-swiper"
             >
-              <div className="swiper-wrapper equal-height-slides">
-                {testimonials.map((testimonial) => (
-                  <SwiperSlide key={testimonial.id} className="h-auto border border-slate-300 rounded-lg">
-                    <div className="bg-white p-10 rounded-lg shadow-xl flex flex-col h-[400px] lg:h-[330px]">
-                      <div className="flex items-center mb-4">
+              {testimonials?.map((testimonial) => (
+                <SwiperSlide key={testimonial.id}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    className="h-full"
+                  >
+                    <div className="bg-white p-8 rounded-2xl border border-green-200 h-[250px] min-h-[250px] flex flex-col">
+                      <div className="flex items-center mb-6">
                         <img
-                          src={testimonial.image}
-                          alt={testimonial.name}
-                          width={50}
-                          height={50}
-                          className="rounded-full mr-4 lg:h-[50px] lg:w-[50px]"
+                          src={
+                            testimonial.user.image_url
+                              ? `${imageBaseUrl}${testimonial.user.image_url}`
+                              : defaultAvatar
+                          }
+                          alt={testimonial.user.name}
+                          width={90} // Increased size of avatar
+                          height={90}
+                          className="rounded-full mr-6 object-cover border-2 border-green-400 w-[90px] h-[90px]"
                         />
                         <div>
-                          <h3 className="font-semibold">{testimonial.name}</h3>
-                          <div className="flex items-center mt-1">
-                            <div className="flex mr-2">
-                              {[...Array(5)].map((_, i) => (
-                                <Star
-                                  key={i}
-                                  className={`h-4 w-4 ${
-                                    i < testimonial.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
-                                  }`}
-                                />
-                              ))}
-                            </div>
+                          <h3 className="font-bold text-xl text-gray-800">
+                            {testimonial.user.name}
+                          </h3>
+                          <div className="flex mt-1">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className={`h-5 w-5 ${
+                                  i < testimonial.ratings
+                                    ? "text-yellow-400 fill-yellow-400"
+                                    : "text-gray-300"
+                                }`}
+                              />
+                            ))}
                           </div>
                         </div>
                       </div>
-                      <p className="text-gray-700 flex-grow">{testimonial.text}</p>
+
+                      <p className="text-gray-600 text-lg leading-relaxed flex-grow mb-4">
+                        {testimonial.comment.length > 200
+                          ? testimonial.comment.slice(0, 200) + "..."
+                          : testimonial.comment}
+                      </p>
+
+                    
                     </div>
-                  </SwiperSlide>
-                ))}
-              </div>
+                  </motion.div>
+                </SwiperSlide>
+              ))}
             </Swiper>
           )}
 
-          <div className="swiper-button-prev !absolute !left-0 !top-1/2 !-translate-y-1/2 !z-10 !bg-[#84c749] !w-10 !h-10 !rounded-full !flex !items-center !justify-center !text-white after:!text-lg after:!content-['prev']  !shadow-md"></div>
-          <div className="swiper-button-next !absolute !right-0 !top-1/2 !-translate-y-1/2 !z-10 !bg-[#84c749] !w-10 !h-10 !rounded-full !flex !items-center !justify-center !text-white after:!text-lg after:!content-['next']  !shadow-md"></div>
+          {/* Navigation Arrows */}
+          <div className="swiper-button-prev !absolute !top-1/2 !left-[-40px] !transform !-translate-y-1/2 !z-10  !w-12 !h-18 !rounded-full !flex !items-center !justify-center  !text-green-900 !text-4xl  after:!content-['‹']"></div>
 
-          <div className="testimonial-pagination mx-auto space-x-4 text-center mt-16 flex justify-center"></div>
+          <div className="swiper-button-next !absolute !top-1/2 !right-[-40px] !transform !-translate-y-1/2 !z-10  !w-12 !h-18 !rounded-full !flex !items-center !justify-center  !text-green-900 !text-4xl  after:!content-['›']"></div>
+
+          {/* Pagination Dots - Centered */}
+          <div className="testimonial-pagination mt-8 absolute bottom-0 left-1/2 transform -translate-x-1/2 flex justify-center space-x-4"></div>
         </div>
       </div>
     </section>
-  )
-}
-
+  );
+};

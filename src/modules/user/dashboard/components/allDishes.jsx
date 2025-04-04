@@ -15,7 +15,7 @@ export const AllDishes = () => {
   const handleAddToCart = async (dish) => {
     try {
       await addToCart({
-        menu_item_id: dish.menu_item_id,
+        menu_item_id: dish.id,
         quantity: 1,
       });
       toast.success(`${dish.name} added to cart! 🛒`);
@@ -45,7 +45,7 @@ export const AllDishes = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-6 text-center">Our Popular Dishes</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center">Our Dishes</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7">
         {itemsToShow.map((item) => (

@@ -19,7 +19,7 @@ export const OrderPage = () => {
   if (isLoading) return <div className="text-center p-4">Loading orders...</div>;
   if (isError) return <div className="text-center p-4 text-red-500">Error fetching orders</div>;
 
-  console.log("Current Orders:", orders);
+  console.log("Current Orders*******:", orders);
 
   const statusOptions = ["all", "pending", "accepted", "preparing", "out-for-delivery", "delivered", "cancelled"];
 

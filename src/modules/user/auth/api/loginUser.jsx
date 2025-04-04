@@ -17,7 +17,7 @@ const loginUser = async (userData) => {
     }
 
     saveUserData("user", token);
-    localStorage.setItem("user_id", userId); // Store userId separately
+    localStorage.setItem("user_id", userId); 
 
     const savedToken = localStorage.getItem("user_token");
     const savedUserId = localStorage.getItem("user_id");
