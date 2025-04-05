@@ -38,7 +38,7 @@ const createCategoryItem = async (data) => {
     }
     
     // Add authentication token
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("cook_token");
     if (!token) {
       throw new Error("No authentication token found");
     }
