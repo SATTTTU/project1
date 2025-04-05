@@ -90,7 +90,7 @@ export const OrderList = () => {
                   >
                     Track Order
                   </Link>
-                </li>
+                </div>
               );
             })}
           </div>
