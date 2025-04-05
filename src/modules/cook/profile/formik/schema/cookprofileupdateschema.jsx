@@ -1,5 +1,5 @@
 // schemas/cookprofileUpdateSchema.js
-import { z } from "zod";
+import {  z } from "zod";
 
 export const cookprofileEditSchema = z.object({
   name: z
@@ -7,9 +7,6 @@ export const cookprofileEditSchema = z.object({
     .min(1, "Full name is required")
     .max(100, "Full name must be 100 characters or less"),
     
-  mobile: z
-    .string()
-    .regex(/^\d{10}$/, "Mobile number must be exactly 10 digits"),
     
   // Actual file for submission
   image: z

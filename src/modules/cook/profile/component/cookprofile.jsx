@@ -5,15 +5,62 @@ import { UseProfileFormik } from "../formik/useupdatecookprofile"
 import LocationMap from "@/components/ui/locationMap/locationmap"
 import { UsegetCookLocation } from "../api/getCookLocation"
 
+const getFullImageUrl = (imagePath) => {
+  // If no image path, return placeholder
+  if (!imagePath) return "/api/placeholder/80/80"
+
+  // If already a full URL, return as is
+  if (imagePath.startsWith("http")) return imagePath
+
+  const bucketUrl =
+    typeof import.meta !== "undefined" && import.meta.env
+      ? import.meta.env.VITE_BUCKET_URL
+      : // For Next.js projects
+        typeof process !== "undefined" && process.env
+        ? process.env.NEXT_PUBLIC_BUCKET_URL
+        : ""
+
+  // Log for debugging
+  console.log("Bucket URL:", bucketUrl)
+  console.log("Image path:", imagePath)
+
+  // If no bucket URL found, return placeholder
+  if (!bucketUrl) {
+    console.error("No bucket URL found in environment variables")
+    return "/api/placeholder/80/80"
+  }
+
+  // Construct final image URL
+  const finalUrl = `${bucketUrl.endsWith("/") ? bucketUrl : bucketUrl + "/"}${imagePath}`
+  console.log("Final image URL:", finalUrl)
+  return finalUrl
+}
+
 export const ProfileCard = ({ userData }) => {
+  console.log("User data received:", userData)
+
   const { mutateAsync: fetchCookLocation } = UsegetCookLocation()
   const { formik, isLoading } = UseProfileFormik(userData)
-  const [imagePreview, setImagePreview] = useState(userData?.image || "/api/placeholder/200/200")
+
+  // Initialize with placeholder, then update in useEffect
+  const [image, setImage] = useState("")
   const [isEditMode, setIsEditMode] = useState(false)
+  const [imageError, setImageError] = useState(false)
+
+  // Set initial image preview after component mounts
+  useEffect(() => {
+    if (userData?.image_url) {
+      const fullImageUrl = getFullImageUrl(userData.image_url)
+      console.log("Setting image preview to:", fullImageUrl)
+      setImage(fullImageUrl)
+      setImageError(false) // Reset error state when trying a new URL
+    }
+  }, [userData])
 
   useEffect(() => {
     if (formik.values.image && !(formik.values.image instanceof File)) {
-      setImagePreview(formik.values.image)
+      setImage(formik.values.image)
+      setImageError(false) // Reset error state when trying a new URL
     }
   }, [formik.values.image])
 
@@ -28,10 +75,16 @@ export const ProfileCard = ({ userData }) => {
 
       const reader = new FileReader()
       reader.onload = () => {
-        setImagePreview(reader.result)
+        setImage(reader.result)
+        setImageError(false) // Reset error state when trying a new URL
       }
       reader.readAsDataURL(file)
     }
+  }
+
+  const handleImageError = () => {
+    console.error("Image failed to load:", image)
+    setImageError(true)
   }
 
   const handleEditToggle = () => {
@@ -51,9 +104,8 @@ export const ProfileCard = ({ userData }) => {
     setIsEditMode(false)
     formik.setFieldValue("isEditing", false)
     formik.resetForm()
-    setImagePreview(formik.initialValues.image)
+    setImage(formik.initialValues.image)
   }
-	const profilePhotoUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
@@ -64,13 +116,33 @@ export const ProfileCard = ({ userData }) => {
             {/* Profile Image and Edit Button */}
             <div className="flex items-center space-x-6 w-full md:w-auto">
               <div className="relative">
-              
                 <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-white bg-white shadow-md">
-                <img
-											src={`${profilePhotoUrl}${userData?.image_url}`}
-											alt="image"
-											className="rounded-full lg:h-30 w-30 h-30  mb-4"
-										/>
+                  {/* Displaying image */}
+                  {imageError ? (
+                    <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-12 w-12"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                    </div>
+                  ) : (
+                    <img
+                      src={image || "/placeholder.svg"}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                      onError={handleImageError}
+                    />
+                  )}
                 </div>
                 {isEditMode && (
                   <label
@@ -135,26 +207,7 @@ export const ProfileCard = ({ userData }) => {
                   )}
                 </div>
 
-                {/* Mobile Number */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-600 mb-1">Mobile Number</label>
-                  {isEditMode ? (
-                    <input
-                      type="text"
-                      name="mobile"
-                      value={formik.values.mobile}
-                      onChange={formik.handleChange}
-                      maxLength={10}
-                      placeholder="Enter 10-digit mobile number"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                    />
-                  ) : (
-                    <p className="text-gray-800 font-medium">{userData?.phone || "Not provided"}</p>
-                  )}
-                  {formik.errors.mobile && formik.touched.mobile && (
-                    <div className="text-red-500 text-xs mt-1">{formik.errors.mobile}</div>
-                  )}
-                </div>
+                
 
                 {/* Email */}
                 <div>
@@ -219,3 +272,4 @@ export const ProfileCard = ({ userData }) => {
     </div>
   )
 }
+

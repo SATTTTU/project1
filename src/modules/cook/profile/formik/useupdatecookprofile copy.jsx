@@ -27,9 +27,9 @@ export const UseProfileFormik = () => {
     if (imagePath.startsWith("http")) return imagePath
 
     // Use your existing API_URL
-    const storageUrl = import.meta.env.VITE_APP_API_URL.endsWith("/")
-      ? `${import.meta.env.VITE_APP_API_URL}storage/`
-      : `${import.meta.env.VITE_APP_API_URL}/storage/`
+    const storageUrl = import.meta.env.VITE_BUCKET_URL.endsWith("/")
+      ? `${import.meta.env.VITE_BUCKET_URL}/`
+      : `${import.meta.env.VITE_BUCKET_URL}/`
     return `${storageUrl}${imagePath}`
   }
 
