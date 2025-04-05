@@ -6,14 +6,12 @@ export const OrderStatusUpdate = ({ order, updateOrderStatus }) => {
   const { mutate: updateStatus, isLoading } = useUpdateOrderStatus();
   const navigate = useNavigate();
 
-  // Define valid status progression
+  // Define valid status progression (only 4 statuses)
   const statusFlow = {
-    pending: ["accepted", "cancelled"],
-    accepted: ["preparing", "cancelled"],
-    preparing: ["out-for-delivery", "cancelled"],
-    "out-for-delivery": ["delivered", "cancelled"],
-    delivered: [], // Terminal state
-    cancelled: [], // Terminal state
+    pending: ["accepted"],
+    accepted: ["preparing"],
+    preparing: ["out-for-delivery"],
+    "out-for-delivery": [] // Terminal state in our simplified flow
   };
 
   // Get valid status options based on current status
@@ -22,13 +20,11 @@ export const OrderStatusUpdate = ({ order, updateOrderStatus }) => {
       { value: "pending", label: "Pending" },
       { value: "accepted", label: "Accepted" },
       { value: "preparing", label: "Preparing" },
-      { value: "out-for-delivery", label: "Out for Delivery" },
-      { value: "delivered", label: "Delivered" },
-      { value: "cancelled", label: "Cancelled" }
+      { value: "out-for-delivery", label: "Out for Delivery" }
     ];
     
-    // For terminal states, only show current status
-    if (order.status === "delivered" || order.status === "cancelled") {
+    // For terminal state, only show current status
+    if (order.status === "out-for-delivery") {
       return allStatuses.filter(s => s.value === order.status);
     }
     
@@ -46,18 +42,30 @@ export const OrderStatusUpdate = ({ order, updateOrderStatus }) => {
       newStatus === order.status || 
       statusFlow[order.status]?.includes(newStatus)
     ) {
+      // First update local state
       updateOrderStatus(order.order_id, newStatus);
-      updateStatus({ order_id: order.order_id, status: newStatus });
       
-      // Navigate to tracking page if status is changed to out-for-delivery
-      if (newStatus === "out-for-delivery") {
-        if (order && order.order_id) {
-          const orderId = order.order_id.toString();
-          navigate(`/cook/order-tracking/${orderId}`);
+      // Then call API
+      updateStatus({ 
+        order_id: order.order_id, 
+        status: newStatus 
+      }, {
+        onSuccess: () => {
+          // Navigate to tracking page if status is changed to out-for-delivery
+          if (newStatus === "out-for-delivery") {
+            navigateToTracking();
+          }
         }
-      }
+      });
     } else {
       alert(`Cannot change status from ${order.status} to ${newStatus}. Invalid transition.`);
+    }
+  };
+
+  const navigateToTracking = () => {
+    if (order && order.order_id) {
+      const orderId = order.order_id.toString();
+      navigate(`/cook/order-tracking/${orderId}`);
     }
   };
 
@@ -70,7 +78,7 @@ export const OrderStatusUpdate = ({ order, updateOrderStatus }) => {
         id={`status-${order.order_id}`}
         value={order.status}
         onChange={handleStatusChange}
-        disabled={isLoading || order.status === "delivered" || order.status === "cancelled"}
+        disabled={isLoading || order.status === "out-for-delivery"}
         className="px-4 py-2 text-sm font-medium border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         {getStatusOptions().map((status) => (
@@ -82,9 +90,9 @@ export const OrderStatusUpdate = ({ order, updateOrderStatus }) => {
       {isLoading && (
         <p className="text-xs text-gray-500 mt-1">Updating status...</p>
       )}
-      {(order.status === "delivered" || order.status === "cancelled") && (
+      {order.status === "out-for-delivery" && (
         <p className="text-xs text-gray-500 mt-1">
-          This order has reached its final status and cannot be modified.
+          This order has reached its final delivery status.
         </p>
       )}
     </div>

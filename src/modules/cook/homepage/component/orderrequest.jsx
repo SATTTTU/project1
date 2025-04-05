@@ -1,32 +1,41 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUpdateOrderStatus } from "../../orders/api/updateOrders";
 
 export const OrderRequestCard = ({ order, updateOrderStatus }) => {
   const [status, setStatus] = useState(order.status);
   const navigate = useNavigate();
+  const { mutate: updateStatus, isLoading } = useUpdateOrderStatus();
 
-  // Define the valid status progression
+  // Define the valid status progression (only 4 statuses)
   const statusFlow = {
-    pending: ["accepted", "cancelled"],
-    accepted: ["preparing", "cancelled"],
-    preparing: ["out-for-delivery", "cancelled"],
-    "out-for-delivery": ["delivered", "cancelled"],
-    delivered: [], // Terminal state - no further transitions
-    cancelled: [], // Terminal state - no further transitions
+    pending: ["accepted"],
+    accepted: ["preparing"],
+    preparing: ["out-for-delivery"],
+    "out-for-delivery": [] // Terminal state in our simplified flow
   };
 
   const handleStatusChange = (event) => {
     const newStatus = event.target.value;
     
     // Check if the status transition is valid
-    if (statusFlow[status].includes(newStatus) || newStatus === status) {
+    if (statusFlow[status]?.includes(newStatus) || newStatus === status) {
+      // Update local state
       setStatus(newStatus);
       updateOrderStatus(order.order_id, newStatus);
       
-      // Navigate to order tracking page when status changes to out-for-delivery
-      if (newStatus === "out-for-delivery") {
-        handleTrackOrder();
-      }
+      // Call API
+      updateStatus(
+        { order_id: order.order_id, status: newStatus },
+        {
+          onSuccess: () => {
+            // Navigate to order tracking page when status changes to out-for-delivery
+            if (newStatus === "out-for-delivery") {
+              handleTrackOrder();
+            }
+          }
+        }
+      );
     } else {
       alert(`Cannot change status from ${status} to ${newStatus}. Invalid transition.`);
     }
@@ -51,10 +60,6 @@ export const OrderRequestCard = ({ order, updateOrderStatus }) => {
         return "bg-orange-100 text-orange-800";
       case "out-for-delivery":
         return "bg-purple-100 text-purple-800";
-      case "delivered":
-        return "bg-green-100 text-green-800";
-      case "cancelled":
-        return "bg-red-100 text-red-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
@@ -70,11 +75,7 @@ export const OrderRequestCard = ({ order, updateOrderStatus }) => {
       case "preparing":
         return { status: "out-for-delivery", text: "Mark as Ready", style: "bg-green-600 hover:bg-green-700" };
       case "out-for-delivery":
-        return { status: "delivered", text: "Deliver Order", style: "bg-purple-600 hover:bg-purple-700" };
-      case "delivered":
-        return { status: "delivered", text: "Order Completed", style: "bg-gray-600 hover:bg-gray-700", disabled: true };
-      case "cancelled":
-        return { status: "cancelled", text: "Order Cancelled", style: "bg-red-600 hover:bg-red-700", disabled: true };
+        return { status: "out-for-delivery", text: "Track Order", style: "bg-gray-600 hover:bg-gray-700" };
       default:
         return { status: "", text: "Update Status", style: "bg-blue-600 hover:bg-blue-700" };
     }
@@ -83,23 +84,29 @@ export const OrderRequestCard = ({ order, updateOrderStatus }) => {
   const nextAction = getNextAction(status);
 
   const handleActionButton = () => {
-    // If terminal state or disabled, do nothing
-    if (nextAction.disabled) return;
-    
-    // For tracking, just navigate
-    if (status === "out-for-delivery" && nextAction.text === "Track Order") {
+    // For tracking or out-for-delivery, just navigate
+    if (status === "out-for-delivery" || nextAction.text === "Track Order") {
       handleTrackOrder();
       return;
     }
     
     // Otherwise proceed with next status
-    if (nextAction.status && statusFlow[status].includes(nextAction.status)) {
+    if (nextAction.status && statusFlow[status]?.includes(nextAction.status)) {
+      // Update local state
       setStatus(nextAction.status);
       updateOrderStatus(order.order_id, nextAction.status);
       
-      if (nextAction.status === "out-for-delivery") {
-        handleTrackOrder();
-      }
+      // Call API
+      updateStatus(
+        { order_id: order.order_id, status: nextAction.status },
+        {
+          onSuccess: () => {
+            if (nextAction.status === "out-for-delivery") {
+              handleTrackOrder();
+            }
+          }
+        }
+      );
     }
   };
 
@@ -109,19 +116,17 @@ export const OrderRequestCard = ({ order, updateOrderStatus }) => {
       { value: "pending", label: "Pending" },
       { value: "accepted", label: "Accepted" },
       { value: "preparing", label: "Preparing" },
-      { value: "out-for-delivery", label: "Out for Delivery" },
-      { value: "delivered", label: "Delivered" },
-      { value: "cancelled", label: "Cancelled" }
+      { value: "out-for-delivery", label: "Out for Delivery" }
     ];
     
-    // For terminal states, only show current status
-    if (status === "delivered" || status === "cancelled") {
+    // For terminal state, only show current status
+    if (status === "out-for-delivery") {
       return allStatuses.filter(s => s.value === status);
     }
     
     // For active states, show current + valid next states
     return allStatuses.filter(s => 
-      s.value === status || statusFlow[status].includes(s.value)
+      s.value === status || statusFlow[status]?.includes(s.value)
     );
   };
 
@@ -159,24 +164,11 @@ export const OrderRequestCard = ({ order, updateOrderStatus }) => {
             <button
               onClick={handleActionButton}
               className={`flex items-center cursor-pointer rounded-md ${nextAction.style} px-3 py-1.5 text-sm font-medium text-white`}
-              disabled={nextAction.disabled}
+              disabled={isLoading}
             >
-              {nextAction.text}
+              {isLoading ? "Updating..." : nextAction.text}
             </button>
-            {status !== "cancelled" && status !== "delivered" && (
-              <button
-                onClick={() => {
-                  if (confirm("Are you sure you want to cancel this order?")) {
-                    setStatus("cancelled");
-                    updateOrderStatus(order.order_id, "cancelled");
-                  }
-                }}
-                className="flex items-center cursor-pointer rounded-md bg-red-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-700"
-              >
-                Cancel Order
-              </button>
-            )}
-            {(status === "out-for-delivery" || status === "preparing") && (
+            {status === "out-for-delivery" && (
               <button
                 onClick={handleTrackOrder}
                 className="flex items-center cursor-pointer rounded-md bg-gray-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700"
@@ -194,7 +186,7 @@ export const OrderRequestCard = ({ order, updateOrderStatus }) => {
           value={status}
           onChange={handleStatusChange}
           className="w-full p-2 border border-gray-300 rounded-md"
-          disabled={status === "delivered" || status === "cancelled"}
+          disabled={isLoading || status === "out-for-delivery"}
         >
           {getStatusOptions().map(option => (
             <option key={option.value} value={option.value}>
@@ -202,9 +194,14 @@ export const OrderRequestCard = ({ order, updateOrderStatus }) => {
             </option>
           ))}
         </select>
-        {(status === "delivered" || status === "cancelled") && (
+        {isLoading && (
           <p className="text-xs text-gray-500 mt-1">
-            This order has reached its final status and cannot be modified.
+            Updating status...
+          </p>
+        )}
+        {status === "out-for-delivery" && (
+          <p className="text-xs text-gray-500 mt-1">
+            This order is out for delivery.
           </p>
         )}
       </div>
