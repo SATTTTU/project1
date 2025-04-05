@@ -70,21 +70,21 @@ export const TestimonialSlider = () => {
                       <div className="flex items-center mb-6">
                         <img
                           src={
-                            testimonial.user.image_url
-                              ? `${imageBaseUrl}${testimonial.user.image_url}`
+                            testimonial?.user.image_url
+                              ? `${imageBaseUrl}${testimonial?.user.image_url}`
                               : defaultAvatar
                           }
-                          alt={testimonial.user.name}
+                          alt={testimonial?.user?.name}
                           width={90} // Increased size of avatar
                           height={90}
                           className="rounded-full mr-6 object-cover border-2 border-green-400 w-[90px] h-[90px]"
                         />
                         <div>
                           <h3 className="font-bold text-xl text-gray-800">
-                            {testimonial.user.name}
+                            {testimonial?.user?.name}
                           </h3>
                           <h2 className="font-bold text-md text-green-500">To:  
-                            {testimonial.cook.name}
+                            {testimonial?.cook?.name}
                           </h2>
                           <div className="flex mt-1">
                             {[...Array(5)].map((_, i) => (
