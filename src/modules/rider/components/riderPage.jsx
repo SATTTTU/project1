@@ -4,6 +4,8 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { Loader2, Navigation } from "lucide-react";
 import { io } from "socket.io-client";
+import "leaflet-routing-machine/dist/leaflet-routing-machine.css"; // Import the CSS
+import RoutingMachine from "./RoutingMachine";
 
 // Fix Leaflet marker issue
 delete L.Icon.Default.prototype._getIconUrl;
@@ -51,31 +53,6 @@ const MapUpdater = ({ center }) => {
   return null;
 };
 
-const DirectRoute = ({ from, to }) => {
-  const map = useMap();
-
-  useEffect(() => {
-    if (!from || !to) return;
-
-    const positions = [
-      [from.lat, from.lng],
-      [to.lat, to.lng],
-    ];
-
-    const polyline = L.polyline(positions, {
-      color: "#6366F1",
-      weight: 4,
-      opacity: 0.7,
-    }).addTo(map);
-
-    return () => {
-      map.removeLayer(polyline);
-    };
-  }, [map, from, to]);
-
-  return null;
-};
-
 export const RiderPages = ({ orderId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -86,6 +63,7 @@ export const RiderPages = ({ orderId }) => {
   const [userLocation, setUserLocation] = useState(null);
   const [isPickedUp, setIsPickedUp] = useState(false);
   const [socket] = useState(() => io("wss://khajabox-socket.tai.com.np"));
+  const [routeWaypoints, setRouteWaypoints] = useState([]); // State for route waypoints
 
   const getOrderData = async () => {
     try {
@@ -151,7 +129,7 @@ export const RiderPages = ({ orderId }) => {
         socket.emit("join room", orderId);
       }
     }
-  }, [orderId]);
+  }, [orderId, socket]);
 
   // Set up geolocation tracking
   useEffect(() => {
@@ -212,6 +190,26 @@ export const RiderPages = ({ orderId }) => {
   const currentDestination = useMemo(() => {
     return isPickedUp ? userLocation : cookLocation;
   }, [isPickedUp, userLocation, cookLocation]);
+
+  // Update route waypoints when locations change
+  useEffect(() => {
+    if (riderLocation && currentDestination) {
+      // Set waypoints based on current status (picked up or not)
+      if (isPickedUp) {
+        // If food is picked up, route is rider -> customer
+        setRouteWaypoints([
+          { latitude: riderLocation.lat, longitude: riderLocation.lng },
+          { latitude: userLocation.lat, longitude: userLocation.lng }
+        ]);
+      } else {
+        // If food is not picked up, route is rider -> restaurant
+        setRouteWaypoints([
+          { latitude: riderLocation.lat, longitude: riderLocation.lng },
+          { latitude: cookLocation.lat, longitude: cookLocation.lng }
+        ]);
+      }
+    }
+  }, [riderLocation, cookLocation, userLocation, isPickedUp, currentDestination]);
 
   // Calculate ETA based on distance
   const eta = useMemo(() => {
@@ -388,9 +386,9 @@ export const RiderPages = ({ orderId }) => {
               </Marker>
             )}
 
-            {/* Direct Route Line */}
-            {riderLocation && currentDestination && (
-              <DirectRoute from={riderLocation} to={currentDestination} />
+            {/* Routing Machine */}
+            {routeWaypoints.length > 1 && (
+              <RoutingMachine waypoints={routeWaypoints} />
             )}
 
             {/* Map Updater */}

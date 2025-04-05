@@ -5,11 +5,11 @@ import {
   Marker,
   Popup,
   useMap,
-  Polyline,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { io } from "socket.io-client";
 import L from "leaflet";
+import RoutingMachine from "@/modules/rider/components/RoutingMachine";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -51,8 +51,10 @@ export const UserLocation = ({ orderId }) => {
   const [error, setError] = useState(null);
   const [orderStatus, setOrderStatus] = useState("received");
   const [socket] = useState(() => io("wss://khajabox-socket.tai.com.np"));
-  const [restaurantRoute, setRestaurantRoute] = useState([]);
-  const [riderRoute, setRiderRoute] = useState([]);
+  
+  // Remove the manual route arrays since we'll use RoutingMachine
+  // const [restaurantRoute, setRestaurantRoute] = useState([]);
+  // const [riderRoute, setRiderRoute] = useState([]);
 
   const getOrderData = async () => {
     try {
@@ -110,45 +112,7 @@ export const UserLocation = ({ orderId }) => {
     };
   }, [socket, orderId]);
 
-  const fetchRoute = async (start, end) => {
-    if (!start?.lat || !start?.lng || !end?.lat || !end?.lng) return [];
-    
-    try {
-      const response = await fetch(
-        `https://router.project-osrm.org/route/v1/driving/${start.lng},${start.lat};${end.lng},${end.lat}?overview=full&geometries=geojson`
-      );
-      const data = await response.json();
-
-      if (data.routes && data.routes.length > 0) {
-        return data.routes[0].geometry.coordinates.map((coord) => [
-          coord[1],
-          coord[0],
-        ]);
-      }
-      return [
-        [start.lat, start.lng],
-        [end.lat, end.lng],
-      ];
-    } catch (error) {
-      console.error("Error fetching route:", error);
-      return [
-        [start.lat, start.lng],
-        [end.lat, end.lng],
-      ];
-    }
-  };
-
-  useEffect(() => {
-    if (cookLocation && userLocation) {
-      fetchRoute(cookLocation, userLocation).then(setRestaurantRoute);
-    }
-  }, [cookLocation, userLocation]);
-
-  useEffect(() => {
-    if (riderLocation && userLocation) {
-      fetchRoute(riderLocation, userLocation).then(setRiderRoute);
-    }
-  }, [riderLocation, userLocation]);
+  // Remove the manual fetchRoute function and related useEffects since we'll use RoutingMachine
 
   const calculateETA = (from, to) => {
     if (!from?.lat || !from?.lng || !to?.lat || !to?.lng) return "Unknown";
@@ -191,6 +155,31 @@ export const UserLocation = ({ orderId }) => {
   // Default center if userLocation is not available
   const defaultCenter = { lat: 27.7172, lng: 85.324 }; // Kathmandu coordinates as fallback
   const mapCenter = userLocation || cookLocation || defaultCenter;
+
+  // Prepare waypoints for RoutingMachine
+  const getRestaurantToUserWaypoints = () => {
+    if (cookLocation && userLocation) {
+      return [
+        { latitude: cookLocation.lat, longitude: cookLocation.lng },
+        { latitude: userLocation.lat, longitude: userLocation.lng }
+      ];
+    }
+    return [];
+  };
+
+  const getRiderToUserWaypoints = () => {
+    if (riderLocation && userLocation) {
+      return [
+        { latitude: riderLocation.lat, longitude: riderLocation.lng },
+        { latitude: userLocation.lat, longitude: userLocation.lng }
+      ];
+    }
+    return [];
+  };
+
+  // Determine if we have valid waypoints for routing
+  const restaurantUserWaypoints = getRestaurantToUserWaypoints();
+  const riderUserWaypoints = getRiderToUserWaypoints();
 
   return (
     <div className="h-screen flex flex-col bg-gray-50">
@@ -238,6 +227,16 @@ export const UserLocation = ({ orderId }) => {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
 
+            {/* Restaurant to User Route */}
+            {restaurantUserWaypoints.length > 0 && (
+              <RoutingMachine waypoints={restaurantUserWaypoints} />
+            )}
+
+            {/* Rider to User Route */}
+            {riderUserWaypoints.length > 0 && (
+              <RoutingMachine waypoints={riderUserWaypoints} />
+            )}
+
             {riderLocation?.lat && riderLocation?.lng && (
               <Marker
                 position={[riderLocation.lat, riderLocation.lng]}
@@ -275,25 +274,6 @@ export const UserLocation = ({ orderId }) => {
                   </div>
                 </Popup>
               </Marker>
-            )}
-
-            {restaurantRoute.length > 0 && (
-              <Polyline
-                positions={restaurantRoute}
-                color="#10B981"
-                weight={4}
-                opacity={0.7}
-              />
-            )}
-
-            {riderRoute.length > 0 && (
-              <Polyline
-                positions={riderRoute}
-                color="#2563EB"
-                weight={4}
-                opacity={0.7}
-                dashArray="5,10"
-              />
             )}
 
             <MapUpdater center={userLocation || cookLocation} />

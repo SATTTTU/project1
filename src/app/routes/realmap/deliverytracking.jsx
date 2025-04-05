@@ -3,6 +3,8 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { io } from "socket.io-client";
+import "leaflet-routing-machine/dist/leaflet-routing-machine.css"; // Import the CSS
+import RoutingMachine from "@/modules/rider/components/RoutingMachine";
 
 // Fix Leaflet icon issue
 delete L.Icon.Default.prototype._getIconUrl;
@@ -40,12 +42,13 @@ const DeliveryTracking = ({ orderId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [orderStatus, setOrderStatus] = useState("received");
+  const [routeWaypoints, setRouteWaypoints] = useState([]); // State for route waypoints
 
   const userRole = orderData?.userRole || "user";
   const [socket] = useState(() => io("wss://khajabox-socket.tai.com.np"));
 
   const getOrderData = async () => {
-    console.log("first",orderId)
+    console.log("first", orderId);
     try {
       const response = await fetch(
         `https://khajabox-backend.dev.tai.com.np/api/get-order-ride-by-id/${orderId}`
@@ -107,6 +110,36 @@ const DeliveryTracking = ({ orderId }) => {
       clearTimeout(timeout);
     };
   }, [socket, orderId, riderLocation]);
+
+  // Determine which route to show based on order status and user role
+  useEffect(() => {
+    if (riderLocation) {
+      // For rider view or general customer/cook view when rider is moving
+      if (orderStatus === "picked_up" || orderStatus === "on_the_way" || orderStatus === "delivered") {
+        // If food is picked up, route should be from rider to customer
+        if (riderLocation && userLocation) {
+          setRouteWaypoints([
+            { latitude: riderLocation.lat, longitude: riderLocation.lng },
+            { latitude: userLocation.lat, longitude: userLocation.lng }
+          ]);
+        }
+      } else {
+        // If food is not picked up yet, route should be from rider to restaurant
+        if (riderLocation && cookLocation) {
+          setRouteWaypoints([
+            { latitude: riderLocation.lat, longitude: riderLocation.lng },
+            { latitude: cookLocation.lat, longitude: cookLocation.lng }
+          ]);
+        }
+      }
+    } else if (cookLocation && userLocation) {
+      // If rider isn't connected yet, show route from restaurant to customer
+      setRouteWaypoints([
+        { latitude: cookLocation.lat, longitude: cookLocation.lng },
+        { latitude: userLocation.lat, longitude: userLocation.lng }
+      ]);
+    }
+  }, [riderLocation, cookLocation, userLocation, orderStatus]);
 
   const calculateETA = (from, to) => {
     if (!from || !to) return "Unknown";
@@ -271,9 +304,9 @@ const DeliveryTracking = ({ orderId }) => {
       </div>
 
       {primaryLocation && !isNaN(primaryLocation.lat) && !isNaN(primaryLocation.lng) ? (
-  <div className="flex-grow relative">
-    <MapContainer
-      center={[primaryLocation.lat, primaryLocation.lng]}
+        <div className="flex-grow relative">
+          <MapContainer
+            center={[primaryLocation.lat, primaryLocation.lng]}
             zoom={15}
             style={{ height: "100%", width: "100%" }}
           >
@@ -312,6 +345,11 @@ const DeliveryTracking = ({ orderId }) => {
                   </strong>
                 </Popup>
               </Marker>
+            )}
+
+            {/* Add RoutingMachine for optimized routing */}
+            {routeWaypoints.length >= 2 && (
+              <RoutingMachine waypoints={routeWaypoints} />
             )}
 
             <MapUpdater center={primaryLocation} />

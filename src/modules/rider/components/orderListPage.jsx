@@ -19,57 +19,62 @@ export const OrderListPage = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6 text-center">Order List</h1>
+
       {data.length === 0 ? (
         <p className="text-center text-gray-600">No orders available</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {data.map((item) => (
-            <div
-              key={item.order_id}
-              className="bg-white shadow-md rounded-lg p-6 border border-gray-200 cursor-pointer hover:shadow-lg transition"
-              onClick={() => navigate(`/rider/main/${item.order_id}`)} // Navigate to details page
-            >
-              <h2 className="text-xl font-semibold text-blue-600">
-                Order ID: {item.order_id}
-              </h2>
-
-              {/* User Info */}
-              <div className="flex items-center gap-4 mt-3">
-                <div>
-                  <p className="font-medium">{item.user?.name}</p>
-                  <p className="text-sm text-gray-600">{item.user?.email}</p>
-                </div>
-              </div>
-
-              {/* Cook Info */}
-              <div className="mt-4">
-                <p className="text-gray-700">
-                  <span className="font-semibold">Cook:</span> {item.cook?.name} ({item.cook?.email})
-                </p>
-              </div>
-
-              {/* Pickup & Drop Info */}
-              <div className="mt-4 text-sm text-gray-700">
-                <p>
-                  <span className="font-semibold">Pickup:</span> {item?.latitude}, {item?.longitude}
-                </p>
-                <p>
-                  <span className="font-semibold">Drop:</span> {item.drop_location_id?.latitude}, {item.drop_location_id?.longitude}
-                </p>
-              </div>
-
-              {/* Status */}
-              <p
-                className={`mt-4 px-3 py-1 w-fit text-sm font-semibold rounded-full 
-                ${item.status === "delivered" ? "bg-green-200 text-green-800" : "bg-yellow-200 text-yellow-800"}
-              `}
-              >
-                {item.status}
-              </p>
-            </div>
-          ))}
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white border border-gray-200 rounded-md">
+            <thead>
+              <tr className="bg-gray-100 text-left text-sm font-semibold text-gray-700">
+                <th className="px-4 py-3 border-b">Order ID</th>
+                <th className="px-4 py-3 border-b">User</th>
+                <th className="px-4 py-3 border-b">Cook</th>
+                <th className="px-4 py-3 border-b">Pickup Location</th>
+                <th className="px-4 py-3 border-b">Drop Location</th>
+                <th className="px-4 py-3 border-b">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((item) => (
+                <tr
+                  key={item.order_id}
+                  className="hover:bg-gray-50 cursor-pointer"
+                  onClick={() => navigate(`/rider/main/${item.order_id}`)}
+                >
+                  <td className="px-4 py-3 border-b text-blue-600 font-medium">
+                    {item.order_id}
+                  </td>
+                  <td className="px-4 py-3 border-b">
+                    <p className="font-medium">{item.user?.name}</p>
+                    <p className="text-sm text-gray-500">{item.user?.email}</p>
+                  </td>
+                  <td className="px-4 py-3 border-b">
+                    <p className="font-medium">{item.cook?.name}</p>
+                    <p className="text-sm text-gray-500">{item.cook?.email}</p>
+                  </td>
+                  <td className="px-4 py-3 border-b text-sm text-gray-700">
+                    {item.latitude}, {item.longitude}
+                  </td>
+                  <td className="px-4 py-3 border-b text-sm text-gray-700">
+                    {item.drop_location_id?.latitude}, {item.drop_location_id?.longitude}
+                  </td>
+                  <td className="px-4 py-3 border-b">
+                    <span
+                      className={`px-3 py-1 text-sm font-semibold rounded-full
+                        ${item.status === "delivered"
+                          ? "bg-green-200 text-green-800"
+                          : "bg-yellow-200 text-yellow-800"}`}
+                    >
+                      {item.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
