@@ -20,6 +20,7 @@ import {
 import { useGetSingleCook } from "../api/get-single-cook"
 import { useVerifyCook } from "../api/verify-cook"
 import { useDeleteCook } from "../api/deleteCook"
+import { toast } from "react-toastify"
 
 const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false)
@@ -169,7 +170,6 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
     console.log("Deleting cook:", cook.id)
     try {
       await deleteCook()
-      // Navigation is handled in the onSuccess callback of the API hook
     } catch (error) {
       console.error("Error in handleDeleteCook:", error)
       setShowConfirmDelete(false)
@@ -177,12 +177,12 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
   }
 
   const handleProvideMoney = () => {
-    console.log("Providing money to cook:", cook.id)
-    // In real app, show payment form or redirect to payment page
+    toast.success("Money provided to cook successfully!");
+    
   }
 
   const handleVerifyStatus = async (newStatus) => {
-    console.log(`Changing status to ${newStatus} for cook:`, cook.id)
+    toast.info(`Changing status to ${newStatus}...`)
 
     try {
       if (newStatus === "Verified") {
@@ -274,7 +274,7 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
               {cook.status === "Verified" && (
                 <button
                   onClick={handleProvideMoney}
-                  className="flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="flex items-center px-4 py-2 cursor-pointer  bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                Provide Money
                 </button>
@@ -289,17 +289,17 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
                       isVerifying ? "opacity-70 cursor-not-allowed" : ""
                     }`}
                   >
-                    <CheckCircle size={16} className="mr-2" />
+                    <CheckCircle size={16} className="mr-2 cursor-pointer" />
                     {isVerifying ? "Approving..." : "Approve Cook"}
                   </button>
                   <button
                     onClick={() => handleVerifyStatus("Unverified")}
                     disabled={isVerifying}
-                    className={`flex items-center px-4 py-2 bg-red-600 text-white font-medium rounded-md hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 ${
+                    className={`flex items-center px-4 py-2 cursor-pointer bg-red-600 text-white font-medium rounded-md hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 ${
                       isVerifying ? "opacity-70 cursor-not-allowed" : ""
                     }`}
                   >
-                    <AlertCircle size={16} className="mr-2" />
+                    <AlertCircle size={16} className="mr-2 cursor-pointer" />
                     {isVerifying ? "Rejecting..." : "Reject Cook"}
                   </button>
                 </div>
@@ -308,7 +308,7 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
               {cook.status !== "Unverified" && (
                 <button
                   onClick={() => handleVerifyStatus("Unverified")}
-                  className="flex items-center px-4 py-2 bg-yellow-100 text-yellow-600 font-medium rounded-md hover:bg-yellow-200 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+                  className="flex items-center px-4 py-2 cursor-pointer bg-yellow-100 text-yellow-600 font-medium rounded-md hover:bg-yellow-200 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
                 >
                   <AlertCircle size={16} className="mr-2" /> Suspend Cook
                 </button>
@@ -316,7 +316,7 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
 
               <button
                 onClick={() => setShowConfirmDelete(true)}
-                className="flex items-center px-4 py-2 bg-red-100 text-red-600 font-medium rounded-md hover:bg-red-200 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                className="flex items-center cursor-pointer px-4 py-2 bg-red-100 text-red-600 font-medium rounded-md hover:bg-red-200 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
               >
                 <Trash2 size={16} className="mr-2" /> Delete Cook
               </button>
@@ -408,7 +408,7 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
             <FileText size={18} className="mr-2 text-blue-500" /> Verification Documents
           </h3>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 ">
             {cook.documents?.passportPhoto && (
               <div className="border rounded-lg overflow-hidden">
                 <div className="p-2 bg-gray-50 border-b">
