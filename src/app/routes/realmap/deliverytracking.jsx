@@ -42,7 +42,7 @@ const DeliveryTracking = ({ orderId }) => {
   const [orderStatus, setOrderStatus] = useState("received");
 
   const userRole = orderData?.userRole || "user";
-  const [socket] = useState(() => io("http://localhost:3000"));
+  const [socket] = useState(() => io("wss://khajabox-socket.tai.com.np"));
 
   const getOrderData = async () => {
     console.log("first",orderId)

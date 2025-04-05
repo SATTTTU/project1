@@ -8,7 +8,7 @@ import { TopCooksList } from "@/modules/admin/dashboard/components/top-cooks";
 import { ProfileAvatar } from "@/modules/admin/dashboard/components/avatar";
 import { Link } from "react-router-dom";
 import { ProfileCard } from "@/modules/admin/editProfile/components/profilecard";
-import { useGetTotalEarning } from "@/modules/admin/payment/api/gettotalearning";
+import { Usegettotalearning } from "@/modules/admin/payment/api/gettotalearning";
 
 // Custom hook to detect clicks outside a specified element
 const useOutsideClick = (ref, callback) => {
@@ -36,12 +36,15 @@ export const AdminDashboardRoute = React.memo(() => {
   const notificationRef = useRef(null);
   
   // Fetch total earnings data
-  const { data: earningsData, isLoading: earningsLoading, error: earningsError } = useGetTotalEarning();
+  const { data: earningsData, isLoading: earningsLoading, error: earningsError } = Usegettotalearning();
+
+console.log("Earnings Data:", earningsData);
+
 
   const dashboardStats = React.useMemo(() => {
     const formattedEarnings = earningsLoading || earningsError 
   ? "Loading..." 
-  : `₹${earningsData?.totalEarnings?.toLocaleString() || "0"}`;
+  : `Rs${earningsData?.totalEarnings?.toLocaleString() || "0"}`;
 
 const earningIncrease = earningsLoading || earningsError
   ? "..." 

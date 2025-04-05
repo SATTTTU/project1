@@ -85,7 +85,7 @@ export const RiderPages = ({ orderId }) => {
   const [cookLocation, setCookLocation] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
   const [isPickedUp, setIsPickedUp] = useState(false);
-  const [socket] = useState(() => io("localhost:3000"));
+  const [socket] = useState(() => io("wss://khajabox-socket.tai.com.np"));
 
   const getOrderData = async () => {
     try {
