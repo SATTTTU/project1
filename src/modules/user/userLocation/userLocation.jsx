@@ -52,11 +52,8 @@ export const UserLocation = ({ orderId }) => {
   const [orderStatus, setOrderStatus] = useState("received");
   const [socket] = useState(() => io("wss://khajabox-socket.tai.com.np"));
   
-  // Remove the manual route arrays since we'll use RoutingMachine
-  // const [restaurantRoute, setRestaurantRoute] = useState([]);
-  // const [riderRoute, setRiderRoute] = useState([]);
-
   const getOrderData = async () => {
+    console.log("Fetching order data for ID:", orderId);
     try {
       const response = await fetch(
         `https://khajabox-backend.dev.tai.com.np/api/get-order-ride-by-id/${orderId}`
@@ -64,26 +61,32 @@ export const UserLocation = ({ orderId }) => {
       const result = await response.json();
       
       if (!result.data || !result.data[0]) {
+        console.error("No order data found in response:", result);
         throw new Error("No order data found");
       }
 
       const orderRideData = result.data[0];
+      console.log("Order data loaded:", orderRideData);
       setOrderData(orderRideData);
       setOrderStatus(orderRideData?.status || "received");
   
       // Set locations with validation
       if (orderRideData?.pickup_location_id?.latitude && orderRideData?.pickup_location_id?.longitude) {
-        setCookLocation({
+        const cookLoc = {
           lat: parseFloat(orderRideData.pickup_location_id.latitude),
           lng: parseFloat(orderRideData.pickup_location_id.longitude),
-        });
+        };
+        console.log("Setting cook location:", cookLoc);
+        setCookLocation(cookLoc);
       }
   
       if (orderRideData?.drop_location_id?.latitude && orderRideData?.drop_location_id?.longitude) {
-        setUserLocation({
+        const userLoc = {
           lat: parseFloat(orderRideData.drop_location_id.latitude),
           lng: parseFloat(orderRideData.drop_location_id.longitude),
-        });
+        };
+        console.log("Setting user location:", userLoc);
+        setUserLocation(userLoc);
       }
     } catch (err) {
       console.error("Error fetching order:", err);
@@ -98,21 +101,47 @@ export const UserLocation = ({ orderId }) => {
   }, [orderId]);
 
   useEffect(() => {
+    // Try both possible room formats
     const roomId = `order-${orderId}`;
+    
+    console.log("Joining socket rooms:", orderId, roomId);
+    socket.emit("join room", orderId);
     socket.emit("join room", roomId);
 
-    socket.on("rider location", (data) => {
-      if (data?.lat && data?.lng) {
+    const handleRiderLocation = (data, room) => {
+      console.log("Received rider location:", data, "Room:", room);
+      
+      // Accept data regardless of room to debug
+      if (data && typeof data.lat === 'number' && typeof data.lng === 'number') {
+        console.log("Setting rider location state:", data);
         setRiderLocation(data);
+        setLoading(false);
+      } else {
+        console.warn("Invalid rider location data:", data);
       }
-    });
+    };
+
+    socket.on("rider location", handleRiderLocation);
+
+    // Set timeout for initial loading state
+    const timeout = setTimeout(() => {
+      if (loading) {
+        console.log("Loading timeout reached, continuing without rider location");
+        setLoading(false);
+      }
+    }, 5000);
 
     return () => {
-      socket.off("rider location");
+      console.log("Cleaning up socket connection");
+      socket.off("rider location", handleRiderLocation);
+      clearTimeout(timeout);
     };
-  }, [socket, orderId]);
+  }, [socket, orderId, loading]);
 
-  // Remove the manual fetchRoute function and related useEffects since we'll use RoutingMachine
+  // Debug whenever rider location changes
+  useEffect(() => {
+    console.log("Rider location updated:", riderLocation);
+  }, [riderLocation]);
 
   const calculateETA = (from, to) => {
     if (!from?.lat || !from?.lng || !to?.lat || !to?.lng) return "Unknown";
@@ -154,11 +183,11 @@ export const UserLocation = ({ orderId }) => {
 
   // Default center if userLocation is not available
   const defaultCenter = { lat: 27.7172, lng: 85.324 }; // Kathmandu coordinates as fallback
-  const mapCenter = userLocation || cookLocation || defaultCenter;
+  const mapCenter = userLocation || cookLocation || riderLocation || defaultCenter;
 
   // Prepare waypoints for RoutingMachine
   const getRestaurantToUserWaypoints = () => {
-    if (cookLocation && userLocation) {
+    if (cookLocation?.lat && cookLocation?.lng && userLocation?.lat && userLocation?.lng) {
       return [
         { latitude: cookLocation.lat, longitude: cookLocation.lng },
         { latitude: userLocation.lat, longitude: userLocation.lng }
@@ -168,7 +197,7 @@ export const UserLocation = ({ orderId }) => {
   };
 
   const getRiderToUserWaypoints = () => {
-    if (riderLocation && userLocation) {
+    if (riderLocation?.lat && riderLocation?.lng && userLocation?.lat && userLocation?.lng) {
       return [
         { latitude: riderLocation.lat, longitude: riderLocation.lng },
         { latitude: userLocation.lat, longitude: userLocation.lng }
@@ -181,11 +210,16 @@ export const UserLocation = ({ orderId }) => {
   const restaurantUserWaypoints = getRestaurantToUserWaypoints();
   const riderUserWaypoints = getRiderToUserWaypoints();
 
+  // Debug - check if routing waypoints are valid
+  console.log("Restaurant to User waypoints:", restaurantUserWaypoints);
+  console.log("Rider to User waypoints:", riderUserWaypoints);
+
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       <div className="bg-pink-600 text-white p-4 shadow-md">
         <h1 className="text-xl font-bold">Order Tracking</h1>
         <p className="text-sm opacity-80">Order #{orderId}</p>
+        <p className="text-sm opacity-80">Status: {orderStatus}</p>
       </div>
 
       <div className="p-4 bg-white shadow-sm">
@@ -198,7 +232,7 @@ export const UserLocation = ({ orderId }) => {
           <div className="text-gray-500 text-xs mb-3">Location not available</div>
         )}
 
-        {riderLocation && (
+        {riderLocation?.lat && riderLocation?.lng && userLocation?.lat && userLocation?.lng && (
           <div className="mt-3 p-2 bg-blue-50 rounded-md">
             <div className="font-medium">
               Rider ETA:
@@ -206,17 +240,24 @@ export const UserLocation = ({ orderId }) => {
                 {calculateETA(riderLocation, userLocation)}
               </span>
             </div>
+            <div className="text-xs text-gray-500 mt-1">
+              Rider location: {riderLocation.lat.toFixed(6)}, {riderLocation.lng.toFixed(6)}
+            </div>
           </div>
         )}
 
-        <div className="mt-3 text-sm text-gray-500">
-          {!riderLocation && "Waiting for rider to connect..."}
-          {riderLocation && "Rider connected and on the way!"}
+        <div className="mt-3 text-sm">
+          {!riderLocation?.lat && (
+            <div className="text-gray-500">Waiting for rider to connect...</div>
+          )}
+          {riderLocation?.lat && riderLocation?.lng && (
+            <div className="text-green-600">Rider connected and on the way!</div>
+          )}
         </div>
       </div>
 
       <div className="flex-grow relative">
-        {mapCenter.lat && mapCenter.lng ? (
+        {mapCenter?.lat && mapCenter?.lng ? (
           <MapContainer
             center={[mapCenter.lat, mapCenter.lng]}
             zoom={15}
@@ -227,12 +268,12 @@ export const UserLocation = ({ orderId }) => {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
 
-            {/* Restaurant to User Route */}
-            {restaurantUserWaypoints.length > 0 && (
+            {/* Restaurant to User Route - show only if rider route not available */}
+            {restaurantUserWaypoints.length > 0 && riderUserWaypoints.length === 0 && (
               <RoutingMachine waypoints={restaurantUserWaypoints} />
             )}
 
-            {/* Rider to User Route */}
+            {/* Rider to User Route - priority over restaurant route */}
             {riderUserWaypoints.length > 0 && (
               <RoutingMachine waypoints={riderUserWaypoints} />
             )}
@@ -276,7 +317,7 @@ export const UserLocation = ({ orderId }) => {
               </Marker>
             )}
 
-            <MapUpdater center={userLocation || cookLocation} />
+            <MapUpdater center={riderLocation || userLocation || cookLocation} />
           </MapContainer>
         ) : (
           <div className="flex items-center justify-center h-full bg-gray-100">
@@ -289,16 +330,18 @@ export const UserLocation = ({ orderId }) => {
             <div className="w-3 h-3 rounded-full bg-pink-600 mr-2"></div>
             <span>You (Customer)</span>
           </div>
-          {riderLocation && (
+          {riderLocation?.lat && riderLocation?.lng && (
             <div className="flex items-center mb-1">
               <div className="w-3 h-3 rounded-full bg-blue-600 mr-2"></div>
               <span>Rider</span>
             </div>
           )}
-          <div className="flex items-center">
-            <div className="w-3 h-3 rounded-full bg-green-600 mr-2"></div>
-            <span>Restaurant</span>
-          </div>
+          {cookLocation?.lat && cookLocation?.lng && (
+            <div className="flex items-center">
+              <div className="w-3 h-3 rounded-full bg-green-600 mr-2"></div>
+              <span>Restaurant</span>
+            </div>
+          )}
         </div>
       </div>
     </div>
