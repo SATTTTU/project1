@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { io } from "socket.io-client";
-import "leaflet-routing-machine/dist/leaflet-routing-machine.css"; // Import the CSS
+import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import RoutingMachine from "@/modules/rider/components/RoutingMachine";
 
 // Fix Leaflet icon issue
@@ -42,13 +42,13 @@ const DeliveryTracking = ({ orderId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [orderStatus, setOrderStatus] = useState("received");
-  const [routeWaypoints, setRouteWaypoints] = useState([]); // State for route waypoints
+  const [routeWaypoints, setRouteWaypoints] = useState([]);
 
   const userRole = orderData?.userRole || "user";
+  // Initialize socket once
   const [socket] = useState(() => io("wss://khajabox-socket.tai.com.np"));
 
   const getOrderData = async () => {
-    console.log("first", orderId);
     try {
       const response = await fetch(
         `https://khajabox-backend.dev.tai.com.np/api/get-order-ride-by-id/${orderId}`
@@ -58,22 +58,23 @@ const DeliveryTracking = ({ orderId }) => {
       // The actual data is inside the data array at index 0
       const orderRideData = result.data[0];
       setOrderData(orderRideData);
-      console.log("Order data:", orderRideData);
       setOrderStatus(orderRideData?.status || "received");
   
       // Set locations - accessing the nested structure correctly
       if (orderRideData?.pickup_location_id) {
-        setCookLocation({
+        const cookLoc = {
           lat: parseFloat(orderRideData.pickup_location_id.latitude),
           lng: parseFloat(orderRideData.pickup_location_id.longitude),
-        });
+        };
+        setCookLocation(cookLoc);
       }
   
       if (orderRideData?.drop_location_id) {
-        setUserLocation({
+        const userLoc = {
           lat: parseFloat(orderRideData.drop_location_id.latitude),
           lng: parseFloat(orderRideData.drop_location_id.longitude),
-        });
+        };
+        setUserLocation(userLoc);
       }
     } catch (err) {
       console.error("Error fetching order:", err);
@@ -87,57 +88,73 @@ const DeliveryTracking = ({ orderId }) => {
     getOrderData();
   }, [orderId]);
 
+  // Fix for socket connection - use both roomId formats for compatibility
   useEffect(() => {
     const roomId = `order-${orderId}`;
+    
+    // Join both possible room formats to ensure we catch all events
     socket.emit("join room", orderId);
+    socket.emit("join room", roomId);
+    
+    console.log("Joined socket rooms:", orderId, roomId);
 
-    socket.on("rider location", (data, room) => {
+    const handleRiderLocation = (data, room) => {
       console.log("Received rider location:", data, "Room:", room);
-      if (room === roomId || !room) {
+      // Accept data regardless of room name for now, to debug
+      if (data && typeof data.lat === 'number' && typeof data.lng === 'number') {
+        console.log("Setting rider location state:", data);
         setRiderLocation(data);
-        setLoading(false);
+      } else {
+        console.warn("Invalid rider location data:", data);
       }
-    });
+    };
+
+    socket.on("rider location", handleRiderLocation);
 
     const timeout = setTimeout(() => {
       if (!riderLocation) {
+        console.log("No rider location received after timeout");
         setLoading(false);
       }
     }, 5000);
 
     return () => {
-      socket.off("rider location");
+      socket.off("rider location", handleRiderLocation);
       clearTimeout(timeout);
     };
-  }, [socket, orderId, riderLocation]);
+  }, [socket, orderId]);
 
-  // Determine which route to show based on order status and user role
+  // Recalculate route whenever locations change
   useEffect(() => {
-    if (riderLocation) {
+    
+    if (riderLocation && riderLocation.lat && riderLocation.lng) {
       // For rider view or general customer/cook view when rider is moving
       if (orderStatus === "picked_up" || orderStatus === "on_the_way" || orderStatus === "delivered") {
         // If food is picked up, route should be from rider to customer
-        if (riderLocation && userLocation) {
-          setRouteWaypoints([
+        if (userLocation) {
+          const waypoints = [
             { latitude: riderLocation.lat, longitude: riderLocation.lng },
             { latitude: userLocation.lat, longitude: userLocation.lng }
-          ]);
+          ];
+          setRouteWaypoints(waypoints);
         }
       } else {
         // If food is not picked up yet, route should be from rider to restaurant
-        if (riderLocation && cookLocation) {
-          setRouteWaypoints([
+        if (cookLocation) {
+          const waypoints = [
             { latitude: riderLocation.lat, longitude: riderLocation.lng },
             { latitude: cookLocation.lat, longitude: cookLocation.lng }
-          ]);
+          ];
+          setRouteWaypoints(waypoints);
         }
       }
     } else if (cookLocation && userLocation) {
       // If rider isn't connected yet, show route from restaurant to customer
-      setRouteWaypoints([
+      const waypoints = [
         { latitude: cookLocation.lat, longitude: cookLocation.lng },
         { latitude: userLocation.lat, longitude: userLocation.lng }
-      ]);
+      ];
+      setRouteWaypoints(waypoints);
     }
   }, [riderLocation, cookLocation, userLocation, orderStatus]);
 
@@ -174,9 +191,13 @@ const DeliveryTracking = ({ orderId }) => {
   };
 
   const getPrimaryLocation = () => {
+    // First check if rider location is available
+    if (riderLocation && riderLocation.lat && riderLocation.lng) {
+      return riderLocation;
+    }
+    
+    // Fall back to role-specific locations
     switch (userRole) {
-      case "rider":
-        return riderLocation || userLocation;
       case "cook":
         return cookLocation;
       case "user":
@@ -272,6 +293,9 @@ const DeliveryTracking = ({ orderId }) => {
     );
   };
 
+  // Debug info for development
+
+
   const primaryLocation = getPrimaryLocation();
 
   if (loading) {
@@ -312,7 +336,7 @@ const DeliveryTracking = ({ orderId }) => {
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-            {riderLocation && (
+            {riderLocation && riderLocation.lat && riderLocation.lng && (
               <Marker
                 position={[riderLocation.lat, riderLocation.lng]}
                 icon={createCustomIcon("blue")}
@@ -356,7 +380,7 @@ const DeliveryTracking = ({ orderId }) => {
           </MapContainer>
 
           <div className="absolute bottom-4 right-4 z-50 bg-white p-2 rounded-md shadow-md text-xs">
-            {riderLocation && (
+            {riderLocation && riderLocation.lat && riderLocation.lng && (
               <div className="flex items-center mb-1">
                 <div className="w-3 h-3 rounded-full bg-blue-600 mr-2"></div>
                 <span>{userRole === "rider" ? "You (Rider)" : "Rider"}</span>
