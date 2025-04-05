@@ -62,7 +62,7 @@ export const RiderPages = ({ orderId }) => {
   const [cookLocation, setCookLocation] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
   const [socket] = useState(() => io("wss://khajabox-socket.tai.com.np"));
-  const [routeWaypoints, setRouteWaypoints] = useState([]);
+  const [activeRoute, setActiveRoute] = useState("riderToCook");
   const [orderRideId, setOrderRideId] = useState(null);
 
   const getOrderData = async () => {
@@ -178,52 +178,42 @@ export const RiderPages = ({ orderId }) => {
     };
   }, [orderId, socket]);
 
-  // Update route waypoints based on status
+  // Determine which route should be active based on status
   useEffect(() => {
-    if (!riderLocation) return;
-
-    if (orderStatus === "assigned" && cookLocation) {
-      // Show route from rider to cook (restaurant)
-      setRouteWaypoints([
-        { latitude: riderLocation.lat, longitude: riderLocation.lng },
-        { latitude: cookLocation.lat, longitude: cookLocation.lng }
-      ]);
-    } else if ((orderStatus === "picked_up" || orderStatus === "delivering") && userLocation) {
-      // Show route from rider to user (customer)
-      setRouteWaypoints([
-        { latitude: riderLocation.lat, longitude: riderLocation.lng },
-        { latitude: userLocation.lat, longitude: userLocation.lng }
-      ]);
-    } else {
-      // Clear route if no valid destination
-      setRouteWaypoints([]);
+    if (orderStatus === "assigned") {
+      setActiveRoute("riderToCook");
+    } else if (orderStatus === "picked_up" || orderStatus === "delivering") {
+      setActiveRoute("cookToUser");
     }
-  }, [riderLocation, cookLocation, userLocation, orderStatus]);
+  }, [orderStatus]);
 
-  // Calculate ETA based on distance to current destination
+  // Calculate ETA based on active route
   const eta = useMemo(() => {
     if (!riderLocation) return null;
 
-    let destination = null;
-    if (orderStatus === "assigned" && cookLocation) {
-      destination = cookLocation;
-    } else if ((orderStatus === "picked_up" || orderStatus === "delivering") && userLocation) {
-      destination = userLocation;
+    let distance = 0;
+    if (activeRoute === "riderToCook" && cookLocation) {
+      distance = calculateDistance(
+        riderLocation.lat,
+        riderLocation.lng,
+        cookLocation.lat,
+        cookLocation.lng
+      );
+    } else if (activeRoute === "cookToUser" && userLocation) {
+      distance = calculateDistance(
+        riderLocation.lat,
+        riderLocation.lng,
+        userLocation.lat,
+        userLocation.lng
+      );
+    } else {
+      return null;
     }
-
-    if (!destination) return null;
-
-    const distance = calculateDistance(
-      riderLocation.lat,
-      riderLocation.lng,
-      destination.lat,
-      destination.lng
-    );
 
     // Assuming average speed of 30 km/h
     const timeInMinutes = Math.round((distance / 30) * 60);
     return timeInMinutes;
-  }, [riderLocation, cookLocation, userLocation, orderStatus]);
+  }, [riderLocation, cookLocation, userLocation, activeRoute]);
 
   // Get next status in the flow
   const getNextStatus = (currentStatus) => {
@@ -383,11 +373,9 @@ export const RiderPages = ({ orderId }) => {
               <div className="text-sm text-gray-500">Estimated Time</div>
               <div className="text-xl font-bold text-blue-600">{eta} min</div>
               <div className="text-sm">
-                {orderStatus === "assigned" 
+                {activeRoute === "riderToCook" 
                   ? "to restaurant" 
-                  : orderStatus === "picked_up" || orderStatus === "delivering"
-                  ? "to customer"
-                  : ""}
+                  : "to customer"}
               </div>
             </div>
           )}
@@ -413,7 +401,7 @@ export const RiderPages = ({ orderId }) => {
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-            {/* Rider Marker */}
+            {/* Rider Marker - Always visible */}
             {riderLocation && (
               <Marker
                 position={[riderLocation.lat, riderLocation.lng]}
@@ -427,8 +415,8 @@ export const RiderPages = ({ orderId }) => {
               </Marker>
             )}
 
-            {/* Cook Marker - Show when assigned or picked up */}
-            {(orderStatus === "assigned" || orderStatus === "picked_up") && cookLocation && (
+            {/* Cook Marker - Always visible */}
+            {cookLocation && (
               <Marker
                 position={[cookLocation.lat, cookLocation.lng]}
                 icon={createCustomIcon("#22C55E")}
@@ -437,14 +425,12 @@ export const RiderPages = ({ orderId }) => {
                   <strong>Restaurant</strong>
                   <br />
                   {orderData?.pickup_location_id?.cook?.name || "Restaurant"}
-                  <br />
-                  {orderStatus === "assigned" ? "Pickup location" : "Food picked up"}
                 </Popup>
               </Marker>
             )}
 
-            {/* User Marker - Show when delivering or picked up */}
-            {(orderStatus === "picked_up" || orderStatus === "delivering") && userLocation && (
+            {/* User Marker - Always visible */}
+            {userLocation && (
               <Marker
                 position={[userLocation.lat, userLocation.lng]}
                 icon={createCustomIcon("#EF4444")}
@@ -453,17 +439,29 @@ export const RiderPages = ({ orderId }) => {
                   <strong>Customer</strong>
                   <br />
                   {orderData?.drop_location_id?.user?.name || "Customer"}
-                  <br />
-                  Delivery destination
                 </Popup>
               </Marker>
             )}
 
-            {/* Routing Machine - Show route based on status */}
-            {routeWaypoints.length > 1 && (
+            {/* Active Route - Rider to Cook */}
+            {activeRoute === "riderToCook" && riderLocation && cookLocation && (
               <RoutingMachine 
-                waypoints={routeWaypoints} 
-                color={orderStatus === "assigned" ? "#3b82f6" : "#8b5cf6"}
+                waypoints={[
+                  { latitude: riderLocation.lat, longitude: riderLocation.lng },
+                  { latitude: cookLocation.lat, longitude: cookLocation.lng }
+                ]}
+                color="#3b82f6" // Blue for pickup route
+              />
+            )}
+
+            {/* Active Route - Cook to User */}
+            {activeRoute === "cookToUser" && riderLocation && userLocation && (
+              <RoutingMachine 
+                waypoints={[
+                  { latitude: riderLocation.lat, longitude: riderLocation.lng },
+                  { latitude: userLocation.lat, longitude: userLocation.lng }
+                ]}
+                color="#8b5cf6" // Purple for delivery route
               />
             )}
 
