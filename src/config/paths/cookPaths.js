@@ -32,6 +32,14 @@ export const cookPaths = {
         redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
       }`,
   },
+  
+    cookpath: {
+      orderTracking: {
+        path: "/cook/order-tracking/:orderId",
+        fullPath: "/cook/order-tracking/:orderId",
+      },
+    },
+
 
   pendingPage: {
     path: "/cook/underReview",

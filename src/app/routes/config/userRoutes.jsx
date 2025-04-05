@@ -263,6 +263,16 @@ export const userRoutes = [
 									return { Component: OrderList };
 								},
 							},
+							{
+								path: "/track-order/:orderId",
+								lazy: async () => {
+									const { UserTrackingRoute } = await import(
+										"../../../modules/user/cart/components/param"
+									);
+									return { Component: UserTrackingRoute };
+								},
+							},
+
 						],
 					},
 				],

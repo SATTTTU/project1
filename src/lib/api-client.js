@@ -42,6 +42,7 @@ function getToken() {
       const adminToken =
         localStorage.getItem(STORAGE_KEYS.ADMIN_TOKEN) ||
         localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
+        
       const cookToken = localStorage.getItem(STORAGE_KEYS.COOK_TOKEN);
       const userToken = localStorage.getItem(STORAGE_KEYS.USER_TOKEN);
 
@@ -200,7 +201,7 @@ api.interceptors.response.use(
     // Handle unauthorized errors (401) by clearing auth data
     if (error.response && error.response.status === 401) {
       console.log("401 Unauthorized response detected, clearing auth data");
-      clearAuthData();
+      // clearAuthData();
     }
 
     return Promise.reject(error);

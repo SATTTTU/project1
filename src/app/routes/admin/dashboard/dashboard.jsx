@@ -8,7 +8,7 @@ import { TopCooksList } from "@/modules/admin/dashboard/components/top-cooks";
 import { ProfileAvatar } from "@/modules/admin/dashboard/components/avatar";
 import { Link } from "react-router-dom";
 import { ProfileCard } from "@/modules/admin/editProfile/components/profilecard";
-import { useGetTotalEarning } from "@/modules/admin/payment/api/gettotalearning";
+import { Usegettotalearning } from "@/modules/admin/payment/api/gettotalearning";
 
 // Custom hook to detect clicks outside a specified element
 const useOutsideClick = (ref, callback) => {
@@ -36,12 +36,15 @@ export const AdminDashboardRoute = React.memo(() => {
   const notificationRef = useRef(null);
   
   // Fetch total earnings data
-  const { data: earningsData, isLoading: earningsLoading, error: earningsError } = useGetTotalEarning();
+  const { data: earningsData, isLoading: earningsLoading, error: earningsError } = Usegettotalearning();
+
+console.log("Earnings Data:", earningsData);
+
 
   const dashboardStats = React.useMemo(() => {
     const formattedEarnings = earningsLoading || earningsError 
   ? "Loading..." 
-  : `₹${earningsData?.totalEarnings?.toLocaleString() || "0"}`;
+  : `Rs${earningsData?.totalEarnings?.toLocaleString() || "0"}`;
 
 const earningIncrease = earningsLoading || earningsError
   ? "..." 
@@ -88,42 +91,39 @@ const earningIncrease = earningsLoading || earningsError
   </div>
   
   <div className="flex items-center gap-6">
-    <div className="relative max-w-lg">
-      <input
-        type="text"
-        placeholder="Search..."
-        className="w-full pl-8 pr-4 py-2 border border-gray-200 rounded-lg "
-      />
-    </div>
+   
     
     <div className="relative">
-      <Link onClick={toggleNotifications} className="relative">
-        <IoIosNotifications className="text-2xl text-gray-600 hover:text-green-500 transition" />
-        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center">
-          {notifications.length}
-        </span>
-      </Link>
-      
-      <AnimatePresence>
-        {showNotifications && (
-          <motion.div
-            ref={notificationRef}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 z-50"
-          >
-            <h2 className="text-lg font-semibold mb-2">Notifications</h2>
-            {notifications.map((notification) => (
-              <div key={notification.id} className="p-2 hover:bg-gray-100 rounded-md cursor-pointer">
-                {notification.message}
-              </div>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+  <Link onClick={toggleNotifications} className="relative">
+    <IoIosNotifications className="text-2xl text-gray-600 hover:text-green-500 transition" />
+    {!showNotifications && (
+      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center">
+        {notifications.length}
+      </span>
+    )}
+  </Link>
+
+  <AnimatePresence>
+    {showNotifications && (
+      <motion.div
+        ref={notificationRef}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        transition={{ duration: 0.2 }}
+        className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 z-50"
+      >
+        <h2 className="text-lg font-semibold mb-2">Notifications</h2>
+        {notifications.map((notification) => (
+          <div key={notification.id} className="p-2 hover:bg-gray-100 rounded-md cursor-pointer">
+            {notification.message}
+          </div>
+        ))}
+      </motion.div>
+    )}
+  </AnimatePresence>
+</div>
+
     
     <div className="relative">
       <ProfileAvatar onClick={toggleProfile} />
