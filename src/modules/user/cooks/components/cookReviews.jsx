@@ -5,10 +5,11 @@ import { useUserReview } from "../api/getReview";
 import { ReviewForm } from "./reviewForm";
 
 export const CookReviews = ({ id, cookName, setCook }) => {
+  
   const [showReviewForm, setShowReviewForm] = useState(false);
   const queryClient = useQueryClient();
   const { data: reviews } = useUserReview(id); 
-  console.log("REview", reviews)
+  console.log("REview", id)
 
   const handleDeleteReview = (id) => {
     queryClient.invalidateQueries(["cookProfile", id]);
@@ -51,7 +52,7 @@ export const CookReviews = ({ id, cookName, setCook }) => {
       <div className="space-y-6">
         {reviews?.map((review) => (
           <ReviewCard key={`${review.id}-${Math.random()}`}
-          review={review} onDelete={handleDeleteReview} setCook={setCook} />
+          review={review}  onDelete={handleDeleteReview} setCook={setCook} />
         ))}
       </div>
     </div>

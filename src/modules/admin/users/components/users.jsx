@@ -11,7 +11,7 @@ export const UserList = ({ search = "", currentPage = 1, rowsPerPage = 5, onPage
   const filteredUsers = useMemo(() => {
     if (!users) return [];
     return users.filter(user =>
-      user.name.toLowerCase().includes(search.toLowerCase())
+      user?.name.toLowerCase().includes(search.toLowerCase())
     );
   }, [users, search]);
 

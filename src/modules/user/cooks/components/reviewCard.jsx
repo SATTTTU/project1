@@ -2,11 +2,19 @@ import { useState } from "react";
 import { FiStar, FiTrash, FiEdit } from "react-icons/fi";
 import { useUpdateReview } from "../api/updateReview";
 import { useDeleteReview } from "../api/deleteReview";
+// import { useAuth } from "@/hooks/context/useAuth";
+import { useProfile } from "../../userprofile/api/getProfile";
+// import { useAuth } from "../../../auth/hooks/useAuth"; // Example hook
 
 const ReviewCard = ({ review, setCook }) => {
+  const {data:user}= useProfile();
+  // const { currentUser } = useAuth();
+  console.log("user", user) // get the current logged-in user
   const [isEditing, setIsEditing] = useState(false);
   const [editedComment, setEditedComment] = useState(review.comment);
   const [editedRating, setEditedRating] = useState(review.ratings);
+
+  const isOwner = user?.id === (typeof review.user === "string" ? review.user : review.user.id);
 
   const { mutate: deleteReview, isLoading: isDeleting } = useDeleteReview({
     onSuccess: (deletedReviewId) => {
@@ -18,10 +26,8 @@ const ReviewCard = ({ review, setCook }) => {
     },
   });
 
-  // Update Review Mutation
   const { mutate: updateReview, isLoading: isUpdating } = useUpdateReview({
     onMutate: async (updatedData) => {
-      // Optimistic UI update before API response
       setCook((prevCook) => ({
         ...prevCook,
         reviews: prevCook?.reviews?.map((r) =>
@@ -32,19 +38,15 @@ const ReviewCard = ({ review, setCook }) => {
       }));
     },
     onSuccess: (updatedReview) => {
-      // Update state with the latest data after API call
       setCook((prevCook) => ({
         ...prevCook,
         reviews: prevCook?.reviews?.map((r) =>
           r.review_id === updatedReview.review_id ? updatedReview : r
         ),
       }));
-
-      // Update local state with the new review data
       setEditedComment(updatedReview.comment);
       setEditedRating(updatedReview.ratings);
-
-      setIsEditing(false); // Close the edit form
+      setIsEditing(false);
     },
   });
 
@@ -82,18 +84,20 @@ const ReviewCard = ({ review, setCook }) => {
           </div>
         </div>
 
-        <div className="flex gap-2">
-          <button onClick={() => setIsEditing(true)} className="text-blue-500 hover:text-blue-700 cursor-pointer">
-            <FiEdit className="text-xl" />
-          </button>
-          <button
-            onClick={handleDelete}
-            className="text-red-500 hover:text-red-700 cursor-pointer"
-            disabled={isDeleting}
-          >
-            {isDeleting ? "Deleting..." : <FiTrash className="text-xl" />}
-          </button>
-        </div>
+        {isOwner && (
+          <div className="flex gap-2">
+            <button onClick={() => setIsEditing(true)} className="text-blue-500 hover:text-blue-700 cursor-pointer">
+              <FiEdit className="text-xl" />
+            </button>
+            <button
+              onClick={handleDelete}
+              className="text-red-500 hover:text-red-700 cursor-pointer"
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Deleting..." : <FiTrash className="text-xl" />}
+            </button>
+          </div>
+        )}
       </div>
 
       {isEditing ? (
@@ -103,14 +107,29 @@ const ReviewCard = ({ review, setCook }) => {
             value={editedComment}
             onChange={(e) => setEditedComment(e.target.value)}
           />
-          <input
-            type="number"
-            min="1"
-            max="5"
-            className="w-full p-2 border rounded mt-2"
-            value={editedRating}
-            onChange={(e) => setEditedRating(Number(e.target.value))}
-          />
+      <input
+  type="number"
+  min="1"
+  max="5"
+  className="w-full p-2 border rounded mt-2"
+  value={editedRating || ""}
+  onChange={(e) => {
+    const value = Number(e.target.value);
+    // Allow only 1–5
+    if ([1, 2, 3, 4, 5].includes(value)) {
+      setEditedRating(value);
+    } else if (e.target.value === "") {
+      setEditedRating(""); // Allow clearing for a moment
+    }
+  }}
+  onBlur={() => {
+    // If input is cleared or invalid, reset to previous or default valid rating
+    if (![1, 2, 3, 4, 5].includes(editedRating)) {
+      setEditedRating(review.ratings || 1);
+    }
+  }}
+/>
+
           <div className="mt-2 flex gap-2">
             <button
               onClick={handleUpdate}

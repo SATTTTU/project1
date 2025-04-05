@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 const fetchCategory = async () => {
   try {
     const response = await api.get("/api/cooks/get-menu");
-    console.log("Category fetch response:", response);
+    console.log("Category fetch response:***", response);
 
     if (!response.data) {
       throw new Error("No data found in the response");

@@ -60,8 +60,8 @@ export const Header = ({ navigate, popularItems, categories, cooks }) => {
 	};
   
 	return (
-	  <div className="fixed top-0 left-0 right-0 z-50 shadow-sm bg-white">
-		<div className="container mx-auto px-4 py-3 lg:py-2">
+	  <div className="sticky top-0 left-0 right-0 z-50 shadow-sm bg-white">
+		<div className="container mx-auto px-4 py-3 lg:py-2 sticky top-0">
 		  <div className="flex items-center justify-between">
 			<Link to="/dashboard" className="flex items-center">
 			  <img src={Logo} alt="Khajabox" className="h-8 w-8 mr-2" />

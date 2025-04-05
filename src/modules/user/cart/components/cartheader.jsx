@@ -3,7 +3,7 @@ import { FiArrowLeft } from "react-icons/fi";
 import Logo from "../../../../assets/unnamed.png";
 export const CartHeader = () => {
     return (
-      <div className="bg-white shadow-sm">
+      <div className="bg-white shadow-sm sticky top-0">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <Link to="/dashboard" className="flex items-center">

@@ -22,7 +22,7 @@ export const AllDishes = () => {
         menu_item_id: dish.id,
         quantity: 1,
       });
-      toast.success(`${dish.name} added to cart! 🛒`);
+      toast.success(`${dish?.name} added to cart! 🛒`);
     } catch (error) {
       toast.error("Failed to add item to cart.");
       console.error("Cart error:", error);

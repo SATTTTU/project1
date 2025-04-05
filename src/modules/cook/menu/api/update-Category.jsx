@@ -12,7 +12,7 @@ export const updateMenu = ({ menuId, data }) => {
       mutationFn: updateMenu,
       onSuccess: (...args) => {
         queryClient.invalidateQueries({
-          queryKey: ["menu"],
+          queryKey: ["categories"],
         });
         onSuccess?.(...args);
       },

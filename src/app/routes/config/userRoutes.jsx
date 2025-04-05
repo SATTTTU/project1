@@ -60,10 +60,10 @@ export const userRoutes = [
 					{
 						path: paths.user.emailVerification.path,
 						lazy: async () => {
-							const { Verification } = await import(
-								"../../../modules/user/auth/components/verification"
+							const { EmailVerification } = await import(
+								"../../../modules/user/auth/components/emailVerification"
 							);
-							return { Component: Verification };
+							return { Component: EmailVerification };
 						},
 					},
 					{

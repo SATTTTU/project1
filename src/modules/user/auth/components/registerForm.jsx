@@ -11,7 +11,7 @@ export const RegisterForm = () => {
     mutationConfig: {
       onSuccess: (data) => {
         console.log("Registration successful:", data);
-        navigate("/login"); 
+        navigate("/verification"); 
       },
       onError: (error) => {
         console.error("Registration failed:", error);

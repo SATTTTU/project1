@@ -203,7 +203,7 @@ export const ProfileCard = ({ userData }) => {
                     <p className="text-gray-800 font-medium hidden md:block">{formik.values.name}</p>
                   )}
                   {formik.errors.name && formik.touched.name && (
-                    <div className="text-red-500 text-xs mt-1">{formik.errors.name}</div>
+                    <div className="text-red-500 text-xs mt-1">{formik.errors?.name}</div>
                   )}
                 </div>
 

@@ -5,7 +5,7 @@ import { OrderItem } from "./orderItem";
 const OrdersContent = () => {
 	const { data: orders } = useAllOrders();
 	const { data: currentorders } = useCurrentOrders();
-	console.log("current orders", currentorders)
+	console.log("current orders****", currentorders)
 
 
 	return (

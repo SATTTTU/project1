@@ -8,7 +8,7 @@ export const getUserReview = async (cookId) => {
 };
 export const useUserReview = (cookId, queryConfig = {}) => {
   return useQuery({
-    queryKey: ["cookProfile", cookId],
+    queryKey: ["reviews", cookId],
     queryFn: () => getUserReview(cookId),
     enabled: !!cookId, // Only fetch if cookId exists
     ...queryConfig, // Ensure queryConfig is correctly applied

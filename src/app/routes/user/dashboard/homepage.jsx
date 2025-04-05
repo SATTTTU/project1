@@ -41,7 +41,8 @@ export const Homepage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 w-full overflow-x-hidden">
+    <>
+    <div className="min-h-screen bg-gray-50 w-full ">
       <Header navigate={navigate} handleAddToCart={handleAddToCart} />
       
       <div className="mt-10 lg:mt-16 md:mt-16">
@@ -74,5 +75,6 @@ export const Homepage = () => {
 
       <Footer />
     </div>
+  </>
   );
 };

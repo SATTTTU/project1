@@ -66,7 +66,7 @@ export const useCreateCategoryItem = (options = {}) => {
     mutationFn: createCategoryItem,
     onSuccess: (data) => {
       // Invalidate the query after a successful mutation to trigger a refresh
-      queryClient.invalidateQueries(["categoryItems"]); // Replace with the actual query key you use for the category items
+      queryClient.invalidateQueries(["categories"]); // Replace with the actual query key you use for the category items
       if (onSuccess) onSuccess(data);
     },
     onError,
