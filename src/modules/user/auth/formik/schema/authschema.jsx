@@ -5,7 +5,7 @@ export const signInSchema = z.object({
 
   password: z
     .string()
-    .min(8, "Password must be at least 8 characters")
+    // .min(8, "Password must be at least 8 characters")
     .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
     .regex(/[a-z]/, "Password must contain at least one lowercase letter")
     .regex(/\d/, "Password must contain at least one number")
@@ -21,7 +21,7 @@ export const signUpSchema = z.object({
 	email: z.string().email("Invalid email format"),
 	password: z
 	  .string()
-	  .min(6, "Password must be at least 6 characters")
+	  // .min(6, "Password must be at least 6 characters")
 	  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
 	  .regex(/[0-9]/, "Password must contain at least one number")
 	  .regex(/[\W_]/, "Password must contain at least one special character"),
@@ -45,7 +45,7 @@ export const resetPasswordSchema = z
 
     password: z
       .string()
-      .min(8, { message: "Password must be at least 8 characters" })
+      // .min(8, { message: "Password must be at least 8 characters" })
       .regex(/[A-Z]/, { message: "Must include at least one uppercase letter" })
       .regex(/[a-z]/, { message: "Must include at least one lowercase letter" })
       .regex(/[0-9]/, { message: "Must include at least one number" })
@@ -65,7 +65,7 @@ export const resetPasswordSchema = z
       oldpassword: z.string().min(8, "Current password is required"),
       newpassword: z
         .string()
-        .min(8, "Password must be at least 8 characters")
+        // .min(8, "Password must be at least 8 characters")
         .regex(/[A-Z]/, "Must contain at least one uppercase letter")
         .regex(/[0-9]/, "Must contain at least one number")
         .regex(/[@$!%*?&]/, { message: "Must include at least one special character" }),

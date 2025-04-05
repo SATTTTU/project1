@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUpdateOrderStatus } from "../../orders/api/updateOrders";
+import Dishes from "../../../../assets/defaultDishes.jpg";
+
 
 export const OrderRequestCard = ({ order, updateOrderStatus }) => {
-  const [status, setStatus] = useState(order.status);
-  const navigate = useNavigate();
+	console.log("orders****aayyo", order);
+	const [status, setStatus] = useState(order.status);
+	const navigate = useNavigate();
   const { mutate: updateStatus, isLoading } = useUpdateOrderStatus();
 
   // Define the valid status progression (only 4 statuses)
@@ -64,6 +67,7 @@ export const OrderRequestCard = ({ order, updateOrderStatus }) => {
         return "bg-gray-100 text-gray-800";
     }
   };
+	const imageBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
   // Get next logical action based on current status
   const getNextAction = (currentStatus) => {
@@ -130,23 +134,27 @@ export const OrderRequestCard = ({ order, updateOrderStatus }) => {
     );
   };
 
-  return (
-    <div className="rounded-lg bg-white p-4 shadow-md hover:shadow-lg transition-all">
-      <div className="flex items-start">
-        <img
-          src={order.image || "/placeholder.svg"}
-          alt="Customer"
-          className="h-20 w-20 rounded-md object-cover mr-4"
-        />
-        <div className="flex-1">
-          <div className="flex justify-between">
-            <h3 className="font-semibold">{order.customerName || order.user?.name || "Customer"}</h3>
-            <span
-              className={`px-3 py-1 text-xs rounded-full ${getStatusBadgeStyle(status)}`}
-            >
-              {status.charAt(0).toUpperCase() + status.slice(1).replace(/-/g, ' ')}
-            </span>
-          </div>
+	return (
+		<div className="rounded-lg bg-white p-4 shadow-md hover:shadow-lg transition-all">
+			<div className="flex items-start">
+				<img
+					src={order?.image_url ? `${imageBaseUrl}${order?.items[0].menuitem.image_url}` : Dishes}
+					alt="Profile"
+					className="h-34 mr-2 w-24 object-cover shadow-md border-2 border-white transition-all duration-300"
+				/>
+				<div className="flex-1">
+					<div className="flex justify-between">
+						<h3 className="font-semibold">{order.customerName}</h3>
+						<span
+							className={`px-3 py-1 text-xs rounded-full ${
+								order.status === "preparing"
+									? "bg-yellow-100 text-yellow-800"
+									: "bg-green-100 text-green-800"
+							}`}
+						>
+							{order.status === "preparing" ? "Preparing" : "Ready for Pickup"}
+						</span>
+					</div>
 
           <div className="grid grid-cols-2 gap-1 mt-1">
             <p className="text-sm text-gray-600">

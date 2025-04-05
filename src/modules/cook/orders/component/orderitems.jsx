@@ -27,7 +27,7 @@ export const OrderItems = ({ items }) => {
               {item.menu_item?.name || item.name || `Item #${index + 1}`}{" "}
               <span className="text-gray-500">x{item.quantity}</span>
             </span>
-            <span>₹{((item.price || 0) * item.quantity).toFixed(2)}</span>
+            <span>Rs. {item.price * item.quantity}</span>
           </div>
         ))}
         <div className="flex justify-between pt-2 mt-2 border-t border-dashed">

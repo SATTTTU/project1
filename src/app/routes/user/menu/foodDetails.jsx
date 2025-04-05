@@ -15,7 +15,7 @@ export const FoodDetails = () => {
 
   const { data: food, isLoading, error } = useMenuItemsInfo(id);
   console.log("food details ", food)
-    const { updateItem } = useUpdateCartItem();
+  const { updateItem } = useUpdateCartItem();
   
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -45,17 +45,14 @@ export const FoodDetails = () => {
 
   const handleQuantityChange = async (itemId, newQuantity) => {
     console.log("quantity", itemId, newQuantity)
-		if (newQuantity < 1) return;
-		try {
-			await updateItem({ item_id: itemId, quantity: newQuantity });
-			// refetch(); // Ensure cart updates
-		} catch (error) {
-			console.error("Error updating quantity:", error);
-		}
-	};
-
-
-
+    if (newQuantity < 1) return;
+    try {
+      await updateItem({ item_id: itemId, quantity: newQuantity });
+      // refetch(); // Ensure cart updates
+    } catch (error) {
+      console.error("Error updating quantity:", error);
+    }
+  };
 
   const toggleFavorite = () => {
     setIsFavorite(!isFavorite);
@@ -71,11 +68,15 @@ export const FoodDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
+    <div className="min-h-screen">
+      <div className="">
 
-      <main className="container mx-auto px-4 py-6">
-        <div className="mb-6">
+
+      <Header />
+      </div>
+
+      <main className="container mx-auto px-4 py-6 lg:mt-30 mt-16"> {/* Added mt-16 */}
+        <div className="mb-6 mt-2">
           <Link
             to="/dashboard"
             className="inline-flex items-center text-gray-600 hover:text-green-600 transition-colors"
@@ -102,7 +103,6 @@ export const FoodDetails = () => {
 
           {/* <FoodTabs food={food} activeTab={activeTab} setActiveTab={setActiveTab} /> */}
         </div>
-
       </main>
     </div>
   );
