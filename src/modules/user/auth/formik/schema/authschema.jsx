@@ -59,21 +59,25 @@ export const resetPasswordSchema = z
   });
 
 
-export const changePasswordSchema = z
-	.object({
-		oldpassword: z.string().min(8, "Current password is required"),
-		newpassword: z
-			.string()
-			.min(8, "Password must be at least 8 characters")
-			.regex(/[A-Z]/, "Must contain at least one uppercase letter")
-			.regex(/[0-9]/, "Must contain at least one number"),
-		confirmpassword: z.string(),
-	})
-	.refine((data) => data.newpassword === data.confirmpassword, {
-		message: "Passwords do not match",
-		path: ["confirmPassword"],
-	})
-	.refine((data) => data.oldpassword !== data.newpassword, {
-		message: "New password must be different from the current password",
-		path: ["newPassword"],
-	});
+
+  export const changePasswordSchema = z
+    .object({
+      oldpassword: z.string().min(8, "Current password is required"),
+      newpassword: z
+        .string()
+        .min(8, "Password must be at least 8 characters")
+        .regex(/[A-Z]/, "Must contain at least one uppercase letter")
+        .regex(/[0-9]/, "Must contain at least one number")
+        .regex(/[@$!%*?&]/, { message: "Must include at least one special character" }),
+
+      confirmpassword: z.string(),
+    })
+    .refine((data) => data.newpassword === data.confirmpassword, {
+      message: "new password and confirm password do not match",
+      path: ["confirmpassword"],
+    })
+    .refine((data) => data.oldpassword !== data.newpassword, {
+      message: "New password must be different from the current password",
+      path: ["newpassword"],
+    });
+  

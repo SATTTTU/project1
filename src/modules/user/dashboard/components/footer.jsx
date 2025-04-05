@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "../../../../assets/logo.jpg";
+import Logo from "../../../../assets/unnamed.png";
 import { Link } from "react-router-dom";
 import {
 	FaFacebookF,
@@ -22,8 +22,8 @@ export const Footer = () => {
 								<img
 									src={Logo}
 									alt="KhanaBox Logo"
-									width={40}
-									height={40}
+									width={25}
+									height={25}
 									className=""
 								/>
 								<span className="text-2xl font-bold text-[#426B1F] ">
@@ -88,16 +88,16 @@ export const Footer = () => {
 							<p className="text-gray-600">Phone: +1 (234) 567-890</p>
 
 							<div className="flex   space-x-4 mt-4 lg:justify-center lg:items-center">
-								<a href="#" className="hover:text-gray-300">
+								<a href="#" className="hover:text-green-300">
 									<FaFacebookF size={20} />
 								</a>
-								<a href="#" className="hover:text-gray-300">
+								<a href="#" className="hover:text-green-300">
 									<FaTwitter size={20} />
 								</a>
-								<a href="#" className="hover:text-gray-300">
+								<a href="#" className="hover:text-green-300">
 									<FaInstagram size={20} />
 								</a>
-								<a href="#" className="hover:text-gray-300">
+								<a href="#" className="hover:text-green-300">
 									<FaLinkedinIn size={20} />
 								</a>
 							</div>

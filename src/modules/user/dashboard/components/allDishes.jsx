@@ -1,18 +1,22 @@
 import React, { useState } from "react";
 import { useAddCartItem } from "../../cart/api/addItems";
-import { toast } from "react-toastify"; 
-import Dishes from "../../../../assets/defaultDishes.jpg"; 
+import { toast } from "react-toastify";
+import Dishes from "../../../../assets/defaultDishes.jpg";
 import { useAllDishes } from "../../menu/api/allDishes";
+import { useNavigate } from "react-router-dom";
 
 export const AllDishes = () => {
+  const navigate = useNavigate();
   const { data: menuItems, isLoading, error } = useAllDishes();
-  console.log("All dishes", menuItems)
-  const { mutateAsync: addToCart, isLoading: isAddingToCart } = useAddCartItem();
+  const { mutateAsync: addToCart } = useAddCartItem();
   const imageUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
-  const [visibleItems, setVisibleItems] = useState(4);
+  const [visibleItems, setVisibleItems] = useState(8);
+  const [loadingItemId, setLoadingItemId] = useState(null); // individual item loading state
 
-  const handleAddToCart = async (dish) => {
+  const handleAddToCart = async (dish, e) => {
+    e.stopPropagation();
+    setLoadingItemId(dish.id);
     try {
       await addToCart({
         menu_item_id: dish.id,
@@ -20,80 +24,110 @@ export const AllDishes = () => {
       });
       toast.success(`${dish.name} added to cart! 🛒`);
     } catch (error) {
-      toast.error("Failed to add item to cart. Try again!");
-      console.error("Error adding to cart:", error);
+      toast.error("Failed to add item to cart.");
+      console.error("Cart error:", error);
+    } finally {
+      setLoadingItemId(null);
     }
   };
 
-  const handleLoadMore = () => {
-    setVisibleItems((prev) => prev + 6);
-  };
+  // const handleLoadMore = () => {
+  //   setVisibleItems((prev) => prev + 6);
+  // };
 
   if (isLoading) {
     return <div className="p-6 text-center animate-pulse">Loading menu items...</div>;
   }
 
   if (error) {
-    return <div className="p-6 text-center text-red-500">Error loading menu items: {error.message}</div>;
+    return (
+      <div className="p-6 text-center text-red-500">
+        Error loading dishes: {error.message}
+      </div>
+    );
   }
 
   if (!menuItems || menuItems.length === 0) {
-    return <div className="p-6 text-center">No menu items available at the moment.</div>;
+    return <div className="p-6 text-center">No dishes available right now.</div>;
   }
 
   const itemsToShow = menuItems.slice(0, visibleItems);
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-6 text-center">Our Dishes</h2>
+      <h2 className="text-3xl font-bold mb-10 text-center text-[#426B1F]">
+       All Special Dishes
+      </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {itemsToShow.map((item) => (
-          <div key={item.id} className="bg-white rounded-lg shadow-xl border border-slate-200 overflow-hidden hover:shadow-lg transition-shadow">
-            <div className="h-50 overflow-hidden">
+          <div
+            key={item.id}
+            onClick={() => navigate(`/food/${item.id}`)}
+            className="bg-white rounded-2xl shadow-md border border-slate-200 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 cursor-pointer group flex flex-col"
+          >
+            <div className="h-48 w-full overflow-hidden rounded-t-2xl">
               <img
-                src={item?.image_url ? `${imageUrl}${item.image_url}` : Dishes} 
-                alt={item.name || "Dish Image"}
-                className="w-full h-full object-cover"
-                onError={(e) => (e.target.src = Dishes)} // Use Dishes image if load fails
+                src={item.image_url ? `${imageUrl}${item.image_url}` : Dishes}
+                alt={item.name}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                onError={(e) => (e.target.src = Dishes)}
               />
             </div>
 
-            <div className="p-4">
-              <h3 className="text-2xl font-bold">{item.name}</h3>
-              <p className="text-gray-600 text-sm mb-3 hover:text-green-600">By {item.cook_name}</p>
+            <div className="p-5 flex flex-col flex-grow">
+              <h3 className="text-lg font-semibold text-gray-800 group-hover:text-[#426B1F]">
+                {item.name}
+              </h3>
+
+              <p className="text-md font-bold text-green-700 mb-1">
+                Rs. {item.price}
+              </p>
+
+              {item.cook_name && (
+                <p
+                  className="text-sm text-gray-600 mb-1 hover:underline hover:text-green-600 cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/cook/${item.cook_id}`);
+                  }}
+                >
+                  👨‍🍳 By {item.cook_name}
+                </p>
+              )}
 
               {item.description && (
-                <p className="text-gray-600 mt-2 text-sm">
-                  {item.description.length > 100
-                    ? `${item.description.substring(0, 100)}...`
+                <p className="text-gray-500 text-sm mb-4">
+                  {item.description.length > 90
+                    ? item.description.substring(0, 90) + "..."
                     : item.description}
                 </p>
               )}
 
-              <button
-                className="bg-[#426B1F] text-white py-2 px-4 rounded-md font-semibold hover:bg-green-700 transition disabled:opacity-50 mt-4 cursor-pointer"
-                onClick={() => handleAddToCart(item)}
-                disabled={isAddingToCart}
-              >
-                {isAddingToCart ? "Adding..." : "Add to Cart"}
-              </button>
+              <div className="mt-auto pt-2">
+                <button
+                  onClick={(e) => handleAddToCart(item, e)}
+                  className="bg-[#426B1F] text-white py-2 px-4 w-full rounded-md font-semibold hover:bg-green-800 transition disabled:opacity-50"
+                  disabled={loadingItemId === item.id}
+                >
+                  {loadingItemId === item.id ? "Adding..." : "Add to Cart"}
+                </button>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      {visibleItems < menuItems.length && (
-        <div className="text-end mt-6">
+      {/* {visibleItems < menuItems.length && (
+        <div className="text-center mt-10">
           <button
             onClick={handleLoadMore}
-            className="text-[#426B1F] bg-gray-200 py-2 px-4 rounded-md font-semibold transition"
-            disabled={isAddingToCart}
+            className="text-[#426B1F] border border-[#426B1F] py-2 px-6 rounded-md font-semibold transition hover:bg-[#426B1F] hover:text-white"
           >
-            {isAddingToCart ? "Loading..." : "Load More..."}
+            Load More
           </button>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

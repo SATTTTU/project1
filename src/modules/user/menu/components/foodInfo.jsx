@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { FiMinus, FiPlus } from "react-icons/fi";
-import { AiOutlineShoppingCart } from "react-icons/ai";
-import { BiLeaf } from "react-icons/bi";
 import { GiChiliPepper } from "react-icons/gi";
+import { BiLeaf } from "react-icons/bi";
 import { useAddCartItem } from "../../cart/api/addItems";
-import { toast } from "react-toastify"; 
+import { toast } from "react-toastify";
 
 const FoodInfoSection = ({ food }) => {
-  const { mutateAsync: addToCart, isLoading: isAddingToCart } = useAddCartItem(); 
+  const { mutateAsync: addToCart, isLoading: isAddingToCart } = useAddCartItem();
 
   const menuItem = Array.isArray(food) ? food[0] : food;
   if (!menuItem) return <p>Loading...</p>;
@@ -24,7 +23,6 @@ const FoodInfoSection = ({ food }) => {
         menu_item_id: menuItem.id,
         quantity: quantity,
       });
-
       toast.success(`${menuItem.name} added to cart! 🛒`);
     } catch (error) {
       toast.error("Failed to add item to cart. Try again!");
@@ -33,7 +31,7 @@ const FoodInfoSection = ({ food }) => {
   };
 
   return (
-    <div className="md:w-1/2 p-6 flex flex-col justify-center space-y-6">
+    <div className="md:w-1/2 p-6 flex flex-col justify-between h-full space-y-6">
       <div className="flex justify-between items-start">
         <div>
           <h1 className="text-3xl font-semibold text-gray-800">{menuItem.name}</h1>
@@ -102,7 +100,7 @@ const FoodInfoSection = ({ food }) => {
 
         <button
           onClick={(e) => {
-            e.stopPropagation(); 
+            e.stopPropagation();
             handleAddToCart();
           }}
           className="w-full px-6 py-3 bg-[#426B1F] text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors disabled:bg-gray-400"

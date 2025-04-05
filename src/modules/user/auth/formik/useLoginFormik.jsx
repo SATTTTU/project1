@@ -20,26 +20,41 @@ export const useLoginFormik = () => {
     onSubmit: async (values, helpers) => {
       try {
         const response = await mutateAsync(values);
-        console.log("Login Response:", response); // Debugging
-
+    
         if (!response.token) {
           throw new Error("No token received from server");
         }
-
+    
         await login({ type: "user" }, response.token);
-
         toast.success("Login successfully");
         formik.resetForm();
         navigate("/dashboard");
+    
       } catch (err) {
-        console.error("Login Error:", err); 
-        const errorMessage =
-        err?.response.data.error || "An error occurred";
-        helpers.setErrors({ submit: errorMessage });
-        console.log("err", err.response.data.error)
-        toast.error(errorMessage);
+        console.error("Login Error:", err);
+    
+        const errorData = err?.response?.data;
+    
+        if (errorData?.errors) {
+          const fieldErrors = errorData.errors;
+          Object.entries(fieldErrors).forEach(([field, messages]) => {
+            if (Array.isArray(messages) && messages.length > 0) {
+              helpers.setFieldError(field, messages[0]);
+            }
+          });
+        } else if (errorData?.error) {
+          if (errorData.error.toLowerCase().includes("password")) {
+            helpers.setFieldError("password", errorData.error);
+          } else {
+            helpers.setErrors({ submit: errorData.error });
+          }
+          toast.error(errorData.error);
+        } else {
+          toast.error("Something went wrong. Please try again.");
+        }
       }
-    },
+    }
+    
   });
 
   return {

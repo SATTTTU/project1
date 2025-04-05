@@ -43,7 +43,7 @@ export const PopularCooks = () => {
           <SwiperSlide key={index}>
             <Link
               to={`/cook/${cook.id}`}
-              className="flex flex-col items-center justify-center border border-gray-200 p-4 bg-white rounded-xl shadow-lg hover:scale-105 hover:shadow-2xl transition-all duration-300"
+              className="flex flex-col items-center justify-center border border-gray-200 p-4 bg-white rounded-xl  hover:scale-105 hover:shadow-2xl transition-all duration-300"
             >
               <div className="relative mb-4 overflow-hidden rounded-full w-40 h-40 md:w-48 md:h-48 border-1 border-green-600">
                 <img

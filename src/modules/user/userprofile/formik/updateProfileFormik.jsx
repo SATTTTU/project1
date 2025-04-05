@@ -1,54 +1,64 @@
 import { useProfile } from "../api/getProfile";
 import { useFormik } from "formik";
-import { toFormikValidationSchema } from "zod-formik-adapter";
+import { toFormikValidationSchema } from "zod-formik-adapter"; // Zod to Formik adapter
 import { toast } from "react-toastify";
 import { UpdateProfile } from "../api/updateProfile";
-import { profileEditSchema } from "./schema/updateSchema";
+import { profileEditSchema } from "./schema/updateSchema"; // Import the Zod schema
 
 export const useUserProfileEditFormik = () => {
   const { mutateAsync: editProfile, isLoading: isEditing } = UpdateProfile();
-  const { data: profileData, isLoading: isFetching } = useProfile(); 
+  const { data: profileData, isLoading: isFetching } = useProfile();
 
   const formik = useFormik({
     initialValues: {
       name: profileData?.name || "",
       email: profileData?.email || "",
-      mobile: profileData?.mobile || "",
+      phone: profileData?.phone || "",
       image: profileData?.image_url || "",
     },
     enableReinitialize: true,
-    validationSchema: toFormikValidationSchema(profileEditSchema),
+    validationSchema: toFormikValidationSchema(profileEditSchema), // Use Zod validation schema
     onSubmit: async (values, helpers) => {
       try {
         const formData = new FormData();
 
-        // Append only if the field has a non-empty value
-        if (values.name.trim()) {
-          formData.append("name", values.name.trim());
+        // Only send fields that have changed
+        if (values.name !== profileData?.name) {
+          formData.append("name", values.name);
         }
-        if (values.email.trim()) {
-          formData.append("email", values.email.trim());
+
+        if (values.email !== profileData?.email) {
+          formData.append("email", values.email);
         }
-        if (values.mobile.trim()) {
-          formData.append("mobile", values.mobile.trim());
+
+        if (values.phone !== profileData?.phone) {
+          formData.append("phone", values.phone);
         }
+
+        // If a new image is selected, send it as well
         if (values.image instanceof File) {
           formData.append("image", values.image);
         }
 
-        // Prevent empty submission
-        if ([...formData.keys()].length === 0) {
-          toast.warning("Nothing to update.");
-          return;
+        if (formData.has("name") || formData.has("email") || formData.has("phone") || formData.has("image")) {
+          // Make the API request only if there are changes
+          await editProfile(formData);
+          toast.success("Successfully updated profile");
+        } else {
+          toast.info("No changes made");
         }
-
-        await editProfile(formData);
-        toast.success("Successfully updated profile");
       } catch (err) {
-        helpers.setErrors({
-          submit: err?.response?.data?.message || "An error occurred",
-        });
-        toast.error("Something went wrong");
+        if (err?.response?.data?.errors) {
+          // Map API errors to Formik field errors
+          helpers.setErrors({
+            name: err.response.data.errors?.name || "",
+            email: err.response.data.errors?.email || "",
+            phone: err.response.data.errors?.phone || "",
+            submit: err?.response?.data?.message || "An error occurred",
+          });
+        } else {
+          toast.error("Something went wrong");
+        }
       }
     },
   });

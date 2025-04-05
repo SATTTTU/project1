@@ -11,7 +11,7 @@ export const LoginForm = () => {
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
-  const {formik, isLoggingIn } = useLoginFormik({
+  const {formik } = useLoginFormik({
 	  mutationConfig: {
 		  onSuccess: (data) => {
 		  console.log("Login successful:", data);
@@ -86,6 +86,12 @@ export const LoginForm = () => {
 			>
 				Sign in
 			</button>
+			{formik.errors.submit && (
+  <div className="text-red-600 text-sm mt-2 text-center">
+    {formik.errors.submit}
+  </div>
+)}
+
 
 			<p className="text-md mt-3 text-center text-black mb-6">
 				Don't have an account?{" "}

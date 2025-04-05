@@ -1,5 +1,6 @@
 
-import { Header } from "./header";
+
+import { Header } from "../../dashboard/components/header"
 
 
 export const LoadingSkeleton = () => {

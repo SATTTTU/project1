@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { toast } from "react-toastify";
-import {UserChangePassword } from "../api/changePassword";
+import { UserChangePassword } from "../api/changePassword";
 import { changePasswordSchema } from "./schema/authschema";
 
 export const UsechangePasswordFormik = () => {
@@ -9,7 +9,7 @@ export const UsechangePasswordFormik = () => {
 
   const formik = useFormik({
     initialValues: {
-      oldpassword: "", 
+      oldpassword: "",
       newpassword: "",
       confirmpassword: "",
     },
@@ -22,16 +22,18 @@ export const UsechangePasswordFormik = () => {
           confirmpassword: values.confirmpassword,
         });
 
-        toast.success(response?.message || "Password reset successfully.");
+        toast.success(response?.message);
         resetForm();
       } catch (err) {
-        const errorMessage =
-          err?.response?.data?.message ||
-          (err?.response?.data?.errors
-            ? Object.values(err.response.data.errors).flat().join(", ")
-            : "An error occurred while resetting the password.");
+        console.log("error****", err);
+        const errorMessage = err?.response?.data?.message;
 
-        setErrors({ submit: errorMessage });
+        if (errorMessage === "Incorrect old password") {
+          setErrors({ oldpassword: "The current password is incorrect." }); // Set Formik error for old password
+        } else {
+          setErrors({ submit: errorMessage });
+        }
+
         console.error("Password reset error:", err);
         toast.error(errorMessage);
       }
@@ -46,3 +48,4 @@ export const UsechangePasswordFormik = () => {
     isSuccess,
   };
 };
+
