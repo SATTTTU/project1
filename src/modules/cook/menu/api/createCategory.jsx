@@ -1,5 +1,5 @@
 import { api } from "@/lib/api-client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 // Create Category API Call
 export const createCategory = async (data) => {
@@ -28,8 +28,15 @@ export const createCategory = async (data) => {
 
 // Custom Hook for Creating Category
 export const useCreateCategory = ({ mutationConfig } = {}) => {
+  const queryClient = useQueryClient(); // Get the queryClient instance
+
   const mutation = useMutation({
     mutationFn: createCategory,
+    onSuccess: (data) => {
+      // Invalidate the query after a successful mutation to trigger a refresh
+      queryClient.invalidateQueries(["categoryList"]); // Replace with the actual query key you use for the category list
+      if (mutationConfig?.onSuccess) mutationConfig.onSuccess(data); // If there's a custom onSuccess callback, call it
+    },
     ...mutationConfig,
   });
 

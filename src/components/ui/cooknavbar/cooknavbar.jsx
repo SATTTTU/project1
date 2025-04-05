@@ -68,23 +68,6 @@ const CookNavBAr = () => {
     return `${baseClass} text-gray-700 hover:bg-gray-100`;
   };
 
-  // Notification data
-  const notifications = [
-    { id: 1, message: "New order received: #ORD-7832", time: "2 min ago" },
-    {
-      id: 2,
-      message: "Order #ORD-7830 is waiting to be prepared",
-      time: "5 min ago",
-    },
-    {
-      id: 3,
-      message: "Delivery for #ORD-7829 is on the way",
-      time: "10 min ago",
-    },
-  ];
-
-  const [notificationOpen, setNotificationOpen] = useState(false);
-
   return (
     <div className="sticky top-0 z-50">
       <header className="flex h-16 items-center justify-between border-b px-4 md:px-6 bg-white shadow-sm">
@@ -118,66 +101,7 @@ const CookNavBAr = () => {
           <div className="relative w-full"></div>
         </div>
 
-        <div className="flex items-center gap-2">
-          {/* Status indicator */}
-          <div className="hidden md:flex items-center gap-1 bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium">
-            <Coffee className="h-4 w-4" />
-            <span>Kitchen Active</span>
-          </div>
-
-          {/* Notifications */}
-          <div className="relative">
-            <button
-              className="relative rounded-full cursor-pointer p-2 hover:bg-gray-100 transition-colors"
-              onClick={() => {
-                setNotificationOpen(!notificationOpen);
-                setCount(0);
-              }}
-            >
-              <Bell className="h-6 w-6" />
-              {count > 0 && (
-                <span className="absolute right-0 top-0 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs text-white animate-pulse">
-                  {count}
-                </span>
-              )}
-              <span className="sr-only">Notifications</span>
-            </button>
-
-            {/* Notifications dropdown */}
-            {notificationOpen && (
-              <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
-                <div className="p-3 border-b border-gray-200">
-                  <h3 className="text-sm font-semibold">Notifications</h3>
-                </div>
-                <div className="max-h-80 overflow-y-auto">
-                  {notifications.length > 0 ? (
-                    notifications.map((notification) => (
-                      <div
-                        key={notification.id}
-                        className="p-3 border-b border-gray-100 hover:bg-gray-50 cursor-pointer"
-                      >
-                        <p className="text-sm">{notification.message}</p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          {notification.time}
-                        </p>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="p-4 text-center text-sm text-gray-500">
-                      No new notifications
-                    </div>
-                  )}
-                </div>
-                <div className="p-2 text-center border-t border-gray-200">
-                  <button className="text-xs text-[#426B1F] font-medium hover:underline">
-                    View all notifications
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* User profile */}
+        <div className="flex items-center gap-4">
           <div className="relative">
             <button
               onClick={() => setUserMenuOpen(!userMenuOpen)}

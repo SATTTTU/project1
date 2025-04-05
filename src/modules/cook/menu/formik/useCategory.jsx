@@ -3,6 +3,7 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 import { toast } from "react-toastify";
 import { categorySchema } from "./schema/menuschema";
 import { useCreateCategory } from "../api/createCategory";
+import { useNavigate } from "react-router-dom";
 
 export const useCategoryFormik = ({
   editingCategory,
@@ -31,6 +32,7 @@ export const useCategoryFormik = ({
         },
       },
     });
+    const navigate = useNavigate(); // Ensure you import useNavigate from react-router-dom
 
   const formik = useFormik({
     initialValues: {
@@ -70,6 +72,7 @@ export const useCategoryFormik = ({
             );
             setEditingCategory(null);
             toast.success("Category updated successfully");
+            navigate("/cook/menu");
           } else {
             // Check if category already exists locally
             const existingCategory = (categories || []).find( // Ensure categories is an array
@@ -107,6 +110,7 @@ export const useCategoryFormik = ({
               },
             ]);
             toast.success("Category added successfully");
+            navigate("/cook/menu");
           }
     
           resetForm();
