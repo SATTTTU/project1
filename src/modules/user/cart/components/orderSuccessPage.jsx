@@ -86,7 +86,6 @@ export const OrderSuccess=()=> {
         </div>
       </div>
 
-      {/* Payment Verification Modal */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className="space-x-4 text-center">
           <h2 className="text-lg font-bold mb-2">Checkout Successful</h2>

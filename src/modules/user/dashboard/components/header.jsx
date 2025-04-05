@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { IoMdLogOut } from "react-icons/io";
@@ -20,7 +19,7 @@ export const Header = ({ navigate, popularItems, categories, cooks }) => {
 	const imageBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
 	const { data: profile, isLoading: isProfileLoading, isError } = useProfile();
-	console.log("profile****", profile)
+	console.log("profile****", profile);
 	const { mutateAsync: logout, isLoading: isLoggingOut } = useUserLogout();
 	const {
 		data: cartItems,
@@ -83,44 +82,50 @@ export const Header = ({ navigate, popularItems, categories, cooks }) => {
 						<CartBadge cartItems={cartItems} isLoading={isCartLoading} />
 
 						<div className="relative" ref={profileRef}>
-						<div
-    onClick={toggleProfileMenu}
-    className="p-1 rounded-full transition-transform duration-200 hover:scale-105 "
-  >
-    <img
-      src={
-        profile?.image_url
-          ? `${imageBaseUrl}${profile?.image_url}`
-          : Profile
-      }
-      alt="Profile"
-      className="rounded-full h-10 w-10 object-cover shadow-md border-2 border-white transition-all duration-300"
-    />
-  </div>
+							<div
+								onClick={toggleProfileMenu}
+								className="p-1 rounded-full transition-transform duration-200 hover:scale-105 "
+							>
+								<img
+									src={
+										profile?.image_url
+											? `${imageBaseUrl}${profile?.image_url}`
+											: Profile
+									}
+									alt="Profile"
+									className="rounded-full h-10 w-10 object-cover shadow-md border-2 border-white transition-all duration-300"
+								/>
+							</div>
 
-  {showProfileMenu && (
-    <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl py-4 z-50 border border-gray-200 animate-fade-in">
-      <div className="px-6 flex flex-col items-center text-center py-4 border-b border-gray-200">
-        <img
-          src={
-            profile?.image_url
-              ? `${imageBaseUrl}${profile?.image_url}`
-              : Profile
-          }
-          alt="Profile"
-          className="rounded-full h-20 w-20 object-cover border-1 border-green-500 shadow-lg mb-3 transition-transform duration-300 hover:scale-105"
-        />
-        {isProfileLoading ? (
-          <p className="text-sm text-gray-500">Loading...</p>
-        ) : isError ? (
-          <p className="text-sm text-red-500">Error loading profile</p>
-        ) : (
-          <>
-            <p className="text-lg font-semibold text-gray-900">{profile.name}</p>
-            <p className="text-sm text-gray-500 truncate">{profile.email}</p>
-          </>
-        )}
-      </div>
+							{showProfileMenu && (
+								<div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl py-4 z-50 border border-gray-200 animate-fade-in">
+									<div className="px-6 flex flex-col items-center text-center py-4 border-b border-gray-200">
+										<img
+											src={
+												profile?.image_url
+													? `${imageBaseUrl}${profile?.image_url}`
+													: Profile
+											}
+											alt="Profile"
+											className="rounded-full h-20 w-20 object-cover border-1 border-green-500 shadow-lg mb-3 transition-transform duration-300 hover:scale-105"
+										/>
+										{isProfileLoading ? (
+											<p className="text-sm text-gray-500">Loading...</p>
+										) : isError ? (
+											<p className="text-sm text-red-500">
+												Error loading profile
+											</p>
+										) : (
+											<>
+												<p className="text-lg font-semibold text-gray-900">
+													{profile.name}
+												</p>
+												<p className="text-sm text-gray-500 truncate">
+													{profile.email}
+												</p>
+											</>
+										)}
+									</div>
 
 									<div className="flex flex-col py-2">
 										<Link

@@ -13,7 +13,7 @@ export const verifyPayment = async () => {
 		const response = await api.post("/api/verify-payment", {
 			pidx: storedPidx,
 		});
-		console.log("verify", response);
+		console.log("verify ***", response);
 
 		return response;
 	} catch (error) {

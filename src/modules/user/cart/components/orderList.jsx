@@ -5,7 +5,8 @@ const imageBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
 export const OrderList = () => {
   const { data: orders, isLoading, error } = useCurrentOrders();
-  console.log("orders****", orders);
+  
+  console.log("orders current", orders);
 
   if (isLoading) return <p className="p-4 text-gray-600">Loading orders...</p>;
   if (error) return <p className="p-4 text-red-500">Failed to load orders.</p>;
