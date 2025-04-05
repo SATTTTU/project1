@@ -40,7 +40,7 @@ export const DashSlider = () => {
 	];
 
 	return (
-		<header className="relative w-full h-[80vh] lg:h-screen overflow-hidden">
+		<header className="relative w-full h-[60vh] lg:h-[70vh] overflow-hidden ">
 			<div className="relative w-full h-full">
 				<button
 					className="absolute left-6 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover:bg-black/60 text-white rounded-full p-3 md:p-4 transition-all"

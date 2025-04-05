@@ -3,8 +3,8 @@ import { FaCheck } from "react-icons/fa";
 
 export const VerificationRoute = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <div className="mx-auto max-w-md rounded-xl bg-white p-8 text-center shadow-lg">
+    <div className="flex min-h-screen items-center justify-center p-4 ">
+      <div className="mx-auto max-w-md rounded-xl bg-white p-8 text-center shadow-lg border border-slate-300">
         <h1 className="mb-2 text-3xl font-medium text-gray-700">
           Verify Your Email
         </h1>
@@ -26,10 +26,7 @@ export const VerificationRoute = () => {
             </div>
           </div>
         </div>
-        
-        <button className="mt-4 w-full rounded-lg bg-[#4b6c1e] px-4 py-3 font-medium text-white transition hover:bg-[#5a8225]">
-          Resend Verification Email
-        </button>
+     
       </div>
     </div>
   );

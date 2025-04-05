@@ -1,4 +1,3 @@
-// CategoryCard.jsx
 import { BiCategory } from "react-icons/bi"
 
 export const CategoryCard = ({ category, onClick }) => {
@@ -8,7 +7,6 @@ export const CategoryCard = ({ category, onClick }) => {
       className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
     >
       <div className="relative h-40">
-        {/* Use the first dish image as category image */}
         <img
           src={category.dishes[0]?.img || "/placeholder.svg"}
           alt={category.name}

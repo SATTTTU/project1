@@ -55,7 +55,7 @@ export const AllDishes = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-3xl font-bold mb-10 text-center text-[#426B1F]">
+      <h2 className="text-3xl font-bold mb-10 text-center text-[#0e9300]">
        All Special Dishes
       </h2>
 
@@ -107,7 +107,7 @@ export const AllDishes = () => {
               <div className="mt-auto pt-2">
                 <button
                   onClick={(e) => handleAddToCart(item, e)}
-                  className="bg-[#426B1F] text-white py-2 px-4 w-full rounded-md font-semibold hover:bg-green-800 transition disabled:opacity-50"
+                  className="bg-[#0e9300] text-white py-2 px-4 w-full rounded-md font-semibold hover:bg-green-800 transition disabled:opacity-50"
                   disabled={loadingItemId === item.id}
                 >
                   {loadingItemId === item.id ? "Adding..." : "Add to Cart"}

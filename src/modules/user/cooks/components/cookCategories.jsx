@@ -4,6 +4,8 @@ import { FiArrowLeft } from "react-icons/fi";
 import { useCategoryItems } from "../api/getCategory";
 import { useCategoryMenuItems } from "../api/getCategoryMenu";
 import { DishCard } from "./dishCard";
+import Dishes from "../../../../assets/defaultDishes.jpg";
+
 
 export const CookCategories = ({ cookId, onAddToCart }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -52,9 +54,9 @@ export const CookCategories = ({ cookId, onAddToCart }) => {
               onClick={() => setSelectedCategory(category.id)}
               className="bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-shadow transform hover:scale-105"
             >
-              <div className="relative h-60">
+              <div className="relative h-80">
                 <img
-                  src={`${imageBaseUrl}${category?.items[0]?.image_url}`}
+                    src={category?.items[0]?.image_url ? `${imageBaseUrl}${category?.items[0]?.image_url}` : Dishes}
                   alt={category.name}
                   className="object-cover w-full h-full transition-transform duration-300 ease-in-out transform hover:scale-110"
                 />

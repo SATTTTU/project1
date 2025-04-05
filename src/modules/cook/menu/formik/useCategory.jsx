@@ -34,16 +34,16 @@ export const useCategoryFormik = ({
     });
     const navigate = useNavigate(); // Ensure you import useNavigate from react-router-dom
 
-  const formik = useFormik({
-    initialValues: {
-      name: initialCategory?.name || "",
-      description: initialCategory?.description || "",
-    },
-    validationSchema: toFormikValidationSchema(categorySchema),
-    onSubmit: async (values, { resetForm, setSubmitting }) => {
-      try {
-        const categoryName = values.name.trim();
-        const categoryDescription = values.description.trim();
+    const formik = useFormik({
+      initialValues: {
+        name: initialCategory?.name || "",
+        description: initialCategory?.description || "",
+      },
+      validationSchema: toFormikValidationSchema(categorySchema),
+      onSubmit: async (values, { resetForm, setSubmitting }) => {
+        try {
+          const categoryName = values.name.trim();
+          const categoryDescription = values.description.trim();
     
         if (categoryName && categoryDescription) {
           if (editingCategory) {
@@ -113,21 +113,22 @@ export const useCategoryFormik = ({
             navigate("/cook/menu");
           }
     
-          resetForm();
-          setShowAddCategory(false);
+            resetForm();
+            setShowAddCategory(false);
+          }
+        } catch (err) {
+          console.error("Submission Error:", err);
+          const errorMessage =
+            err?.response?.data?.message ||
+            err.message ||
+            "An error occurred while saving the category";
+          toast.error(errorMessage);
+        } finally {
+          setSubmitting(false);
         }
-      } catch (err) {
-        console.error("Submission Error:", err);
-        const errorMessage =
-          err?.response?.data?.message ||
-          err.message ||
-          "An error occurred while saving the category";
-        toast.error(errorMessage);
-      } finally {
-        setSubmitting(false);
-      }
-    },
-  });
+      },
+    });
+    
 
   return {
     formik,

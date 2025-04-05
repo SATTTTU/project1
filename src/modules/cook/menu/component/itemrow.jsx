@@ -1,6 +1,8 @@
 
 import React from "react";
 import { Edit, Trash } from 'lucide-react';
+import Dishes from "../../../../assets/defaultDishes.jpg";
+
 
 const ItemRow = ({
   item,
@@ -9,6 +11,7 @@ const ItemRow = ({
   handleDeleteItem,
   toggleItemAvailability,
 }) => {
+  console.log("items***",item)
   // Function to construct the full image URL
   const getFullImageUrl = (imagePath) => {
     if (!imagePath) return "/api/placeholder/80/80";
@@ -23,15 +26,16 @@ const ItemRow = ({
       : `${import.meta.env.VITE_APP_API_URL}/storage/`;
     return `${storageUrl}${imagePath}`;
   };
+  const imageUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
   return (
     <tr className="hover:bg-gray-50">
       <td className="px-6 py-4 pl-12">
-        <div className="flex items-center">
+        <div className="flex items-center space-x-4">
           <img
-            src={getFullImageUrl(item.image_url) || "/placeholder.svg"}
-            alt={item.name}
-            className="h-10 w-10 rounded-full object-cover mr-3"
+            src={item?.image_url ? `${imageUrl}${item.image_url}` : Dishes}
+                           alt={item.name || "Dish"}
+                           className="rounded-full w-10 h-10 object-cover"
           />
           <div>
             <div className="font-medium">{item.name}</div>
@@ -42,10 +46,10 @@ const ItemRow = ({
         </div>
       </td>
       <td className="px-6 py-4">
-        <span className="font-medium">${item.price}</span>
+        <span className="font-medium">Rs. {item.price}</span>
       </td>
       <td className="px-6 py-4">
-        <div
+        {/* <div
           className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
             item.available
               ? "bg-green-100 text-green-800"
@@ -60,7 +64,7 @@ const ItemRow = ({
             }`}
           ></span>
           {item.available ? "Available" : "Unavailable"}
-        </div>
+        </div> */}
       </td>
       <td className="px-6 py-4 text-right space-x-2">
         <button
