@@ -61,7 +61,7 @@ export const SearchBar = () => {
 
 	return (
 		<div
-			className="relative w-full max-w-4xl mx-auto px-4 py-6"
+			className="relative w-full max-w-4xl mx-auto px-4 py-2"
 			ref={searchRef}
 		>
 			<div className="flex items-center border border-slate-300 rounded-full shadow-sm bg-white focus-within:ring-2 focus-within:ring-green-500 transition">
@@ -73,7 +73,7 @@ export const SearchBar = () => {
 					placeholder="Search for dishes..."
 					value={searchTerm}
 					onChange={handleInputChange}
-					className="w-full px-4 py-3 text-base md:text-lg rounded-full focus:outline-none"
+					className="w-full px-4 py-2 text-base md:text-lg rounded-full focus:outline-none"
 					aria-label="Search for dishes"
 				/>
 				{searchTerm && (

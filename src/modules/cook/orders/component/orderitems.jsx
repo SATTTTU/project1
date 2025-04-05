@@ -11,7 +11,7 @@ export const OrderItems = ({ items }) => {
               {item.menu_item.name}{" "}
               <span className="text-gray-500">x{item.quantity}</span>
             </span>
-            <span>₹{item.price * item.quantity}</span>
+            <span>Rs. {item.price * item.quantity}</span>
           </div>
         ))}
       </div>

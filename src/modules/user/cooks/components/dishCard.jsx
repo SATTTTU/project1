@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify"; 
 import { useAddCartItem } from "../../cart/api/addItems";
+import Dishes from "../../../../assets/defaultDishes.jpg";
+
 
 export const DishCard = ({ dish }) => {
   console.log("dishes888", dish)
@@ -28,9 +30,9 @@ export const DishCard = ({ dish }) => {
       onClick={() => navigate(`/food/${dish.id}`)} 
     >
       <img
-        src={`${imageUrl}${dish?.image_url}`}
+         src={dish?.image_url ? `${imageUrl}${dish.image_url}` : Dishes}
         alt={dish.name}
-        className="w-full h-48 object-cover"
+        className="w-full h-50 object-cover"
       />
 
       <div className="p-4">

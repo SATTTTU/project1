@@ -51,7 +51,7 @@ export const PopularItemsPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <h2 className="text-3xl font-bold mb-8 text-center text-[#426B1F]">
+      <h2 className="text-3xl font-bold mb-8 text-center text-[#0e9300]">
          Our Popular Dishes
       </h2>
 
@@ -104,7 +104,7 @@ export const PopularItemsPage = () => {
 
               <div className="mt-auto pt-2 flex justify-between items-center">
                 <button
-                  className="bg-[#426B1F] text-white py-1.5 px-4 rounded-md font-medium hover:bg-green-800 transition-all text-sm"
+                  className="bg-[#0e9300] text-white py-1.5 px-4 rounded-md font-medium hover:bg-green-800 transition-all text-sm"
                   onClick={(e) => handleAddToCart(item, e)}
                   disabled={isAddingToCart}
                 >

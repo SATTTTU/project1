@@ -5,7 +5,7 @@ export const EmailVerification = () => {
     <div className="flex min-h-screen items-center justify-center  p-4">
       <div className="mx-auto max-w-md rounded-xl bg-white p-8 text-center shadow-lg">
         <h1 className="mb-2 text-3xl font-medium text-gray-700">
-          Verify Your Email
+          Verify Your Emails
         </h1>
         <p className="mb-8 text-gray-500">
           Check your email & click the link to activate your account.
@@ -26,9 +26,6 @@ export const EmailVerification = () => {
           </div>
         </div>
 
-        <button className="mt-4 w-full rounded-lg bg-[#4b6c1e] px-4 py-3 font-medium text-white transition hover:bg-[#5a8225]">
-          Resend Verification Email
-        </button>
       </div>
     </div>
   );

@@ -1,5 +1,3 @@
-
-
 import { useState, useEffect, useRef } from "react"
 import { AiOutlineShoppingCart } from "react-icons/ai"
 import { Link } from "react-router-dom"
@@ -46,5 +44,3 @@ export const CartBadge = ({ cartItems, isLoading }) => {
     </Link>
   )
 }
-
-

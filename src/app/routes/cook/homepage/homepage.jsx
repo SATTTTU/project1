@@ -24,7 +24,7 @@ export const Homepage = () => {
     <div className="flex h-screen flex-col">
       {/* Header */}
       <CookNavBAr />
-      <CookLocation/>
+      {/* <CookLocation/> */}
       <div className="flex flex-1 overflow-hidden">
         <main className="flex-1 overflow-auto p-4 md:p-6 bg-gray-50">
           <DashboardHeader

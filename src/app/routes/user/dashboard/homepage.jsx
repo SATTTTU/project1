@@ -5,7 +5,7 @@ import { addToCart } from "../../../../store/cart/cart";
 import { Header } from "@/modules/user/dashboard/components/header";
 import { Footer } from "@/modules/user/dashboard/components/footer";
 import { PopularCooks } from "@/modules/user/dashboard/components/popularCooks";
-import {UserLocation} from "@/modules/user/dashboard/components/setLocation";
+import { UserLocation } from "@/modules/user/dashboard/components/setLocation";
 import { PopularItemsPage } from "@/modules/user/dashboard/components/popularItemsSection";
 import { DashSlider } from "@/modules/user/dashboard/components/dashboardSlider";
 import LocationMap from "@/components/ui/locationMap/locationmap";
@@ -43,21 +43,20 @@ export const Homepage = () => {
   return (
     <div className="min-h-screen bg-gray-50 w-full overflow-x-hidden">
       <Header navigate={navigate} handleAddToCart={handleAddToCart} />
+      
+      <div className="mt-10 lg:mt-16 md:mt-16">
+        <DashSlider />
+      </div>
 
       <main className="container mx-auto px-4 md:px-6 lg:px-8 py-6">
         <section className="mb-8">
-          <div className="mb-6">
-            <DashSlider />
-          </div>
+          <AllDishes />
 
-          <AllDishes/>
           <div className="bg-white shadow-lg rounded-lg p-6 mb-8">
-           
             <PopularItemsPage handleAddToCart={handleAddToCart} addedToCart={addedToCart} />
           </div>
 
           <div className="bg-white shadow-lg rounded-lg p-6 mb-8">
-         
             <PopularCooks />
           </div>
 
