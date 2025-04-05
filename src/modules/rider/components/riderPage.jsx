@@ -4,7 +4,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { Loader2, Navigation } from "lucide-react";
 import { io } from "socket.io-client";
-import "leaflet-routing-machine/dist/leaflet-routing-machine.css"; // Import the CSS
+import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import RoutingMachine from "./RoutingMachine";
 
 // Fix Leaflet marker issue
@@ -57,13 +57,13 @@ export const RiderPages = ({ orderId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [orderData, setOrderData] = useState(null);
-  const [orderStatus, setOrderStatus] = useState("received");
+  const [orderStatus, setOrderStatus] = useState("assigned");
   const [riderLocation, setRiderLocation] = useState(null);
   const [cookLocation, setCookLocation] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
-  const [isPickedUp, setIsPickedUp] = useState(false);
   const [socket] = useState(() => io("wss://khajabox-socket.tai.com.np"));
-  const [routeWaypoints, setRouteWaypoints] = useState([]); // State for route waypoints
+  const [routeWaypoints, setRouteWaypoints] = useState([]);
+  const [orderRideId, setOrderRideId] = useState(null);
 
   const getOrderData = async () => {
     try {
@@ -81,10 +81,10 @@ export const RiderPages = ({ orderId }) => {
         throw new Error("No order data returned");
       }
 
-      // The actual data is inside the data array at index 0
       const orderRideData = result.data[0];
       setOrderData(orderRideData);
-      setOrderStatus(orderRideData.status || "received");
+      setOrderStatus(orderRideData.status || "assigned");
+      setOrderRideId(orderRideData.order_ride_id);
 
       // Set pickup location
       if (orderRideData.pickup_location_id) {
@@ -100,14 +100,6 @@ export const RiderPages = ({ orderId }) => {
           lat: parseFloat(orderRideData.drop_location_id.latitude),
           lng: parseFloat(orderRideData.drop_location_id.longitude),
         });
-      }
-
-      // Check if order is already picked up
-      if (
-        orderRideData.status === "picked_up" ||
-        orderRideData.status === "on_the_way"
-      ) {
-        setIsPickedUp(true);
       }
     } catch (err) {
       console.error("Error fetching order:", err);
@@ -186,86 +178,159 @@ export const RiderPages = ({ orderId }) => {
     };
   }, [orderId, socket]);
 
-  // Determine current destination
-  const currentDestination = useMemo(() => {
-    return isPickedUp ? userLocation : cookLocation;
-  }, [isPickedUp, userLocation, cookLocation]);
-
-  // Update route waypoints when locations change
+  // Update route waypoints based on status
   useEffect(() => {
-    if (riderLocation && currentDestination) {
-      // Set waypoints based on current status (picked up or not)
-      if (isPickedUp) {
-        // If food is picked up, route is rider -> customer
-        setRouteWaypoints([
-          { latitude: riderLocation.lat, longitude: riderLocation.lng },
-          { latitude: userLocation.lat, longitude: userLocation.lng }
-        ]);
-      } else {
-        // If food is not picked up, route is rider -> restaurant
-        setRouteWaypoints([
-          { latitude: riderLocation.lat, longitude: riderLocation.lng },
-          { latitude: cookLocation.lat, longitude: cookLocation.lng }
-        ]);
-      }
-    }
-  }, [riderLocation, cookLocation, userLocation, isPickedUp, currentDestination]);
+    if (!riderLocation) return;
 
-  // Calculate ETA based on distance
+    if (orderStatus === "assigned" && cookLocation) {
+      // Show route from rider to cook (restaurant)
+      setRouteWaypoints([
+        { latitude: riderLocation.lat, longitude: riderLocation.lng },
+        { latitude: cookLocation.lat, longitude: cookLocation.lng }
+      ]);
+    } else if ((orderStatus === "picked_up" || orderStatus === "delivering") && userLocation) {
+      // Show route from rider to user (customer)
+      setRouteWaypoints([
+        { latitude: riderLocation.lat, longitude: riderLocation.lng },
+        { latitude: userLocation.lat, longitude: userLocation.lng }
+      ]);
+    } else {
+      // Clear route if no valid destination
+      setRouteWaypoints([]);
+    }
+  }, [riderLocation, cookLocation, userLocation, orderStatus]);
+
+  // Calculate ETA based on distance to current destination
   const eta = useMemo(() => {
-    if (!riderLocation || !currentDestination) return null;
+    if (!riderLocation) return null;
+
+    let destination = null;
+    if (orderStatus === "assigned" && cookLocation) {
+      destination = cookLocation;
+    } else if ((orderStatus === "picked_up" || orderStatus === "delivering") && userLocation) {
+      destination = userLocation;
+    }
+
+    if (!destination) return null;
 
     const distance = calculateDistance(
       riderLocation.lat,
       riderLocation.lng,
-      currentDestination.lat,
-      currentDestination.lng
+      destination.lat,
+      destination.lng
     );
 
     // Assuming average speed of 30 km/h
     const timeInMinutes = Math.round((distance / 30) * 60);
     return timeInMinutes;
-  }, [riderLocation, currentDestination]);
+  }, [riderLocation, cookLocation, userLocation, orderStatus]);
 
-  // Handle pickup/delivery status change
+  // Get next status in the flow
+  const getNextStatus = (currentStatus) => {
+    switch (currentStatus) {
+      case "assigned":
+        return "picked_up";
+      case "picked_up":
+        return "delivering";
+      case "delivering":
+        return "delivered";
+      default:
+        return currentStatus;
+    }
+  };
+
+  // Get button text based on status
+  const getButtonText = (status) => {
+    switch (status) {
+      case "assigned":
+        return "Mark as Picked Up";
+      case "picked_up":
+        return "Start Delivery";
+      case "delivering":
+        return "Mark as Delivered";
+      default:
+        return "Complete Order";
+    }
+  };
+
+  // Handle status change
   const handleStatusChange = async () => {
-    const newStatus = isPickedUp ? "delivered" : "picked_up";
-
+    if (!orderRideId) {
+      setError("Order ride ID not available.");
+      return;
+    }
+  
+    const newStatus = getNextStatus(orderStatus);
+  
     try {
-      // Update local state immediately for responsive UI
-      setIsPickedUp(!isPickedUp);
-
-      // Update the server
+      // Optimistically update UI
+      setOrderStatus(newStatus);
+  
       const response = await fetch(
-        `https://khajabox-backend.dev.tai.com.np/api/update-order-status/${orderId}`,
+        `https://khajabox-backend.dev.tai.com.np/api/riders/update-delivery-status/${orderRideId}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ status: newStatus }),
+          body: JSON.stringify({ newStatus }),
         }
       );
-
+  
       if (!response.ok) {
         throw new Error("Failed to update order status");
       }
-
-      // Emit status change to socket
+  
       if (socket && socket.connected) {
         socket.emit("status update", {
           roomId: orderId,
           status: newStatus,
         });
       }
-
-      // Refresh order data
+  
+      // Refresh data to ensure consistency
       getOrderData();
     } catch (err) {
       console.error("Error updating status:", err);
-      // Revert the local state if the API call failed
-      setIsPickedUp(!isPickedUp);
+      // Revert on error
+      setOrderStatus(orderStatus);
       setError("Failed to update order status. Please try again.");
+    }
+  };
+
+  // Get status display text
+  const getStatusText = (status) => {
+    switch (status) {
+      case "assigned":
+        return "Going to Restaurant";
+      case "picked_up":
+        return "Food Picked Up";
+      case "delivering":
+        return "On the Way to Customer";
+      case "delivered":
+        return "Order Delivered";
+      case "cancelled":
+        return "Order Cancelled";
+      default:
+        return "Status Unknown";
+    }
+  };
+
+  // Get status color
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "assigned":
+        return "bg-blue-500";
+      case "picked_up":
+        return "bg-yellow-500";
+      case "delivering":
+        return "bg-purple-500";
+      case "delivered":
+        return "bg-green-500";
+      case "cancelled":
+        return "bg-red-500";
+      default:
+        return "bg-gray-500";
     }
   };
 
@@ -318,7 +383,11 @@ export const RiderPages = ({ orderId }) => {
               <div className="text-sm text-gray-500">Estimated Time</div>
               <div className="text-xl font-bold text-blue-600">{eta} min</div>
               <div className="text-sm">
-                to {isPickedUp ? "customer" : "restaurant"}
+                {orderStatus === "assigned" 
+                  ? "to restaurant" 
+                  : orderStatus === "picked_up" || orderStatus === "delivering"
+                  ? "to customer"
+                  : ""}
               </div>
             </div>
           )}
@@ -326,12 +395,10 @@ export const RiderPages = ({ orderId }) => {
 
         <div className="mt-2 flex items-center">
           <div
-            className={`w-3 h-3 rounded-full ${
-              isPickedUp ? "bg-green-500" : "bg-yellow-500"
-            } mr-2`}
+            className={`w-3 h-3 rounded-full ${getStatusColor(orderStatus)} mr-2`}
           ></div>
           <span className="text-sm font-medium">
-            Status: {isPickedUp ? "Food Picked Up" : "En Route to Restaurant"}
+            Status: {getStatusText(orderStatus)}
           </span>
         </div>
       </div>
@@ -354,12 +421,14 @@ export const RiderPages = ({ orderId }) => {
               >
                 <Popup>
                   <strong>You (Rider)</strong>
+                  <br />
+                  Current location
                 </Popup>
               </Marker>
             )}
 
-            {/* Cook Marker */}
-            {cookLocation && (
+            {/* Cook Marker - Show when assigned or picked up */}
+            {(orderStatus === "assigned" || orderStatus === "picked_up") && cookLocation && (
               <Marker
                 position={[cookLocation.lat, cookLocation.lng]}
                 icon={createCustomIcon("#22C55E")}
@@ -368,12 +437,14 @@ export const RiderPages = ({ orderId }) => {
                   <strong>Restaurant</strong>
                   <br />
                   {orderData?.pickup_location_id?.cook?.name || "Restaurant"}
+                  <br />
+                  {orderStatus === "assigned" ? "Pickup location" : "Food picked up"}
                 </Popup>
               </Marker>
             )}
 
-            {/* User Marker */}
-            {userLocation && (
+            {/* User Marker - Show when delivering or picked up */}
+            {(orderStatus === "picked_up" || orderStatus === "delivering") && userLocation && (
               <Marker
                 position={[userLocation.lat, userLocation.lng]}
                 icon={createCustomIcon("#EF4444")}
@@ -382,16 +453,21 @@ export const RiderPages = ({ orderId }) => {
                   <strong>Customer</strong>
                   <br />
                   {orderData?.drop_location_id?.user?.name || "Customer"}
+                  <br />
+                  Delivery destination
                 </Popup>
               </Marker>
             )}
 
-            {/* Routing Machine */}
+            {/* Routing Machine - Show route based on status */}
             {routeWaypoints.length > 1 && (
-              <RoutingMachine waypoints={routeWaypoints} />
+              <RoutingMachine 
+                waypoints={routeWaypoints} 
+                color={orderStatus === "assigned" ? "#3b82f6" : "#8b5cf6"}
+              />
             )}
 
-            {/* Map Updater */}
+            {/* Map Updater - Follow rider */}
             {riderLocation && (
               <MapUpdater center={[riderLocation.lat, riderLocation.lng]} />
             )}
@@ -399,20 +475,24 @@ export const RiderPages = ({ orderId }) => {
         )}
       </div>
 
-      {/* Action Button */}
-      <div className="p-4 bg-white border-t">
-        <button
-          className={`w-full py-3 rounded-lg font-medium text-white ${
-            isPickedUp ? "bg-green-600" : "bg-blue-600"
-          }`}
-          onClick={handleStatusChange}
-        >
-          <div className="flex items-center justify-center">
-            <Navigation className="w-5 h-5 mr-2" />
-            {isPickedUp ? "Mark as Delivered" : "Mark as Picked Up"}
-          </div>
-        </button>
-      </div>
+      {/* Action Button - Only show if order is not delivered or cancelled */}
+      {!["delivered", "cancelled"].includes(orderStatus) && (
+        <div className="p-4 bg-white border-t">
+          <button
+            className={`w-full py-3 rounded-lg font-medium text-white ${
+              orderStatus === "assigned" ? "bg-blue-600" :
+              orderStatus === "picked_up" ? "bg-purple-600" :
+              "bg-green-600"
+            }`}
+            onClick={handleStatusChange}
+          >
+            <div className="flex items-center justify-center">
+              <Navigation className="w-5 h-5 mr-2" />
+              {getButtonText(orderStatus)}
+            </div>
+          </button>
+        </div>
+      )}
     </div>
   );
 };
