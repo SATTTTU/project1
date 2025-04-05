@@ -107,7 +107,7 @@ const CookNavBAr = () => {
               className="flex items-center gap-2 rounded-full p-1 pl-2 hover:bg-gray-100 transition-colors"
             >
               <div className="hidden md:block text-right mr-2">
-                <div className="text-lg font-medium">{cook?.name}</div>
+                {/* <div className="text-lg font-medium">{cook?.name}</div> */}
                 
               </div>
               <div className="h-8 w-8 rounded-full bg-[#426B1F] text-white flex items-center justify-center">
