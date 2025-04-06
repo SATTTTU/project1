@@ -6,15 +6,14 @@ import { TestimonialSlider } from "@/modules/user/home/components/testimonialSli
 export const Layout = () => {
 	return (
 		<>
-		<pre>TEST DASHBOAERD</pre>
 			<div className=" w-screen overflow-x-hidden max-w-full ">
-				{/* <HeroSlider /> */}
+				<HeroSlider />
 
-				{/* <About />
+				<About />
 
 				<TestimonialSlider />
 
-				<Footer /> */}
+				<Footer />
 			</div>
 		</>
 	);
