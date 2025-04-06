@@ -21,7 +21,7 @@ const ItemFormModal = ({
 
   const { formik, isEditing, isLoading, error } =addItemFormik;
   
-  
+  console.log("formik**", formik.values)
 
 
   // If formik is undefined due to any error in useItemFormik
@@ -51,7 +51,7 @@ const ItemFormModal = ({
       <form onSubmit={formik.handleSubmit} className="space-y-4">
         {/* Dish Name */}
         <div>
-          <label className="block font-medium text-gray-700">Dish Name</label>
+          <label className="block font-medium text-gray-700">Dishs Name</label>
           <Input
             id="name"
             name="name"
@@ -68,7 +68,7 @@ const ItemFormModal = ({
 
         {/* Price */}
         <div>
-          <label className="block font-medium text-gray-700">Price ($)</label>
+          <label className="block font-medium text-gray-700">Price (Rs.)</label>
           <Input
             id="price"
             type="number"

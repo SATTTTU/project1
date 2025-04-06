@@ -6,7 +6,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/effect-fade";
 import { Autoplay, Pagination, Navigation, EffectFade } from "swiper/modules";
-import Category1 from "../../../../assets/UserImages/Category/Cato1.jpg";
+import Category1 from "../../../../assets/imageee.jpg";
 import Grand from "../../../../assets/UserImages/Category1.jpg";
 import Lunch from "../../../../assets/nepali.jpeg";
 

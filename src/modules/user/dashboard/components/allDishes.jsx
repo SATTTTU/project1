@@ -107,7 +107,7 @@ export const AllDishes = () => {
 							<div className="mt-auto pt-2">
 								<button
 									onClick={(e) => handleAddToCart(item, e)}
-									className="bg-[#0e9300] text-white py-2 px-4 w-full rounded-md font-semibold hover:bg-green-800 transition disabled:opacity-50"
+									className="bg-[#0e9300] text-white py-2 px-4 w-full rounded-md font-semibold hover:bg-[#0e9300] transition disabled:opacity-50"
 									disabled={loadingItemId === item.id}
 								>
 									{loadingItemId === item.id ? "Adding..." : "Add to Cart"}

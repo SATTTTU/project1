@@ -6,99 +6,86 @@ import { useAddCartItem } from "../../cart/api/addItems";
 import { toast } from "react-toastify";
 
 const FoodInfoSection = ({ food }) => {
-  const { mutateAsync: addToCart, isLoading: isAddingToCart } = useAddCartItem();
+	const { mutateAsync: addToCart, isLoading: isAddingToCart } = useAddCartItem();
+	const menuItem = Array.isArray(food) ? food[0] : food;
+	if (!menuItem) return <p>Loading...</p>;
 
-  const menuItem = Array.isArray(food) ? food[0] : food;
-  if (!menuItem) return <p>Loading...</p>;
+	const [quantity, setQuantity] = useState(1);
+	const handleQuantityChange = (amount) => {
+		setQuantity((prev) => Math.max(1, prev + amount));
+	};
 
-  const [quantity, setQuantity] = useState(1);
-
-  const handleQuantityChange = (amount) => {
-    setQuantity((prevQuantity) => Math.max(1, prevQuantity + amount));
-  };
-
-  const handleAddToCart = async () => {
+	const handleAddToCart = async () => {
 		try {
 			await addToCart({
 				menu_item_id: menuItem.id,
-				quantity: quantity,
+				quantity,
 			});
-			toast.success(`${menuItem?.name} added to cart! 🛒`);
+			toast.success(`${menuItem.name} added to cart! 🛒`);
 		} catch (error) {
 			toast.error("Failed to add item to cart. Try again!");
-			console.error("Error adding to cart:", error);
+			console.error("Add to cart error:", error);
 		}
 	};
 
 	return (
-		<div className="md:w-1/2 p-6 flex flex-col justify-between h-full space-y-6">
-			<div className="flex justify-between items-start">
-				<div>
-					<h1 className="text-3xl font-semibold text-gray-800">
-						{menuItem?.name}
-					</h1>
-				</div>
-				<div className="text-3xl font-bold text-green-600">
-					Rs. {menuItem.price}
-				</div>
+		<div className="w-full md:w-1/2 p-4 flex flex-col space-y-5">
+			<div>
+				<h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-1">{menuItem.name}</h1>
+				<p className="text-xl text-green-600 font-semibold">Rs. {menuItem.price}</p>
 			</div>
 
-			<div className="flex flex-wrap gap-2 mt-4">
+			<div className="flex flex-wrap gap-2">
 				{menuItem.isVegetarian && (
-					<span className="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 text-sm rounded-full">
+					<span className="flex items-center px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">
 						<BiLeaf className="mr-2" />
 						Vegetarian
 					</span>
 				)}
-
 				{menuItem.spicyLevel && (
-					<span className="inline-flex items-center px-4 py-2 bg-red-100 text-red-800 text-sm rounded-full">
+					<span className="flex items-center px-3 py-1 bg-red-100 text-red-800 text-sm rounded-full">
 						<GiChiliPepper className="mr-2" />
 						{menuItem.spicyLevel}
 					</span>
 				)}
-
 				{menuItem.tags &&
-					menuItem.tags.map((tag, index) => (
+					menuItem.tags.map((tag, i) => (
 						<span
-							key={index}
-							className="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-800 text-sm rounded-full"
+							key={i}
+							className="px-3 py-1 bg-gray-100 text-gray-800 text-sm rounded-full"
 						>
 							{tag}
 						</span>
 					))}
 			</div>
 
-			<p className="mt-6 text-gray-700">{menuItem.description}</p>
+			<p className="text-gray-700 text-sm sm:text-base">{menuItem.description}</p>
 
 			{menuItem.allergens && menuItem.allergens.length > 0 && (
-				<div className="mt-4">
-					<p className="text-sm text-gray-500">
-						<span className="font-medium">Allergens:</span>{" "}
-						{menuItem.allergens.join(", ")}
-					</p>
-				</div>
+				<p className="text-sm text-gray-500">
+					<span className="font-medium">Allergens:</span> {menuItem.allergens.join(", ")}
+				</p>
 			)}
 
 			{/* Add to Cart Section */}
-			<div className="mt-8">
-				<div className="flex items-center mb-4 space-x-4">
-					<span className="text-gray-700">Quantity:</span>
-					<div className="flex items-center border border-gray-300 rounded-md overflow-hidden">
+			<div className="space-y-4 mt-6">
+				<div className="flex items-center space-x-3">
+					<span className="text-gray-700 text-sm">Quantity:</span>
+					<div className="flex items-center border border-gray-300 rounded-md">
 						<button
 							onClick={() => handleQuantityChange(-1)}
-							className="px-4 py-2 bg-gray-100 hover:bg-gray-200 transition-colors"
+							className="px-3 py-2 bg-gray-100 hover:bg-gray-200"
 							aria-label="Decrease quantity"
 						>
-							<FiMinus size={20} />
+							<FiMinus size={18} />
 						</button>
-						<span className="px-6 py-2 font-medium">{quantity}</span>
+						<span className="px-4 py-2">{quantity}</span>
 						<button
 							onClick={() => handleQuantityChange(1)}
-							className="px-4 py-2 bg-gray-100 hover:bg-gray-200 transition-colors"
+							className="px-3 py-2 bg-gray-100 hover:bg-gray-200"
 							aria-label="Increase quantity"
 						>
-							<FiPlus size={20} />
+							<FiPlus size={18} />
 						</button>
 					</div>
 				</div>
@@ -108,7 +95,7 @@ const FoodInfoSection = ({ food }) => {
 						e.stopPropagation();
 						handleAddToCart();
 					}}
-					className="w-full px-6 py-3 bg-[#426B1F] text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors disabled:bg-gray-400"
+					className="w-full py-3 bg-[#218b16] text-white text-sm sm:text-base font-medium rounded-lg shadow hover:bg-green-700 transition disabled:bg-gray-400"
 					disabled={isAddingToCart}
 				>
 					{isAddingToCart ? "Adding..." : "Add to Cart"}

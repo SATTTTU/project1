@@ -31,13 +31,12 @@ export const EmailVerification = () => {
           </div>
         </div>
 
-        {/* Navigation Button */}
-        <button
+        {/* <button
           onClick={() => navigate("/login")}
           className="mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition duration-200"
         >
           Go to Login
-        </button>
+        </button> */}
       </div>
     </div>
   );

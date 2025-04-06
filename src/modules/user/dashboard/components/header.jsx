@@ -78,8 +78,7 @@ export const Header = ({ navigate, popularItems, categories, cooks }) => {
 					</div>
 
 					<div className="flex items-center space-x-4">
-						<CartBadge cartItems={cartItems} isLoading={isCartLoading} />
-
+					<CartBadge cartItems={cartItems?.[0]?.items} isLoading={isCartLoading} />
 						<div className="relative" ref={profileRef}>
 							<div
 								onClick={toggleProfileMenu}
@@ -88,7 +87,7 @@ export const Header = ({ navigate, popularItems, categories, cooks }) => {
 								<img
 									src={
 										profile?.image_url
-											? `${imageBaseUrl}${profile?.image_url}`
+											? `${import.meta.env.VITE_BUCKET_URL}${profile?.image_url}`
 											: Profile
 									}
 									alt="Profile"
@@ -102,7 +101,7 @@ export const Header = ({ navigate, popularItems, categories, cooks }) => {
 										<img
 											src={
 												profile?.image_url
-													? `${imageBaseUrl}${profile?.image_url}`
+													? `${import.meta.env.VITE_BUCKET_URL}${profile?.image_url}`
 													: Profile
 											}
 											alt="Profile"

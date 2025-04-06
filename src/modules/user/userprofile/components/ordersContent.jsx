@@ -2,8 +2,9 @@ import { useCurrentOrders } from "../../cart/api/currentOrders";
 import { useAllOrders } from "../api/getAllOrders";
 import { EmptyOrder } from "./emptyOrder";
 import { OrderItem } from "./orderItem";
-const OrdersContent = () => {
+export const OrdersContent = () => {
 	const { data: orders } = useAllOrders();
+	console.log("orders",orders)
 	const { data: currentorders } = useCurrentOrders();
 	console.log("current orders****", currentorders)
 
@@ -12,9 +13,9 @@ const OrdersContent = () => {
 		<div>
 			<h2 className="text-2xl font-bold mb-6">Your Orders</h2>
 
-			{orders?.length > 0 ? (
+			{currentorders?.length > 0 ? (
 				<div className="space-y-6">
-					{orders.map((order) => (
+					{currentorders.map((order) => (
 						<OrderItem key={order.id} order={order} />
 					))}
 				</div>
@@ -24,4 +25,3 @@ const OrdersContent = () => {
 		</div>
 	);
 };
-export default OrdersContent;

@@ -12,12 +12,17 @@ import defaultAvatar from "../../../../assets/defaultProfile.jpg";
 
 export const TestimonialSlider = () => {
   const { data: testimonials } = useAllReviews();
+  console.log("Testimonial", testimonials);
   const imageBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
   const [domLoaded, setDomLoaded] = useState(false);
 
   useEffect(() => {
     setDomLoaded(true);
   }, []);
+
+  const filteredTestimonials = testimonials?.filter(
+    (testimonial) => testimonial?.cook?.name
+  );
 
   return (
     <section className="py-10 px-4 md:px-8 lg:px-16 bg-gradient-to-br from-[#f5fff5] to-[#e1ffe1]">
@@ -30,7 +35,7 @@ export const TestimonialSlider = () => {
           {domLoaded && (
             <Swiper
               slidesPerView={1}
-              spaceBetween={30} // Increased the space between the cards
+              spaceBetween={30}
               pagination={{
                 clickable: true,
                 dynamicBullets: true,
@@ -58,7 +63,7 @@ export const TestimonialSlider = () => {
               modules={[Pagination, Navigation, Autoplay]}
               className="testimonial-swiper"
             >
-              {testimonials?.map((testimonial) => (
+              {filteredTestimonials?.map((testimonial) => (
                 <SwiperSlide key={testimonial.id}>
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
@@ -66,7 +71,7 @@ export const TestimonialSlider = () => {
                     transition={{ duration: 0.6 }}
                     className="h-full"
                   >
-                    <div className="bg-white p-8 rounded-2xl border border-green-200 h-[250px] min-h-[250px] flex flex-col">
+                    <div className="bg-white p-8 rounded-2xl border border-green-200 min-h-[280px] flex flex-col justify-between shadow-md hover:shadow-lg transition-shadow duration-300">
                       <div className="flex items-center mb-6">
                         <img
                           src={
@@ -75,22 +80,22 @@ export const TestimonialSlider = () => {
                               : defaultAvatar
                           }
                           alt={testimonial?.user?.name}
-                          width={90} // Increased size of avatar
+                          width={90}
                           height={90}
                           className="rounded-full mr-6 object-cover border-2 border-green-400 w-[90px] h-[90px]"
                         />
                         <div>
-                          <h3 className="font-bold text-xl text-gray-800">
+                          <h3 className="font-bold text-lg text-gray-800">
                             {testimonial?.user?.name}
                           </h3>
-                          <h2 className="font-bold text-md text-green-500">To:  
-                            {testimonial?.cook?.name}
+                          <h2 className="font-bold text-md text-green-500">
+                            To: {testimonial?.cook?.name}
                           </h2>
                           <div className="flex mt-1">
                             {[...Array(5)].map((_, i) => (
                               <Star
                                 key={i}
-                                className={`h-5 w-5 ${
+                                className={`h-4 w-4 ${
                                   i < testimonial.ratings
                                     ? "text-yellow-400 fill-yellow-400"
                                     : "text-gray-300"
@@ -101,13 +106,11 @@ export const TestimonialSlider = () => {
                         </div>
                       </div>
 
-                      <p className="text-gray-600 text-lg leading-relaxed flex-grow mb-4">
+                      <p className="text-gray-600 text-sm leading-relaxed flex-grow">
                         {testimonial.comment.length > 200
                           ? testimonial.comment.slice(0, 200) + "..."
                           : testimonial.comment}
                       </p>
-
-                    
                     </div>
                   </motion.div>
                 </SwiperSlide>
@@ -116,11 +119,11 @@ export const TestimonialSlider = () => {
           )}
 
           {/* Navigation Arrows */}
-          <div className="swiper-button-prev !absolute !top-1/2 !left-[-40px] !transform !-translate-y-1/2 !z-10  !w-12 !h-18 !rounded-full !flex !items-center !justify-center  !text-green-900 !text-4xl  after:!content-['‹']"></div>
+          <div className="swiper-button-prev !absolute !top-1/2 !left-[-40px] !transform !-translate-y-1/2 !z-10  !w-12 !h-12 !rounded-full  !flex !items-center !justify-center !text-green-900 !text-4xl after:!content-['‹']"></div>
 
-          <div className="swiper-button-next !absolute !top-1/2 !right-[-40px] !transform !-translate-y-1/2 !z-10  !w-12 !h-18 !rounded-full !flex !items-center !justify-center  !text-green-900 !text-4xl  after:!content-['›']"></div>
+          <div className="swiper-button-next !absolute !top-1/2 !right-[-40px] !transform !-translate-y-1/2 !z-10  !w-12 !h-12 !rounded-full  !flex !items-center !justify-center !text-green-900 !text-4xl after:!content-['›']"></div>
 
-          {/* Pagination Dots - Centered */}
+          {/* Pagination Dots */}
           <div className="testimonial-pagination mt-8 absolute bottom-0 left-1/2 transform -translate-x-1/2 flex justify-center space-x-4"></div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { api } from "@/lib/api-client"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation,useQueryClient } from "@tanstack/react-query"
 
 const updateCookProfile = async (cookData) => {
   console.log("cookdata:", cookData);
@@ -17,13 +17,16 @@ const updateCookProfile = async (cookData) => {
   })
   return response.data
 }
+export const UpdateCookProfile = ({ mutationConfig } = {}) => {
+  const queryClient = useQueryClient();
 
-export const UpdateProfile = ({ mutationConfig } = {}) => {
   const mutation = useMutation({
     mutationFn: updateCookProfile,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["cookProfile"]); 
+    },
     ...mutationConfig,
-  })
-
+  });
   return {
     mutateAsync: mutation.mutateAsync,
     isLoading: mutation.isLoading, // Loading state

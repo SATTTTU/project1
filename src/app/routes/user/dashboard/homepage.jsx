@@ -45,7 +45,7 @@ export const Homepage = () => {
     <div className="min-h-screen bg-gray-50 w-full ">
       <Header navigate={navigate} handleAddToCart={handleAddToCart} />
       
-      <div className="mt-10 lg:mt-16 md:mt-16">
+      <div>
         <DashSlider />
       </div>
 
