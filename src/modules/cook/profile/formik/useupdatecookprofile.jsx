@@ -4,11 +4,11 @@ import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { cookprofileEditSchema } from "./schema/cookprofileupdateschema";
 import { toast } from "react-toastify";
-import { UpdateProfile } from "../api/updatecookprofile";
+import { UpdateCookProfile } from "../api/updatecookprofile";
 import { useProfile } from "../api/getcookprofile";
 
 export const UseProfileFormik = () => {
-  const { mutateAsync: editProfile, isLoading: isEditing } = UpdateProfile();
+  const { mutateAsync: editProfile, isLoading: isEditing } = UpdateCookProfile();
   const {
     data: profileData,
     isLoading: isFetching,

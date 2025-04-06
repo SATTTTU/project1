@@ -1,14 +1,15 @@
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify"; 
+import { toast } from "react-toastify";
 import { useAddCartItem } from "../../cart/api/addItems";
 import Dishes from "../../../../assets/defaultDishes.jpg";
 
 export const DishCard = ({ dish }) => {
-  const navigate = useNavigate();
-  const { mutateAsync: addToCart, isLoading: isAddingToCart } = useAddCartItem(); // Destructure the mutation function and loading state
-  const imageUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
+	const navigate = useNavigate();
+	const { mutateAsync: addToCart, isLoading: isAddingToCart } =
+		useAddCartItem(); // Destructure the mutation function and loading state
+	const imageUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
-  const handleAddToCart = async (dish) => {
+	const handleAddToCart = async (dish) => {
 		try {
 			await addToCart({
 				menu_item_id: dish.id,
@@ -34,25 +35,26 @@ export const DishCard = ({ dish }) => {
 			/>
 
 			<div className="p-4 flex flex-col flex-grow">
-				<h3 className="font-bold text-lg">{dish?.name}</h3>
+				<h3 className="font-bold text-xl">{dish?.name}</h3>
+				<div className="flex justify-between items-center mt-4">
+					<span className="text-md font-bold">Rs. {dish.price}</span>
+				</div>
 				<p className="text-gray-600 text-sm mt-1">{dish.description}</p>
 
-				<div className="flex justify-between items-center mt-4">
-					<span className="text-lg font-bold">Rs. {dish.price}</span>
-				</div>
 			</div>
 
-			{/* Add "mt-auto" to ensure the button stays at the bottom */}
-			<button
-				onClick={(e) => {
-					e.stopPropagation();
-					handleAddToCart(dish);
-				}}
-				className="px-4 py-2 bg-[#426B1F] text-white rounded-lg transition-colors mt-auto"
-				disabled={isAddingToCart}
-			>
-				{isAddingToCart ? "Adding..." : "Add to Cart"}
-			</button>
+			<div className="mt-auto flex justify-center items-center">
+				<button
+					onClick={(e) => {
+						e.stopPropagation();
+						handleAddToCart(dish);
+					}}
+					className="px-4 py-2 w-full bg-[#0e9300] text-white rounded-lg transition-colors "
+					disabled={isAddingToCart}
+				>
+					{isAddingToCart ? "Adding..." : "Add to Cart"}
+				</button>
+			</div>
 		</div>
 	);
 };

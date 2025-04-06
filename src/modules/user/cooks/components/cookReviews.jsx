@@ -33,7 +33,7 @@ export const CookReviews = ({ id, cookName, setCook }) => {
         <h2 className="text-xl font-bold">Customer Reviews</h2>
         <button
           onClick={() => setShowReviewForm(true)}
-          className="px-4 py-2 bg-[#426B1F] cursor-pointer text-white rounded-lg hover:bg-[#426B1F] transition-colors"
+          className="px-4 py-2 bg-[#0e9300] cursor-pointer text-white rounded-lg hover:bg-[#426B1F] transition-colors"
         >
           Write a Review
         </button>

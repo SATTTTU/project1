@@ -113,7 +113,7 @@ export const ReviewForm = ({ cookId, setShowReviewForm, setCook, onReviewSubmit 
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-[#426B1F] text-white rounded-md hover:bg-green-700"
+            className="px-4 py-2 bg-[#0e9300] text-white rounded-md hover:bg-green-700"
             disabled={isLoading}
           >
             {isLoading ? "Submitting..." : "Submit Review"}

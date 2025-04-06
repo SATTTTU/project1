@@ -129,7 +129,7 @@ export const ProfileContent = () => {
 			<button
 				type="submit"
 				disabled={formik.isSubmitting}
-				className="px-6 py-2 bg-green-600 text-white rounded-md"
+				className="px-6 py-2 bg-[#0e9300] text-white rounded-md"
 			>
 				{formik.isSubmitting ? "Updating..." : "Save Changes"}
 			</button>

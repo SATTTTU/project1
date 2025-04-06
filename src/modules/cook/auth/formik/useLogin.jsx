@@ -46,33 +46,43 @@ export const useLoginFormik = (config = {
     onSubmit: async (values, helpers) => {
       try {
         const result = await mutateAsync(values);
-        helpers.setStatus({ success: true, message: 'login successful' });
+        console.log("REsults",result)
+        const cookInfo = result?.user || result?.data?.user;
+    
+        // 👇 Redirect if cook is under review
+        if (cookInfo?.status === "pending") {
+          navigate("/cook/underReview");
+          return;
+        }
+    
+        helpers.setStatus({ success: true, message: "login successful" });
         helpers.resetForm();
         console.log("Login successful:", result);
+    
+        // Navigate to homepage only if approved
+        navigate("/cook/homepage");
       } catch (err) {
         console.error("Login error:", err);
         helpers.setStatus({ success: false });
-        
+    
         if (err instanceof AxiosError && err.response) {
-          // Check for specific error messages from the backend
           const errorMessage = err.response?.data?.error || err.response?.data?.message || "Login failed";
-          
-          // Identify which field should display the error based on error message
-          if (errorMessage.toLowerCase().includes('password')) {
-            helpers.setFieldError('password', errorMessage);
-          } else if (errorMessage.toLowerCase().includes('email') || errorMessage.toLowerCase().includes('user')) {
-            helpers.setFieldError('email', errorMessage);
+    
+          if (errorMessage.toLowerCase().includes("password")) {
+            helpers.setFieldError("password", errorMessage);
+          } else if (errorMessage.toLowerCase().includes("email") || errorMessage.toLowerCase().includes("user")) {
+            helpers.setFieldError("email", errorMessage);
           } else {
-            // Generic error goes to the password field for login form
-            helpers.setFieldError('password', errorMessage);
+            helpers.setFieldError("password", errorMessage);
           }
         } else {
-          helpers.setFieldError('password', "An unexpected error occurred");
+          helpers.setFieldError("password", "An unexpected error occurred");
         }
       } finally {
         helpers.setSubmitting(false);
       }
-    },
+    }
+    
   });
   
   return { formik, isLoggingIn };

@@ -75,8 +75,8 @@ export const FoodDetails = () => {
       <Header />
       </div>
 
-      <main className="container mx-auto px-4 py-6 lg:mt-30 mt-16"> {/* Added mt-16 */}
-        <div className="mb-6 mt-2">
+      <main className="container mx-auto px-4 py-6 "> {/* Added mt-16 */}
+        {/* <div className="mb-6 mt-2">
           <Link
             to="/dashboard"
             className="inline-flex items-center text-gray-600 hover:text-green-600 transition-colors"
@@ -84,7 +84,7 @@ export const FoodDetails = () => {
             <FiArrowLeft className="mr-2" />
             Back to Home
           </Link>
-        </div>
+        </div> */}
 
         <div className="bg-white rounded-lg shadow-md overflow-hidden mb-10">
           <div className="md:flex">

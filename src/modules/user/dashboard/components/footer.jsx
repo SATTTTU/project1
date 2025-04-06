@@ -105,7 +105,7 @@ export const Footer = () => {
 					</div>
 
 					<div className="border-t border-gray-200 mt-8 pt-6 flex flex-col md:flex-row justify-between text-sm text-gray-600">
-						<p>© Order Copyright 2023. All Rights Reserved.</p>
+						<p>Copyright © 2025 KHAJABOX. All Rights Reserved.</p>
 						<div className="flex flex-wrap gap-4 mt-4 md:mt-0">
 							<Link to="#" className="hover:text-green-600">
 								Privacy Policy

@@ -29,7 +29,7 @@ console.log("earnings*****", earnings);
           <h2 className="text-lg font-semibold">Cook Dashboard</h2>
           <p className="text-sm text-gray-500">Welcome back, Chef!</p>
         </div>
-        {/* <button
+        <button
           onClick={handleToggleStatus}
           className={`px-4 py-2 rounded-full cursor-pointer font-medium ${
             isOnline ? "bg-[#426B1F] text-white" : "bg-gray-200 text-gray-700"
@@ -37,7 +37,7 @@ console.log("earnings*****", earnings);
           disabled={isLoading} 
         >
           {isOnline ? "Available" : "Go Online"}
-        </button> */}
+        </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

@@ -1,17 +1,5 @@
 export default function PendingPage() {
-    // Import the image from useCookEditFormik.js
-    // You would need to properly import this value in your actual implementation
-    const getProfileImage = () => {
-      try {
-        // Try to get the image from local storage or context if available
-        // This is a fallback if you don't have access to the formik context directly
-        const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
-        return userProfile.image || "/api/placeholder/200/200";
-      } catch (error) {
-        console.log(error);
-        return "/api/placeholder/200/200";
-      }
-    };
+
   
     return (
       <div className="flex flex-col items-center justify-center min-h-fit bg-white text-center p-6">

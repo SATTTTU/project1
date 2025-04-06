@@ -27,7 +27,7 @@ export const CookCategories = ({ cookId, onAddToCart }) => {
 					<div className="flex items-center mb-6">
 						<button
 							onClick={() => setSelectedCategory(null)}
-							className="mr-3 p-3 bg-[#426B1F] text-white rounded-full hover:bg-green-700 transition-colors"
+							className="mr-3 p-3 bg-[#0e9300] text-white rounded-full hover:bg-green-700 transition-colors"
 						>
 							<FiArrowLeft size={24} />
 						</button>

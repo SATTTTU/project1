@@ -10,7 +10,7 @@ const fetchCookProfile = async () => {
 
 export const useProfile = () => {
   return useQuery({
-    queryKey: ["CookProfile"],
+    queryKey: ["cookProfile"],
     queryFn: fetchCookProfile,
     staleTime: 600000, // Cache for 10 minutes
   });

@@ -60,15 +60,14 @@ const CookNavBAr = () => {
 		setSidebarOpen(false);
 	};
 
-  const getItemClass = (path) => {
-    const baseClass =
-      "flex items-center rounded-md px-3 py-2 text-sm font-medium";
-    if (activeItem === path) {
-      return `${baseClass} bg-[#426B1F] text-white`;
-    }
-    return `${baseClass} text-gray-700 hover:bg-gray-100`;
-  };
-	const imageBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
+	const getItemClass = (path) => {
+		const baseClass =
+			"flex items-center rounded-md px-3 py-2 text-sm font-medium";
+		if (activeItem === path) {
+			return `${baseClass} bg-[#426B1F] text-white`;
+		}
+		return `${baseClass} text-gray-700 hover:bg-gray-100`;
+	};
 
 	return (
 		<div className="sticky top-0 z-50">
@@ -84,7 +83,7 @@ const CookNavBAr = () => {
 
 					<Link
 						to="/cook/homepage"
-						className="flex items-center gap-2 text-xl font-bold text-[#426B1F] hover:text-[#2d4e14] transition duration-200"
+						className="flex items-center gap-2 text-xl font-bold text-[#0e9300] hover:text-[#2d4e14] transition duration-200"
 					>
 						<img
 							src={khajaboxlogo}
@@ -100,28 +99,27 @@ const CookNavBAr = () => {
 					<div className="relative w-full"></div>
 				</div>
 
-        <div className="flex items-center gap-4">
-          <div className="relative">
-            <button
-              onClick={() => setUserMenuOpen(!userMenuOpen)}
-              className="flex items-center gap-2 rounded-full p-1 pl-2 hover:bg-gray-100 transition-colors"
-            >
-              <div className="hidden md:block text-right mr-2">
-                {/* <div className="text-lg font-medium">{cook?.name}</div> */}
-                
-              </div>
-              <div className="h-8 w-8 rounded-full bg-[#426B1F] text-white flex items-center justify-center">
-                    <img
-                          src={
-                            cook?.image_url
-                            ? `${imageBaseUrl}${cook?.image_url}`
-                            : Profile
-                          }
-                          alt="Profile"
-                          className="rounded-full h-10 w-10 object-cover shadow-md border-2 border-white transition-all duration-300"
-                          />
-              </div>
-            </button>
+				<div className="flex items-center gap-4">
+					<div className="relative">
+						<button
+							onClick={() => setUserMenuOpen(!userMenuOpen)}
+							className="flex items-center gap-2 rounded-full p-1 pl-2 hover:bg-gray-100 transition-colors"
+						>
+							<div className="hidden md:block text-right mr-2">
+								<div className="text-md font-medium">{cook?.name}</div>
+							</div>
+							<div className="p-1 rounded-full transition-transform duration-200 hover:scale-105">
+								<img
+									src={
+										cook?.image_url
+											? `${import.meta.env.VITE_BUCKET_URL}${cook?.image_url}`
+											: Profile
+									}
+									alt="Profile"
+									className="rounded-full h-10 w-10 object-cover shadow-md border-2 border-white transition-all duration-300"
+								/>
+							</div>
+						</button>
 
 						{/* User dropdown menu */}
 						{userMenuOpen && (
