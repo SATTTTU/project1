@@ -16,17 +16,6 @@ export const rootRoutes = [
     element: <Navigate to={paths.user.root.path} />,
   },
  
-  
-
-  // {
-  //   path: "/",
-  //   lazy: async () => {
-  //     const { HomePageRoute } = await import(
-  //       "../../routes/admin/auth/components/homepage/homepage"
-  //     );
-  //     return { Component: HomePageRoute };
-  //   },
-  // },
   {
     path: "/",
     lazy: async () => {

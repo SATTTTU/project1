@@ -9,11 +9,11 @@ export const Layout = () => {
 			<div className=" w-screen overflow-x-hidden max-w-full ">
 				<HeroSlider />
 
-				<About />
+				{/* <About />
 
 				<TestimonialSlider />
 
-				<Footer />
+				<Footer /> */}
 			</div>
 		</>
 	);
