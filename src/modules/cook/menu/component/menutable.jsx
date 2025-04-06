@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useState } from "react";
 import {
@@ -18,6 +17,8 @@ import ItemRow from "./itemrow";
 import { useUpdateMenu } from "../api/update-menu";
 import { useDeleteMenu } from "../api/deletecategory";
 import { useDeleteMenuItem } from "../api/deletemenu";
+import { useItemFormik } from "../formik/useCategory-Menu";
+// import { useEditFormik } from "../formik/useEditFormik";
 
 const MenuTable = ({
   setEditingCategory,
@@ -29,6 +30,8 @@ const MenuTable = ({
 
   const [showAddItem, setShowAddItem] = useState(null);
   const [editingItem, setEditingItem] = useState(null);
+  const [isEditingItem, setIsEditingItem] = useState(false);
+
   const [newItem, setNewItem] = useState({
     name: "",
     price: "",
@@ -37,7 +40,23 @@ const MenuTable = ({
     imagePreview: null,
     available: true,
   });
+  const currentCategory =
+  showAddItem !== null ? categories.find((c) => c.id === showAddItem) : null;
 
+  const addItemformik = useItemFormik({
+    category:currentCategory,
+    newItem,
+    setNewItem,
+    editingItem,
+    // handleAddItem,
+  });
+  const editItemformik = useItemFormik({
+    category:currentCategory,
+    newItem,
+    setNewItem,
+    editingItem,
+    // handleAddItem,
+  });
   // Reset the item form
   const resetItemForm = () => {
     setNewItem({
@@ -68,22 +87,24 @@ const MenuTable = ({
 
   // Add or edit item
   const handleAddItem = async (categoryId, values) => {
-    try {
-      if (editingItem) {
-        // Update existing item
-        await api.put(`/api/cooks/update-menu-item/${editingItem}`, {
-          ...values,
-          category_id: categoryId,
-        });
-      } else {
-        // Add new item
-        await api.post(`/api/cooks/add-menu-item/${categoryId}`, values);
-      }
-      queryClient.invalidateQueries(["categories"]);
-      resetItemForm();
-    } catch (error) {
-      console.error("Error saving item:", error);
-    }
+    console.log("handleItmes", editingItem, values);
+		try {
+			if (editingItem) {
+				console.log("editinng", editingItem);
+				// Update existing item
+				await api.put(`/api/cooks/update-menu-item/${editingItem}`, {
+					...values,
+					category_id: categoryId,
+				});
+			} else {
+				// Add new item
+				await api.post(`/api/cooks/add-menu-item/${categoryId}`, values);
+			}
+			queryClient.invalidateQueries(["categories"]);
+			resetItemForm();
+		} catch (error) {
+			console.error("Error saving item:", error);
+		}
   };
 
   // Delete item
@@ -140,8 +161,9 @@ const MenuTable = ({
   });
 
   const handleEditItem = (categoryId, item) => {
+  setIsEditingItem(true)
     setNewItem({
-      name: item.name,
+      name: item?.name,
       price: item.price,
       description: item.description,
       image: null,
@@ -178,8 +200,6 @@ const MenuTable = ({
   }
 
   // Find the current category when showAddItem is not null
-  const currentCategory =
-    showAddItem !== null ? categories.find((c) => c.id === showAddItem) : null;
 
   return (
     <div className="bg-white rounded-lg shadow overflow-auto">
@@ -245,6 +265,9 @@ const MenuTable = ({
 
       {showAddItem !== null && currentCategory && (
         <ItemFormModal
+        
+        addItemFormik={ isEditingItem ? editItemformik: addItemformik }
+
           category={currentCategory}
           newItem={newItem}
           setNewItem={setNewItem}

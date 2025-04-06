@@ -85,129 +85,129 @@ export const useMenuManagement = () => {
 
   // Add or edit category
   const handleAddCategory = () => {
-    if (newCategory.trim()) {
-      if (editingCategory) {
-        // Update existing category
-        setCategories(
-          categories.map((category) =>
-            category.id === editingCategory
-              ? { ...category, name: newCategory }
-              : category
-          )
-        );
-        setEditingCategory(null);
-      } else {
-        // Check if category already exists
-        const existingCategory = categories.find(
-          (c) => c.name.toLowerCase() === newCategory.toLowerCase()
-        );
+		if (newCategory.trim()) {
+			if (editingCategory) {
+				// Update existing category
+				setCategories(
+					categories.map((category) =>
+						category.id === editingCategory
+							? { ...category, name: newCategory }
+							: category
+					)
+				);
+				setEditingCategory(null);
+			} else {
+				// Check if category already exists
+				const existingCategory = categories.find(
+					(c) => c?.name.toLowerCase() === newCategory.toLowerCase()
+				);
 
-        if (existingCategory) {
-          // If exists, just focus on it
-          setCategories(
-            categories.map((c) =>
-              c.id === existingCategory.id ? { ...c, isExpanded: true } : c
-            )
-          );
-        } else {
-          // Add new category
-          const newId = Math.max(...categories.map((c) => c.id), 0) + 1;
-          setCategories([
-            ...categories,
-            {
-              id: newId,
-              name: newCategory,
-              isExpanded: true,
-              items: [],
-            },
-          ]);
-        }
-      }
-      setNewCategory("");
-      setShowAddCategory(false);
-    }
-  };
+				if (existingCategory) {
+					// If exists, just focus on it
+					setCategories(
+						categories.map((c) =>
+							c.id === existingCategory.id ? { ...c, isExpanded: true } : c
+						)
+					);
+				} else {
+					// Add new category
+					const newId = Math.max(...categories.map((c) => c.id), 0) + 1;
+					setCategories([
+						...categories,
+						{
+							id: newId,
+							name: newCategory,
+							isExpanded: true,
+							items: [],
+						},
+					]);
+				}
+			}
+			setNewCategory("");
+			setShowAddCategory(false);
+		}
+	};
 
-  // Reset the item form
-  const resetItemForm = () => {
-    setNewItem({
-      name: "",
-      price: "",
-      description: "",
-      image: null,
-      imagePreview: null,
-      available: true,
-    });
-    setEditingItem(null);
-    setShowAddItem(null);
-  };
+	// Reset the item form
+	const resetItemForm = () => {
+		setNewItem({
+			name: "",
+			price: "",
+			description: "",
+			image: null,
+			imagePreview: null,
+			available: true,
+		});
+		setEditingItem(null);
+		setShowAddItem(null);
+	};
 
-  // Add or edit item
-  const handleAddItem = (categoryId) => {
-    if (newItem.name.trim() && newItem.price) {
-      if (editingItem) {
-        // Update existing item
-        setCategories(
-          categories.map((category) =>
-            category.id === categoryId
-              ? {
-                  ...category,
-                  items: category.items.map((item) =>
-                    item.id === editingItem
-                      ? {
-                          ...item,
-                          name: newItem.name,
-                          price: parseFloat(newItem.price),
-                          description: newItem.description,
-                          image: newItem.imagePreview || item.image,
-                          available: newItem.available,
-                        }
-                      : item
-                  ),
-                }
-              : category
-          )
-        );
-      } else {
-        // Add new item
-        setCategories(
-          categories.map((category) =>
-            category.id === categoryId
-              ? {
-                  ...category,
-                  items: [
-                    ...category.items,
-                    {
-                      id: Date.now(),
-                      name: newItem.name,
-                      price: parseFloat(newItem.price),
-                      description: newItem.description,
-                      image: newItem.imagePreview || foodimage,
-                      available: newItem.available,
-                    },
-                  ],
-                }
-              : category
-          )
-        );
-      }
-      resetItemForm();
-    }
-  };
+	// Add or edit item
+	const handleAddItem = (categoryId) => {
+		if (newItem?.name.trim() && newItem.price) {
+			if (editingItem) {
+				// Update existing item
+				setCategories(
+					categories.map((category) =>
+						category.id === categoryId
+							? {
+									...category,
+									items: category.items.map((item) =>
+										item.id === editingItem
+											? {
+													...item,
+													name: newItem?.name,
+													price: parseFloat(newItem.price),
+													description: newItem.description,
+													image: newItem.imagePreview || item.image,
+													available: newItem.available,
+											  }
+											: item
+									),
+							  }
+							: category
+					)
+				);
+			} else {
+				// Add new item
+				setCategories(
+					categories.map((category) =>
+						category.id === categoryId
+							? {
+									...category,
+									items: [
+										...category.items,
+										{
+											id: Date.now(),
+											name: newItem?.name,
+											price: parseFloat(newItem.price),
+											description: newItem.description,
+											image: newItem.imagePreview || foodimage,
+											available: newItem.available,
+										},
+									],
+							  }
+							: category
+					)
+				);
+			}
+			resetItemForm();
+		}
+	};
 
-  // Start editing item
-  const handleEditItem = (categoryId, item) => {
-    setNewItem({
-      name: item.name,
-      price: item.price,
-      description: item.description,
-      image: null,
-      imagePreview: item.image,
-      available: item.available,
-    });
-    setEditingItem(item.id);
-    setShowAddItem(categoryId);
-  };
+	// Start editing item
+	const handleEditItem = (categoryId, item) => {
+		setNewItem({
+			name: item?.name,
+			price: item.price,
+			description: item.description,
+			image: null,
+			imagePreview: item.image,
+			available: item.available,
+		});
+		setEditingItem(item.id);
+		setShowAddItem(categoryId);
+	};
 
   // Delete category
   const handleDeleteCategory = (categoryId) => {

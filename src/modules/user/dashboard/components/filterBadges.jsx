@@ -181,7 +181,7 @@ export const  PromotedRestaurants = () => {
           <h3 className="text-2xl font-bold text-slate-700">{restaurant.offer.value}% OFF</h3>
           <p className="text-slate-600 text-sm">{restaurant.offer.description}</p>
           <div className="mt-2 text-sm text-gray-600">
-            {restaurant.name} - {restaurant.location}
+            {restaurant?.name} - {restaurant.location}
           </div>
           <button className="bg-red-600 text-white px-3 py-1 rounded-md mt-auto text-sm font-medium uppercase w-full">
             ORDER NOW
@@ -201,7 +201,7 @@ export const  PromotedRestaurants = () => {
         <div className="relative h-32">
           <img
             src={restaurant.offer.image || "/placeholder.svg"}
-            alt={restaurant.name}
+            alt={restaurant?.name}
             className="w-full h-full object-cover"
           />
           <div className="absolute top-2 left-2 bg-green-600 text-white px-2 py-1 rounded text-xs font-medium">
@@ -213,7 +213,7 @@ export const  PromotedRestaurants = () => {
           <h3 className="text-2xl font-bold text-slate-700">Rs. {restaurant.offer.value}</h3>
           {restaurant.offer.subtext && <p className="text-slate-600 text-xs">{restaurant.offer.subtext}</p>}
           <div className="mt-2 text-sm text-gray-600">
-            {restaurant.name} - {restaurant.location}
+            {restaurant?.name} - {restaurant.location}
           </div>
           <button className="bg-red-600 text-white px-3 py-1 rounded-md mt-auto text-sm font-medium uppercase w-full">
             ORDER NOW
@@ -228,7 +228,7 @@ export const  PromotedRestaurants = () => {
     return (
       <div className="flex items-center">
         <h2 className="text-xl font-bold text-gray-800">
-          {restaurant.name} - {restaurant.location}
+          {restaurant?.name} - {restaurant.location}
         </h2>
         <div className="flex items-center ml-auto">
           <div className="flex items-center bg-orange-100 px-2 py-0.5 rounded">
@@ -274,7 +274,7 @@ export const  PromotedRestaurants = () => {
       <div className="border-b pb-6 mb-6">
         <div className="flex justify-between">
           <div className="flex-1 pr-4">
-            <h3 className="text-lg font-bold">{item.name}</h3>
+            <h3 className="text-lg font-bold">{item?.name}</h3>
             <p className="text-gray-600 text-sm mt-1">{item.description}</p>
             <div className="flex items-center mt-2">
               <span className="text-gray-900 font-bold">₹{item.discountedPrice}</span>

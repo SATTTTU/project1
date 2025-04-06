@@ -38,7 +38,7 @@ export const CartItem = ({ item, onRemoveItem, isUpdating, isDeleting }) => {
 			</div>
 
 			<div className="flex-1">
-				<h3 className="font-medium text-lg">{item?.menu_item.name}</h3>
+				<h3 className="font-medium text-lg">{item?.menu_item?.name}</h3>
 				<p className="text-gray-600 text-sm mb-2">
 					Unit Price: Rs. {item?.price}
 				</p>

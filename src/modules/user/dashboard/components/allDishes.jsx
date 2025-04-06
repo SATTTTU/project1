@@ -54,71 +54,71 @@ export const AllDishes = () => {
   const itemsToShow = menuItems.slice(0, visibleItems);
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-3xl font-bold mb-10 text-center text-[#0e9300]">
-       All Special Dishes
-      </h2>
+		<div className="container mx-auto p-4">
+			<h2 className="text-3xl font-bold mb-10 text-center text-[#0e9300]">
+				All Special Dishes
+			</h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {itemsToShow.map((item) => (
-          <div
-            key={item.id}
-            onClick={() => navigate(`/food/${item.id}`)}
-            className="bg-white rounded-2xl shadow-md border border-slate-200 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 cursor-pointer group flex flex-col"
-          >
-            <div className="h-48 w-full overflow-hidden rounded-t-2xl">
-              <img
-                src={item.image_url ? `${imageUrl}${item.image_url}` : Dishes}
-                alt={item.name}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                onError={(e) => (e.target.src = Dishes)}
-              />
-            </div>
+			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+				{itemsToShow.map((item) => (
+					<div
+						key={item.id}
+						onClick={() => navigate(`/food/${item.id}`)}
+						className="bg-white rounded-2xl shadow-md border border-slate-200 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 cursor-pointer group flex flex-col"
+					>
+						<div className="h-48 w-full overflow-hidden rounded-t-2xl">
+							<img
+								src={item.image_url ? `${imageUrl}${item.image_url}` : Dishes}
+								alt={item?.name}
+								className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+								onError={(e) => (e.target.src = Dishes)}
+							/>
+						</div>
 
-            <div className="p-5 flex flex-col flex-grow">
-              <h3 className="text-lg font-semibold text-gray-800 group-hover:text-[#426B1F]">
-                {item.name}
-              </h3>
+						<div className="p-5 flex flex-col flex-grow">
+							<h3 className="text-lg font-semibold text-gray-800 group-hover:text-[#426B1F]">
+								{item?.name}
+							</h3>
 
-              <p className="text-md font-bold text-green-700 mb-1">
-                Rs. {item.price}
-              </p>
+							<p className="text-md font-bold text-green-700 mb-1">
+								Rs. {item.price}
+							</p>
 
-              {item.cook_name && (
-                <p
-                  className="text-sm text-gray-600 mb-1 hover:underline hover:text-green-600 cursor-pointer"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate(`/cook/${item.cook_id}`);
-                  }}
-                >
-                  👨‍🍳 By {item.cook_name}
-                </p>
-              )}
+							{item.cook_name && (
+								<p
+									className="text-sm text-gray-600 mb-1 hover:underline hover:text-green-600 cursor-pointer"
+									onClick={(e) => {
+										e.stopPropagation();
+										navigate(`/cook/${item.cook_id}`);
+									}}
+								>
+									👨‍🍳 By {item.cook_name}
+								</p>
+							)}
 
-              {item.description && (
-                <p className="text-gray-500 text-sm mb-4">
-                  {item.description.length > 90
-                    ? item.description.substring(0, 90) + "..."
-                    : item.description}
-                </p>
-              )}
+							{item.description && (
+								<p className="text-gray-500 text-sm mb-4">
+									{item.description.length > 90
+										? item.description.substring(0, 90) + "..."
+										: item.description}
+								</p>
+							)}
 
-              <div className="mt-auto pt-2">
-                <button
-                  onClick={(e) => handleAddToCart(item, e)}
-                  className="bg-[#0e9300] text-white py-2 px-4 w-full rounded-md font-semibold hover:bg-green-800 transition disabled:opacity-50"
-                  disabled={loadingItemId === item.id}
-                >
-                  {loadingItemId === item.id ? "Adding..." : "Add to Cart"}
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+							<div className="mt-auto pt-2">
+								<button
+									onClick={(e) => handleAddToCart(item, e)}
+									className="bg-[#0e9300] text-white py-2 px-4 w-full rounded-md font-semibold hover:bg-green-800 transition disabled:opacity-50"
+									disabled={loadingItemId === item.id}
+								>
+									{loadingItemId === item.id ? "Adding..." : "Add to Cart"}
+								</button>
+							</div>
+						</div>
+					</div>
+				))}
+			</div>
 
-      {/* {visibleItems < menuItems.length && (
+			{/* {visibleItems < menuItems.length && (
         <div className="text-center mt-10">
           <button
             onClick={handleLoadMore}
@@ -128,6 +128,6 @@ export const AllDishes = () => {
           </button>
         </div>
       )} */}
-    </div>
-  );
+		</div>
+	);
 };

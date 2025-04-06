@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, Input, Button, Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { useItemFormik } from "../formik/useCategory-Menu";
+// import { useItemFormik } from "../formik/useCategory-Menu";
 
 const ItemFormModal = ({
   category,
@@ -11,19 +11,18 @@ const ItemFormModal = ({
   handleAddItem,
   onClose,
   visible,
+  // formik,
+  // isLoading
+  addItemFormik
 }) => {
-  // Adding a safety check before using useItemFormik
   if (!category || !category.id) {
     return null; // Don't render anything if category is invalid
   }
 
-  const { formik, isEditing, isLoading, error } = useItemFormik({
-    category,
-    newItem,
-    setNewItem,
-    editingItem,
-    handleAddItem,
-  });
+  const { formik, isEditing, isLoading, error } =addItemFormik;
+  
+  
+
 
   // If formik is undefined due to any error in useItemFormik
   if (!formik) {
@@ -56,14 +55,14 @@ const ItemFormModal = ({
           <Input
             id="name"
             name="name"
-            value={formik.values.name}
+            value={formik.values?.name}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             placeholder="Enter dish name..."
             className="mt-1"
           />
-          {formik.touched.name && formik.errors.name && (
-            <p className="text-red-500 text-sm mt-1">{formik.errors.name}</p>
+          {formik.touched?.name && formik.errors?.name && (
+            <p className="text-red-500 text-sm mt-1">{formik.errors?.name}</p>
           )}
         </div>
 

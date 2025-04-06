@@ -62,7 +62,7 @@ export const OrderList = () => {
                               ? `${imageBaseUrl}${item.menu_item.image_url}`
                               : "/placeholder.jpg"
                           }
-                          alt={item.menu_item.name}
+                          alt={item.menu_item?.name}
                           className="w-20 h-20 object-cover rounded-lg border border-gray-200"
                           onError={(e) => {
                             e.target.src = "/placeholder.jpg";
@@ -70,7 +70,7 @@ export const OrderList = () => {
                         />
 
                         <div>
-                          <p className="font-semibold text-gray-900">{item.menu_item.name}</p>
+                          <p className="font-semibold text-gray-900">{item.menu_item?.name}</p>
                           <p className="text-sm text-gray-600">{item.menu_item.description}</p>
                           <div className="text-sm mt-1">
                             <p>Quantity: {item.quantity}</p>

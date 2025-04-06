@@ -23,9 +23,9 @@ export const useUserProfileEditFormik = () => {
         const formData = new FormData();
 
         // Only send fields that have changed
-        if (values.name !== profileData?.name) {
-          formData.append("name", values.name);
-        }
+        if (values?.name !== profileData?.name) {
+					formData.append("name", values?.name);
+				}
 
         if (values.email !== profileData?.email) {
           formData.append("email", values.email);

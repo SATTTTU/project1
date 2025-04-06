@@ -29,27 +29,27 @@ const ItemRow = ({
   const imageUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
   return (
-    <tr className="hover:bg-gray-50">
-      <td className="px-6 py-4 pl-12">
-        <div className="flex items-center space-x-4">
-          <img
-            src={item?.image_url ? `${imageUrl}${item.image_url}` : Dishes}
-                           alt={item.name || "Dish"}
-                           className="rounded-full w-10 h-10 object-cover"
-          />
-          <div>
-            <div className="font-medium">{item.name}</div>
-            <div className="text-sm text-gray-500 line-clamp-1">
-              {item.description}
-            </div>
-          </div>
-        </div>
-      </td>
-      <td className="px-6 py-4">
-        <span className="font-medium">Rs. {item.price}</span>
-      </td>
-      <td className="px-6 py-4">
-        {/* <div
+		<tr className="hover:bg-gray-50">
+			<td className="px-6 py-4 pl-12">
+				<div className="flex items-center space-x-4">
+					<img
+						src={item?.image_url ? `${imageUrl}${item.image_url}` : Dishes}
+						alt={item?.name || "Dish"}
+						className="rounded-full w-10 h-10 object-cover"
+					/>
+					<div>
+						<div className="font-medium">{item?.name}</div>
+						<div className="text-sm text-gray-500 line-clamp-1">
+							{item.description}
+						</div>
+					</div>
+				</div>
+			</td>
+			<td className="px-6 py-4">
+				<span className="font-medium">Rs. {item.price}</span>
+			</td>
+			<td className="px-6 py-4">
+				{/* <div
           className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
             item.available
               ? "bg-green-100 text-green-800"
@@ -65,23 +65,23 @@ const ItemRow = ({
           ></span>
           {item.available ? "Available" : "Unavailable"}
         </div> */}
-      </td>
-      <td className="px-6 py-4 text-right space-x-2">
-        <button
-          onClick={() => handleEditItem(categoryId, item)}
-          className="text-blue-500 hover:text-blue-700 cursor-pointer"
-        >
-          <Edit size={18} />
-        </button>
-        <button
-          onClick={() => handleDeleteItem(categoryId, item.id)}
-          className="text-red-500 hover:text-red-700 cursor-pointer"
-        >
-          <Trash size={18} />
-        </button>
-      </td>
-    </tr>
-  );
+			</td>
+			<td className="px-6 py-4 text-right space-x-2">
+				<button
+					onClick={() => handleEditItem(categoryId, item)}
+					className="text-blue-500 hover:text-blue-700 cursor-pointer"
+				>
+					<Edit size={18} />
+				</button>
+				<button
+					onClick={() => handleDeleteItem(categoryId, item.id)}
+					className="text-red-500 hover:text-red-700 cursor-pointer"
+				>
+					<Trash size={18} />
+				</button>
+			</td>
+		</tr>
+	);
 };
 
 export default ItemRow;

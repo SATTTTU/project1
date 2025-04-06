@@ -131,7 +131,7 @@ export const cookRoutes = [
                   const { MenuPage } = await import("../cook/menu/menu");
                   return { Component: MenuPage };
                 },
-                ErrorBoundary: AppRootErrorBoundary,
+                // ErrorBoundary: AppRootErrorBoundary,
               },
               {
                 path: paths.cook.historyPage.path,

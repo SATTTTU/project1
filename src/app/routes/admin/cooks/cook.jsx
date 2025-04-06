@@ -49,9 +49,9 @@ export const CooksRoute = () => {
 
     // Apply name search filter
     if (search) {
-      result = result.filter(cook => 
-        cook.name.toLowerCase().includes(search.toLowerCase())
-      );
+      result = result.filter((cook) =>
+				cook?.name.toLowerCase().includes(search.toLowerCase())
+			);
     }
 
     // Apply status filter

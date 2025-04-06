@@ -38,7 +38,7 @@ export const SearchBar = () => {
 		try {
 			setLoadingCartItem(dish.menu_item_id);
 			await addToCart({ menu_item_id: dish.menu_item_id, quantity: 1 });
-			toast.success(`${dish.name} added to cart!`, { autoClose: 2000 });
+			toast.success(`${dish?.name} added to cart!`, { autoClose: 2000 });
 		} catch (error) {
 			console.error("Error adding to cart:", error);
 			toast.error("Failed to add item to cart.", { autoClose: 2000 });
@@ -118,7 +118,7 @@ export const SearchBar = () => {
 									<div className="flex items-center space-x-4">
 										<img
 											src={`${imageUrl}${dish?.image_url}`}
-											alt={dish.name}
+											alt={dish?.name}
 											className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-md shadow-sm hover:scale-105 transition-transform"
 											onClick={(e) => {
 												e.stopPropagation();
@@ -136,7 +136,7 @@ export const SearchBar = () => {
 													navigate(`/food/${dish.menu_item_id}`);
 												}}
 											>
-												{dish.name}
+												{dish?.name}
 											</h2>
 											<p className="text-gray-600 text-sm">
 												Cook:{" "}
@@ -175,7 +175,7 @@ export const SearchBar = () => {
 											handleAddToCart(dish);
 										}}
 										disabled={loadingCartItem === dish.menu_item_id}
-										aria-label={`Add ${dish.name} to cart`}
+										aria-label={`Add ${dish?.name} to cart`}
 									>
 										{loadingCartItem === dish.menu_item_id
 											? "Adding..."

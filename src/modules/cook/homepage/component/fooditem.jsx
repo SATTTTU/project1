@@ -6,23 +6,22 @@ export const FoodItem = ({ item, onToggleAvailability }) => {
   const imageUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
   return (
-    <div className="rounded-lg bg-white shadow-sm overflow-hidden hover:shadow-md transition-all">
-      <div className="relative">
-        <img
-          src={item?.image_url ? `${imageUrl}${item.image_url}` : Dishes}
-                         alt={item.name || "Dish"}
-                         className="w-full h-full object-cover"
-          loading="lazy"
-        />
-        <span className="absolute top-2 right-2 px-2 py-1 text-xs rounded-full bg-white font-medium">
-          ★ {item.popularityRating || 0}
-        </span>
-      
-      </div>
+		<div className="rounded-lg bg-white shadow-sm overflow-hidden hover:shadow-md transition-all">
+			<div className="relative">
+				<img
+					src={item?.image_url ? `${imageUrl}${item.image_url}` : Dishes}
+					alt={item?.name || "Dish"}
+					className="w-full h-full object-cover"
+					loading="lazy"
+				/>
+				<span className="absolute top-2 right-2 px-2 py-1 text-xs rounded-full bg-white font-medium">
+					★ {item.popularityRating || 0}
+				</span>
+			</div>
 
-      <div className="p-4">
-        {/* <div className="flex justify-between items-start">
-          <h3 className="text-lg font-semibold">{item.name}</h3>
+			<div className="p-4">
+				{/* <div className="flex justify-between items-start">
+          <h3 className="text-lg font-semibold">{item?.name}</h3>
           <label className="relative inline-flex items-center cursor-pointer">
             <input
               type="checkbox"
@@ -34,17 +33,18 @@ export const FoodItem = ({ item, onToggleAvailability }) => {
           </label>
         </div> */}
 
-        <p className="mt-1 text-sm text-gray-500 line-clamp-2">
-          {item.description || "No description available"}
-        </p>
-        
-        <div className="mt-2 text-xs text-gray-500">{item.orderCount || 0} orders this month</div>
+				<p className="mt-1 text-sm text-gray-500 line-clamp-2">
+					{item.description || "No description available"}
+				</p>
 
-        <div className="mt-3 flex items-center justify-between">
-          <span className="text-lg font-bold">₹{item.price}</span>
-          
-        </div>
-      </div>
-    </div>
-  );
+				<div className="mt-2 text-xs text-gray-500">
+					{item.orderCount || 0} orders this month
+				</div>
+
+				<div className="mt-3 flex items-center justify-between">
+					<span className="text-lg font-bold">₹{item.price}</span>
+				</div>
+			</div>
+		</div>
+	);
 };

@@ -33,15 +33,15 @@ export const UserList = ({ search = "", currentPage = 1, rowsPerPage = 5, onPage
 
   // Render row function
   const renderRow = (user) => (
-    <tr
-      key={user.id}
-      className="text-center border border-gray-300 odd:bg-white even:bg-gray-50 text-base text-gray-800"
-    >
-      <td className="p-3">{user.id}</td>
-      <td className="p-3">{user.name}</td>
-      <td className="p-3">{user.email}</td>
-    </tr>
-  );
+		<tr
+			key={user.id}
+			className="text-center border border-gray-300 odd:bg-white even:bg-gray-50 text-base text-gray-800"
+		>
+			<td className="p-3">{user.id}</td>
+			<td className="p-3">{user?.name}</td>
+			<td className="p-3">{user.email}</td>
+		</tr>
+	);
 
   // Loading and error states
   if (isLoading) return <p>Loading users...</p>;

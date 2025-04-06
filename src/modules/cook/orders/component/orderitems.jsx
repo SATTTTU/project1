@@ -18,23 +18,23 @@ export const OrderItems = ({ items }) => {
   );
 
   return (
-    <div className="mt-4 pt-4 border-t">
-      <h4 className="text-sm font-bold mb-2">Order Items</h4>
-      <div className="space-y-2">
-        {items.map((item, index) => (
-          <div key={index} className="flex justify-between text-sm">
-            <span>
-              {item.menu_item?.name || item.name || `Item #${index + 1}`}{" "}
-              <span className="text-gray-500">x{item.quantity}</span>
-            </span>
-            <span>Rs. {item.price * item.quantity}</span>
-          </div>
-        ))}
-        <div className="flex justify-between pt-2 mt-2 border-t border-dashed">
-          <span className="font-bold">Total</span>
-          <span className="font-bold">₹{orderTotal.toFixed(2)}</span>
-        </div>
-      </div>
-    </div>
-  );
+		<div className="mt-4 pt-4 border-t">
+			<h4 className="text-sm font-bold mb-2">Order Items</h4>
+			<div className="space-y-2">
+				{items.map((item, index) => (
+					<div key={index} className="flex justify-between text-sm">
+						<span>
+							{item.menu_item?.name || item?.name || `Item #${index + 1}`}{" "}
+							<span className="text-gray-500">x{item.quantity}</span>
+						</span>
+						<span>Rs. {item.price * item.quantity}</span>
+					</div>
+				))}
+				<div className="flex justify-between pt-2 mt-2 border-t border-dashed">
+					<span className="font-bold">Total</span>
+					<span className="font-bold">₹{orderTotal.toFixed(2)}</span>
+				</div>
+			</div>
+		</div>
+	);
 };

@@ -7,7 +7,9 @@ const editAdminProfile = async (adminData) => {
   if (adminData instanceof FormData) {
     console.log("FormData contents:");
     for (let [key, value] of adminData.entries()) {
-      console.log(`${key}: ${value instanceof File ? `File: ${value.name}` : value}`);
+      console.log(
+				`${key}: ${value instanceof File ? `File: ${value?.name}` : value}`
+			);
     }
   }
   

@@ -14,9 +14,9 @@ export const createCategory = async (data) => {
     const method = data.action === "update" ? "put" : "post";
 
     const response = await api[method](endpoint, {
-      name: data.name,
-      description: data.description,
-    });
+			name: data?.name,
+			description: data.description,
+		});
 
     console.log("✅ API Response:", response);
     return response.data; // Return the category data from the response

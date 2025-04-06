@@ -29,13 +29,15 @@ export const CookProfileHeader = ({ cook, isFavorite, toggleFavorite }) => {
 					<div className="md:w-1/4">
 						<img
 							src={cook.img}
-							alt={cook.name}
+							alt={cook?.name}
 							className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white shadow-lg -mt-16 md:-mt-20 mx-auto md:mx-0"
 						/>
 					</div>
 
 					<div className="md:w-3/4 mt-4 md:mt-0 text-center md:text-left">
-						<h1 className="text-2xl md:text-3xl text-[#426B1F] font-bold">{cook.name}</h1>
+						<h1 className="text-2xl md:text-3xl text-[#426B1F] font-bold">
+							{cook?.name}
+						</h1>
 
 						<div className="flex items-center justify-center md:justify-start mt-2">
 							<div className="flex items-center text-yellow-500 mr-2">

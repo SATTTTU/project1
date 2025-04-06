@@ -81,14 +81,14 @@ export const useAdminProfileEditFormik = () => {
         const formData = new FormData();
         
         // Add text fields
-        formData.append('name', values.name);
-        formData.append('mobile', values.mobile);
-        
-        // Only append the image if it's a File object
-        if (values.image instanceof File) {
-          formData.append('image', values.image);
-          console.log("Uploading file:", values.image.name, values.image.type);
-        }
+        formData.append("name", values?.name);
+				formData.append("mobile", values.mobile);
+
+				// Only append the image if it's a File object
+				if (values.image instanceof File) {
+					formData.append("image", values.image);
+					console.log("Uploading file:", values.image?.name, values.image.type);
+				}
         
         // Submit the form
         await editProfile(formData);

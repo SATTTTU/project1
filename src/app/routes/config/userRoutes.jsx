@@ -3,11 +3,7 @@ import { AppRootErrorBoundary, AuthRoot } from "../app/root";
 import { Outlet } from "react-router-dom";
 import ProtectedRoute from "./protectedRoute";
 
-// Remove static imports of these components
-// import ProfileLayout from "../user/userprofile/profile";
-// import { ProfileContent } from "@/modules/user/userprofile/components/profileContent";
-// import SettingsContent from "@/modules/user/userprofile/components/settingContent";
-// import OrdersContent from "@/modules/user/userprofile/components/ordersContent";
+
 
 export const userRoutes = [
 	{

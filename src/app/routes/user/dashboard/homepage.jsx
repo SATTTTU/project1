@@ -32,7 +32,7 @@ export const Homepage = () => {
       addToCart({
         productId: item.productId,
         quantity: 1,
-        name: item.name,
+        name: item?.name,
         price: item.price,
         img: item.img,
       })

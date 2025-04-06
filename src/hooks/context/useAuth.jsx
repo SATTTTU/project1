@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useEffect, useState } from "react"
 import { getToken, getCurrentUserType } from "@/lib/api-client"
 
@@ -6,23 +7,33 @@ const AuthContext = createContext()
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [userType, setUserType] = useState(null) // Store userType in state
 
-  // Load userType when component mounts
+  // Load authentication state on initial render
+
+
   useEffect(() => {
-    console.log("The cureent user type",getCurrentUserType())
-    setUserType(getCurrentUserType()) // Fetch userType and store it in state
-  }, [])
+    const handleStorageChange = (event) => {
+      if (event.key === 'auth_token' || event.key === 'active_user') {
+        const newUser = JSON.parse(localStorage.getItem('active_user') || '{}');
+        setUser((prevUser) => ({
+          ...prevUser,
+          type: newUser.type, // only update the type
+        }));
+      }
+    };
+  
+    window.addEventListener('storage', handleStorageChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
-  // Load authentication state when userType changes
+
   useEffect(() => {
-    if (userType === null) return // Prevent running on initial mount
-
-    const loadAuthState = () => {
+  const loadAuthState = () => {
       try {
-        const token = getToken() 
-
-        console.log("userType is ", userType)
+        const token = getToken() // Use the getToken function from api-client
+        const userType = getCurrentUserType()
 
         if (token && userType) {
           setUser({ type: userType, token })
@@ -40,7 +51,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     loadAuthState()
-  }, [userType]) // Now userType is in state, so useEffect runs when it changes
+  }, [])
 
   const login = (userData, token) => {
     if (!userData?.type || !token) {
@@ -50,12 +61,11 @@ export const AuthProvider = ({ children }) => {
 
     console.log(`Setting user in auth context: ${userData.type}`)
     setUser({ type: userData.type, token })
-    setUserType(userData.type) // Update userType when logging in
+
   }
 
   const logout = () => {
     setUser(null)
-    setUserType(null) // Reset userType on logout
     // Note: Token removal is handled by the clearAuthData function in api-client
   }
 
@@ -75,6 +85,7 @@ export const AuthProvider = ({ children }) => {
         checkPermission,
         login,
         logout,
+        setUser
       }}
     >
       {children}
@@ -85,3 +96,4 @@ export const AuthProvider = ({ children }) => {
 export const useAuth = () => {
   return useContext(AuthContext)
 }
+

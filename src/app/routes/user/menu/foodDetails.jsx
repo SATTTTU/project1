@@ -57,14 +57,14 @@ export const FoodDetails = () => {
   const toggleFavorite = () => {
     setIsFavorite(!isFavorite);
     toast.success(
-      isFavorite
-        ? `Removed ${food.name} from favorites`
-        : `Added ${food.name} to favorites`,
-      {
-        position: "bottom-right",
-        autoClose: 2000,
-      }
-    );
+			isFavorite
+				? `Removed ${food?.name} from favorites`
+				: `Added ${food?.name} to favorites`,
+			{
+				position: "bottom-right",
+				autoClose: 2000,
+			}
+		);
   };
 
   return (

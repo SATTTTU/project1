@@ -19,7 +19,7 @@ const createCategoryItem = async (data) => {
     let requestData;
     if (data.image instanceof File) {
       const formData = new FormData();
-      formData.append("name", data.name);
+      formData.append("name", data?.name);
       formData.append("description", data.description);
       formData.append("price", data.price.toString());
       formData.append("image", data.image);
@@ -27,7 +27,7 @@ const createCategoryItem = async (data) => {
       requestData = formData;
     } else {
       requestData = {
-        name: data.name,
+        name: data?.name,
         description: data.description,
         price: data.price,
         category_id: data.category_id,

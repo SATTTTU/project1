@@ -182,69 +182,69 @@ const MultiStepForm = () => {
   }
 
   return (
-    <div className="w-3/4 mx-auto p-6 pt-10 bg-white rounded-lg shadow-md">
-      <ToastContainer />
-      <Stepper
-        currentStep={currentStep}
-        steps={["Citizenship", "Certificates", "Terms"]}
-      />
+		<div className="w-3/4 mx-auto p-6 pt-10 bg-white rounded-lg shadow-md">
+			<ToastContainer />
+			<Stepper
+				currentStep={currentStep}
+				steps={["Citizenship", "Certificates", "Terms"]}
+			/>
 
-      {userData && (
-        <div className="mb-4 p-3 bg-green-50 rounded-md">
-          <h3 className="font-medium text-green-800">
-            Welcome, {userData.name}
-          </h3>
-          <p className="text-sm text-green-700">Email: {userData.email}</p>
-        </div>
-      )}
+			{userData && (
+				<div className="mb-4 p-3 bg-green-50 rounded-md">
+					<h3 className="font-medium text-green-800">
+						Welcome, {userData?.name}
+					</h3>
+					<p className="text-sm text-green-700">Email: {userData.email}</p>
+				</div>
+			)}
 
-      <form onSubmit={handleSubmit} className="mt-8">
-        {renderStep()}
+			<form onSubmit={handleSubmit} className="mt-8">
+				{renderStep()}
 
-        {formik.errors.submit && (
-          <div className="text-red-500 mt-4">{formik.errors.submit}</div>
-        )}
+				{formik.errors.submit && (
+					<div className="text-red-500 mt-4">{formik.errors.submit}</div>
+				)}
 
-        <div className="flex justify-between mt-8">
-          {currentStep > 1 && (
-            <button
-              type="button"
-              onClick={handlePrevious}
-              className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
-              disabled={formik.isSubmitting || isRegistering}
-            >
-              Back
-            </button>
-          )}
+				<div className="flex justify-between mt-8">
+					{currentStep > 1 && (
+						<button
+							type="button"
+							onClick={handlePrevious}
+							className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+							disabled={formik.isSubmitting || isRegistering}
+						>
+							Back
+						</button>
+					)}
 
-          {isLastStep ? (
-            <button
-              type="submit"
-              className="px-4 py-2 bg-[#426B1F] text-white rounded hover:bg-[#426B1G] flex items-center"
-              disabled={formik.isSubmitting || isRegistering}
-            >
-              {formik.isSubmitting || isRegistering
-                ? "Submitting..."
-                : "Submit"}
-              {!(formik.isSubmitting || isRegistering) && (
-                <ChevronRight className="ml-1 h-4 w-4" />
-              )}
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={handleNext}
-              className="px-4 py-2 bg-[#426B1F] text-white rounded hover:bg-[#426B1H] flex items-center"
-              disabled={formik.isSubmitting || isRegistering}
-            >
-              Next
-              <ChevronRight className="ml-1 h-4 w-4" />
-            </button>
-          )}
-        </div>
-      </form>
-    </div>
-  );
+					{isLastStep ? (
+						<button
+							type="submit"
+							className="px-4 py-2 bg-[#426B1F] text-white rounded hover:bg-[#426B1G] flex items-center"
+							disabled={formik.isSubmitting || isRegistering}
+						>
+							{formik.isSubmitting || isRegistering
+								? "Submitting..."
+								: "Submit"}
+							{!(formik.isSubmitting || isRegistering) && (
+								<ChevronRight className="ml-1 h-4 w-4" />
+							)}
+						</button>
+					) : (
+						<button
+							type="button"
+							onClick={handleNext}
+							className="px-4 py-2 bg-[#426B1F] text-white rounded hover:bg-[#426B1H] flex items-center"
+							disabled={formik.isSubmitting || isRegistering}
+						>
+							Next
+							<ChevronRight className="ml-1 h-4 w-4" />
+						</button>
+					)}
+				</div>
+			</form>
+		</div>
+	);
 };
 
 export default MultiStepForm;

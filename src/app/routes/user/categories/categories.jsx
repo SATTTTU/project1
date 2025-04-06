@@ -30,79 +30,86 @@ export const CategoryPage = () => {
   const [addedToCart, setAddedToCart] = useState(null);
 
   useEffect(() => {
-    const categoryData = categoriesData.find((c) => c.id === Number.parseInt(id));
-    if (categoryData) {
-      setCategory(categoryData);
+		const categoryData = categoriesData.find(
+			(c) => c.id === Number.parseInt(id)
+		);
+		if (categoryData) {
+			setCategory(categoryData);
 
-      const categoryItems = allFoodItems.filter(
-        (item) => item.category.toLowerCase() === categoryData.name.toLowerCase()
-      );
-      setItems(categoryItems);
-      setFilteredItems(categoryItems);
-    }
+			const categoryItems = allFoodItems.filter(
+				(item) =>
+					item.category.toLowerCase() === categoryData?.name.toLowerCase()
+			);
+			setItems(categoryItems);
+			setFilteredItems(categoryItems);
+		}
 
-    window.scrollTo(0, 0);
-  }, [id]);
+		window.scrollTo(0, 0);
+	}, [id]);
 
-  useEffect(() => {
-    if (!items.length) return;
+	useEffect(() => {
+		if (!items.length) return;
 
-    let result = [...items];
+		let result = [...items];
 
-    result = result.filter((item) => {
-      const price = Number.parseFloat(item.price);
-      return price >= priceRange[0] && price <= priceRange[1];
-    });
+		result = result.filter((item) => {
+			const price = Number.parseFloat(item.price);
+			return price >= priceRange[0] && price <= priceRange[1];
+		});
 
-    if (ratingFilter > 0) {
-      result = result.filter((item) => item.rating >= ratingFilter);
-    }
+		if (ratingFilter > 0) {
+			result = result.filter((item) => item.rating >= ratingFilter);
+		}
 
-    switch (sortOption) {
-      case "price-low-high":
-        result.sort((a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price));
-        break;
-      case "price-high-low":
-        result.sort((a, b) => Number.parseFloat(b.price) - Number.parseFloat(a.price));
-        break;
-      case "rating":
-        result.sort((a, b) => b.rating - a.rating);
-        break;
-      default:
-        break;
-    }
+		switch (sortOption) {
+			case "price-low-high":
+				result.sort(
+					(a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
+				);
+				break;
+			case "price-high-low":
+				result.sort(
+					(a, b) => Number.parseFloat(b.price) - Number.parseFloat(a.price)
+				);
+				break;
+			case "rating":
+				result.sort((a, b) => b.rating - a.rating);
+				break;
+			default:
+				break;
+		}
 
-    setFilteredItems(result);
-  }, [items, priceRange, ratingFilter, sortOption]);
+		setFilteredItems(result);
+	}, [items, priceRange, ratingFilter, sortOption]);
 
-  useEffect(() => {
-    if (addedToCart) {
-      const timer = setTimeout(() => {
-        setAddedToCart(null);
-      }, 1500);
+	useEffect(() => {
+		if (addedToCart) {
+			const timer = setTimeout(() => {
+				setAddedToCart(null);
+			}, 1500);
 
-      return () => clearTimeout(timer);
-    }
-  }, [addedToCart]);
+			return () => clearTimeout(timer);
+		}
+	}, [addedToCart]);
 
-  const handleAddToCart = (item) => {
-    dispatch(
-      addToCart({
-        productId: item.id,
-        quantity: 1,
-        name: item.name,
-        price: item.price,
-        img: item.img,
-      })
-    );
+	const handleAddToCart = (item) => {
+		dispatch(
+			addToCart({
+				productId: item.id,
+				quantity: 1,
+				name: item?.name,
+				price: item.price,
+				img: item.img,
+			})
+		);
 
-    setAddedToCart(item.id);
+		setAddedToCart(item.id);
 
-    toast.success(`${item.name} added to cart!`, {
-      position: "bottom-right",
-      autoClose: 2000,
-    });
-  };
+		toast.success(`${item?.name} added to cart!`, {
+			position: "bottom-right",
+			autoClose: 2000,
+		});
+	};
 
   if (!category) {
     return (

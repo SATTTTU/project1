@@ -36,18 +36,18 @@ export const CookProfile = () => {
   const handleAddToCart = (dish) => {
     if (!dish) return;
     dispatch(
-      addToCart({
-        productId: dish.id,
-        quantity: 1,
-        name: dish.name,
-        price: dish.price,
-        img: dish.img,
-      })
-    );
-    toast.success(`${dish.name} added to cart!`, {
-      position: "bottom-right",
-      autoClose: 2000,
-    });
+			addToCart({
+				productId: dish.id,
+				quantity: 1,
+				name: dish?.name,
+				price: dish.price,
+				img: dish.img,
+			})
+		);
+		toast.success(`${dish?.name} added to cart!`, {
+			position: "bottom-right",
+			autoClose: 2000,
+		});
   };
 
   if (isLoading) return <LoadingSkeleton />;

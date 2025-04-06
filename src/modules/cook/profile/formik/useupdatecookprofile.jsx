@@ -68,14 +68,14 @@ export const UseProfileFormik = () => {
         const formData = new FormData();
 
         // Add text fields
-        formData.append("name", values.name);
-        formData.append("phone", values.mobile);
+        formData.append("name", values?.name);
+				formData.append("phone", values.mobile);
 
-        // Only append the image if it's a File object
-        if (values.image instanceof File) {
-          formData.append("image", values.image);
-          console.log("Uploading file:", values.image.name, values.image.type);
-        }
+				// Only append the image if it's a File object
+				if (values.image instanceof File) {
+					formData.append("image", values.image);
+					console.log("Uploading file:", values.image?.name, values.image.type);
+				}
 
         // Submit the form
         await editProfile(formData);

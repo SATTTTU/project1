@@ -19,10 +19,10 @@ export const LoginForm = () => {
         
         // Store user data in localStorage
         const userData = {
-          id: data.id,
-          name: data.name,
-          email: data.email
-        };
+					id: data.id,
+					name: data?.name,
+					email: data.email,
+				};
         
         if (rememberMe) {
           localStorage.setItem('userData', JSON.stringify(userData));

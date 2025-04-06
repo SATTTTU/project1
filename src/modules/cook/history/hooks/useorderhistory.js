@@ -15,12 +15,12 @@ export const useOrderHistory = () => {
       // Search filter
       const searchLower = searchQuery.toLowerCase();
       const matchesSearch =
-        searchQuery === "" ||
-        item.id.toLowerCase().includes(searchLower) ||
-        item.customerName.toLowerCase().includes(searchLower) ||
-        item.items.some((food) =>
-          food.name.toLowerCase().includes(searchLower)
-        );
+				searchQuery === "" ||
+				item.id.toLowerCase().includes(searchLower) ||
+				item.customerName.toLowerCase().includes(searchLower) ||
+				item.items.some((food) =>
+					food?.name.toLowerCase().includes(searchLower)
+				);
 
       // Time filter
       let matchesTime = true;
