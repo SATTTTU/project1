@@ -1,7 +1,7 @@
 import CookNavBAr from "@/components/ui/cooknavbar/cooknavbar";
 import { useProfile } from "@/modules/cook/profile/api/getcookprofile";
 import AccountSettings from "@/modules/cook/profile/component/accountsSettings";
-import AchievementsExperience from "@/modules/cook/profile/component/achivementsExperience";
+// import AchievementsExperience from "@/modules/cook/profile/component/achivementsExperience";
 
 import { ProfileCard } from "@/modules/cook/profile/component/cookprofile";
 import IntroductionVideo from "@/modules/cook/profile/component/introductionVideo";
@@ -30,7 +30,7 @@ export const ProfileRoute = () => {
       </video>
     </div> */}
           <IntroductionVideo initialVideo={userData?.intro_video_url} />
-          <AchievementsExperience userData={userData} />
+          {/* <AchievementsExperience userData={userData} /> */}
           <AccountSettings />
         </main>
       </div>
