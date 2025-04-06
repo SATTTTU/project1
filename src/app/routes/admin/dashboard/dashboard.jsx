@@ -9,6 +9,8 @@ import { ProfileAvatar } from "@/modules/admin/dashboard/components/avatar";
 import { Link } from "react-router-dom";
 import { ProfileCard } from "@/modules/admin/editProfile/components/profilecard";
 import { Usegettotalearning } from "@/modules/admin/payment/api/gettotalearning";
+import { useGetTotalCooks, useGetTotalOrders, useGetTotalUsers } from "@/modules/admin/dashboard/api/getstats";
+import { useGetPopularCooks } from "@/modules/admin/dashboard/api/get-top-cooks";
 
 // Custom hook to detect clicks outside a specified element
 const useOutsideClick = (ref, callback) => {
@@ -37,32 +39,86 @@ export const AdminDashboardRoute = React.memo(() => {
   
   // Fetch total earnings data
   const { data: earningsData, isLoading: earningsLoading, error: earningsError } = Usegettotalearning();
+  const { data: usersData, isLoading: usersLoading } = useGetTotalUsers();
+  const { data: cooksData, isLoading: cooksLoading } = useGetTotalCooks();
+  const { data: ordersData, isLoading: ordersLoading } = useGetTotalOrders();
+  const { data: topCooks, isLoading, error } = useGetPopularCooks();
+  
 
-console.log("Earnings Data:", earningsData);
 
 
   const dashboardStats = React.useMemo(() => {
-    const formattedEarnings = earningsLoading || earningsError 
-  ? "Loading..." 
-  : `Rs${earningsData?.totalEarnings?.toLocaleString() || "0"}`;
-
-const earningIncrease = earningsLoading || earningsError
-  ? "..." 
-  : `+${earningsData?.percentageIncrease || "0"}%`;
-      
+    const formattedEarnings =
+      earningsLoading || earningsError
+        ? "Loading..."
+        : `Rs${earningsData?.totalEarnings?.toLocaleString() || "0"}`;
+  
+    const earningIncrease =
+      earningsLoading || earningsError
+        ? "..."
+        : `+${earningsData?.percentageIncrease || "0"}%`;
+  
+        const formattedUsers = usersLoading ? "Loading..." : usersData?.toLocaleString();
+        const formattedCooks = cooksLoading ? "Loading..." : cooksData?.toLocaleString();
+        const formattedOrders = ordersLoading ? "Loading..." : ordersData?.toLocaleString();
+        
+  
     return [
-      { icon: <FaUsers className="text-blue-500 text-2xl" />, title: "Total Users", value: "1,254", increase: "+12.5%", timeFrame: "this month" },
-      { icon: <FaUtensils className="text-green-500 text-2xl" />, title: "Active Cooks", value: "328", increase: "+8.2%", timeFrame: "this month" },
-      { icon: <FaMoneyBillWave className="text-purple-500 text-2xl" />, title: "Total Revenue", value: formattedEarnings, increase: earningIncrease, timeFrame: "this month" },
-      { icon: <FaClipboardList className="text-orange-500 text-2xl" />, title: "Total Orders", value: "856", increase: "+10.7%", timeFrame: "today" },
+      {
+        icon: <FaUsers className="text-blue-500 text-2xl" />,
+        title: "Total Users",
+        value: formattedUsers,
+        increase: "+12.5%", // Optional: you can fetch this too if available
+        timeFrame: "this month",
+      },
+      {
+        icon: <FaUtensils className="text-green-500 text-2xl" />,
+        title: "Active Cooks",
+        value: formattedCooks,
+        increase: "+8.2%",
+        timeFrame: "this month",
+      },
+      {
+        icon: <FaMoneyBillWave className="text-purple-500 text-2xl" />,
+        title: "Total Revenue",
+        value: formattedEarnings,
+        increase: earningIncrease,
+        timeFrame: "this month",
+      },
+      {
+        icon: <FaClipboardList className="text-orange-500 text-2xl" />,
+        title: "Total Orders",
+        value: formattedOrders,
+        increase: "+10.7%",
+        timeFrame: "today",
+      },
     ];
-  }, [earningsData, earningsLoading, earningsError]);
-
-  const topCooks = React.useMemo(() => [
-    { name: "Meera's Kitchen", rating: 4.8, orders: 156, earnings: "₹25,400" },
-    { name: "Spice Garden", rating: 4.7, orders: 142, earnings: "₹22,800" },
-    { name: "Home Flavours", rating: 4.6, orders: 128, earnings: "₹20,500" },
-  ], []);
+  }, [
+    earningsData,
+    earningsLoading,
+    earningsError,
+    usersData,
+    usersLoading,
+    cooksData,
+    cooksLoading,
+    ordersData,
+    ordersLoading,
+  ]);
+  
+  const formattedTopCooks = React.useMemo(() => {
+    if (!topCooks || isLoading || error) return [];
+  
+    return topCooks
+      .filter((entry) => entry.cook !== null)
+      .map((entry) => ({
+        name: entry.cook.name,
+        rating: entry.cook.rating ?? 0,
+        orders: entry.cook.total_orders ?? 0,
+        earnings: `₹${Number(entry.total_revenue).toLocaleString()}`,
+      }));
+  }, [topCooks, isLoading, error]);
+  
+  
 
   const notifications = [
     { id: 1, message: "New order placed by customer #1023" },
@@ -151,7 +207,7 @@ const earningIncrease = earningsLoading || earningsError
               <StatsCard key={index} {...stat} delay={index} />
             ))}
           </div>
-          <TopCooksList cooks={topCooks} />
+          <TopCooksList cooks={formattedTopCooks} />
         </main>
       </div>
     </div>

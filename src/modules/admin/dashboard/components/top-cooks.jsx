@@ -26,18 +26,12 @@ export const TopCooksList = ({ cooks }) => {
 							<span className="text-base font-medium text-gray-900">
 								{cook?.name}
 							</span>
-							<div className="flex items-center mt-1">
-								<span className="text-lg text-yellow-500">★</span>
-								<span className="text-sm text-gray-500 ml-1">
-									{cook.rating}
-								</span>
-							</div>
+							
 						</div>
 						<div className="text-right">
 							<span className="text-base font-medium text-gray-900">
 								{cook.earnings}
 							</span>
-							<p className="text-sm text-gray-500">{cook.orders} orders</p>
 						</div>
 					</div>
 				))}

@@ -55,7 +55,7 @@ export const Sidebar = () => {
         } md:translate-x-0 md:relative md:flex flex-col border-l border-gray-200`}
       >
         {/* Header */}
-        <Link to="/user/home" className="flex items-center p-6">
+        <Link to="/admin/dashboard" className="flex items-center p-6">
           <div className="h-5 w-10 flex items-center justify-center">
             <img src={logo} alt="Logo" />
           </div>
