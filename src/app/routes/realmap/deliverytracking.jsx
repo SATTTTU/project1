@@ -4,8 +4,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { io } from "socket.io-client";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
-import RoutingMachine from "@/modules/rider/components/RoutingMachine";
-
+import RoutingMAchine from "@/components/layout/realtime-map/RoutingMachine/RoutingMAchine";
 // Fix Leaflet icon issue
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -373,7 +372,7 @@ const DeliveryTracking = ({ orderId }) => {
 
             {/* Add RoutingMachine for optimized routing */}
             {routeWaypoints.length >= 2 && (
-              <RoutingMachine waypoints={routeWaypoints} />
+              <RoutingMAchine waypoints={routeWaypoints} />
             )}
 
             <MapUpdater center={primaryLocation} />

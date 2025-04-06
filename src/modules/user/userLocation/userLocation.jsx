@@ -9,8 +9,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import { io } from "socket.io-client";
 import L from "leaflet";
-import RoutingMachine from "@/modules/rider/components/RoutingMachine";
-
+import RoutingMAchine from "@/components/layout/realtime-map/RoutingMachine/RoutingMAchine";
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -43,7 +42,7 @@ const MapUpdater = ({ center }) => {
 };
 
 export const UserLocation = ({ orderId }) => {
-  const [orderData, setOrderData] = useState(null);
+  const [, setOrderData] = useState(null);
   const [cookLocation, setCookLocation] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
   const [riderLocation, setRiderLocation] = useState(null);
@@ -181,11 +180,9 @@ export const UserLocation = ({ orderId }) => {
     );
   }
 
-  // Default center if userLocation is not available
   const defaultCenter = { lat: 27.7172, lng: 85.324 }; // Kathmandu coordinates as fallback
   const mapCenter = userLocation || cookLocation || riderLocation || defaultCenter;
 
-  // Prepare waypoints for RoutingMachine
   const getRestaurantToUserWaypoints = () => {
     if (cookLocation?.lat && cookLocation?.lng && userLocation?.lat && userLocation?.lng) {
       return [
@@ -270,12 +267,13 @@ export const UserLocation = ({ orderId }) => {
 
             {/* Restaurant to User Route - show only if rider route not available */}
             {restaurantUserWaypoints.length > 0 && riderUserWaypoints.length === 0 && (
-              <RoutingMachine waypoints={restaurantUserWaypoints} />
+              <RoutingMAchine
+              waypoints={restaurantUserWaypoints} />
             )}
 
             {/* Rider to User Route - priority over restaurant route */}
             {riderUserWaypoints.length > 0 && (
-              <RoutingMachine waypoints={riderUserWaypoints} />
+              <RoutingMAchine waypoints={riderUserWaypoints} />
             )}
 
             {riderLocation?.lat && riderLocation?.lng && (
