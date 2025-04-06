@@ -50,37 +50,26 @@ export const CooksRoute = () => {
     // Apply name search filter
     if (search) {
       result = result.filter((cook) =>
-				cook?.name.toLowerCase().includes(search.toLowerCase())
-			);
+        cook?.name?.toLowerCase().includes(search.toLowerCase())
+      );
     }
 
-    // Apply status filter
+    // Apply status filter - only using approval_status
     if (statusFilter !== "all") {
-      result = result.filter(cook => {
-        const status = cook.available_status || cook.approval_status;
-        
-        if (statusFilter === "verified") {
-          return status === "verified" || status === "online";
-        } else if (statusFilter === "under-review") {
-          return status === "under-review" || status === "offline";
-        } else if (statusFilter === "rejected") {
-          return status === "rejected";
-        }
-        return true;
-      });
+      result = result.filter(cook => cook.approval_status === statusFilter);
     }
 
     // Apply rating filter
     if (ratingFilter !== "all") {
       result = result.filter(cook => {
-        const rating = cook.average_rating || 0;
+        const rating = parseFloat(cook.average_rating) || 0;
         
         if (ratingFilter === "no-rating") {
-          return rating === 0 || rating === null || rating === undefined;
+          return rating === 0;
         } else if (ratingFilter === "low") {
-          return rating > 0 && rating < 2;
+          return rating > 0 && rating < 3;
         } else if (ratingFilter === "medium") {
-          return rating >= 2 && rating < 4;
+          return rating >= 3 && rating < 4;
         } else if (ratingFilter === "high") {
           return rating >= 4;
         }

@@ -13,9 +13,9 @@ const CookFilters = ({ search, setSearch, statusFilter, setStatusFilter, ratingF
       <Select
         options={[
           { label: "All Status", value: "all" },
-          { label: "Verified", value: "verified" },
-          { label: "Pending", value: "under-review" },
-          { label: "Rejected", value: "rejected" },
+          { label: "Approved", value: "approved" },
+          { label: "Under Review", value: "under-review" },
+          { label: "Rejected", value: "rejected" }
         ]}
         value={statusFilter}
         onChange={(e) => setStatusFilter(e.target.value)}
@@ -24,8 +24,8 @@ const CookFilters = ({ search, setSearch, statusFilter, setStatusFilter, ratingF
         options={[
           { label: "All Ratings", value: "all" },
           { label: "No Rating", value: "no-rating" },
-          { label: "Less than 2 stars", value: "low" },
-          { label: "2 to 4 stars", value: "medium" },
+          { label: "Less than 3 stars", value: "low" },
+          { label: "3 to 4 stars", value: "medium" },
           { label: "4+ stars", value: "high" },
         ]}
         value={ratingFilter}
