@@ -109,7 +109,6 @@ export const UserLocation = ({ orderId }) => {
     const handleRiderLocation = (data, room) => {
       console.log("Received rider location:", data, "Room:", room);
 
-      // Accept data regardless of room to debug
       if (
         data &&
         typeof data.lat === "number" &&
