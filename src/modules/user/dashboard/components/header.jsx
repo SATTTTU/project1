@@ -16,7 +16,7 @@ export const Header = ({ navigate, popularItems, categories, cooks }) => {
 	const [showProfileMenu, setShowProfileMenu] = useState(false);
 	const [showLogoutModal, setShowLogoutModal] = useState(false);
 	const profileRef = useRef(null);
-	const imageBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
+	// const imageBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
   
 	const { data: profile, isLoading: isProfileLoading, isError } = useProfile();
 	const { mutateAsync: logout, isLoading: isLoggingOut } = useUserLogout();
@@ -65,7 +65,7 @@ export const Header = ({ navigate, popularItems, categories, cooks }) => {
 				<div className="flex items-center justify-between">
 					<Link to="/dashboard" className="flex items-center">
 						<img src={Logo} alt="Khajabox" className="h-8 w-8 mr-2" />
-						<span className="text-3xl font-bold text-green-600">Khajabox</span>
+						<span className="text-3xl font-bold text-green-600">KhajaBox</span>
 					</Link>
 
 					<div className="hidden lg:block w-full max-w-lg">
