@@ -32,11 +32,18 @@ export const OrderItem = ({ order }) => {
       </div>
 
       <div className="p-6">
-        <h3 className="font-semibold text-xl mb-4 text-gray-800 border-b border-slate-300 pb-2">Order Items
-        <span className="flex justify-end text-sm text-gray-500 mb-4">
-            <Link to={`/track-order/${order?.order_id}`}>Track Orders</Link>
-          </span>
-        </h3>
+      <h3 className="font-semibold text-xl mb-4 text-gray-800 border-b border-slate-300 pb-2">
+  Order Items
+  <span className="flex justify-end mt-2">
+    <Link
+      to={`/track-order/${order?.order_id}`}
+      className="inline-block bg-green-600 text-white text-sm font-medium px-4 py-2 rounded-md hover:bg-green-600 transition duration-300"
+    >
+      Track My Order
+    </Link>
+  </span>
+</h3>
+
        
         <div className="space-y-4">
           {order.items.map((item, index) => (
