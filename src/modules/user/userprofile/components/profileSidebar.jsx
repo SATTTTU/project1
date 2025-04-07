@@ -26,7 +26,7 @@ export const ProfileSidebar = ({ activeTab, setActiveTab, handleLogout }) => {
 						<button
 							className={`w-full text-left p-2 rounded-md ${
 								activeTab === item.path.split("/").pop()
-									? "bg-[#426B1F] text-white"
+									? "bg-[#0e9300] text-white"
 									: "text-gray-700"
 							}`}
 							onClick={() => {

@@ -53,7 +53,7 @@ export const ChangePasswordForm = () => {
 
       <button
         type="submit"
-        className="w-full bg-[#426B1F] text-white py-2 rounded-md hover:bg-green-900"
+        className="w-full bg-[#0e9300] text-white py-2 rounded-md hover:bg-green-900"
         disabled={formik.isSubmitting}
       >
         {formik.isSubmitting ? "Changing..." : "Change Password"}
