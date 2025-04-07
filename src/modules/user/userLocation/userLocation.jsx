@@ -256,10 +256,21 @@ export const UserLocation = ({ orderId }) => {
 
   return (
     <div className="h-screen flex flex-col bg-gray-50">
-      <div className="bg-pink-600 text-white p-4 shadow-md">
-        <h1 className="text-xl font-bold">Order Tracking</h1>
-        <p className="text-sm opacity-80">Order #{orderId}</p>
-        <p className="text-sm opacity-80">Status: {orderStatus}</p>
+       <div className="bg-gradient-to-r from-pink-600 to-pink-500 text-white p-5 rounded-md shadow-lg flex justify-between items-center">
+      <div>
+        <h1 className="text-2xl font-bold mb-1">Order Tracking</h1>
+        <p className="text-sm text-white/90">Order #: <span className="font-medium">{orderId}</span></p>
+        <p className="text-sm text-white/90">Status: <span className="font-medium">{orderStatus}</span></p>
+      </div>
+
+      <button
+     onClick={() => window.location.href = "/profile/order"}
+        className="bg-white text-pink-600 hover:bg-pink-100 font-semibold px-4 py-2 rounded-md transition-all shadow-md"
+      >
+        Go Back to Order
+      </button>
+    </div>
+      <div>
       </div>
 
       <div className="p-4 bg-white shadow-sm">

@@ -8,7 +8,7 @@ import "swiper/css/effect-fade";
 import { Autoplay, Pagination, Navigation, EffectFade } from "swiper/modules";
 import Category1 from "../../../../assets/imageee.jpg";
 import Grand from "../../../../assets/UserImages/Category1.jpg";
-import Lunch from "../../../../assets/nepali.jpeg";
+import Lunch from "../../../../assets/name.jpg";
 
 export const DashSlider = () => {
 	const [swiperInstance, setSwiperInstance] = useState(null);
@@ -79,7 +79,7 @@ export const DashSlider = () => {
 							<img
 								src={slide.image || "/placeholder.svg"}
 								alt={slide.title}
-								className="absolute inset-0 w-full h-[500px] object-fit"
+								className="absolute inset-0 w-full h-[500px] object-cover"
 							/>
 						</SwiperSlide>
 					))}

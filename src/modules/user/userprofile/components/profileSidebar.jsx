@@ -7,8 +7,7 @@ export const ProfileSidebar = ({ activeTab, setActiveTab, handleLogout }) => {
 
   const menuItems = [
     { name: "Profile", path: "/profile" },
-    { name: "Order", path: "/profile/order" },
-    // { name: "Wishlist", path: "/profile/wishlist" },
+    { name: "Orders", path: "/profile/order" },
     { name: "Settings", path: "/profile/settings" },
   ];
 
@@ -18,7 +17,7 @@ export const ProfileSidebar = ({ activeTab, setActiveTab, handleLogout }) => {
   };
 
   return (
-		<div className="w-full md:w-1/4 bg-gray-100 p-2 lg:h-screen">
+		<div className="w-full md:w-1/4 bg-gray-200 p-2 lg:h-screen">
 			<ul className="space-y-4">
 				{menuItems.map((item) => (
 					<li key={item.path}>
@@ -46,7 +45,6 @@ export const ProfileSidebar = ({ activeTab, setActiveTab, handleLogout }) => {
 				Logout
 			</button>
 
-			{/* Full-page Modal */}
 			{showModal && (
 				<div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
 					<div className="bg-white p-8 rounded-md w-full h-full flex flex-col justify-center items-center">
