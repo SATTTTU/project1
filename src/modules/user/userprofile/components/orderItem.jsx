@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export const OrderItem = ({ order }) => {
   console.log("orders items", order);
 
@@ -25,11 +27,17 @@ export const OrderItem = ({ order }) => {
           >
             {order.status}
           </span>
+         
         </div>
       </div>
 
       <div className="p-6">
-        <h3 className="font-semibold text-xl mb-4 text-gray-800 border-b border-slate-300 pb-2">Order Items</h3>
+        <h3 className="font-semibold text-xl mb-4 text-gray-800 border-b border-slate-300 pb-2">Order Items
+        <span className="flex justify-end text-sm text-gray-500 mb-4">
+            <Link to={`/track-order/${order?.order_id}`}>Track Orders</Link>
+          </span>
+        </h3>
+       
         <div className="space-y-4">
           {order.items.map((item, index) => (
             <div

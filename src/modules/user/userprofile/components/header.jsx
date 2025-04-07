@@ -45,9 +45,7 @@ export const Header = () => {
                         <button className="px-4 py-1.5 bg-green-600 text-white rounded-full text-sm hover:bg-green-700 transition-colors">
                             Special Offers
                         </button>
-                        <button className="px-4 py-1.5 border border-gray-300 rounded-full text-sm hover:bg-gray-50 transition-colors">
-                            Track Order
-                        </button>
+                        
 
                         <Link
                             to="/user/cart"

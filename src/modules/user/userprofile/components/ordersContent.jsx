@@ -6,7 +6,6 @@ export const OrdersContent = () => {
 	const { data: orders } = useAllOrders();
 	console.log("orders",orders)
 	const { data: currentorders } = useCurrentOrders();
-	console.log("current orders****", currentorders)
 
 
 	return (
