@@ -24,7 +24,7 @@ export const ProfileCard = () => {
   const handleLogout = async () => {
     try {
       await logout();
-      localStorage.clear();
+      localStorage.removeItem('admin_token');
       window.location.href = "/admin/login";
     } catch (error) {
       console.error("Logout failed", error);

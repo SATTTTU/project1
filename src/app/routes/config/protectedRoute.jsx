@@ -8,6 +8,48 @@ const ProtectedRoute = ({ allowedRoles = [] }) => {
   const location = useLocation();
   const [roleSynced, setRoleSynced] = useState(false);
 
+
+  useEffect(() => {
+    const userType = allowedRoles[0];
+    localStorage.setItem('user_type', userType);
+    localStorage.setItem('active_user', userType);
+    localStorage.setItem('user_type', userType);
+
+    // Handle visibility changes (e.g., switching tabs)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        const storedUserType = localStorage.getItem('active_user');
+        if (storedUserType !== userType) {
+          localStorage.setItem('user_type', userType);
+          localStorage.setItem('active_user', userType);
+   
+  
+        }
+      }
+    };
+
+    // Handle focus changes (e.g., switching browser windows)
+    const handleFocus = () => {
+      const storedUserType = localStorage.getItem('active_user');
+      if (storedUserType !== userType) {
+        localStorage.setItem('user_type', userType);
+        localStorage.setItem('active_user', userType);
+        localStorage.setItem('user_type', userType);
+
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', handleFocus);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('focus', handleFocus);
+    };
+  }, [allowedRoles]);
+
+
+
   // Sync user role based on current allowedRoles
   useEffect(() => {
     if (!user || loading) return;
@@ -47,8 +89,10 @@ const ProtectedRoute = ({ allowedRoles = [] }) => {
     });
   }
 
+
+
   // Wait until role is synced to avoid premature redirects
-  if (loading || !roleSynced) {
+  if ((loading || !roleSynced) && isAuthenticated) {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-100">
         <div className="text-center">
@@ -59,7 +103,9 @@ const ProtectedRoute = ({ allowedRoles = [] }) => {
     );
   }
 
-  if (isAuthenticated) {
+
+  if (isAuthenticated && roleSynced && (allowedRoles[0] === location.pathname.split("/")[1] !=='dashboard' || allowedRoles[0] === location.pathname.split("/")[1])) {
+
     const hasRequiredRole =
       allowedRoles.length === 0 || allowedRoles.includes(user?.type);
 

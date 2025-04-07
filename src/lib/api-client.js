@@ -42,7 +42,7 @@ function getToken() {
       const adminToken =
         localStorage.getItem(STORAGE_KEYS.ADMIN_TOKEN) ||
         localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
-        
+
       const cookToken = localStorage.getItem(STORAGE_KEYS.COOK_TOKEN);
       const userToken = localStorage.getItem(STORAGE_KEYS.USER_TOKEN);
 
@@ -88,8 +88,9 @@ function getToken() {
       console.log("Retrieved admin token from localStorage");
       return token;
     } else if (userType === "cook") {
-      const token = localStorage.getItem(STORAGE_KEYS.COOK_TOKEN) ||
-      localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
+      const token =
+        localStorage.getItem(STORAGE_KEYS.COOK_TOKEN) ||
+        localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
 
       if (!token || token === "undefined") {
         console.warn("⚠️ Cook token is undefined or invalid");
@@ -99,8 +100,9 @@ function getToken() {
       console.log("Retrieved cook token from localStorage");
       return token;
     } else if (userType === "user") {
-      const token = localStorage.getItem(STORAGE_KEYS.USER_TOKEN) ||
-      localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
+      const token =
+        localStorage.getItem(STORAGE_KEYS.USER_TOKEN) ||
+        localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
 
       if (!token || token === "undefined") {
         console.warn("⚠️ User token is undefined or invalid"); // Fixed: Changed from "user" to "User"
@@ -152,7 +154,6 @@ function saveUserData(userType, token) {
     throw error;
   }
 }
-
 
 function authRequestInterceptor(config) {
   try {
@@ -226,7 +227,7 @@ function clearAuthData() {
 
 // Helper function to get current user type
 function getCurrentUserType() {
-  return localStorage.getItem('active_user') || null;
+  return localStorage.getItem("active_user") || null;
 }
 
 export { saveUserData, getToken, clearAuthData, getCurrentUserType };

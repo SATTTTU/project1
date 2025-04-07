@@ -47,8 +47,7 @@ const CookNavBAr = () => {
 	const handleLogout = async () => {
 		try {
 			await logout();
-			console.log("Logout successful");
-			localStorage.clear();
+		 localStorage.removeItem('cook_token');
 			window.location.href = "/";
 		} catch (err) {
 			console.error("Logout failed", err);

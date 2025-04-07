@@ -15,9 +15,22 @@ export const AuthProvider = ({ children }) => {
     const handleStorageChange = (event) => {
       if (event.key === 'auth_token' || event.key === 'active_user') {
         const newUser = JSON.parse(localStorage.getItem('active_user') || '{}');
+
+        let authStatus = false;
+        if(newUser === 'user'){
+          authStatus = localStorage.getItem('user_token');
+        }else if (newUser === 'cook'){
+          authStatus = localStorage.getItem('cook_token');
+        }else if (newUser === 'admin'){
+          authStatus = localStorage.getItem('admin_token');
+        }
+
+
         setUser((prevUser) => ({
           ...prevUser,
           type: newUser.type, // only update the type
+          authStatus : localStorage.getItem('user_token'),
+          isAuthenticated:authStatus
         }));
       }
     };
@@ -66,6 +79,18 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null)
+    const newUser = JSON.parse(localStorage.getItem('active_user') || '{}');
+
+    if(newUser === 'user'){
+      localStorage.removeItem('user_token')
+    }else if(newUser === 'cook'){
+      localStorage.removeItem('cook_token')
+    } else if (newUser === 'admin'){
+      localStorage.removeItem('admin_token')
+    }
+
+
+
     // Note: Token removal is handled by the clearAuthData function in api-client
   }
 
