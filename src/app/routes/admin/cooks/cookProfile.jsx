@@ -17,12 +17,7 @@ export const CookProfileRoute = () => {
       <Sidebar />
       <div className="flex-1 p-8 overflow-auto">
         <div className="mb-4">
-          {/* <button 
-            onClick={handleBack} 
-            className="flex items-center px-3 py-2 text-gray-600 hover:text-gray-800 bg-white rounded-md shadow-sm"
-          >
-            ← Back
-          </button> */}
+         
         </div>
         <div className="bg-white rounded-lg shadow-sm p-6">
           <CookProfileDetails 

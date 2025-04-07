@@ -85,12 +85,11 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
   // Function to get full image URL
   const getFullImageUrl = (path) => {
     if (!path) return null;
-    // Check if the path already includes http:// or https://
     if (path.startsWith('http://') || path.startsWith('https://')) {
       return path;
       
     }
-    return `${baseUrl}/${path}`;
+    return `${baseUrl}${path}`;
   };
 
   const cook = cookData
