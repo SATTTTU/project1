@@ -7,7 +7,6 @@ import { io } from "socket.io-client";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import RoutingMachine from "./RoutingMachine";
 
-// Fix Leaflet marker issue
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -18,7 +17,6 @@ L.Icon.Default.mergeOptions({
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
-// Custom icon for markers
 const createCustomIcon = (color) =>
   L.divIcon({
     className: "custom-icon",
@@ -29,7 +27,7 @@ const createCustomIcon = (color) =>
   });
 
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
-  const R = 6371; // Radius of the earth in km
+  const R = 6371; 
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
   const dLon = ((lon2 - lon1) * Math.PI) / 180;
   const a =
