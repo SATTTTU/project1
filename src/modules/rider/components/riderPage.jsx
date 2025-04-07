@@ -136,9 +136,9 @@ export const RiderPages = ({ orderId }) => {
           };
 
           setRiderLocation(newLocation);
+          console.log("Rider location updated:", newLocation);
 
-          // Emit location to socket if connected
-          if (socket && socket.connected && orderId) {
+          if (socket &&  orderId) {
             socket.emit("rider location", {
               roomId: orderId,
               location: newLocation,
@@ -345,7 +345,7 @@ export const RiderPages = ({ orderId }) => {
 
   const defaultCenter = riderLocation ||
     cookLocation ||
-    userLocation || { lat: 27.7172, lng: 85.324 };
+    userLocation || { lat: 0, lng: 0 };
 
   return (
     <div className="h-screen flex flex-col bg-gray-50">
@@ -401,7 +401,6 @@ export const RiderPages = ({ orderId }) => {
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-            {/* Rider Marker - Always visible */}
             {riderLocation && (
               <Marker
                 position={[riderLocation.lat, riderLocation.lng]}
@@ -415,7 +414,6 @@ export const RiderPages = ({ orderId }) => {
               </Marker>
             )}
 
-            {/* Cook Marker - Always visible */}
             {cookLocation && (
               <Marker
                 position={[cookLocation.lat, cookLocation.lng]}
@@ -444,10 +442,10 @@ export const RiderPages = ({ orderId }) => {
             )}
 
             {/* Active Route - Rider to Cook */}
-            {activeRoute === "riderToCook" && riderLocation && cookLocation && (
+            {activeRoute === "riderToCook" && userLocation && cookLocation && (
               <RoutingMachine 
                 waypoints={[
-                  { latitude: riderLocation.lat, longitude: riderLocation.lng },
+                  { latitude: userLocation.lat, longitude: userLocation.lng },
                   { latitude: cookLocation.lat, longitude: cookLocation.lng }
                 ]}
                 color="#3b82f6" // Blue for pickup route
@@ -455,7 +453,7 @@ export const RiderPages = ({ orderId }) => {
             )}
 
             {/* Active Route - Cook to User */}
-            {activeRoute === "cookToUser" && riderLocation && userLocation && (
+            {/* {activeRoute === "cookToUser" && riderLocation && userLocation && (
               <RoutingMachine 
                 waypoints={[
                   { latitude: riderLocation.lat, longitude: riderLocation.lng },
@@ -463,12 +461,12 @@ export const RiderPages = ({ orderId }) => {
                 ]}
                 color="#8b5cf6" // Purple for delivery route
               />
-            )}
+            )} */}
 
             {/* Map Updater - Follow rider */}
-            {riderLocation && (
-              <MapUpdater center={[riderLocation.lat, riderLocation.lng]} />
-            )}
+            {/* {riderLocation && (
+              // <MapUpdater center={[riderLocation.lat, riderLocation.lng]} />
+            )} */}
           </MapContainer>
         )}
       </div>

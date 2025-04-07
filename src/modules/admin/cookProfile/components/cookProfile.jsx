@@ -85,11 +85,12 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
   // Function to get full image URL
   const getFullImageUrl = (path) => {
     if (!path) return null;
+    // Check if the path already includes http:// or https://
     if (path.startsWith('http://') || path.startsWith('https://')) {
       return path;
       
     }
-    return `${baseUrl}${path}`;
+    return `${baseUrl}/${path}`;
   };
 
   const cook = cookData
@@ -98,7 +99,7 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
         name: cookData?.name || "Unknown Cook",
         email: cookData?.email || "Email not available",
         phone: cookData?.phone || "Phone not available",
-        image: getFullImageUrl(cookData?.image_url) || "https://via.placeholder.com/150",
+        image: getFullImageUrl(cookData?.image_url) || "https://api-private.atlassian.com/users/f5438effda9d33bb23e6d93bc772a910/avatar",
         status: cookData?.approval_status ? mapApprovalStatusToDisplay(cookData.approval_status) : "Unknown",
         averageRating: cookData?.average_rating || 0,
         totalReviews: cookData?.total_reviews || 0,
@@ -229,7 +230,7 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
 					<div className="flex items-start justify-between">
 						<div className="flex items-center">
 							<img
-								src={cook.image || "https://via.placeholder.com/150"}
+								src={cook.image || "https://api-private.atlassian.com/users/f5438effda9d33bb23e6d93bc772a910/avatar"}
 								alt={cook?.name}
 								className="w-20 h-20 rounded-full object-cover mr-4 border-2 border-gray-200"
 							/>
