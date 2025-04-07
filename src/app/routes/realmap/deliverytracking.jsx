@@ -47,19 +47,19 @@ const DeliveryTracking = ({ orderId }) => {
   // Initialize socket once
   const [socket] = useState(() => io("wss://khajabox-socket.tai.com.np"));
 
+  socket && socket.emit("join room", `khajabox-${orderId}`);
+
   const getOrderData = async () => {
     try {
       const response = await fetch(
         `https://khajabox-backend.dev.tai.com.np/api/get-order-ride-by-id/${orderId}`
       );
       const result = await response.json();
-      
-      // The actual data is inside the data array at index 0
+
       const orderRideData = result.data[0];
       setOrderData(orderRideData);
       setOrderStatus(orderRideData?.status || "received");
-  
-      // Set locations - accessing the nested structure correctly
+
       if (orderRideData?.pickup_location_id) {
         const cookLoc = {
           lat: parseFloat(orderRideData.pickup_location_id.latitude),
@@ -67,7 +67,7 @@ const DeliveryTracking = ({ orderId }) => {
         };
         setCookLocation(cookLoc);
       }
-  
+
       if (orderRideData?.drop_location_id) {
         const userLoc = {
           lat: parseFloat(orderRideData.drop_location_id.latitude),
@@ -87,74 +87,87 @@ const DeliveryTracking = ({ orderId }) => {
     getOrderData();
   }, [orderId]);
 
+  // Fix for socket connection - use both roomId formats for compatibility
+  //Don't uncomment it [Rishi]
+  //Not the right way to do it
+  // useEffect(() => {
+  //   const roomId = `order-${orderId}`;
+
+  //   console.log("Joined socket rooms:", orderId, roomId);
+
+  //   const handleRiderLocation = (data, room) => {
+  //     console.log("Received rider location:", data, "Room:", room);
+  //     // Accept data regardless of room name for now, to debug
+  //     if (
+  //       data &&
+  //       typeof data.lat === "number" &&
+  //       typeof data.lng === "number"
+  //     ) {
+  //       console.log("Setting rider location state:", data);
+  //       setRiderLocation(data);
+  //     } else {
+  //       console.warn("Invalid rider location data:", data);
+  //     }
+  //   };
+
+  //   socket.on("rider location", handleRiderLocation);
+
+  //   const timeout = setTimeout(() => {
+  //     if (!riderLocation) {
+  //       console.log("No rider location received after timeout");
+  //       setLoading(false);
+  //     }
+  //   }, 5000);
+
+  //   return () => {
+  //     socket.off("rider location", handleRiderLocation);
+  //     clearTimeout(timeout);
+  //   };
+  // }, [socket, orderId]);
+
   useEffect(() => {
-    const roomId = `order-${orderId}`;
-    
-    // Join both possible room formats to ensure we catch all events
-    socket.emit("join room", orderId);
-    socket.emit("join room", roomId);
-    
-    console.log("Joined socket rooms:", orderId, roomId);
-
-    const handleRiderLocation = (data, room) => {
-      console.log("Received rider location:", data, "Room:", room);
-      // Accept data regardless of room name for now, to debug
-      if (data && typeof data.lat === 'number' && typeof data.lng === 'number') {
-        console.log("Setting rider location state:", data);
-        setRiderLocation(data);
-      } else {
-        console.warn("Invalid rider location data:", data);
-      }
-    };
-
-    socket.on("rider location", handleRiderLocation);
-
-    const timeout = setTimeout(() => {
-      if (!riderLocation) {
-        console.log("No rider location received after timeout");
-        setLoading(false);
-      }
-    }, 5000);
-
-    return () => {
-      socket.off("rider location", handleRiderLocation);
-      clearTimeout(timeout);
-    };
-  }, [socket, orderId]);
+    socket.on("rider location", (data) => {
+      console.log("rider lcoation data from socket", data);
+      setRiderLocation(data);
+    });
+  }, [socket]);
 
   // Recalculate route whenever locations change
-  useEffect(() => {
-    
-    if (riderLocation && riderLocation.lat && riderLocation.lng) {
-      // For rider view or general customer/cook view when rider is moving
-      if (orderStatus === "picked_up" || orderStatus === "on_the_way" || orderStatus === "delivered") {
-        // If food is picked up, route should be from rider to customer
-        if (userLocation) {
-          const waypoints = [
-            { latitude: riderLocation.lat, longitude: riderLocation.lng },
-            { latitude: userLocation.lat, longitude: userLocation.lng }
-          ];
-          setRouteWaypoints(waypoints);
-        }
-      } else {
-        // If food is not picked up yet, route should be from rider to restaurant
-        if (cookLocation) {
-          const waypoints = [
-            { latitude: riderLocation.lat, longitude: riderLocation.lng },
-            { latitude: cookLocation.lat, longitude: cookLocation.lng }
-          ];
-          setRouteWaypoints(waypoints);
-        }
-      }
-    } else if (cookLocation && userLocation) {
-      // If rider isn't connected yet, show route from restaurant to customer
-      const waypoints = [
-        { latitude: cookLocation.lat, longitude: cookLocation.lng },
-        { latitude: userLocation.lat, longitude: userLocation.lng }
-      ];
-      setRouteWaypoints(waypoints);
-    }
-  }, [riderLocation, cookLocation, userLocation, orderStatus]);
+  // useEffect(() => {
+  //   if (riderLocation && riderLocation.lat && riderLocation.lng) {
+  //     // For rider view or general customer/cook view when rider is moving
+  //     if (
+  //       orderStatus === "picked_up" ||
+  //       orderStatus === "on_the_way" ||
+  //       orderStatus === "delivered"
+  //     ) {
+  //       // If food is picked up, route should be from rider to customer
+  //       if (userLocation) {
+  //         const waypoints = [
+  //           { latitude: riderLocation.lat, longitude: riderLocation.lng },
+  //           { latitude: userLocation.lat, longitude: userLocation.lng },
+  //         ];
+  //         setRouteWaypoints(waypoints);
+  //       }
+  //     } else {
+  //       // If food is not picked up yet, route should be from rider to restaurant
+  //       if (cookLocation) {
+  //         const waypoints = [
+  //           { latitude: riderLocation.lat, longitude: riderLocation.lng },
+  //           { latitude: cookLocation.lat, longitude: cookLocation.lng },
+  //         ];
+  //         setRouteWaypoints(waypoints);
+  //       }
+  //     }
+  //   } else if (cookLocation && userLocation) {
+  //     // If rider isn't connected yet, show route from restaurant to customer
+  //     const waypoints = [
+  //       { latitude: cookLocation.lat, longitude: cookLocation.lng },
+  //       { latitude: userLocation.lat, longitude: userLocation.lng },
+  //     ];
+  //     setRouteWaypoints(waypoints);
+  //   }
+  // }, [riderLocation, cookLocation, userLocation, orderStatus]);
 
   const calculateETA = (from, to) => {
     if (!from || !to) return "Unknown";
@@ -193,7 +206,7 @@ const DeliveryTracking = ({ orderId }) => {
     if (riderLocation && riderLocation.lat && riderLocation.lng) {
       return riderLocation;
     }
-    
+
     // Fall back to role-specific locations
     switch (userRole) {
       case "cook":
@@ -293,7 +306,6 @@ const DeliveryTracking = ({ orderId }) => {
 
   // Debug info for development
 
-
   const primaryLocation = getPrimaryLocation();
 
   if (loading) {
@@ -325,56 +337,67 @@ const DeliveryTracking = ({ orderId }) => {
         {renderConnectionStatus()}
       </div>
 
-      {primaryLocation && !isNaN(primaryLocation.lat) && !isNaN(primaryLocation.lng) ? (
+      {primaryLocation &&
+      !isNaN(primaryLocation.lat) &&
+      !isNaN(primaryLocation.lng) ? (
         <div className="flex-grow relative">
           <MapContainer
-  center={[primaryLocation.lat, primaryLocation.lng]}
-  zoom={15}
-  style={{ height: "100%", width: "100%" }}
->
-  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            center={[primaryLocation.lat, primaryLocation.lng]}
+            zoom={15}
+            style={{ height: "100%", width: "100%" }}
+          >
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-  {riderLocation && riderLocation.lat && riderLocation.lng && (
-    <Marker
-      position={[riderLocation.lat, riderLocation.lng]}
-      icon={createCustomIcon("blue")}
-    >
-      <Popup>
-        <strong>Rider</strong>
-      </Popup>
-    </Marker>
-  )}
+            {riderLocation && riderLocation.lat && riderLocation.lng && (
+              <Marker
+                position={[riderLocation.lat, riderLocation.lng]}
+                icon={createCustomIcon("blue")}
+              >
+                <Popup>
+                  <strong>Rider</strong>
+                </Popup>
+              </Marker>
+            )}
 
-  {cookLocation && (
-    <Marker
-      position={[cookLocation.lat, cookLocation.lng]}
-      icon={createCustomIcon("#10B981")}
-    >
-      <Popup>
-        <strong>Cook: {orderData?.pickup_location_id?.cook?.name}</strong>
-      </Popup>
-    </Marker>
-  )}
+            {cookLocation && (
+              <Marker
+                position={[cookLocation.lat, cookLocation.lng]}
+                icon={createCustomIcon("#10B981")}
+              >
+                <Popup>
+                  <strong>
+                    Cook: {orderData?.pickup_location_id?.cook?.name}
+                  </strong>
+                </Popup>
+              </Marker>
+            )}
 
-  {userLocation && (
-    <Marker
-      position={[userLocation.lat, userLocation.lng]}
-      icon={createCustomIcon("#EC4899")}
-    >
-      <Popup>
-        <strong>User: {orderData?.drop_location_id?.user?.name}</strong>
-      </Popup>
-    </Marker>
-  )}
+            {userLocation && (
+              <Marker
+                position={[userLocation.lat, userLocation.lng]}
+                icon={createCustomIcon("#EC4899")}
+              >
+                <Popup>
+                  <strong>
+                    User: {orderData?.drop_location_id?.user?.name}
+                  </strong>
+                </Popup>
+              </Marker>
+            )}
 
-  {/* Add RoutingMachine for optimized routing */}
-  {routeWaypoints.length >= 2 && (
-    <RoutingMAchine waypoints={routeWaypoints} />
-  )}
+            {/* Add RoutingMachine for optimized routing */}
 
-  <MapUpdater center={primaryLocation} />
-</MapContainer>
+            {userLocation.lat && cookLocation.lat && (
+              <RoutingMAchine
+                waypoints={[
+                  { latitude: userLocation.lat, longitude: userLocation.lng },
+                  { latitude: cookLocation.lat, longitude: cookLocation.lng },
+                ]}
+              />
+            )}
 
+            <MapUpdater center={primaryLocation} />
+          </MapContainer>
 
           <div className="absolute bottom-4 right-4 z-50 bg-white p-2 rounded-md shadow-md text-xs">
             {riderLocation && riderLocation.lat && riderLocation.lng && (
@@ -386,17 +409,13 @@ const DeliveryTracking = ({ orderId }) => {
             {cookLocation && (
               <div className="flex items-center mb-1">
                 <div className="w-3 h-3 rounded-full bg-green-600 mr-2"></div>
-                <span>
-                  {userRole === "cook" ? " (Cook)" : "Cook"}
-                </span>
+                <span>{userRole === "cook" ? " (Cook)" : "Cook"}</span>
               </div>
             )}
             {userLocation && (
               <div className="flex items-center">
                 <div className="w-3 h-3 rounded-full bg-pink-600 mr-2"></div>
-                <span>
-                  {userRole === "user" ? " (Customer)" : "Customer"}
-                </span>
+                <span>{userRole === "user" ? " (Customer)" : "Customer"}</span>
               </div>
             )}
           </div>
