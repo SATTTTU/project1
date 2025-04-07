@@ -6,7 +6,8 @@ import { useDailyEarnings } from "../api/dailyEarnings";
 import { usePendingPayout } from "../api/pendingpayout";
 
 const DashboardHeader = ({ isOnline, setIsOnline}) => {
-  const { mutate: setCookStatus, isLoading} = UseSetCookStatus(); // 'mutate' should be renamed to 'setCookStatus'
+  const { mutate: setCookStatus, isLoading} = UseSetCookStatus();
+   // 'mutate' should be renamed to 'setCookStatus'
 const {data}= useAllTimeEarnings();
 console.log("earning****", data);
 const {data:weeklyearnings}= useWeeklyEarnings();

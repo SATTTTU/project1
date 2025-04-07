@@ -6,7 +6,7 @@ export const Table = ({ columns, data, renderRow }) => {
       <table className="min-w-full table-auto border-collapse border border-gray-200">
         <thead className="bg-gray-100">
           <tr>
-            {columns.map((column, index) => (
+            {columns?.map((column, index) => (
               <th
                 key={index}
                 className="px-6 py-3 text-center text-sm font-semibold text-gray-600 border border-gray-200"
@@ -17,12 +17,12 @@ export const Table = ({ columns, data, renderRow }) => {
           </tr>
         </thead>
         <tbody>
-          {data.length > 0 ? (
+          {data?.length > 0 ? (
             data.map((item, index) => renderRow(item, index))
           ) : (
             <tr>
               <td
-                colSpan={columns.length}
+                colSpan={columns?.length}
                 className="px-6 py-4 text-center text-sm text-gray-500 border border-gray-200"
               >
                 No data available

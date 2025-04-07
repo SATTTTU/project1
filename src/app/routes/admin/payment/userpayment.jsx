@@ -1,28 +1,47 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { ChevronRight, CreditCard, DollarSign, Users, Settings } from "lucide-react";
-import { Table } from "@/components/ui/tables/tables";
-
-import { TransactionRow } from "@/modules/admin/payment/components/userpaymentdetails";
-import { PeriodSelector } from "@/modules/admin/payment/components/periodselector";
-import { StatCard } from "@/modules/admin/payment/components/statcard";
-import { usePaymentData } from "@/modules/admin/payment/hooks/usePaymentData";
-import { Sidebar } from "@/components/ui/admin/aside/aside";
+import { ChevronRight, CreditCard, DollarSign, Settings } from "lucide-react";
 import { FaArrowLeft } from "react-icons/fa";
+import { Sidebar } from "@/components/ui/admin/aside/aside";
+import { Usegettotalearning } from "@/modules/admin/payment/api/gettotalearning";
+import { useGetAllWithdrawRequests } from "@/modules/admin/payment/api/getWithdrawRequest";
 
 export const UserPaymentRoute = () => {
+  const { data: earningsData, isLoading: earningsLoading, error: earningsError } = Usegettotalearning();
+  const { data: transactionsData = { message: "", requests: [] } } = useGetAllWithdrawRequests();
+
+  // Make sure we're accessing the correct structure from your data
+  const requests = transactionsData|| [];
+  console.log('first',requests)
+  
+  const formattedEarnings =
+    earningsLoading || earningsError
+      ? "Loading..."
+      : `Rs${earningsData?.totalEarnings?.toLocaleString() || "0"}`;
+  
+      const totalTransactionAmount = Array.isArray(requests)
+      ? requests.reduce((total, transaction) => {
+          return total + parseFloat(transaction.amount || 0);
+        }, 0)
+      : 0;
+  
+  // Format the total amount to currency format
+  const formattedTransactionAmount = `Rs${totalTransactionAmount.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  })}`;
+  
+  // Get the count of transactions
+  const transactionCount = requests.length;
+  
   const [selectedPeriod, setSelectedPeriod] = useState("This Month");
-
-  // ✅ Fetch filtered transactions & stats using the updated hook
-  const { filteredTransactions, filteredStats, isLoading, isError } = usePaymentData("user", selectedPeriod);
-
-  const columns = ["ID", "Date", "Description", "Amount", "Status", "Actions"];
   const periodOptions = ["Today", "This Week", "This Month", "This Quarter", "This Year"];
 
   return (
     <div className="flex h-screen bg-gray-100 font-sans">
-      {/* Sidebar */}
-      <Sidebar />
+      <div className="w-64 bg-white shadow-md">
+        <Sidebar/>
+      </div>
 
       {/* Main Content */}
       <div className="flex-1 p-6 bg-gray-50 space-y-6">
@@ -45,17 +64,17 @@ export const UserPaymentRoute = () => {
 
         {/* Stats Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <StatCard
+          {/* Placeholder Stat Cards */}
+          <SimplifiedStatCard
             title="Total Revenue"
-            value={filteredStats.revenue}
-            count={`${filteredTransactions.filter((t) => t.amount.startsWith("+")).length} transactions`}
+            value={formattedEarnings}
             icon={<DollarSign size={24} className="text-green-600" />}
             color="green"
           />
-          <StatCard
+          <SimplifiedStatCard
             title="Pending Transactions"
-            value={filteredStats.pending}
-            count={`${filteredTransactions.filter((t) => t.status === "Processing").length} pending`}
+            value={formattedTransactionAmount}
+            count={`${transactionCount} pending`}
             icon={<CreditCard size={24} className="text-orange-600" />}
             color="orange"
           />
@@ -77,24 +96,53 @@ export const UserPaymentRoute = () => {
           </Link>
         </div>
 
-        {/* Transactions Table */}
-        <div className="p-4 bg-white rounded-xl shadow-md">
-          <h2 className="text-xl font-bold text-gray-800">User Transactions ({selectedPeriod})</h2>
 
-          {/* Loading & Error Handling */}
-          {isLoading ? (
-            <p className="text-gray-500 text-center py-6">Loading transactions...</p>
-          ) : isError ? (
-            <p className="text-red-500 text-center py-6">Error loading transactions.</p>
-          ) : (
-            <Table
-              columns={columns}
-              data={filteredTransactions}
-              renderRow={(tx, index) => <TransactionRow key={index} tx={tx} />}
-            />
-          )}
+        {/* Transactions Section - Just the Button */}
+        <div className="p-4 bg-white rounded-xl shadow-md">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">User Transactions ({selectedPeriod})</h2>
+          
+          <div className="flex justify-center py-4">
+            <Link to="https://test-admin.khalti.com/#/transaction?search_type&search_value&state=DhvMj9hdRufLqkP8ZY4d8g&type&start_date=2025-04-04&end_date=2025-04-07&live=true&page=1" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              View Transaction Details
+            </Link>
+          </div>
         </div>
       </div>
     </div>
   );
 };
+
+// Simplified components without data dependencies
+
+const PeriodSelector = ({ selectedPeriod, onChange, options }) => (
+  <div className="flex items-center space-x-2 relative">
+    <span className="text-gray-500">Period:</span>
+    <div className="relative">
+      <select
+        className="appearance-none bg-white border border-gray-300 rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        value={selectedPeriod}
+        onChange={onChange}
+      >
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+      <ChevronRight className="absolute right-2 top-3 text-gray-500 pointer-events-none rotate-90" size={16} />
+    </div>
+  </div>
+);
+
+const SimplifiedStatCard = ({ title, value, count, icon, color }) => (
+  <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+    <div className="flex items-center justify-between mb-4">
+      <div className="text-sm font-medium text-gray-500">{title}</div>
+      <div className={`p-2 rounded-lg bg-${color}-100`}>
+        {icon}
+      </div>
+    </div>
+    <div className="text-2xl font-bold text-gray-800">{value}</div>
+    {count && <div className={`text-sm text-${color}-500 mt-2`}>{count}</div>}
+  </div>
+);

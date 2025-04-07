@@ -1,28 +1,27 @@
 import React, { useState } from "react";
 import { DollarSign, CreditCard, Users, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
-// Component imports
 import { PeriodSelector } from "@/modules/admin/payment/components/periodselector";
 import { usePaymentData } from "@/modules/admin/payment/hooks/usePaymentData";
-import { WithdrawalRequestMessage } from "@/components/ui/withdrawalrequest/withdrawalrequest";
 import { CookTransactionTable } from "@/modules/admin/payment/components/cookpaymentdetails";
 import { StatCard } from "@/modules/admin/payment/components/statcard";
 import { Sidebar } from "@/components/ui/admin/aside/aside";
 import { useGetAllWithdrawRequests } from "@/modules/admin/payment/api/getWithdrawRequest";
 
 export const CookPaymentRoute = () => {
+  const queryClient = useQueryClient();
   const [selectedPeriod, setSelectedPeriod] = useState("This Month");
 
   const { stats } = usePaymentData("cook", selectedPeriod);
   const { data: transactions = [] } = useGetAllWithdrawRequests();
 
+ 
 
-  const {
-    onApprove,
-    onReject,
-    onArchive,
-  } = WithdrawalRequestMessage();
+  const handleTransactionUpdated = () => {
+    queryClient.invalidateQueries(["withdrawRequests"]);
+  };
 
   const periodOptions = ["This Month", "This Year"];
 
@@ -36,7 +35,7 @@ export const CookPaymentRoute = () => {
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto p-6">
         <div className="max-w-6xl mx-auto">
-          {/* Header with Back Button */}
+          {/* Header */}
           <div className="flex items-center mb-6">
             <Link
               to="/admin/dashboard"
@@ -49,7 +48,7 @@ export const CookPaymentRoute = () => {
             </h1>
           </div>
 
-          {/* Stats Cards */}
+          {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
             <StatCard
               title="Total Payouts"
@@ -84,29 +83,17 @@ export const CookPaymentRoute = () => {
               />
             </div>
 
-            {/* Withdrawal Requests */}
-            <div className="space-y-4">
-              {transactions.length > 0 ? (
-                transactions.map((value) => (
-                  <WithdrawalRequestMessage
-                    key={value.id}
-                    request={value}
-                    onApprove={onApprove}
-                    onReject={onReject}
-                    onArchive={onArchive}
-                  />
-                ))
-              ) : (
-                <p>No withdrawal requests found.</p>
-              )}
-            </div>
+           
 
-            {/* Transaction History */}
+            {/* Transactions Table */}
             <div>
               <h2 className="text-xl font-semibold text-gray-700 mb-4">
                 Transaction History
               </h2>
-              <CookTransactionTable transactions={transactions} />
+              <CookTransactionTable
+                transactions={transactions}
+                onTransactionUpdated={handleTransactionUpdated}
+              />
             </div>
           </div>
         </div>
