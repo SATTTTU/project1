@@ -8,7 +8,7 @@ import { UsegetCookLocation } from "../api/getCookLocation"
 export const ProfileCard = ({ userData }) => {
   const { mutateAsync: fetchCookLocation } = UsegetCookLocation()
   const { formik, isLoading } = UseProfileFormik(userData)
-  const [imagePreview, setImagePreview] = useState(userData?.image || "/api/placeholder/200/200")
+  const [imagePreview, setImagePreview] = useState(userData?.image || "https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg")
   const [isEditMode, setIsEditMode] = useState(false)
 
   useEffect(() => {
@@ -65,13 +65,25 @@ export const ProfileCard = ({ userData }) => {
             <div className="flex items-center space-x-6 w-full md:w-auto">
               <div className="relative">
               
-                <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-white bg-white shadow-md">
-                <img
-											src={`${profilePhotoUrl}${userData?.image_url}`}
-											alt="image"
-											className="rounded-full lg:h-30 w-30 h-30  mb-4"
-										/>
-                </div>
+              <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-white bg-white shadow-md flex items-center justify-center">
+  {userData?.image_url ? (
+    <img
+      src={`${profilePhotoUrl}${userData.image_url}`}
+      alt="profile"
+      className="rounded-full lg:h-30 w-30 h-30 mb-4 object-cover"
+      onError={(e) => {
+        e.currentTarget.onerror = null;
+        e.currentTarget.style.display = "none";
+      }}
+    />
+  ) : (
+    <div className="bg-gray-300 text-white text-xl font-semibold w-full h-full flex items-center justify-center">
+      {/* Just placeholder text */}
+      <img src="https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg" alt="" />
+    </div>
+  )}
+</div>
+
                 {isEditMode && (
                   <label
                     htmlFor="profile-pic"

@@ -15,13 +15,13 @@ export const UseProfileFormik = () => {
     name: "John Doe",
     email: "johndoe@example.com",
     mobile: "",
-    image: "/api/placeholder/200/200",
+    image: "https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg",
     isEditing: false,
   })
 
   // Function to get the full image URL
   const getFullImageUrl = (imagePath) => {
-    if (!imagePath) return "/api/placeholder/200/200"
+    if (!imagePath) return "https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg"
 
     // If it's already a full URL (starts with http/https)
     if (imagePath.startsWith("http")) return imagePath
@@ -39,7 +39,7 @@ export const UseProfileFormik = () => {
         name: profileData?.name || "John Doe",
         email: profileData?.email || "johndoe@example.com",
         mobile: profileData?.mobile || "",
-        image: profileData?.image_url ? getFullImageUrl(profileData.image_url) : "/api/placeholder/200/200",
+        image: profileData?.image_url ? getFullImageUrl(profileData.image_url) : "https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg",
         isEditing: false,
       })
     }
