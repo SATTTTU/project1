@@ -23,7 +23,7 @@ export const CookProfile = () => {
 		reviews: [],
 		reviewCount: 0,
 	});
-	console.log("Cook", cook);
+	console.log("Cook", cook.available_status);
 	const [activeTab, setActiveTab] = useState("categories");
 
 	const videoBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";

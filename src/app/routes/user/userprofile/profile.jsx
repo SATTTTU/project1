@@ -1,5 +1,5 @@
 import { Header } from "@/modules/user/dashboard/components/header";
-import MobileMenuToggle from "@/modules/user/userprofile/components/menuToggle";
+import { MobileMenuToggle } from "@/modules/user/userprofile/components/menuToggle";
 import { ProfileSidebar } from "@/modules/user/userprofile/components/profileSidebar";
 import { useState, useEffect } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";

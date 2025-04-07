@@ -79,8 +79,7 @@ export const DashSlider = () => {
 							<img
 								src={slide.image || "/placeholder.svg"}
 								alt={slide.title}
-								className="absolute inset-0 w-full h-[500px] object-contain"
-
+								className="absolute inset-0 w-full h-[500px] object-cover"
 							/>
 						</SwiperSlide>
 					))}
