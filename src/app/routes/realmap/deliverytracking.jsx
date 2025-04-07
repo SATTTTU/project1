@@ -56,12 +56,10 @@ const DeliveryTracking = ({ orderId }) => {
       );
       const result = await response.json();
 
-      // The actual data is inside the data array at index 0
       const orderRideData = result.data[0];
       setOrderData(orderRideData);
       setOrderStatus(orderRideData?.status || "received");
 
-      // Set locations - accessing the nested structure correctly
       if (orderRideData?.pickup_location_id) {
         const cookLoc = {
           lat: parseFloat(orderRideData.pickup_location_id.latitude),
