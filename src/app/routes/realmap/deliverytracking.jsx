@@ -329,67 +329,66 @@ const DeliveryTracking = ({ orderId }) => {
       {primaryLocation && !isNaN(primaryLocation.lat) && !isNaN(primaryLocation.lng) ? (
         <div className="flex-grow relative">
           <MapContainer
-            center={[primaryLocation.lat, primaryLocation.lng]}
-            zoom={15}
-            style={{ height: "100%", width: "100%" }}
-          >
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+  center={[primaryLocation.lat, primaryLocation.lng]}
+  zoom={15}
+  style={{ height: "100%", width: "100%" }}
+>
+  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-            {riderLocation && riderLocation.lat && riderLocation.lng && (
-              <Marker
-                position={[riderLocation.lat, riderLocation.lng]}
-                icon={createCustomIcon("blue")}
-              >
-                <Popup>
-                  <strong>Rider</strong>
-                </Popup>
-              </Marker>
-            )}
+  {riderLocation && riderLocation.lat && riderLocation.lng && (
+    <Marker
+      position={[riderLocation.lat, riderLocation.lng]}
+      icon={createCustomIcon("blue")}
+    >
+      <Popup>
+        <strong>Rider</strong>
+      </Popup>
+    </Marker>
+  )}
 
-            {cookLocation && (
-              <Marker
-                position={[cookLocation.lat, cookLocation.lng]}
-                icon={createCustomIcon("#10B981")}
-              >
-                <Popup>
-                  <strong>Cook</strong>
-                </Popup>
-              </Marker>
-            )}
+  {cookLocation && (
+    <Marker
+      position={[cookLocation.lat, cookLocation.lng]}
+      icon={createCustomIcon("#10B981")}
+    >
+      <Popup>
+        <strong>Cook: {orderData?.pickup_location_id?.cook?.name}</strong>
+      </Popup>
+    </Marker>
+  )}
 
-            {userLocation && (
-              <Marker
-                position={[userLocation.lat, userLocation.lng]}
-                icon={createCustomIcon("#EC4899")}
-              >
-                <Popup>
-                  <strong>
-                    {userRole === "user" ? "You (Customer)" : "Customer"}
-                  </strong>
-                </Popup>
-              </Marker>
-            )}
+  {userLocation && (
+    <Marker
+      position={[userLocation.lat, userLocation.lng]}
+      icon={createCustomIcon("#EC4899")}
+    >
+      <Popup>
+        <strong>User: {orderData?.drop_location_id?.user?.name}</strong>
+      </Popup>
+    </Marker>
+  )}
 
-            {/* Add RoutingMachine for optimized routing */}
-            {routeWaypoints.length >= 2 && (
-              <RoutingMAchine waypoints={routeWaypoints} />
-            )}
+  {/* Add RoutingMachine for optimized routing */}
+  {routeWaypoints.length >= 2 && (
+    <RoutingMAchine waypoints={routeWaypoints} />
+  )}
 
-            <MapUpdater center={primaryLocation} />
-          </MapContainer>
+  <MapUpdater center={primaryLocation} />
+</MapContainer>
+
 
           <div className="absolute bottom-4 right-4 z-50 bg-white p-2 rounded-md shadow-md text-xs">
             {riderLocation && riderLocation.lat && riderLocation.lng && (
               <div className="flex items-center mb-1">
                 <div className="w-3 h-3 rounded-full bg-blue-600 mr-2"></div>
-                <span>{userRole === "rider" ? "You (Rider)" : "Rider"}</span>
+                <span>{userRole === "rider" ? " (Rider)" : "Rider"}</span>
               </div>
             )}
             {cookLocation && (
               <div className="flex items-center mb-1">
                 <div className="w-3 h-3 rounded-full bg-green-600 mr-2"></div>
                 <span>
-                  {userRole === "cook" ? "You (Cook)" : "Cook"}
+                  {userRole === "cook" ? " (Cook)" : "Cook"}
                 </span>
               </div>
             )}
@@ -397,7 +396,7 @@ const DeliveryTracking = ({ orderId }) => {
               <div className="flex items-center">
                 <div className="w-3 h-3 rounded-full bg-pink-600 mr-2"></div>
                 <span>
-                  {userRole === "user" ? "You (Customer)" : "Customer"}
+                  {userRole === "user" ? " (Customer)" : "Customer"}
                 </span>
               </div>
             )}

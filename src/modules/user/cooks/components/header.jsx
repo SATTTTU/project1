@@ -31,9 +31,9 @@ export const Header = () => {
                             <button className="px-4 py-1.5 bg-green-600 text-white rounded-full text-sm">
                                 Special Offers
                             </button>
-                            <button className="px-4 py-1.5 border border-gray-300 rounded-full text-sm">
+                            {/* <button className="px-4 py-1.5 border border-gray-300 rounded-full text-sm">
                                 Track Order
-                            </button>
+                            </button> */}
 
                             <Link to="/user/cart" className="relative">
                                 <AiOutlineShoppingCart className="text-2xl" />

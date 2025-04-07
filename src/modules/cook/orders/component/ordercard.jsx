@@ -26,14 +26,14 @@ export const OrderCard = ({ order, updateOrderStatus }) => {
             order={order} 
             updateOrderStatus={updateOrderStatus} 
           />
-          {order.status === "out-for-delivery" && (
+           {order.status === "out-for-delivery" && (
             <button
               onClick={handleTrackOrder}
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium"
             >
               Track Order
-            </button>
-          )}
+            </button> 
+          )} 
         </div>
       </div>
     </div>

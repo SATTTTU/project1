@@ -4,6 +4,7 @@ import "leaflet/dist/leaflet.css";
 import { io } from "socket.io-client";
 import L from "leaflet";
 import RoutingMAchine from "@/components/layout/realtime-map/RoutingMachine/RoutingMAchine";
+import image from "../../../assets/gg.svg"
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -89,7 +90,7 @@ export const UserLocation = ({ orderId }) => {
       }
     } catch (err) {
       console.error("Error fetching order:", err);
-      setError("Failed to load order data.");
+      setError("Your order is currently being prepared. Tracking will be available once it’s out for delivery");
     } finally {
       setLoading(false);
     }
@@ -179,11 +180,40 @@ export const UserLocation = ({ orderId }) => {
 
   if (error) {
     return (
-      <div className="p-8 bg-red-50 text-red-700 max-w-md mx-auto mt-8 rounded-lg shadow-md">
-        {error}
+      <div className="flex flex-col items-center justify-center h-screen bg-gray-50 px-4">
+        <div className="max-w-2xl w-full p-8 bg-white rounded-2xl shadow-xl flex flex-col md:flex-row items-center gap-8">
+          {/* Illustration */}
+          <div className="w-full md:w-1/2">
+            <img
+              src={image} // You can replace this with any SVG or PNG
+              alt="Error Illustration"
+              className="w-full h-auto object-cover"
+            />
+          </div>
+  
+          {/* Text content */}
+          <div className="w-full md:w-1/2 text-center md:text-left">
+            <h1 className="text-2xl font-bold text-yellow-600 mb-4">
+            Your order is currently being prepared
+            </h1>
+            <p className="text-gray-600 mb-6">
+              {error ||
+                " Tracking will be available once it’s out for delivery."}
+            </p>
+  
+            <div className="flex flex-col md:flex-row gap-4">
+              <button className="px-6 py-3 bg-teal-600 text-white font-semibold rounded-lg hover:bg-teal-700 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+              onClick={() => window.location.href = "/profile/order"}>
+                Return to Dashboard
+              </button>
+             
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
+  
 
   const defaultCenter = { lat: 27.7172, lng: 85.324 }; 
   const mapCenter =

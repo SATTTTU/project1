@@ -3,39 +3,30 @@ import { useNavigate } from "react-router-dom";
 import { useUpdateOrderStatus } from "../../orders/api/updateOrders";
 import Dishes from "../../../../assets/defaultDishes.jpg";
 
-
 export const OrderRequestCard = ({ order, updateOrderStatus }) => {
-	console.log("orders****aayyo", order);
-	const [status, setStatus] = useState(order.status);
-	const navigate = useNavigate();
+  const [status, setStatus] = useState(order.status);
+  const navigate = useNavigate();
   const { mutate: updateStatus, isLoading } = useUpdateOrderStatus();
 
-  // Define the valid status progression (only 4 statuses)
+  const imageBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
+
   const statusFlow = {
     pending: ["accepted"],
     accepted: ["preparing"],
     preparing: ["out-for-delivery"],
-    "out-for-delivery": [] // Terminal state in our simplified flow
+    "out-for-delivery": []
   };
 
   const handleStatusChange = (event) => {
     const newStatus = event.target.value;
-    
-    // Check if the status transition is valid
     if (statusFlow[status]?.includes(newStatus) || newStatus === status) {
-      // Update local state
       setStatus(newStatus);
       updateOrderStatus(order.order_id, newStatus);
-      
-      // Call API
       updateStatus(
         { order_id: order.order_id, status: newStatus },
         {
           onSuccess: () => {
-            // Navigate to order tracking page when status changes to out-for-delivery
-            if (newStatus === "out-for-delivery") {
-              handleTrackOrder();
-            }
+            if (newStatus === "out-for-delivery") handleTrackOrder();
           }
         }
       );
@@ -45,31 +36,9 @@ export const OrderRequestCard = ({ order, updateOrderStatus }) => {
   };
 
   const handleTrackOrder = () => {
-    if (order && order.order_id) {
-      const orderId = order.order_id.toString();
-      navigate(`/cook/order-tracking/${orderId}`);
-    } else {
-      console.error("Cannot track order - missing order ID", order);
-    }
+    navigate(`/cook/order-tracking/${order.order_id}`);
   };
 
-  const getStatusBadgeStyle = (status) => {
-    switch (status) {
-      case "pending":
-        return "bg-yellow-100 text-yellow-800";
-      case "accepted":
-        return "bg-blue-100 text-blue-800";
-      case "preparing":
-        return "bg-orange-100 text-orange-800";
-      case "out-for-delivery":
-        return "bg-purple-100 text-purple-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-	const imageBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
-
-  // Get next logical action based on current status
   const getNextAction = (currentStatus) => {
     switch (currentStatus) {
       case "pending":
@@ -88,83 +57,65 @@ export const OrderRequestCard = ({ order, updateOrderStatus }) => {
   const nextAction = getNextAction(status);
 
   const handleActionButton = () => {
-    // For tracking or out-for-delivery, just navigate
-    if (status === "out-for-delivery" || nextAction.text === "Track Order") {
-      handleTrackOrder();
-      return;
-    }
-    
-    // Otherwise proceed with next status
+    if (status === "out-for-delivery") return handleTrackOrder();
     if (nextAction.status && statusFlow[status]?.includes(nextAction.status)) {
-      // Update local state
       setStatus(nextAction.status);
       updateOrderStatus(order.order_id, nextAction.status);
-      
-      // Call API
       updateStatus(
         { order_id: order.order_id, status: nextAction.status },
         {
           onSuccess: () => {
-            if (nextAction.status === "out-for-delivery") {
-              handleTrackOrder();
-            }
+            if (nextAction.status === "out-for-delivery") handleTrackOrder();
           }
         }
       );
     }
   };
 
-  // Generate valid status options based on current status
-  const getStatusOptions = () => {
-    const allStatuses = [
-      { value: "pending", label: "Pending" },
-      { value: "accepted", label: "Accepted" },
-      { value: "preparing", label: "Preparing" },
-      { value: "out-for-delivery", label: "Out for Delivery" }
-    ];
-    
-    // For terminal state, only show current status
-    if (status === "out-for-delivery") {
-      return allStatuses.filter(s => s.value === status);
-    }
-    
-    // For active states, show current + valid next states
-    return allStatuses.filter(s => 
-      s.value === status || statusFlow[status]?.includes(s.value)
-    );
-  };
+ 
 
-	return (
-		<div className="rounded-lg bg-white p-4 shadow-md hover:shadow-lg transition-all">
-			<div className="flex items-start">
-				<img
-					src={order?.image_url ? `${imageBaseUrl}${order?.items[0].menuitem.image_url}` : Dishes}
-					alt="Profile"
-					className="h-34 mr-2 w-24 object-cover shadow-md border-2 border-white transition-all duration-300"
-				/>
-				<div className="flex-1">
-					<div className="flex justify-between">
-						<h3 className="font-semibold">{order.customerName}</h3>
-						<span
-							className={`px-3 py-1 text-xs rounded-full ${
-								order.status === "preparing"
-									? "bg-yellow-100 text-yellow-800"
-									: "bg-green-100 text-green-800"
-							}`}
-						>
-							{order.status === "preparing" ? "Preparing" : "Ready for Pickup"}
-						</span>
-					</div>
+  // Calculate total amount from all items
+  const totalAmount = parseFloat(
+    order.total || order.items?.reduce((acc, item) => acc + parseFloat(item.price) * item.quantity, 0)
+  ).toFixed(2);
+
+  // Get the thumbnail image (first item's image or default)
+ 
+
+
+  return (
+    <div className="rounded-lg bg-white p-4 shadow-md hover:shadow-lg transition-all">
+      <div className="flex items-start">
+      
+        <div className="flex-1">
+          <div className="flex justify-between">
+            <h3 className="font-semibold text-gray-800">Order</h3>
+            <span className={`px-3 py-1 text-xs rounded-full ${
+              status === "pending" ? "bg-yellow-100 text-yellow-800" : 
+              status === "accepted" ? "bg-blue-100 text-blue-800" : 
+              status === "preparing" ? "bg-orange-100 text-orange-800" : 
+              "bg-green-100 text-green-800"
+            }`}>
+              {status.charAt(0).toUpperCase() + status.slice(1).replace(/-/g, ' ')}
+            </span>
+          </div>
 
           <div className="grid grid-cols-2 gap-1 mt-1">
             <p className="text-sm text-gray-600">
-              <span className="font-medium">Accepted:</span> {order.timeAccepted || "Pending"}
+              <span className="font-medium">Order ID:</span> #{order.order_id}
             </p>
-            <p className="text-sm text-gray-600">
-              <span className="font-medium">Delivery in:</span> {order.estimatedDelivery || order.timeRemaining || "N/A"}
-            </p>
-            <p className="text-sm font-medium text-[#426B1F]">
-              Total: ₹{parseFloat(order.total || (order.items?.reduce((acc, item) => acc + item.price * item.quantity, 0) || 0)).toFixed(2)}
+            {order.timeAccepted && (
+              <p className="text-sm text-gray-600">
+                <span className="font-medium">Accepted:</span> {order.timeAccepted}
+              </p>
+            )}
+            {order.estimatedDelivery && (
+              <p className="text-sm text-gray-600">
+                <span className="font-medium">Delivery in:</span> {order.estimatedDelivery}
+              </p>
+            )}
+            <p className="text-sm font-medium text-[#426B1F] col-span-2">
+              Total: Rs{totalAmount}
             </p>
           </div>
 
@@ -176,43 +127,43 @@ export const OrderRequestCard = ({ order, updateOrderStatus }) => {
             >
               {isLoading ? "Updating..." : nextAction.text}
             </button>
-            {status === "out-for-delivery" && (
-              <button
-                onClick={handleTrackOrder}
-                className="flex items-center cursor-pointer rounded-md bg-gray-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700"
-              >
-                Track Order
-              </button>
-            )}
+           
           </div>
         </div>
       </div>
 
-      <div className="mt-4">
-        <label className="block text-sm text-gray-600 mb-1">Order Status</label>
-        <select
-          value={status}
-          onChange={handleStatusChange}
-          className="w-full p-2 border border-gray-300 rounded-md"
-          disabled={isLoading || status === "out-for-delivery"}
-        >
-          {getStatusOptions().map(option => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-        {isLoading && (
-          <p className="text-xs text-gray-500 mt-1">
-            Updating status...
-          </p>
-        )}
-        {status === "out-for-delivery" && (
-          <p className="text-xs text-gray-500 mt-1">
-            This order is out for delivery.
-          </p>
-        )}
+      <div className="mt-4 border-t pt-3">
+  <h4 className="text-sm font-semibold mb-2">Order Items</h4>
+  <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+    {order.items && order.items.map((item) => (
+      <div
+        key={item.order_item_id}
+        className="flex items-center justify-between py-2 border-b border-gray-100"
+      >
+        {/* Item Image */}
+        <img
+          src={item.menu_item?.image_url ? `${imageBaseUrl}${item.menu_item.image_url}` : Dishes}
+          alt={item.menu_item?.name}
+          className="w-16 h-16 object-cover rounded-lg shadow-md border border-slate-300"
+        />
+
+        {/* Item Info */}
+        <div className="flex-1 px-3">
+          <div className="text-sm font-medium text-gray-800">{item.menu_item?.name || "Item"}</div>
+          <div className="text-sm text-gray-500">Qty: x{item.quantity}</div>
+        </div>
+
+        {/* Price */}
+        <div className="text-sm text-gray-700 font-semibold whitespace-nowrap">
+          Rs {parseFloat(item.price).toFixed(2)}
+        </div>
       </div>
+    ))}
+  </div>
+</div>
+
+
+     
     </div>
   );
 };

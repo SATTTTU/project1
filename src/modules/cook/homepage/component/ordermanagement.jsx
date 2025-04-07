@@ -38,8 +38,7 @@ const OrderManagement = () => {
     { label: "Accepted", value: "accepted" },
     { label: "Preparing", value: "preparing" },
     { label: "Out for Delivery", value: "out-for-delivery" },
-    { label: "Delivered", value: "delivered" },
-    { label: "Cancelled", value: "cancelled" },
+    
   ];
 
   // Filter orders based on selected status
