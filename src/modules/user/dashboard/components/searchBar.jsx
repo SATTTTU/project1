@@ -130,7 +130,7 @@ export const SearchBar = () => {
 										/>
 										<div>
 											<h2
-												className="text-base sm:text-lg font-semibold text-blue-700 hover:underline"
+												className="text-base sm:text-lg font-semibold text-[#0e9300] hover:underline"
 												onClick={(e) => {
 													e.stopPropagation();
 													navigate(`/food/${dish.menu_item_id}`);
@@ -141,7 +141,7 @@ export const SearchBar = () => {
 											<p className="text-gray-600 text-sm">
 												Cook:{" "}
 												<button
-													className="text-blue-500 hover:underline"
+													className="text-[#0e9300] hover:underline"
 													onClick={(e) => {
 														e.stopPropagation();
 														navigate(`/cook/${dish.cook_id}`);
@@ -153,23 +153,12 @@ export const SearchBar = () => {
 											<p className="text-gray-800 font-bold text-sm">
 												Rs. {dish.price}
 											</p>
-											<div className="flex items-center mt-1">
-												{[...Array(5)].map((_, index) => (
-													<FiStar
-														key={index}
-														className={`h-4 w-4 ${
-															index < Math.round(dish.average_rating)
-																? "text-yellow-400 fill-yellow-400"
-																: "text-gray-300"
-														}`}
-													/>
-												))}
-											</div>
+									
 										</div>
 									</div>
 
 									<button
-										className="bg-[#426B1F] text-white text-sm sm:text-base py-2 px-4 rounded-md font-semibold hover:bg-green-700 transition disabled:opacity-50"
+										className="bg-[#0e9300] text-white text-sm sm:text-base py-2 px-4 rounded-md font-semibold hover:bg-green-700 transition disabled:opacity-50"
 										onClick={(e) => {
 											e.stopPropagation();
 											handleAddToCart(dish);
