@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom"; // Import the Link component
 
 export const TransactionRow = ({ tx }) => {
   const getStatusStyle = (status) => ({
@@ -24,7 +25,10 @@ export const TransactionRow = ({ tx }) => {
         </span>
       </td>
       <td className="p-3">
-        <button className="text-blue-600 hover:text-blue-800">View</button>
+        {/* Replace button with a Link */}
+        <Link to={`/transaction/${tx.id}`} className="text-blue-600 hover:text-blue-800">
+          View
+        </Link>
       </td>
     </tr>
   );
