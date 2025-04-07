@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Table } from "@/components/ui/tables/tables";
-import { useProvideMoney } from "../api/approveWithdrawRequest";
+import { useProvideMoney } from "../api/approvewithdrawRequest";
 
 export const CookTransactionTable = ({
   transactions,
