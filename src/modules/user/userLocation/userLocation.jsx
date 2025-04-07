@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  useMap,
-} from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { io } from "socket.io-client";
 import L from "leaflet";
@@ -50,7 +44,7 @@ export const UserLocation = ({ orderId }) => {
   const [error, setError] = useState(null);
   const [orderStatus, setOrderStatus] = useState("received");
   const [socket] = useState(() => io("wss://khajabox-socket.tai.com.np"));
-  
+
   const getOrderData = async () => {
     console.log("Fetching order data for ID:", orderId);
     try {
@@ -58,7 +52,7 @@ export const UserLocation = ({ orderId }) => {
         `https://khajabox-backend.dev.tai.com.np/api/get-order-ride-by-id/${orderId}`
       );
       const result = await response.json();
-      
+
       if (!result.data || !result.data[0]) {
         console.error("No order data found in response:", result);
         throw new Error("No order data found");
@@ -68,9 +62,12 @@ export const UserLocation = ({ orderId }) => {
       console.log("Order data loaded:", orderRideData);
       setOrderData(orderRideData);
       setOrderStatus(orderRideData?.status || "received");
-  
+
       // Set locations with validation
-      if (orderRideData?.pickup_location_id?.latitude && orderRideData?.pickup_location_id?.longitude) {
+      if (
+        orderRideData?.pickup_location_id?.latitude &&
+        orderRideData?.pickup_location_id?.longitude
+      ) {
         const cookLoc = {
           lat: parseFloat(orderRideData.pickup_location_id.latitude),
           lng: parseFloat(orderRideData.pickup_location_id.longitude),
@@ -78,8 +75,11 @@ export const UserLocation = ({ orderId }) => {
         console.log("Setting cook location:", cookLoc);
         setCookLocation(cookLoc);
       }
-  
-      if (orderRideData?.drop_location_id?.latitude && orderRideData?.drop_location_id?.longitude) {
+
+      if (
+        orderRideData?.drop_location_id?.latitude &&
+        orderRideData?.drop_location_id?.longitude
+      ) {
         const userLoc = {
           lat: parseFloat(orderRideData.drop_location_id.latitude),
           lng: parseFloat(orderRideData.drop_location_id.longitude),
@@ -100,18 +100,21 @@ export const UserLocation = ({ orderId }) => {
   }, [orderId]);
 
   useEffect(() => {
-    // Try both possible room formats
     const roomId = `order-${orderId}`;
-    
+
     console.log("Joining socket rooms:", orderId, roomId);
     socket.emit("join room", orderId);
     socket.emit("join room", roomId);
 
     const handleRiderLocation = (data, room) => {
       console.log("Received rider location:", data, "Room:", room);
-      
+
       // Accept data regardless of room to debug
-      if (data && typeof data.lat === 'number' && typeof data.lng === 'number') {
+      if (
+        data &&
+        typeof data.lat === "number" &&
+        typeof data.lng === "number"
+      ) {
         console.log("Setting rider location state:", data);
         setRiderLocation(data);
         setLoading(false);
@@ -122,10 +125,11 @@ export const UserLocation = ({ orderId }) => {
 
     socket.on("rider location", handleRiderLocation);
 
-    // Set timeout for initial loading state
     const timeout = setTimeout(() => {
       if (loading) {
-        console.log("Loading timeout reached, continuing without rider location");
+        console.log(
+          "Loading timeout reached, continuing without rider location"
+        );
         setLoading(false);
       }
     }, 5000);
@@ -158,7 +162,9 @@ export const UserLocation = ({ orderId }) => {
     const distance = R * c;
     const timeInMinutes = (distance / 30) * 60;
 
-    return timeInMinutes < 1 ? "Less than 1 minute" : `~${Math.round(timeInMinutes)} minutes`;
+    return timeInMinutes < 1
+      ? "Less than 1 minute"
+      : `~${Math.round(timeInMinutes)} minutes`;
   };
 
   if (loading) {
@@ -180,35 +186,43 @@ export const UserLocation = ({ orderId }) => {
     );
   }
 
-  const defaultCenter = { lat: 27.7172, lng: 85.324 }; // Kathmandu coordinates as fallback
-  const mapCenter = userLocation || cookLocation || riderLocation || defaultCenter;
+  const defaultCenter = { lat: 27.7172, lng: 85.324 }; 
+  const mapCenter =
+    userLocation || cookLocation || riderLocation || defaultCenter;
 
   const getRestaurantToUserWaypoints = () => {
-    if (cookLocation?.lat && cookLocation?.lng && userLocation?.lat && userLocation?.lng) {
+    if (
+      cookLocation?.lat &&
+      cookLocation?.lng &&
+      userLocation?.lat &&
+      userLocation?.lng
+    ) {
       return [
         { latitude: cookLocation.lat, longitude: cookLocation.lng },
-        { latitude: userLocation.lat, longitude: userLocation.lng }
+        { latitude: userLocation.lat, longitude: userLocation.lng },
       ];
     }
     return [];
   };
 
   const getRiderToUserWaypoints = () => {
-    if (riderLocation?.lat && riderLocation?.lng && userLocation?.lat && userLocation?.lng) {
+    if (
+      riderLocation?.lat &&
+      riderLocation?.lng &&
+      userLocation?.lat &&
+      userLocation?.lng
+    ) {
       return [
         { latitude: riderLocation.lat, longitude: riderLocation.lng },
-        { latitude: userLocation.lat, longitude: userLocation.lng }
+        { latitude: userLocation.lat, longitude: userLocation.lng },
       ];
     }
     return [];
   };
 
-  // Determine if we have valid waypoints for routing
   const restaurantUserWaypoints = getRestaurantToUserWaypoints();
   const riderUserWaypoints = getRiderToUserWaypoints();
 
-  // Debug - check if routing waypoints are valid
-  console.log("Restaurant to User waypoints:", restaurantUserWaypoints);
   console.log("Rider to User waypoints:", riderUserWaypoints);
 
   return (
@@ -223,32 +237,41 @@ export const UserLocation = ({ orderId }) => {
         <div className="mb-2 font-medium">Your Location:</div>
         {userLocation ? (
           <div className="text-gray-500 text-xs mb-3">
-            Coordinates: {userLocation.lat.toFixed(6)}, {userLocation.lng.toFixed(6)}
+            Coordinates: {userLocation.lat.toFixed(6)},{" "}
+            {userLocation.lng.toFixed(6)}
           </div>
         ) : (
-          <div className="text-gray-500 text-xs mb-3">Location not available</div>
-        )}
-
-        {riderLocation?.lat && riderLocation?.lng && userLocation?.lat && userLocation?.lng && (
-          <div className="mt-3 p-2 bg-blue-50 rounded-md">
-            <div className="font-medium">
-              Rider ETA:
-              <span className="ml-1 font-bold">
-                {calculateETA(riderLocation, userLocation)}
-              </span>
-            </div>
-            <div className="text-xs text-gray-500 mt-1">
-              Rider location: {riderLocation.lat.toFixed(6)}, {riderLocation.lng.toFixed(6)}
-            </div>
+          <div className="text-gray-500 text-xs mb-3">
+            Location not available
           </div>
         )}
+
+        {riderLocation?.lat &&
+          riderLocation?.lng &&
+          userLocation?.lat &&
+          userLocation?.lng && (
+            <div className="mt-3 p-2 bg-blue-50 rounded-md">
+              <div className="font-medium">
+                Rider ETA:
+                <span className="ml-1 font-bold">
+                  {calculateETA(riderLocation, userLocation)}
+                </span>
+              </div>
+              <div className="text-xs text-gray-500 mt-1">
+                Rider location: {riderLocation.lat.toFixed(6)},{" "}
+                {riderLocation.lng.toFixed(6)}
+              </div>
+            </div>
+          )}
 
         <div className="mt-3 text-sm">
           {!riderLocation?.lat && (
             <div className="text-gray-500">Waiting for rider to connect...</div>
           )}
           {riderLocation?.lat && riderLocation?.lng && (
-            <div className="text-green-600">Rider connected and on the way!</div>
+            <div className="text-green-600">
+              Rider connected and on the way!
+            </div>
           )}
         </div>
       </div>
@@ -265,13 +288,11 @@ export const UserLocation = ({ orderId }) => {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
 
-            {/* Restaurant to User Route - show only if rider route not available */}
-            {restaurantUserWaypoints.length > 0 && riderUserWaypoints.length === 0 && (
-              <RoutingMAchine
-              waypoints={restaurantUserWaypoints} />
-            )}
+            {restaurantUserWaypoints.length > 0 &&
+              riderUserWaypoints.length === 0 && (
+                <RoutingMAchine waypoints={restaurantUserWaypoints} />
+              )}
 
-            {/* Rider to User Route - priority over restaurant route */}
             {riderUserWaypoints.length > 0 && (
               <RoutingMAchine waypoints={riderUserWaypoints} />
             )}
@@ -309,17 +330,21 @@ export const UserLocation = ({ orderId }) => {
               >
                 <Popup>
                   <div>
-                    <strong>Restaurant</strong>
+                    <strong>Cook</strong>
                   </div>
                 </Popup>
               </Marker>
             )}
 
-            <MapUpdater center={riderLocation || userLocation || cookLocation} />
+            <MapUpdater
+              center={riderLocation || userLocation || cookLocation}
+            />
           </MapContainer>
         ) : (
           <div className="flex items-center justify-center h-full bg-gray-100">
-            <p className="text-gray-500">Map cannot be loaded - invalid location data</p>
+            <p className="text-gray-500">
+              Map cannot be loaded - invalid location data
+            </p>
           </div>
         )}
 
@@ -337,7 +362,7 @@ export const UserLocation = ({ orderId }) => {
           {cookLocation?.lat && cookLocation?.lng && (
             <div className="flex items-center">
               <div className="w-3 h-3 rounded-full bg-green-600 mr-2"></div>
-              <span>Restaurant</span>
+              <span>Cook</span>
             </div>
           )}
         </div>

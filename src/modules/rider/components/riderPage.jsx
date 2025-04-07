@@ -292,7 +292,7 @@ export const RiderPages = ({ orderId }) => {
   const getStatusText = (status) => {
     switch (status) {
       case "assigned":
-        return "Going to Restaurant";
+        return "Going to Cook";
       case "picked_up":
         return "Food Picked Up";
       case "delivering":
@@ -374,7 +374,7 @@ export const RiderPages = ({ orderId }) => {
               <div className="text-xl font-bold text-blue-600">{eta} min</div>
               <div className="text-sm">
                 {activeRoute === "riderToCook" 
-                  ? "to restaurant" 
+                  ? "to Cook" 
                   : "to customer"}
               </div>
             </div>
@@ -422,9 +422,9 @@ export const RiderPages = ({ orderId }) => {
                 icon={createCustomIcon("#22C55E")}
               >
                 <Popup>
-                  <strong>Restaurant</strong>
+                  <strong>Cook</strong>
                   <br />
-                  {orderData?.pickup_location_id?.cook?.name || "Restaurant"}
+                  {orderData?.pickup_location_id?.cook?.name || "Cook"}
                 </Popup>
               </Marker>
             )}

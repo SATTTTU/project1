@@ -221,7 +221,7 @@ const DeliveryTracking = ({ orderId }) => {
         }
         if (cookLocation) {
           etas.push({
-            label: "Restaurant ETA",
+            label: "Cook ETA",
             value: calculateETA(riderLocation, cookLocation),
             bgColor: "bg-green-50",
           });
@@ -389,7 +389,7 @@ const DeliveryTracking = ({ orderId }) => {
               <div className="flex items-center mb-1">
                 <div className="w-3 h-3 rounded-full bg-green-600 mr-2"></div>
                 <span>
-                  {userRole === "cook" ? "You (Restaurant)" : "Restaurant"}
+                  {userRole === "cook" ? "You (Cook)" : "Cook"}
                 </span>
               </div>
             )}
