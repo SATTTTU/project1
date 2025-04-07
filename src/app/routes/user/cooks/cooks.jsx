@@ -16,6 +16,7 @@ export const CookProfile = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { data: cookData, isLoading, isError } = useGetSingleCook(id);
+  console.log("Cook Data****",cookData)
 
   // const [cook, setCook] = useState(null); 
   const [cook, setCook] = useState({

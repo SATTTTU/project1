@@ -4,18 +4,24 @@ import { toast } from "react-toastify";
 import { itemSchema } from "./schema/itemSchema";
 import { useCreateCategoryItem } from "../api/create-category-item";
 import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+
 
 export const useItemFormik = ({
 	category,
 	newItem,
 	setNewItem,
 	editingItem,
+	setOpenModal,
 	// handleAddItem,
 }) => {
+	const queryClient= useQueryClient();
 	const { createCategoryItem, isLoading, error, isSuccess } =
 		useCreateCategoryItem({
 			mutationConfig: {
 				onSuccess: (updatedData) => {
+			queryClient.invalidateQueries(["categories"]); // Replace with the actual query key you use for the category items
+
 					toast.success(
 						editingItem
 							? "Item updated successfully"
@@ -36,6 +42,9 @@ export const useItemFormik = ({
 				onError: (err) => {
 					console.error("API Error:", err);
 					toast.error("An error occurred while saving the item");
+				},
+				onSettled: () => {
+					setOpenModal(false);
 				},
 			},
 		});
@@ -88,6 +97,7 @@ export const useItemFormik = ({
 				toast.error(errorMessage);
 			} finally {
 				setSubmitting(false);
+				// setOpenModal(false);
 			}
 		},
 	});

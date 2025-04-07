@@ -11,7 +11,7 @@ export const WelcomeLoginPanel = ({ image }) => {
 
         <Link
           to="/register"
-          className="bg-white text-black px-4 py-2 text-lg rounded hover:text-white hover:bg-[#426B1F] transition"
+          className="bg-white text-black px-4 py-2 text-lg rounded hover:text-white hover:bg-[#0e9300] transition"
         >
           Sign Up
         </Link>

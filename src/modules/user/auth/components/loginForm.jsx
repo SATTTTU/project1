@@ -27,7 +27,7 @@ export const LoginForm = () => {
 			onSubmit={formik.handleSubmit}
 			className="w-full md:w-2/3 mx-auto flex flex-col justify-center"
 		>
-			<h1 className="text-3xl lg:text-4xl font-bold text-[#426B1F] mb-6">
+			<h1 className="text-3xl lg:text-4xl font-bold text-[#0e9300] mb-6">
 				Sign in as User
 			</h1>
 
@@ -73,7 +73,7 @@ export const LoginForm = () => {
 				</label>
 				<Link
 					to="/forgotpassword"
-					className="text-sm text-[#426B1F] hover:underline"
+					className="text-sm text-[#0e9300] hover:underline"
 				>
 					Forgot Password?
 				</Link>
@@ -82,7 +82,7 @@ export const LoginForm = () => {
 			<button
 				type="submit"
 				// disabled={isLoggingIn || !formik.isValid || formik.isSubmitting}
-				className="w-full bg-[#426B1F] text-white py-2 text-lg rounded-md hover:bg-[#436b1fe5] transition mt-4"
+				className="w-full bg-[#238f17] text-white py-2 text-lg rounded-md hover:bg-[#0e] transition mt-4"
 			>
 				Sign in
 			</button>
@@ -97,7 +97,7 @@ export const LoginForm = () => {
 				Don't have an account?{" "}
 				<button
 					onClick={() => navigate("/register")}
-					className="text-green-700 font-medium hover:underline cursor-pointer"
+					className="text-[#0e9300] font-medium hover:underline cursor-pointer"
 				>
 					Register now
 				</button>

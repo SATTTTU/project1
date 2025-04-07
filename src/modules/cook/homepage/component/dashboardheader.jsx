@@ -7,13 +7,13 @@ import { usePendingPayout } from "../api/pendingpayout";
 
 const DashboardHeader = ({ isOnline, setIsOnline}) => {
   const { mutate: setCookStatus, isLoading} = UseSetCookStatus(); // 'mutate' should be renamed to 'setCookStatus'
-const {data:earnings}= useAllTimeEarnings();
+const {data}= useAllTimeEarnings();
+console.log("earning****", data);
 const {data:weeklyearnings}= useWeeklyEarnings();
 const {data:dailyearnings}= useDailyEarnings();
 const {data:pending} = usePendingPayout();
 
 
-console.log("earnings*****", earnings);
   // Function to handle the button click and update cook's status
   const handleToggleStatus = () => {
     const newStatus = !isOnline;
@@ -51,7 +51,7 @@ console.log("earnings*****", earnings);
         </div>
         <div className="bg-purple-50 p-4 rounded-lg border border-purple-100">
           <p className="text-sm text-gray-600">Total's Earnings</p>
-          <h3 className="text-xl font-bold">Rs. {earnings}</h3>
+          <h3 className="text-xl font-bold">Rs. {data?.total_balance}</h3>
         </div>
         <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
           <p className="text-sm text-gray-600">Pending Payout</p>

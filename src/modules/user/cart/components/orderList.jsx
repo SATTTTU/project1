@@ -42,9 +42,9 @@ export const OrderList = () => {
               };
 
               return (
-                <div key={order.id} className="border rounded-xl p-5 shadow-sm hover:shadow-md transition duration-200 bg-white">
+                <div key={order.id} className="border border-slate-300 rounded-xl p-5 shadow-sm hover:shadow-md transition duration-200 bg-white">
                   <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-xl font-semibold text-gray-800">Order #{order.order_id}</h3>
+                    <h3 className="text-xl font-semibold text-gray-800">Order: {order.order_id}</h3>
                     <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
                       {order.status}
                     </span>
@@ -75,7 +75,7 @@ export const OrderList = () => {
                           <div className="text-sm mt-1">
                             <p>Quantity: {item.quantity}</p>
                             <p>Price: Rs. {item.price}</p>
-                            <p className="font-medium">Total: Rs. {item.total}</p>
+                            {/* <p className="font-medium">Total: Rs. {item.total}</p> */}
                           </div>
                         </div>
                       </div>

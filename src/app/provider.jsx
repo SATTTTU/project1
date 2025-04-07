@@ -24,7 +24,8 @@ export const AppProvider = ({ children }) => {
 				<Provider store={store}>{children}</Provider>
 				{/* </NotificationProvider> */}
 				<ToastContainer
-					position="top-center"
+				toastContainerClassName="!-top-30 !right-5"
+					position="top-right"
 					autoClose={3000}
 					hideProgressBar={false}
 					newestOnTop={false}

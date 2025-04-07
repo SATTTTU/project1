@@ -59,19 +59,20 @@ const createCategoryItem = async (data) => {
 };
 
 export const useCreateCategoryItem = (options = {}) => {
-  const { onSuccess, onError, ...mutationConfig } = options;
-  const queryClient = useQueryClient(); // Get the queryClient instance
+  const { onSuccess, onError, mutationConfig } = options;
+	const queryClient = useQueryClient(); // Get the queryClient instance
 
-  const mutation = useMutation({
-    mutationFn: createCategoryItem,
-    onSuccess: (data) => {
-      // Invalidate the query after a successful mutation to trigger a refresh
-      queryClient.invalidateQueries(["categories"]); // Replace with the actual query key you use for the category items
-      if (onSuccess) onSuccess(data);
-    },
-    onError,
-    ...mutationConfig,
-  });
+	const mutation = useMutation({
+		mutationFn: createCategoryItem,
+		onSuccess: (data) => {
+			// Invalidate the query after a successful mutation to trigger a refresh
+			console.log("on succedin in ****************");
+			queryClient.invalidateQueries(["categories"]); // Replace with the actual query key you use for the category items
+			if (onSuccess) onSuccess(data);
+		},
+		onError,
+		...mutationConfig,
+	});
 
   return {
     createCategoryItem: mutation.mutateAsync,

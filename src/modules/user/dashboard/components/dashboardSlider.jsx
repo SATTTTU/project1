@@ -64,7 +64,7 @@ export const DashSlider = () => {
 					centeredSlides={true}
 					effect={"fade"}
 					autoplay={{
-						delay: 2000, // Adjusted delay for a smoother experience
+						delay: 5000, // Adjusted delay for a smoother experience
 						disableOnInteraction: false,
 					}}
 					pagination={{
@@ -79,7 +79,7 @@ export const DashSlider = () => {
 							<img
 								src={slide.image || "/placeholder.svg"}
 								alt={slide.title}
-								className="absolute inset-0 w-full h-full object-cover"
+								className="absolute inset-0 w-full h-[500px] object-fit"
 							/>
 						</SwiperSlide>
 					))}

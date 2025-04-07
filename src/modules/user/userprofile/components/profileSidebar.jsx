@@ -12,10 +12,9 @@ export const ProfileSidebar = ({ activeTab, setActiveTab, handleLogout }) => {
     { name: "Settings", path: "/profile/settings" },
   ];
 
-  // Function to handle logout action
   const confirmLogout = () => {
     handleLogout();
-    setShowModal(false); // Close the modal after logout
+    setShowModal(false); 
   };
 
   return (

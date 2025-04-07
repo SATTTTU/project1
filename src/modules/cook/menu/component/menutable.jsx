@@ -31,6 +31,8 @@ const MenuTable = ({
 	const [showAddItem, setShowAddItem] = useState(null);
 	const [editingItem, setEditingItem] = useState(null);
 	const [isEditingItem, setIsEditingItem] = useState(false);
+	const [openModal, setOpenModal] = useState(false);
+	const [currentCategory, setCurrentCategory] = useState(null);
 
 	const [newItem, setNewItem] = useState({
 		name: "",
@@ -40,22 +42,23 @@ const MenuTable = ({
 		imagePreview: null,
 		available: true,
 	});
-	const currentCategory =
-		showAddItem !== null ? categories.find((c) => c.id === showAddItem) : null;
+	// const currentCategory =
+	// 	showAddItem !== null ? categories.find((c) => c.id === showAddItem) : null;
 
 	const addItemformik = useItemFormik({
 		category: currentCategory,
 		newItem,
 		setNewItem,
 		editingItem,
+		setOpenModal,
 		// handleAddItem,
 	});
-  console.log("new items", newItem)
 	const editItemformik = useEditFormik({
 		category: currentCategory,
 		newItem,
 		setNewItem,
 		editingItem,
+		setOpenModal,
 	});
 	// Reset the item form
 	const resetItemForm = () => {
@@ -158,9 +161,15 @@ const MenuTable = ({
 			console.log("Menu item updated successfully!");
 		},
 	});
-const imageUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/"
+	const imageUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
-const handleEditItem = (categoryId, item) => {
+	const addMenuItemHandler = (category) => {
+		setShowAddItem(category.id);
+		setOpenModal(true);
+		setCurrentCategory(categories.find((c) => c.id === category.id) || null);
+	};
+
+	const handleEditItem = (categoryId, item) => {
 		setIsEditingItem(true);
 		setNewItem({
 			name: item?.name,
@@ -172,6 +181,8 @@ const handleEditItem = (categoryId, item) => {
 		});
 		setEditingItem(item.id);
 		setShowAddItem(categoryId);
+		setOpenModal(true);
+		setCurrentCategory(categories.find((c) => c.id === categoryId) || null);
 	};
 
 	// Function to call API when editing is confirmed
@@ -244,6 +255,7 @@ const handleEditItem = (categoryId, item) => {
 									setEditingCategory={setEditingCategory}
 									setNewCategory={setNewCategory}
 									setShowAddCategory={setShowAddCategory}
+									addMenuItemHandler={addMenuItemHandler}
 								/>
 
 								{category.isExpanded &&
@@ -263,7 +275,7 @@ const handleEditItem = (categoryId, item) => {
 				</tbody>
 			</table>
 
-			{showAddItem !== null && currentCategory && (
+			{showAddItem !== null && currentCategory && openModal && (
 				<ItemFormModal
 					addItemFormik={isEditingItem ? editItemformik : addItemformik}
 					category={currentCategory}

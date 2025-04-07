@@ -8,13 +8,20 @@ export const itemSchema = z.object({
     .refine((val) => !isNaN(val), { message: "Price must be a valid number" }),
   description: z.string().min(1, "Description is required"),
   image: z
-    .instanceof(File, { message: "Please upload a valid image file" })
-    .optional()
-    .refine((file) => !file || file.size <= 5 * 1024 * 1024, {
-      message: "Image must be less than 5MB",
-    })
-    .refine((file) => !file || ["image/jpeg", "image/png"].includes(file.type), {
-      message: "Only JPEG or PNG images are allowed",
-    }),
+    .union([
+      z
+        .instanceof(File)
+        .refine((file) => file.size <= 5 * 1024 * 1024, {
+          message: "Image must be less than 5MB",
+        })
+        .refine(
+          (file) => ["image/jpeg", "image/png"].includes(file.type),
+          {
+            message: "Only JPEG or PNG images are allowed",
+          }
+        ),
+      z.string().url("Invalid image URL")
+    ])
+    .optional(),
   category_id: z.number().optional().nullable(),
 });

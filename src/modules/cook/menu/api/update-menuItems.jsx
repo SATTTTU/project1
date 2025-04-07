@@ -7,7 +7,10 @@ export const updateMenuItem = ({ menuId, data }) => {
 	formData.append("name", data?.name);
 	formData.append("description", data.description);
 	formData.append("price", data.price.toString());
-	formData.append("image", data.image);
+	if (data.image instanceof File) {
+		formData.append("image", data.image);
+	  }
+	  
 	formData.append("category_id", data.category_id.toString()); // Always include category_id
 
 	// Add authentication token

@@ -3,37 +3,44 @@ import React, { useState } from "react";
 import { ChevronDown, ChevronUp, Edit, Plus, Trash } from 'lucide-react';
 
 const CategoryRow = ({
-  category,
-  toggleCategory,
-  handleDeleteCategory,
-  setShowAddItem,
-  setEditingCategory,
-  setNewCategory,
-  setShowAddCategory,
+	category,
+	toggleCategory,
+	handleDeleteCategory,
+	setShowAddItem,
+	setEditingCategory,
+	setNewCategory,
+	setShowAddCategory,
+	addMenuItemHandler,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+	const [isExpanded, setIsExpanded] = useState(false);
 
-  const getFullImageUrl = (imagePath) => {
-    if (!imagePath) return "/api/placeholder/80/80";
+	const getFullImageUrl = (imagePath) => {
+		if (!imagePath) return "/api/placeholder/80/80";
 
-    if (imagePath.startsWith("http")) return imagePath;
+		if (imagePath.startsWith("http")) return imagePath;
 
-    const storageUrl = import.meta.env.VITE_BUCKET_URL.endsWith("/")
-      ? `${import.meta.env.VITE_BUCKET_URL}/`
-      : `${import.meta.env.VITE_BUCKET_URL}/`;
-    return `${storageUrl}${imagePath}`;
-  };
+		const storageUrl = import.meta.env.VITE_BUCKET_URL.endsWith("/")
+			? `${import.meta.env.VITE_BUCKET_URL}/`
+			: `${import.meta.env.VITE_BUCKET_URL}/`;
+		return `${storageUrl}${imagePath}`;
+	};
 
-  const handleToggleExpand = () => {
-    setIsExpanded(!isExpanded);
-    toggleCategory(category.id);
-  };
+	const handleToggleExpand = () => {
+		setIsExpanded(!isExpanded);
+		toggleCategory(category.id);
+	};
 
-  if (!category) {
-    return <tr><td colSpan={4} className="text-center">Category not found</td></tr>;
-  }
+	if (!category) {
+		return (
+			<tr>
+				<td colSpan={4} className="text-center">
+					Category not found
+				</td>
+			</tr>
+		);
+	}
 
-  return (
+	return (
 		<>
 			{/* Category Row */}
 			<tr className="bg-gray-50">
@@ -67,7 +74,7 @@ const CategoryRow = ({
 					</button>
 					<button
 						onClick={() => {
-							setShowAddItem(category.id);
+							addMenuItemHandler(category);
 						}}
 						className="text-[#426B1F] hover:text-[#365818] cursor-pointer"
 					>

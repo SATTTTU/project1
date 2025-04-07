@@ -102,7 +102,7 @@ const ItemFormModal = ({
               {formik.errors.description}
             </p>
           )}
-        </div>
+      </div>
 
         {/* Image Upload */}
         <div>
@@ -155,6 +155,7 @@ const ItemFormModal = ({
           block
           className="mt-4"
           loading={isLoading}
+          
         >
           {isEditing ? "Update Dish" : "Add Dish"}
         </Button>
