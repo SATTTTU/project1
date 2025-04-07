@@ -87,7 +87,6 @@ const DeliveryTracking = ({ orderId }) => {
     getOrderData();
   }, [orderId]);
 
-  // Fix for socket connection - use both roomId formats for compatibility
   useEffect(() => {
     const roomId = `order-${orderId}`;
     

@@ -1,6 +1,3 @@
-// components/OrderStats.jsx
-import React from "react";
-
 export const OrderStats = ({ totalOrders, totalItems, totalEarnings }) => {
   return (
     <div className="grid gap-4 mb-6 sm:grid-cols-3">
@@ -17,5 +14,6 @@ export const OrderStats = ({ totalOrders, totalItems, totalEarnings }) => {
         <p className="mt-2 text-3xl font-bold">₹{totalEarnings}</p>
       </div>
     </div>
-  );
-};
+  )
+}
+

@@ -1,6 +1,5 @@
-// components/Pagination.jsx
-import React from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+"use client"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
 export const Pagination = ({
   currentPage,
@@ -17,10 +16,8 @@ export const Pagination = ({
         {filteredDataLength > 0 ? (
           <>
             Showing <span className="font-medium">{startIndex + 1}</span> to{" "}
-            <span className="font-medium">
-              {Math.min(startIndex + itemsPerPage, filteredDataLength)}
-            </span>{" "}
-            of <span className="font-medium">{filteredDataLength}</span> results
+            <span className="font-medium">{Math.min(startIndex + itemsPerPage, filteredDataLength)}</span> of{" "}
+            <span className="font-medium">{filteredDataLength}</span> results
           </>
         ) : (
           "No results"
@@ -29,9 +26,7 @@ export const Pagination = ({
       <div className="flex gap-1">
         <button
           className={`inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1 text-sm font-medium text-gray-700 ${
-            currentPage > 1
-              ? "hover:bg-gray-50"
-              : "opacity-50 cursor-not-allowed"
+            currentPage > 1 ? "hover:bg-gray-50" : "opacity-50 cursor-not-allowed"
           }`}
           onClick={handlePrevPage}
           disabled={currentPage <= 1}
@@ -41,9 +36,7 @@ export const Pagination = ({
         </button>
         <button
           className={`inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1 text-sm font-medium text-gray-700 ${
-            currentPage < totalPages
-              ? "hover:bg-gray-50"
-              : "opacity-50 cursor-not-allowed"
+            currentPage < totalPages ? "hover:bg-gray-50" : "opacity-50 cursor-not-allowed"
           }`}
           onClick={handleNextPage}
           disabled={currentPage >= totalPages}
@@ -53,5 +46,6 @@ export const Pagination = ({
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
+
