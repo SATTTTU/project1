@@ -4,7 +4,7 @@ import "leaflet/dist/leaflet.css";
 import { io } from "socket.io-client";
 import L from "leaflet";
 import RoutingMAchine from "@/components/layout/realtime-map/RoutingMachine/RoutingMAchine";
-import image from "../../../assets/gg.svg"
+import image from "../../../assets/gg.svg";
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -45,6 +45,8 @@ export const UserLocation = ({ orderId }) => {
   const [error, setError] = useState(null);
   const [orderStatus, setOrderStatus] = useState("received");
   const [socket] = useState(() => io("wss://khajabox-socket.tai.com.np"));
+
+  socket && socket.emit("join room", `khajabox-${orderId}`);
 
   const getOrderData = async () => {
     console.log("Fetching order data for ID:", orderId);
@@ -90,7 +92,9 @@ export const UserLocation = ({ orderId }) => {
       }
     } catch (err) {
       console.error("Error fetching order:", err);
-      setError("Your order is currently being prepared. Tracking will be available once it’s out for delivery");
+      setError(
+        "Your order is currently being prepared. Tracking will be available once it’s out for delivery"
+      );
     } finally {
       setLoading(false);
     }
@@ -100,46 +104,51 @@ export const UserLocation = ({ orderId }) => {
     getOrderData();
   }, [orderId]);
 
+  //DON'T uncomment this also [RISHI]
+  // not the effective way
+  // useEffect(() => {
+  //   const roomId = `order-${orderId}`;
+
+  //   const handleRiderLocation = (data, room) => {
+  //     console.log("Received rider location:", data, "Room:", room);
+
+  //     if (
+  //       data &&
+  //       typeof data.lat === "number" &&
+  //       typeof data.lng === "number"
+  //     ) {
+  //       console.log("Setting rider location state:", data);
+  //       setRiderLocation(data);
+  //       setLoading(false);
+  //     } else {
+  //       console.warn("Invalid rider location data:", data);
+  //     }
+  //   };
+
+  //   socket.on("rider location", handleRiderLocation);
+
+  //   const timeout = setTimeout(() => {
+  //     if (loading) {
+  //       console.log(
+  //         "Loading timeout reached, continuing without rider location"
+  //       );
+  //       setLoading(false);
+  //     }
+  //   }, 5000);
+
+  //   return () => {
+  //     console.log("Cleaning up socket connection");
+  //     socket.off("rider location", handleRiderLocation);
+  //     clearTimeout(timeout);
+  //   };
+  // }, [socket, orderId, loading]);
+
   useEffect(() => {
-    const roomId = `order-${orderId}`;
-
-    console.log("Joining socket rooms:", orderId, roomId);
-    socket.emit("join room", orderId);
-    socket.emit("join room", roomId);
-
-    const handleRiderLocation = (data, room) => {
-      console.log("Received rider location:", data, "Room:", room);
-
-      if (
-        data &&
-        typeof data.lat === "number" &&
-        typeof data.lng === "number"
-      ) {
-        console.log("Setting rider location state:", data);
-        setRiderLocation(data);
-        setLoading(false);
-      } else {
-        console.warn("Invalid rider location data:", data);
-      }
-    };
-
-    socket.on("rider location", handleRiderLocation);
-
-    const timeout = setTimeout(() => {
-      if (loading) {
-        console.log(
-          "Loading timeout reached, continuing without rider location"
-        );
-        setLoading(false);
-      }
-    }, 5000);
-
-    return () => {
-      console.log("Cleaning up socket connection");
-      socket.off("rider location", handleRiderLocation);
-      clearTimeout(timeout);
-    };
-  }, [socket, orderId, loading]);
+    socket.on("rider location", (data) => {
+      console.log("rider location data from socket", data);
+      setRiderLocation(data);
+    });
+  }, [socket]);
 
   // Debug whenever rider location changes
   useEffect(() => {
@@ -190,32 +199,32 @@ export const UserLocation = ({ orderId }) => {
               className="w-full h-auto object-cover"
             />
           </div>
-  
+
           {/* Text content */}
           <div className="w-full md:w-1/2 text-center md:text-left">
             <h1 className="text-2xl font-bold text-yellow-600 mb-4">
-            Your order is currently being prepared
+              Your order is currently being prepared
             </h1>
             <p className="text-gray-600 mb-6">
               {error ||
                 " Tracking will be available once it’s out for delivery."}
             </p>
-  
+
             <div className="flex flex-col md:flex-row gap-4">
-              <button className="px-6 py-3 bg-teal-600 text-white font-semibold rounded-lg hover:bg-teal-700 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
-              onClick={() => window.location.href = "/profile/order"}>
+              <button
+                className="px-6 py-3 bg-teal-600 text-white font-semibold rounded-lg hover:bg-teal-700 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+                onClick={() => (window.location.href = "/profile/order")}
+              >
                 Return to Dashboard
               </button>
-             
             </div>
           </div>
         </div>
       </div>
     );
   }
-  
 
-  const defaultCenter = { lat: 27.7172, lng: 85.324 }; 
+  const defaultCenter = { lat: 27.7172, lng: 85.324 };
   const mapCenter =
     userLocation || cookLocation || riderLocation || defaultCenter;
 
@@ -256,22 +265,25 @@ export const UserLocation = ({ orderId }) => {
 
   return (
     <div className="h-screen flex flex-col bg-gray-50">
-       <div className="bg-gradient-to-r from-pink-600 to-pink-500 text-white p-5 rounded-md shadow-lg flex justify-between items-center">
-      <div>
-        <h1 className="text-2xl font-bold mb-1">Order Tracking</h1>
-        <p className="text-sm text-white/90">Order #: <span className="font-medium">{orderId}</span></p>
-        <p className="text-sm text-white/90">Status: <span className="font-medium">{orderStatus}</span></p>
-      </div>
+      <div className="bg-gradient-to-r from-pink-600 to-pink-500 text-white p-5 rounded-md shadow-lg flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold mb-1">Order Tracking</h1>
+          <p className="text-sm text-white/90">
+            Order #: <span className="font-medium">{orderId}</span>
+          </p>
+          <p className="text-sm text-white/90">
+            Status: <span className="font-medium">{orderStatus}</span>
+          </p>
+        </div>
 
-      <button
-     onClick={() => window.location.href = "/profile/order"}
-        className="bg-white text-pink-600 hover:bg-pink-100 font-semibold px-4 py-2 rounded-md transition-all shadow-md"
-      >
-        Go Back to Order
-      </button>
-    </div>
-      <div>
+        <button
+          onClick={() => (window.location.href = "/profile/order")}
+          className="bg-white text-pink-600 hover:bg-pink-100 font-semibold px-4 py-2 rounded-md transition-all shadow-md"
+        >
+          Go Back to Order
+        </button>
       </div>
+      <div></div>
 
       <div className="p-4 bg-white shadow-sm">
         <div className="mb-2 font-medium">Your Location:</div>
@@ -328,15 +340,6 @@ export const UserLocation = ({ orderId }) => {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
 
-            {restaurantUserWaypoints.length > 0 &&
-              riderUserWaypoints.length === 0 && (
-                <RoutingMAchine waypoints={restaurantUserWaypoints} />
-              )}
-
-            {riderUserWaypoints.length > 0 && (
-              <RoutingMAchine waypoints={riderUserWaypoints} />
-            )}
-
             {riderLocation?.lat && riderLocation?.lng && (
               <Marker
                 position={[riderLocation.lat, riderLocation.lng]}
@@ -374,6 +377,15 @@ export const UserLocation = ({ orderId }) => {
                   </div>
                 </Popup>
               </Marker>
+            )}
+
+            {userLocation.lat && cookLocation.lat && (
+              <RoutingMAchine
+                waypoints={[
+                  { latitude: userLocation.lat, longitude: userLocation.lng },
+                  { latitude: cookLocation.lat, longitude: cookLocation.lng },
+                ]}
+              />
             )}
 
             <MapUpdater
