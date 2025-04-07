@@ -52,7 +52,7 @@ export const Header = ({ navigate, popularItems, categories, cooks }) => {
 	const confirmLogout = async () => {
 	  try {
 		await logout();
-		localStorage.clear();
+		localStorage.removeItem('user_token')
 		window.location.href = "/login";
 	  } catch (error) {
 		console.error("Logout failed", error);
