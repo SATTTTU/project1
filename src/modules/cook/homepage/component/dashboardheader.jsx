@@ -1,26 +1,40 @@
-import React from "react";
-import { UseSetCookStatus } from "../api/availableStatus"; // Import the custom hook
+import React, { useEffect, useState } from "react";
+import { UseSetCookStatus } from "../api/availableStatus";
 import { useAllTimeEarnings } from "../api/alltimeEarnings";
 import { useWeeklyEarnings } from "../api/weeklyEarnings";
 import { useDailyEarnings } from "../api/dailyEarnings";
 import { usePendingPayout } from "../api/pendingpayout";
-import { toast } from "react-toastify";  // Import toast for error handling
+// import { useGetCookStatus } from "../api/getCookStatus";
+import { toast } from "react-toastify";
+import { useParams } from "react-router-dom"; // Assuming cookId is in URL params
+import { useGetCookStatus } from "@/modules/user/cooks/api/getCookStatus";
 
-const DashboardHeader = ({ isOnline, setIsOnline }) => {
-  const { mutate: setCookStatus, isLoading: statusLoading} = UseSetCookStatus();
+const DashboardHeader = () => {
+  const { id: cookId } = useParams(); // Or use your auth context if cookId is stored there
+
+  const [isOnline, setIsOnline] = useState(false);
+
+  const { mutate: setCookStatus, isLoading: statusLoading } = UseSetCookStatus();
+  const { data: cookStatusData, isLoading: statusFetching } = useGetCookStatus(cookId);
   const { data } = useAllTimeEarnings();
   const { data: weeklyearnings } = useWeeklyEarnings();
   const { data: dailyearnings } = useDailyEarnings();
   const { data: pending } = usePendingPayout();
 
-  // Function to handle the button click and update cook's status
+  // Set initial status from backend when component mounts
+  useEffect(() => {
+    if (cookStatusData) {
+      setIsOnline(cookStatusData.available_status === "online");
+    }
+  }, [cookStatusData]);
+
   const handleToggleStatus = async () => {
     const newStatus = !isOnline;
-    setIsOnline(newStatus); // Update the local state
+    setIsOnline(newStatus); // Optimistically update UI
 
     try {
-      await setCookStatus({ available_status: newStatus ? "online" : "offline" }); 
-      toast.success(`Status updated to ${newStatus ? "Online" : "offline"}`, {
+      await setCookStatus({ available_status: newStatus ? "online" : "offline" });
+      toast.success(`Status updated to ${newStatus ? "Online" : "Offline"}`, {
         position: "bottom-right",
         autoClose: 2000,
       });
@@ -32,6 +46,8 @@ const DashboardHeader = ({ isOnline, setIsOnline }) => {
     }
   };
 
+  if (statusFetching) return <p className="text-gray-500">Loading status...</p>;
+
   return (
     <div className="mb-6 p-4 bg-white rounded-lg shadow-sm">
       <div className="flex justify-between items-center mb-4">
@@ -41,10 +57,12 @@ const DashboardHeader = ({ isOnline, setIsOnline }) => {
         </div>
         <button
           onClick={handleToggleStatus}
-          className={`px-4 py-2 rounded-full cursor-pointer font-medium ${isOnline ? "bg-[#426B1F] text-white" : "bg-gray-200 text-gray-700"}`}
-          disabled={statusLoading} // Disable while loading
+          className={`px-4 py-2 rounded-full cursor-pointer font-medium ${
+            isOnline ? "bg-[#426B1F] text-white" : "bg-gray-200 text-gray-700"
+          }`}
+          disabled={statusLoading}
         >
-          {statusLoading ? "Updating..." : isOnline ? "Go Offline" : "Go Online"} {/* Button text */}
+          {statusLoading ? "Updating..." : isOnline ? "Go Offline" : "Go Online"}
         </button>
       </div>
 

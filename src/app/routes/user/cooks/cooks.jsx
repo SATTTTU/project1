@@ -19,7 +19,7 @@ export const CookProfile = () => {
   const dispatch = useDispatch();
   const { data: cookData, isLoading, isError } = useGetSingleCook(id);
   const { data: cookStatus, isLoading: statusLoading } = useGetCookStatus(id); 
-  console.log("cookstatus**",cookStatus)// Fetch cook status
+  console.log("cookstatussss**",cookStatus)// Fetch cook status
   const [cook, setCook] = useState({
     reviews: [],
     reviewCount: 0,
@@ -96,7 +96,7 @@ export const CookProfile = () => {
                   : "bg-gray-200 text-gray-600"
               }`}
             >
-              {cook?.available_status || "Unavailable"}
+              {cook?.available_status || "Online"}
             </p>
           </div>
         </section>
