@@ -343,7 +343,7 @@ const DeliveryTracking = ({ orderId }) => {
         <div className="flex-grow relative">
           <MapContainer
             center={[primaryLocation.lat, primaryLocation.lng]}
-            zoom={15}
+            defaultZoom={15}
             style={{ height: "100%", width: "100%" }}
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />

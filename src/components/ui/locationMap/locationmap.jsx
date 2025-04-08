@@ -64,7 +64,7 @@ const LocationMap = ({
     <div className="rounded-lg overflow-hidden border relative z-0 border-gray-200">
       <MapContainer
         center={[location.lat, location.lng]}
-        zoom={13}
+        defaaultZoom={13}
         style={{ height: "300px", width: "100%" }}
       >
         <TileLayer

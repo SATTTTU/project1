@@ -391,7 +391,7 @@ export const RiderPages = ({ orderId }) => {
         {defaultCenter && (
           <MapContainer
             center={[defaultCenter.lat, defaultCenter.lng]}
-            zoom={15}
+            defaultZoom={15}
             style={{ height: "100%", width: "100%" }}
             zoomControl={false}
           >
