@@ -385,7 +385,6 @@ const DeliveryTracking = ({ orderId }) => {
               </Marker>
             )}
 
-            {/* Add RoutingMachine for optimized routing */}
 
             {userLocation.lat && cookLocation.lat && (
               <RoutingMAchine
