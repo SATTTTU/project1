@@ -8,10 +8,7 @@ const customIcon = new L.Icon({
   iconSize: [30, 30],
 });
 
-const LocationMap = ({ 
-  fetchLocationFn, 
-  title = "Your Location" 
-}) => {
+const LocationMap = ({ fetchLocationFn, title = "Your Location" }) => {
   const [location, setLocation] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -22,7 +19,7 @@ const LocationMap = ({
         setIsLoading(true);
         setError(null);
         const response = await fetchLocationFn();
-        
+
         const { latitude, longitude } = response.data;
         setLocation({ lat: latitude, lng: longitude });
       } catch (err) {
@@ -64,7 +61,7 @@ const LocationMap = ({
     <div className="rounded-lg overflow-hidden border relative z-0 border-gray-200">
       <MapContainer
         center={[location.lat, location.lng]}
-        defaaultZoom={13}
+        zoom={19}
         style={{ height: "300px", width: "100%" }}
       >
         <TileLayer

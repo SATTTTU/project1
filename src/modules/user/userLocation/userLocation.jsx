@@ -26,15 +26,15 @@ const createCustomIcon = (color) =>
   });
 
 // Component to auto-center map on user location changes
-const MapUpdater = ({ center }) => {
-  const map = useMap();
-  useEffect(() => {
-    if (center && center.lat && center.lng) {
-      map.setView(center, 15);
-    }
-  }, [center, map]);
-  return null;
-};
+// const MapUpdater = ({ center }) => {
+//   const map = useMap();
+//   useEffect(() => {
+//     if (center && center.lat && center.lng) {
+//       map.setView(center, 15);
+//     }
+//   }, [center, map]);
+//   return null;
+// };
 
 export const UserLocation = ({ orderId }) => {
   const [, setOrderData] = useState(null);
@@ -332,7 +332,7 @@ export const UserLocation = ({ orderId }) => {
         {mapCenter?.lat && mapCenter?.lng ? (
           <MapContainer
             center={[mapCenter.lat, mapCenter.lng]}
-           defaultZoom={15}
+            zoom={19}
             style={{ height: "100%", width: "100%" }}
           >
             <TileLayer
@@ -388,9 +388,9 @@ export const UserLocation = ({ orderId }) => {
               />
             )}
 
-            <MapUpdater
+            {/* <MapUpdater
               center={riderLocation || userLocation || cookLocation}
-            />
+            /> */}
           </MapContainer>
         ) : (
           <div className="flex items-center justify-center h-full bg-gray-100">

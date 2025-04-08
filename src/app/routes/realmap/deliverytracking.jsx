@@ -25,13 +25,13 @@ const createCustomIcon = (color) =>
     popupAnchor: [0, -12],
   });
 
-const MapUpdater = ({ center }) => {
-  const map = useMap();
-  useEffect(() => {
-    if (center) map.setView(center, 15);
-  }, [center, map]);
-  return null;
-};
+// const MapUpdater = ({ center }) => {
+//   const map = useMap();
+//   useEffect(() => {
+//     if (center) map.setView(center, 15);
+//   }, [center, map]);
+//   return null;
+// };
 
 const DeliveryTracking = ({ orderId }) => {
   const [orderData, setOrderData] = useState(null);
@@ -343,7 +343,7 @@ const DeliveryTracking = ({ orderId }) => {
         <div className="flex-grow relative">
           <MapContainer
             center={[primaryLocation.lat, primaryLocation.lng]}
-            defaultZoom={15}
+            zoom={19}
             style={{ height: "100%", width: "100%" }}
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
@@ -395,7 +395,7 @@ const DeliveryTracking = ({ orderId }) => {
               />
             )}
 
-            <MapUpdater center={primaryLocation} />
+            {/* <MapUpdater center={primaryLocation} /> */}
           </MapContainer>
 
           <div className="absolute bottom-4 right-4 z-50 bg-white p-2 rounded-md shadow-md text-xs">

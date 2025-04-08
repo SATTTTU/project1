@@ -27,7 +27,7 @@ const createCustomIcon = (color) =>
   });
 
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
-  const R = 6371; 
+  const R = 6371;
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
   const dLon = ((lon2 - lon1) * Math.PI) / 180;
   const a =
@@ -41,15 +41,15 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
   return d;
 };
 
-const MapUpdater = ({ center }) => {
-  const map = useMap();
+// const MapUpdater = ({ center }) => {
+//   const map = useMap();
 
-  useEffect(() => {
-    if (center) map.setView(center, 15);
-  }, [center, map]);
+//   useEffect(() => {
+//     if (center) map.setView(center, 15);
+//   }, [center, map]);
 
-  return null;
-};
+//   return null;
+// };
 
 export const RiderPages = ({ orderId }) => {
   const [loading, setLoading] = useState(true);
@@ -391,7 +391,7 @@ export const RiderPages = ({ orderId }) => {
         {defaultCenter && (
           <MapContainer
             center={[defaultCenter.lat, defaultCenter.lng]}
-            defaultZoom={15}
+            zoom={19}
             style={{ height: "100%", width: "100%" }}
             zoomControl={false}
           >
