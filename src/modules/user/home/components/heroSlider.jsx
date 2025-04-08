@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Header } from "./header"
@@ -47,14 +46,14 @@ export const HeroSlider = () => {
 
       <div className="relative w-full h-full">
         <button
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover:bg-black/50 text-white rounded-full p-2 transition-colors"
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover:bg-black/50 text-white rounded-full p-2 transition-colors md:left-6 lg:left-8"
           onClick={() => swiperInstance?.slidePrev()}
           aria-label="Previous slide"
         >
           <ChevronLeft className="h-6 w-6 cursor-pointer" />
         </button>
         <button
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover:bg-black/50 text-white rounded-full p-2 transition-colors"
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover:bg-black/50 text-white rounded-full p-2 transition-colors md:right-6 lg:right-8"
           onClick={() => swiperInstance?.slideNext()}
           aria-label="Next slide"
         >
@@ -83,18 +82,23 @@ export const HeroSlider = () => {
         >
           {heroSlides.map((slide) => (
             <SwiperSlide key={slide.id} className="relative">
-              <div className="absolute inset-0 z-0 w-full max-w-full overflow-hidden"></div>
-              <img
-                src={slide.image || "/placeholder.svg"}
-                alt={`${slide.title}`}
-                className="absolute inset-0  w-full h-full object-cover "
-              />
+              <div className="absolute inset-0 z-0 w-full max-w-full overflow-hidden">
+                <img
+                  src={slide.image || "/placeholder.svg"}
+                  alt={`${slide.title}`}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              </div>
               <div className="absolute inset-0 z-10 flex items-center justify-center">
                 <div className="container mx-auto px-4">
                   <div className="max-w-2xl mx-auto text-center">
-                    <h1 className="text-4xl md:text-4xl lg:text-5xl font-bold text-[#0e9300] mb-4">{slide.title}</h1>
-                    <p className=" text-lg md:text-xl mb-6 text-[#0e9300]">{slide.subtitle}</p>
-                  
+                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#0e9300] mb-4">
+                      {slide.title}
+                    </h1>
+                    <p className="text-sm md:text-lg lg:text-xl mb-6 text-[#0e9300]">
+                      {slide.subtitle}
+                    </p>
+                   
                   </div>
                 </div>
               </div>
@@ -116,7 +120,7 @@ export const HeroSlider = () => {
           cursor: pointer;
           transition: all 0.3s ease;
         }
-        
+
         .swiper-custom-bullet-active {
           background: rgba(255, 255, 255, 1);
           width: 24px;
@@ -125,4 +129,3 @@ export const HeroSlider = () => {
     </header>
   )
 }
-

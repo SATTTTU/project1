@@ -12,6 +12,7 @@ export const PreRegisterForm = () => {
 		mutationConfig: {
 			onSuccess: (data) => {
 				console.log("Registration successful:", data);
+				// navigate("/cook/verification")
 
 				// Store user data in localStorage
 				const userData = {
@@ -54,7 +55,7 @@ export const PreRegisterForm = () => {
 
 	return (
 		<div className="bg-white p-8 rounded-lg  w-full max-w-md">
-			<h2 className="text-3xl text-[#426B1F] font-bold mb-6 text-center">
+			<h2 className="text-3xl text-[#0f9300d1] font-bold mb-6 text-center">
 				Sign up as cook
 			</h2>
 
@@ -107,7 +108,7 @@ export const PreRegisterForm = () => {
 				<button
 					type="submit"
 					disabled={isRegistering || formik.isSubmitting}
-					className="w-full bg-[#426B1F] text-white py-2 rounded-md hover:bg-[#426B1G] transition duration-300 disabled:bg-blue-400"
+					className="w-full bg-[#0f9300d1] text-white py-2 rounded-md hover:bg-[#426B1G] transition duration-300 disabled:bg-blue-400"
 				>
 					{isRegistering ? "Signing Up..." : "Sign Up"}
 				</button>
@@ -115,7 +116,7 @@ export const PreRegisterForm = () => {
 
 			<p className="mt-4 text-center text-gray-600">
 				Already have an account?{" "}
-				<Link to="/cook/login" className="text-[#426B1F] hover:underline">
+				<Link to="/cook/login" className="text-[#0f9300d1] hover:underline">
 					Login Now
 				</Link>
 			</p>

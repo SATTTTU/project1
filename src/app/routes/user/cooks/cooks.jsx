@@ -12,12 +12,14 @@ import { useGetSingleCook } from "@/modules/user/cooks/api/getCookProfie";
 import { CookReviews } from "@/modules/user/cooks/components/cookReviews";
 import { AboutTab } from "@/modules/user/cooks/components/aboutTab";
 import { UseSetCookStatus } from "@/modules/cook/homepage/api/availableStatus";
+import { useGetCookStatus } from "@/modules/user/cooks/api/getCookStatus";
 
 export const CookProfile = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { data: cookData, isLoading, isError } = useGetSingleCook(id);
-  const { data: cookStatus, isLoading: statusLoading } = UseSetCookStatus(id); // Fetch cook status
+  const { data: cookStatus, isLoading: statusLoading } = useGetCookStatus(id); 
+  console.log("cookstatus**",cookStatus)// Fetch cook status
   const [cook, setCook] = useState({
     reviews: [],
     reviewCount: 0,
@@ -89,7 +91,7 @@ export const CookProfile = () => {
               className={`mt-2 px-4 py-2 text-sm font-semibold rounded-full inline-block shadow-md ${
                 cook?.available_status === "online"
                   ? "bg-green-100 text-green-700"
-                  : cook?.available_status === "busy"
+                  : cook?.available_status === "offline"
                   ? "bg-yellow-100 text-yellow-700"
                   : "bg-gray-200 text-gray-600"
               }`}

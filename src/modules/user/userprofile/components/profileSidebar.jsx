@@ -7,7 +7,7 @@ export const ProfileSidebar = ({ activeTab, setActiveTab, handleLogout }) => {
 
   const menuItems = [
     { name: "Profile", path: "/profile" },
-    { name: "Orders", path: "/profile/order" },
+    { name: "Orders History", path: "/profile/order" },
     { name: "Settings", path: "/profile/settings" },
   ];
 

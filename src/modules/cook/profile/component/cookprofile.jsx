@@ -4,6 +4,8 @@ import { useState, useEffect } from "react"
 import { UseProfileFormik } from "../formik/useupdatecookprofile"
 import LocationMap from "@/components/ui/locationMap/locationmap"
 import { UsegetCookLocation } from "../api/getCookLocation"
+import Profile from "../../../../assets/defaultProfile.jpg";
+
 
 export const ProfileCard = ({ userData }) => {
   const { mutateAsync: fetchCookLocation } = UsegetCookLocation()
@@ -53,7 +55,7 @@ export const ProfileCard = ({ userData }) => {
     formik.resetForm()
     setImagePreview(formik.initialValues.image)
   }
-	const profilePhotoUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
+	// const profilePhotoUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
@@ -65,13 +67,24 @@ export const ProfileCard = ({ userData }) => {
             <div className="flex items-center space-x-6 w-full md:w-auto">
               <div className="relative">
               
-                <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-white bg-white shadow-md">
-                <img
-											src={`${profilePhotoUrl}${userData?.image_url}`}
-											alt="image"
-											className="rounded-full lg:h-30 w-30 h-30  mb-4"
-										/>
-                </div>
+                <div
+                              className="p-1 rounded-full transition-transform duration-200 hover:scale-105"
+                            >
+                       <img
+  src={
+    userData?.image_url
+      ? `${import.meta.env.VITE_BUCKET_URL}${userData.image_url}`
+      : Profile
+  }
+  onError={(e) => {
+    e.target.onerror = null; // prevent infinite loop
+    e.target.src = Profile;  // fallback image
+  }}
+  alt="Profile"
+  className="rounded-full h-20 w-20 object-cover shadow-md border-2 border-white transition-all duration-300"
+/>
+
+                            </div>
                 {isEditMode && (
                   <label
                     htmlFor="profile-pic"

@@ -19,8 +19,8 @@ const DashboardHeader = ({ isOnline, setIsOnline }) => {
     setIsOnline(newStatus); // Update the local state
 
     try {
-      await setCookStatus({ available_status: newStatus ? "online" : "busy" }); 
-      toast.success(`Status updated to ${newStatus ? "Available" : "Busy"}`, {
+      await setCookStatus({ available_status: newStatus ? "online" : "offline" }); 
+      toast.success(`Status updated to ${newStatus ? "Online" : "offline"}`, {
         position: "bottom-right",
         autoClose: 2000,
       });

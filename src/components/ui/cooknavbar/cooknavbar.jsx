@@ -108,15 +108,20 @@ const CookNavBAr = () => {
 								<div className="text-md font-medium">{cook?.name}</div>
 							</div>
 							<div className="p-1 rounded-full transition-transform duration-200 hover:scale-105">
-								<img
-									src={
-										cook?.image_url
-											? `${import.meta.env.VITE_BUCKET_URL}${cook?.image_url}`
-											: Profile
-									}
-									alt="Profile"
-									className="rounded-full h-10 w-10 object-cover shadow-md border-2 border-white transition-all duration-300"
-								/>
+							<img
+  src={
+    cook?.image_url
+      ? `${import.meta.env.VITE_BUCKET_URL}${cook.image_url}`
+      : Profile
+  }
+  onError={(e) => {
+    e.target.onerror = null; // prevent infinite loop
+    e.target.src = Profile;  // fallback image
+  }}
+  alt="Profile"
+  className="rounded-full h-10 w-10 object-cover shadow-md border-2 border-white transition-all duration-300"
+/>
+
 							</div>
 						</button>
 
