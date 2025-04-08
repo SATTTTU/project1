@@ -1,8 +1,10 @@
 import React from 'react';
 
 const TermsStep = ({ formik }) => {
+  console.log("formik", formik)
   return (
     <div className="flex flex-col items-center max-w-2xl mx-auto">
+      {/* <pre>{JSON.stringify(formik,null,2  )}</pre> */}
       <div className="w-full bg-white p-6 rounded-lg ">
         <h2 className="text-2xl font-bold text-center mb-2">Terms and Conditions</h2>
         

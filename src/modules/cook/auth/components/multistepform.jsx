@@ -218,18 +218,27 @@ const MultiStepForm = () => {
 					)}
 
 					{isLastStep ? (
-						<button
-							type="submit"
-							className="px-4 py-2 bg-[#426B1F] text-white rounded hover:bg-[#426B1G] flex items-center"
-							disabled={formik.isSubmitting || isRegistering}
-						>
-							{formik.isSubmitting || isRegistering
-								? "Submitting..."
-								: "Submit"}
-							{!(formik.isSubmitting || isRegistering) && (
-								<ChevronRight className="ml-1 h-4 w-4" />
-							)}
-						</button>
+					<button
+          type="submit"
+          className={`px-4 py-2 rounded flex items-center transition-colors duration-200
+            ${formik.isSubmitting || isRegistering || !formik.values.termsAccepted
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-[#426B1F] text-white hover:bg-[#3b5f1d]"}`
+          }
+          disabled={
+            formik.isSubmitting ||
+            isRegistering ||
+            !formik.values.termsAccepted
+          }
+        >
+          {formik.isSubmitting || isRegistering
+            ? "Submitting..."
+            : "Submit"}
+          {(formik.isSubmitting || isRegistering) && (
+            <ChevronRight className="ml-1 h-4 w-4" />
+          )}
+        </button>
+        
 					) : (
 						<button
 							type="button"

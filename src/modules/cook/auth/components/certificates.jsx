@@ -22,16 +22,16 @@ const CertificatesStep = ({ formik }) => {
 
   const certificates = formik.values.certificates || [];
 
+
   return (
 		<div className="w-full space-y-6">
+			{/* <pre>{JSON.stringify(formik, null, 2)}</pre> */}
 			<h2 className="text-2xl font-bold text-gray-800">
 				Upload Certificates & Experience
 			</h2>
 			<p className="text-gray-600">
-				You can optionally upload your certificates and enter your experience
-				letters.
+				You can optionally upload your certificates and share your experiences.
 			</p>
-
 			<div className="space-y-4">
 				{/* Certificates Upload */}
 				<div>
@@ -82,7 +82,6 @@ const CertificatesStep = ({ formik }) => {
 					)}
 				</div>
 
-				{/* Experience Letters Text Field */}
 				<div>
 					<label className="block text-sm font-medium text-gray-700 mb-1">
 						Experience <span className="text-gray-400">(Optional)</span>

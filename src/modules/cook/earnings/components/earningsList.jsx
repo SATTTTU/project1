@@ -21,10 +21,10 @@ const EarningsList = () => {
 
   return (
     <div className="mb-6 text-center">
-      <h2 className="font-bold text-2xl text-[#426B1F]">Total Earnings</h2>
-      <div>
+      <h2 className="font-bold text-3xl text-[#426B1F]">Total Earnings</h2>
+      <div className="text-2xl font-bold">
         <strong>Total Balance: </strong>
-        ${data.total_balance}
+        Rs. {data.total_balance}
       </div>
     </div>
   );

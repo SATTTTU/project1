@@ -19,7 +19,7 @@ export const WelcomeRegisterPanel = ({ image }) => {
         </p>
         <Link
           to="/login"
-          className="bg-white hover:bg-[#426B1F] text-lg text-black hover:text-white px-6  py-2 rounded transition"
+          className="bg-white hover:bg-[#0f9300df] text-lg text-black hover:text-white px-6  py-2 rounded transition"
         >
           Sign in
         </Link>

@@ -19,7 +19,7 @@ export const useCookDocumentFormik = (config = {}) => {
       citizenshipFront: null,
       citizenshipBack: null,
       certificates: [],
-      experienceLetters: [],
+      experienceLetters: '',
       termsAccepted: false,
       ...(config?.initialValues || {}),
     },
@@ -66,17 +66,20 @@ export const useCookDocumentFormik = (config = {}) => {
         
         // Append certificates if any
         if (values.certificates && values.certificates.length > 0) {
-          values.certificates.forEach((file, index) => {
-            formData.append(`certificates[${index}]`, file);
-          });
-        }
-        
-        // Append experience letters if any
-        if (values.experienceLetters && values.experienceLetters.length > 0) {
-          values.experienceLetters.forEach((file, index) => {
-            formData.append(`experience_letters[${index}]`, file);
-          });
-        }
+					// values.certificates.forEach((file, index) => {
+					// formData.append(`certificates[${index}]`, file);
+					 formData.append(`certificates`, values.certificates);
+
+					// });
+				}
+
+				// Append experience letters if any
+				if (values.experienceLetters) {
+					// values.experienceLetters.forEach((file, index) => {
+					// formData.append(`experience_letters[${index}]`, file);
+					formData.append(`experienceLetters`, values.experienceLetters);
+					// });
+				}
         
         formData.append("terms_accepted", values.termsAccepted);
         

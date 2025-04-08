@@ -1,17 +1,17 @@
 import { useState } from "react";
-import { Link, useNavigate} from "react-router-dom";
+import { Link} from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { InputField } from "@/components/ui/inputfield/InputField";
 import { useUserRegisterFormik } from "../formik/useRegister";
 
 export const RegisterForm = () => {
-    const navigate= useNavigate();
+    // const navigate= useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const { formik, isRegistering } = useUserRegisterFormik({
     mutationConfig: {
       onSuccess: (data) => {
         console.log("Registration successful:", data);
-        navigate("/verification"); 
+        // navigate("/verification"); 
       },
       onError: (error) => {
         console.error("Registration failed:", error);
@@ -25,7 +25,7 @@ export const RegisterForm = () => {
 
   return (
 		<form onSubmit={formik.handleSubmit} className="w-full max-w-md">
-			<h1 className="text-3xl lg:text-4xl font-bold text-[#426B1F] mb-6">
+			<h1 className="text-3xl lg:text-4xl font-bold text-[#0e9300] mb-6">
 				Create Account
 			</h1>
 
@@ -77,7 +77,7 @@ export const RegisterForm = () => {
 			<button
 				type="submit"
 				// disabled={isRegistering || !formik.isValid || formik.isSubmitting}
-				className="bg-[#426B1F] text-white px-4 py-2 rounded-md mt-6 w-full text-lg cursor-pointer hover:bg-[#5c9429] transition  disabled:cursor-not-allowed"
+				className="bg-[#0f9300d1] text-white px-4 py-2 rounded-md mt-6 w-full text-lg cursor-pointer hover:bg-[#5c9429] transition  disabled:cursor-not-allowed"
 			>
 				{isRegistering ? "Signing Up..." : "Sign Up"}
 			</button>
@@ -86,7 +86,7 @@ export const RegisterForm = () => {
 				Already have an account?{" "}
 				<Link
 					to="/login"
-					className="text-green-700 font-medium hover:underline"
+					className="text-[#0e9300] font-medium hover:underline"
 				>
 					Login Now
 				</Link>

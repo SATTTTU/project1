@@ -28,11 +28,11 @@ export const AboutTab = ({ cook }) => {
 						</div>
 
 						<div>
-							<h3 className="font-bold text-lg mb-3">Working Hours</h3>
+							{/* <h3 className="font-bold text-lg mb-3">Working Hours</h3>
 							<p className="flex items-center">
 								<FiClock className="text-green-600 mr-3" />
 								<span>{cook.workingHours}</span>
-							</p>
+							</p> */}
 
 							{/* <h3 className="font-bold text-lg mt-6 mb-3">Specialties</h3>
               <div className="flex flex-wrap gap-2">

@@ -1,7 +1,10 @@
 import React from "react";
 import { FaCheck } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+
 
 export const VerificationRoute = () => {
+  const navigate = useNavigate();
   return (
     <div className="flex min-h-screen items-center justify-center p-4 ">
       <div className="mx-auto max-w-md rounded-xl bg-white p-8 text-center shadow-lg border border-slate-300">
@@ -26,7 +29,12 @@ export const VerificationRoute = () => {
             </div>
           </div>
         </div>
-     
+      <button
+          onClick={() => navigate("/login")}
+          className="mt-4 px-6 py-2 bg-green-700 hover:bg-green-800 text-white text-sm font-medium rounded-lg transition duration-200"
+        >
+          Go to Login
+        </button>
       </div>
     </div>
   );

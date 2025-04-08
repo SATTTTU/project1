@@ -4,23 +4,32 @@ import { useAllTimeEarnings } from "../api/alltimeEarnings";
 import { useWeeklyEarnings } from "../api/weeklyEarnings";
 import { useDailyEarnings } from "../api/dailyEarnings";
 import { usePendingPayout } from "../api/pendingpayout";
+import { toast } from "react-toastify";  // Import toast for error handling
 
-const DashboardHeader = ({ isOnline, setIsOnline}) => {
-  const { mutate: setCookStatus, isLoading} = UseSetCookStatus();
-   // 'mutate' should be renamed to 'setCookStatus'
-const {data}= useAllTimeEarnings();
-console.log("earning****", data);
-const {data:weeklyearnings}= useWeeklyEarnings();
-const {data:dailyearnings}= useDailyEarnings();
-const {data:pending} = usePendingPayout();
-
+const DashboardHeader = ({ isOnline, setIsOnline }) => {
+  const { mutate: setCookStatus, isLoading: statusLoading} = UseSetCookStatus();
+  const { data } = useAllTimeEarnings();
+  const { data: weeklyearnings } = useWeeklyEarnings();
+  const { data: dailyearnings } = useDailyEarnings();
+  const { data: pending } = usePendingPayout();
 
   // Function to handle the button click and update cook's status
-  const handleToggleStatus = () => {
+  const handleToggleStatus = async () => {
     const newStatus = !isOnline;
-    setIsOnline(newStatus);  // Update the local state
-    
-    setCookStatus({ available_status: newStatus ? "online" : "busy" }); // Pass the status correctly
+    setIsOnline(newStatus); // Update the local state
+
+    try {
+      await setCookStatus({ available_status: newStatus ? "online" : "offline" }); 
+      toast.success(`Status updated to ${newStatus ? "Online" : "offline"}`, {
+        position: "bottom-right",
+        autoClose: 2000,
+      });
+    } catch (error) {
+      toast.error("Failed to update status. Please try again.", {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (
@@ -32,12 +41,10 @@ const {data:pending} = usePendingPayout();
         </div>
         <button
           onClick={handleToggleStatus}
-          className={`px-4 py-2 rounded-full cursor-pointer font-medium ${
-            isOnline ? "bg-[#426B1F] text-white" : "bg-gray-200 text-gray-700"
-          }`}
-          disabled={isLoading} 
+          className={`px-4 py-2 rounded-full cursor-pointer font-medium ${isOnline ? "bg-[#426B1F] text-white" : "bg-gray-200 text-gray-700"}`}
+          disabled={statusLoading} // Disable while loading
         >
-          {isOnline ? "Available" : "Go Online"}
+          {statusLoading ? "Updating..." : isOnline ? "Go Offline" : "Go Online"} {/* Button text */}
         </button>
       </div>
 
