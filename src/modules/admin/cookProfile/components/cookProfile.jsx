@@ -93,7 +93,7 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
         phone: cookData?.phone || "Phone not available",
         image:
           getFullImageUrl(cookData?.image_url) ||
-          "https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg",
+          "c",
         status: cookData?.approval_status
           ? mapApprovalStatusToDisplay(cookData.approval_status)
           : "Unknown",
@@ -237,7 +237,7 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
           <div className="flex items-start justify-between">
             <div className="flex items-center">
               <img
-                src={cook.image || "https://via.placeholder.com/150"}
+                src={cook.image || "https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg"}
                 alt={cook?.name}
                 className="w-20 h-20 rounded-full object-cover mr-4 border-2 border-gray-200"
               />

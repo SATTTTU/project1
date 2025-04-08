@@ -1,4 +1,3 @@
-"use client"
 
 import { useState, useMemo } from "react"
 import { Menu, MessageSquare } from "lucide-react"
@@ -15,7 +14,7 @@ const messagesData = {
       id: 1,
       sender: "Cook A",
       role: "Cook",
-      avatar: "/placeholder.svg?height=40&width=40",
+      avatar: "https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg",
       text: "My withdrawal request is pending.",
       time: "10:25 AM",
       unread: true,
@@ -25,7 +24,7 @@ const messagesData = {
       id: 2,
       sender: "Customer X",
       role: "Customer",
-      avatar: "/placeholder.svg?height=40&width=40",
+      avatar: "https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg",
       text: "Where is my order? I've been waiting for over an hour now.",
       time: "9:42 AM",
       unread: true,
@@ -35,7 +34,7 @@ const messagesData = {
       id: 3,
       sender: "Cook B",
       role: "Cook",
-      avatar: "/placeholder.svg?height=40&width=40",
+      avatar: "https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg",
       text: "How do I update bank details? The current ones are outdated.",
       time: "Yesterday",
       unread: false,
@@ -45,7 +44,7 @@ const messagesData = {
       id: 4,
       sender: "Customer Y",
       role: "Customer",
-      avatar: "/placeholder.svg?height=40&width=40",
+      avatar: "https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg",
       text: "Food was cold on arrival. I would like a refund please.",
       time: "Yesterday",
       unread: false,
@@ -55,7 +54,7 @@ const messagesData = {
       id: 5,
       sender: "Cook C",
       role: "Cook",
-      avatar: "/placeholder.svg?height=40&width=40",
+      avatar: "https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg",
       text: "Can I get an extension on my delivery time?",
       time: "2 days ago",
       unread: false,
@@ -65,7 +64,7 @@ const messagesData = {
       id: 6,
       sender: "Customer Z",
       role: "Customer",
-      avatar: "/placeholder.svg?height=40&width=40",
+      avatar: "https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg",
       text: "I'd like to place a large catering order for next week.",
       time: "3 days ago",
       unread: false,
@@ -77,7 +76,8 @@ const messagesData = {
       id: 1,
       sender: "Cook A",
       role: "Cook",
-      avatar: "/placeholder.svg?height=40&width=40",
+      avatar: "https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg",
+
       text: "My withdrawal request is pending.",
       time: "10:25 AM",
       unread: true,
@@ -87,7 +87,7 @@ const messagesData = {
       id: 3,
       sender: "Cook B",
       role: "Cook",
-      avatar: "/placeholder.svg?height=40&width=40",
+      avatar: "https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg",
       text: "How do I update bank details? The current ones are outdated.",
       time: "Yesterday",
       unread: false,
@@ -97,7 +97,7 @@ const messagesData = {
       id: 5,
       sender: "Cook C",
       role: "Cook",
-      avatar: "/placeholder.svg?height=40&width=40",
+      avatar: "https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg",
       text: "Can I get an extension on my delivery time?",
       time: "2 days ago",
       unread: false,
@@ -109,7 +109,7 @@ const messagesData = {
       id: 2,
       sender: "Customer X",
       role: "Customer",
-      avatar: "/placeholder.svg?height=40&width=40",
+      avatar: "https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg",
       text: "Where is my order? I've been waiting for over an hour now.",
       time: "9:42 AM",
       unread: true,
@@ -119,7 +119,7 @@ const messagesData = {
       id: 4,
       sender: "Customer Y",
       role: "Customer",
-      avatar: "/placeholder.svg?height=40&width=40",
+      avatar: "https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg",
       text: "Food was cold on arrival. I would like a refund please.",
       time: "Yesterday",
       unread: false,
@@ -129,7 +129,7 @@ const messagesData = {
       id: 6,
       sender: "Customer Z",
       role: "Customer",
-      avatar: "/placeholder.svg?height=40&width=40",
+      avatar: "https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg",
       text: "I'd like to place a large catering order for next week.",
       time: "3 days ago",
       unread: false,
@@ -237,7 +237,6 @@ export const MessagesPageRoute = () => {
   const [searchQuery, setSearchQuery] = useState("")
   const [replyText, setReplyText] = useState("")
 
-  // Memoize filtered messages to avoid unnecessary recalculations
   const filteredMessages = useMemo(() => {
     return messagesData[selectedTab].filter(
       (msg) =>
@@ -258,10 +257,8 @@ export const MessagesPageRoute = () => {
   const handleSendMessage = () => {
     if (!replyText.trim() || !selectedMessage) return
 
-    // In a real app, you would send this to your API
     console.log(`Sending message to ${selectedMessage.sender}: ${replyText}`)
 
-    // Clear the input after sending
     setReplyText("")
   }
 

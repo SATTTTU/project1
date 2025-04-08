@@ -15,7 +15,7 @@ export const ConversationHeader = ({ message, toggleSidebar }) => {
 
       <div className="relative">
         <img
-          src={message.avatar || "/placeholder.svg"}
+          src={message.avatar || ""}
           alt={message.sender}
           className="w-10 h-10 rounded-full object-cover border border-gray-200"
         />
