@@ -155,7 +155,7 @@ export const UserLocation = () => {
                 setBackendError("Your location is already stored.")
                 localStorage.setItem("locationSaved", "true")
                 setIsLocationFetched(true)
-                toast.success("Your location is already stored!")
+                // toast.success("Your location is already stored!")
                 resolve(true)
               } else {
                 setBackendError("Error sending location to backend.")
@@ -241,7 +241,7 @@ export const UserLocation = () => {
           if (response.data.city) setCity(response.data.city)
           if (response.data.address) setAddress(response.data.address)
           setIsLocationFetched(true)
-          toast.success("Your location is already stored!")
+          // toast.success("Your location is already stored!")
         } else {
           // No valid location data, try browser geolocation
           console.log("No valid location data found, trying browser geolocation")

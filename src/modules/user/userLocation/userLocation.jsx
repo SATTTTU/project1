@@ -150,7 +150,6 @@ export const UserLocation = ({ orderId }) => {
     });
   }, [socket]);
 
-  // Debug whenever rider location changes
   useEffect(() => {
     console.log("Rider location updated:", riderLocation);
   }, [riderLocation]);
