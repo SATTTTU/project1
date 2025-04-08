@@ -93,7 +93,7 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
         phone: cookData?.phone || "Phone not available",
         image:
           getFullImageUrl(cookData?.image_url) ||
-          "c",
+          "https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg",
         status: cookData?.approval_status
           ? mapApprovalStatusToDisplay(cookData.approval_status)
           : "Unknown",
