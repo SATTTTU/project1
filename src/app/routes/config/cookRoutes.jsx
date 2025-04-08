@@ -136,10 +136,10 @@ export const cookRoutes = [
               {
                 path: paths.cook.historyPage.path,
                 lazy: async () => {
-                  const { HistoryPage } = await import(
+                  const { OrderHistoryPage } = await import(
                     "../cook/history/history"
                   );
-                  return { Component: HistoryPage };
+                  return { Component: OrderHistoryPage };
                 },
                 ErrorBoundary: AppRootErrorBoundary,
               },

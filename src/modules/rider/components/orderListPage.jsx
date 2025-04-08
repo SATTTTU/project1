@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFetchOrder } from "../api/getorder";
 import { useNavigate } from "react-router-dom";
 
 export const OrderListPage = () => {
   const { data, isLoading, isError, error } = useFetchOrder();
   const navigate = useNavigate();
+  
+  // For debugging
+  useEffect(() => {
+    console.log("API Response:", data);
+  }, [data]);
+  
+  // The data is already the array of orders
+  const orders = data || [];
 
   if (isLoading) {
     return <div className="text-center text-gray-500 py-10">Loading orders...</div>;
@@ -21,8 +29,8 @@ export const OrderListPage = () => {
   return (
     <div className="max-w-6xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6 text-center">Order List</h1>
-
-      {data.length === 0 ? (
+      
+      {orders.length === 0 ? (
         <p className="text-center text-gray-600">No orders available</p>
       ) : (
         <div className="overflow-x-auto">
@@ -38,9 +46,9 @@ export const OrderListPage = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((item) => (
+              {orders.map((item) => (
                 <tr
-                  key={item.order_id}
+                  key={item.order_ride_id}
                   className="hover:bg-gray-50 cursor-pointer"
                   onClick={() => navigate(`/rider/main/${item.order_id}`)}
                 >
@@ -48,15 +56,15 @@ export const OrderListPage = () => {
                     {item.order_id}
                   </td>
                   <td className="px-4 py-3 border-b">
-                    <p className="font-medium">{item.user?.name}</p>
-                    <p className="text-sm text-gray-500">{item.user?.email}</p>
+                    <p className="font-medium">{item.drop_location_id?.user?.name}</p>
+                    <p className="text-sm text-gray-500">{item.drop_location_id?.user?.email}</p>
                   </td>
                   <td className="px-4 py-3 border-b">
-                    <p className="font-medium">{item.cook?.name}</p>
-                    <p className="text-sm text-gray-500">{item.cook?.email}</p>
+                    <p className="font-medium">{item.pickup_location_id?.cook?.name}</p>
+                    <p className="text-sm text-gray-500">{item.pickup_location_id?.cook?.email}</p>
                   </td>
                   <td className="px-4 py-3 border-b text-sm text-gray-700">
-                    {item.latitude}, {item.longitude}
+                    {item.pickup_location_id?.latitude}, {item.pickup_location_id?.longitude}
                   </td>
                   <td className="px-4 py-3 border-b text-sm text-gray-700">
                     {item.drop_location_id?.latitude}, {item.drop_location_id?.longitude}

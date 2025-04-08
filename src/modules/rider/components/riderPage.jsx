@@ -7,7 +7,6 @@ import { io } from "socket.io-client";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import RoutingMachine from "./RoutingMachine";
 
-// Fix Leaflet marker issue
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -18,7 +17,6 @@ L.Icon.Default.mergeOptions({
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
-// Custom icon for markers
 const createCustomIcon = (color) =>
   L.divIcon({
     className: "custom-icon",
@@ -29,7 +27,7 @@ const createCustomIcon = (color) =>
   });
 
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
-  const R = 6371; // Radius of the earth in km
+  const R = 6371; 
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
   const dLon = ((lon2 - lon1) * Math.PI) / 180;
   const a =
@@ -64,6 +62,10 @@ export const RiderPages = ({ orderId }) => {
   const [socket] = useState(() => io("wss://khajabox-socket.tai.com.np"));
   const [activeRoute, setActiveRoute] = useState("riderToCook");
   const [orderRideId, setOrderRideId] = useState(null);
+
+  const [watchId, setWatchId] = useState(null);
+
+  socket && socket.emit("join room", `khajabox-${orderId}`);
 
   const getOrderData = async () => {
     try {
@@ -115,68 +117,62 @@ export const RiderPages = ({ orderId }) => {
 
     if (orderId) {
       getOrderData();
-
-      // Join socket room
-      if (socket) {
-        socket.emit("join room", orderId);
-      }
     }
-  }, [orderId, socket]);
+  }, [orderId]);
 
-  // Set up geolocation tracking
   useEffect(() => {
-    let watchId = null;
+    // navigator.geolocation.getCurrentPosition((position) => {
+    //   const { latitude, longitude } = position.coords;
+    //   console.log("position", {
+    //     lat: latitude,
+    //     lng: longitude,
+    //   });
 
-    if (navigator.geolocation) {
-      watchId = navigator.geolocation.watchPosition(
-        (pos) => {
-          const newLocation = {
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude,
-          };
+    //   setRiderLocation({
+    //     lat: latitude,
+    //     lng: longitude,
+    //   });
+    // });
 
-          setRiderLocation(newLocation);
+    // Set up continuous watching of position
+    const id = navigator.geolocation.watchPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        console.log("position in watchposition", {
+          lat: latitude,
+          lng: longitude,
+        });
 
-          // Emit location to socket if connected
-          if (socket && socket.connected && orderId) {
-            socket.emit("rider location", {
-              roomId: orderId,
-              location: newLocation,
-            });
-          }
-        },
-        (error) => {
-          console.error("Geolocation error:", error);
-          if (error.code === error.PERMISSION_DENIED) {
-            setError(
-              "Location permission denied. Please enable location services."
-            );
-          } else {
-            setError("Error tracking location: " + error.message);
-          }
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 0,
-        }
-      );
-    } else {
-      setError("Geolocation is not supported by this browser.");
-    }
+        setRiderLocation({
+          lat: latitude,
+          lng: longitude,
+        });
 
-    // Clean up function
+        socket.emit("rider location", {
+          location: { lat: latitude, lng: longitude },
+          roomId: `khajabox-${orderId}`,
+        });
+      },
+
+      (err) => {
+        console.log("error in watch position", err);
+      },
+      {
+        enableHighAccuracy: true, // Use GPS if available
+        maximumAge: 0, // Don't use cached position
+        timeout: 27000, // Time to wait for a position
+      }
+    );
+
+    setWatchId(id);
+
+    // Cleanup function to stop watching location
     return () => {
       if (watchId) {
         navigator.geolocation.clearWatch(watchId);
       }
-
-      // Disconnect from socket room
-      if (socket) {
-        socket.emit("leave room", orderId);
-      }
     };
-  }, [orderId, socket]);
+  }, []);
 
   // Determine which route should be active based on status
   useEffect(() => {
@@ -249,13 +245,13 @@ export const RiderPages = ({ orderId }) => {
       setError("Order ride ID not available.");
       return;
     }
-  
+
     const newStatus = getNextStatus(orderStatus);
-  
+
     try {
       // Optimistically update UI
       setOrderStatus(newStatus);
-  
+
       const response = await fetch(
         `https://khajabox-backend.dev.tai.com.np/api/riders/update-delivery-status/${orderRideId}`,
         {
@@ -266,18 +262,18 @@ export const RiderPages = ({ orderId }) => {
           body: JSON.stringify({ newStatus }),
         }
       );
-  
+
       if (!response.ok) {
         throw new Error("Failed to update order status");
       }
-  
+
       if (socket && socket.connected) {
         socket.emit("status update", {
           roomId: orderId,
           status: newStatus,
         });
       }
-  
+
       // Refresh data to ensure consistency
       getOrderData();
     } catch (err) {
@@ -345,7 +341,7 @@ export const RiderPages = ({ orderId }) => {
 
   const defaultCenter = riderLocation ||
     cookLocation ||
-    userLocation || { lat: 27.7172, lng: 85.324 };
+    userLocation || { lat: 0, lng: 0 };
 
   return (
     <div className="h-screen flex flex-col bg-gray-50">
@@ -373,9 +369,7 @@ export const RiderPages = ({ orderId }) => {
               <div className="text-sm text-gray-500">Estimated Time</div>
               <div className="text-xl font-bold text-blue-600">{eta} min</div>
               <div className="text-sm">
-                {activeRoute === "riderToCook" 
-                  ? "to Cook" 
-                  : "to customer"}
+                {activeRoute === "riderToCook" ? "to Cook" : "to customer"}
               </div>
             </div>
           )}
@@ -383,7 +377,9 @@ export const RiderPages = ({ orderId }) => {
 
         <div className="mt-2 flex items-center">
           <div
-            className={`w-3 h-3 rounded-full ${getStatusColor(orderStatus)} mr-2`}
+            className={`w-3 h-3 rounded-full ${getStatusColor(
+              orderStatus
+            )} mr-2`}
           ></div>
           <span className="text-sm font-medium">
             Status: {getStatusText(orderStatus)}
@@ -401,7 +397,6 @@ export const RiderPages = ({ orderId }) => {
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-            {/* Rider Marker - Always visible */}
             {riderLocation && (
               <Marker
                 position={[riderLocation.lat, riderLocation.lng]}
@@ -415,7 +410,6 @@ export const RiderPages = ({ orderId }) => {
               </Marker>
             )}
 
-            {/* Cook Marker - Always visible */}
             {cookLocation && (
               <Marker
                 position={[cookLocation.lat, cookLocation.lng]}
@@ -444,18 +438,18 @@ export const RiderPages = ({ orderId }) => {
             )}
 
             {/* Active Route - Rider to Cook */}
-            {activeRoute === "riderToCook" && riderLocation && cookLocation && (
-              <RoutingMachine 
+            {activeRoute === "riderToCook" && userLocation && cookLocation && (
+              <RoutingMachine
                 waypoints={[
-                  { latitude: riderLocation.lat, longitude: riderLocation.lng },
-                  { latitude: cookLocation.lat, longitude: cookLocation.lng }
+                  { latitude: userLocation.lat, longitude: userLocation.lng },
+                  { latitude: cookLocation.lat, longitude: cookLocation.lng },
                 ]}
                 color="#3b82f6" // Blue for pickup route
               />
             )}
 
             {/* Active Route - Cook to User */}
-            {activeRoute === "cookToUser" && riderLocation && userLocation && (
+            {/* {activeRoute === "cookToUser" && riderLocation && userLocation && (
               <RoutingMachine 
                 waypoints={[
                   { latitude: riderLocation.lat, longitude: riderLocation.lng },
@@ -463,12 +457,12 @@ export const RiderPages = ({ orderId }) => {
                 ]}
                 color="#8b5cf6" // Purple for delivery route
               />
-            )}
+            )} */}
 
             {/* Map Updater - Follow rider */}
-            {riderLocation && (
-              <MapUpdater center={[riderLocation.lat, riderLocation.lng]} />
-            )}
+            {/* {riderLocation && (
+              // <MapUpdater center={[riderLocation.lat, riderLocation.lng]} />
+            )} */}
           </MapContainer>
         )}
       </div>
@@ -478,9 +472,11 @@ export const RiderPages = ({ orderId }) => {
         <div className="p-4 bg-white border-t">
           <button
             className={`w-full py-3 rounded-lg font-medium text-white ${
-              orderStatus === "assigned" ? "bg-blue-600" :
-              orderStatus === "picked_up" ? "bg-purple-600" :
-              "bg-green-600"
+              orderStatus === "assigned"
+                ? "bg-blue-600"
+                : orderStatus === "picked_up"
+                ? "bg-purple-600"
+                : "bg-green-600"
             }`}
             onClick={handleStatusChange}
           >

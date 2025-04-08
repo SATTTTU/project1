@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 export const MyProfile = () => {
   const { formik, isLoading } = useAdminProfileEditFormik();
-  const [imagePreview, setImagePreview] = useState("/api/placeholder/200/200");
+  const [imagePreview, setImagePreview] = useState("https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg");
   const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {

@@ -1,13 +1,7 @@
-// components/SearchAndFilter.jsx
-import React from "react";
-import { Search } from "lucide-react";
+"use client"
+import { Search } from "lucide-react"
 
-export const SearchAndFilter = ({
-  searchQuery,
-  setSearchQuery,
-  timeFilter,
-  setTimeFilter,
-}) => {
+export const SearchAndFilter = ({ searchQuery, setSearchQuery, timeFilter, setTimeFilter }) => {
   return (
     <div className="mb-6 flex flex-col sm:flex-row gap-4">
       <div className="relative flex-1">
@@ -31,5 +25,6 @@ export const SearchAndFilter = ({
         <option value="month">This Month</option>
       </select>
     </div>
-  );
-};
+  )
+}
+
