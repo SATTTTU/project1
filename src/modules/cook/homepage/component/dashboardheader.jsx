@@ -8,42 +8,55 @@ import { usePendingPayout } from "../api/pendingpayout";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom"; // Assuming cookId is in URL params
 import { useGetCookStatus } from "@/modules/user/cooks/api/getCookStatus";
+import { useProfile } from "../../profile/api/getcookprofile";
 
 const DashboardHeader = () => {
   const { id: cookId } = useParams(); // Or use your auth context if cookId is stored there
 
-  const [isOnline, setIsOnline] = useState(false);
 
-  const { mutate: setCookStatus, isLoading: statusLoading } = UseSetCookStatus();
   const { data: cookStatusData, isLoading: statusFetching } = useGetCookStatus(cookId);
+  console.log("status******", cookStatusData)
   const { data } = useAllTimeEarnings();
   const { data: weeklyearnings } = useWeeklyEarnings();
   const { data: dailyearnings } = useDailyEarnings();
   const { data: pending } = usePendingPayout();
 
   // Set initial status from backend when component mounts
+  const { data: cookProfile, refetch } = useProfile();
+  const [isOnline, setIsOnline] = useState(false);
+  const { mutate: setCookStatus, isLoading: isUpdating } = UseSetCookStatus();
+
+  // Set initial status when cookProfile is available
   useEffect(() => {
-    if (cookStatusData) {
-      setIsOnline(cookStatusData.available_status === "online");
+    if (cookProfile?.available_status) {
+      setIsOnline(cookProfile.available_status === "online");
     }
-  }, [cookStatusData]);
+  }, [cookProfile]);
 
-  const handleToggleStatus = async () => {
+
+  const handleToggle = () => {
     const newStatus = !isOnline;
-    setIsOnline(newStatus); // Optimistically update UI
+    setIsOnline(newStatus); // Optimistic UI
 
-    try {
-      await setCookStatus({ available_status: newStatus ? "online" : "offline" });
-      toast.success(`Status updated to ${newStatus ? "Online" : "Offline"}`, {
-        position: "bottom-right",
-        autoClose: 2000,
-      });
-    } catch (error) {
-      toast.error("Failed to update status. Please try again.", {
-        position: "bottom-right",
-        autoClose: 3000,
-      });
-    }
+    setCookStatus(
+      { available_status: newStatus ? "online" : "offline" },
+      {
+        onSuccess: () => {
+          toast.success(`Status set to ${newStatus ? "Online" : "Offline"}`, {
+            position: "bottom-right",
+            autoClose: 2000,
+          });
+          refetch(); // Refetch profile to sync
+        },
+        onError: () => {
+          toast.error("Failed to update status", {
+            position: "bottom-right",
+            autoClose: 3000,
+          });
+          setIsOnline(!newStatus); // Revert UI on error
+        },
+      }
+    );
   };
 
   if (statusFetching) return <p className="text-gray-500">Loading status...</p>;
@@ -56,14 +69,14 @@ const DashboardHeader = () => {
           <p className="text-sm text-gray-500">Welcome back, Chef!</p>
         </div>
         <button
-          onClick={handleToggleStatus}
-          className={`px-4 py-2 rounded-full cursor-pointer font-medium ${
-            isOnline ? "bg-[#426B1F] text-white" : "bg-gray-200 text-gray-700"
-          }`}
-          disabled={statusLoading}
-        >
-          {statusLoading ? "Updating..." : isOnline ? "Go Offline" : "Go Online"}
-        </button>
+      onClick={handleToggle}
+      disabled={isUpdating}
+      className={`px-4 py-2 rounded-full font-medium transition duration-300 ${
+        isOnline ? "bg-green-600 text-white" : "bg-gray-300 text-gray-700"
+      }`}
+    >
+      {isUpdating ? "Updating..." : isOnline ? "Go Offline" : "Go Online"}
+    </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

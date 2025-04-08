@@ -15,9 +15,11 @@ import { AboutTab } from "@/modules/user/cooks/components/aboutTab";
 export const CookProfile = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+
   const { data: cook, isLoading, isError } = useGetSingleCook(id);
-  console.log("cook",cook)
+  console.log("status of cok*****", cook) // now refetches every 5s
   const [activeTab, setActiveTab] = useState("categories");
+
   const safeCook = cook || { categories: [], reviews: [] };
   const videoBaseUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
@@ -66,21 +68,23 @@ export const CookProfile = () => {
             <p className="text-gray-600">{safeCook.email || "No email available"}</p>
             <p
               className={`mt-2 px-4 py-2 text-sm font-semibold rounded-full inline-block shadow-md ${
-                safeCook.available_status === "online" ? "bg-green-100 text-green-700" : "bg-gray-200 text-gray-600"
+                safeCook.available_status === "online"
+                  ? "bg-green-100 text-green-700"
+                  : "bg-gray-200 text-gray-600"
               }`}
             >
-              {safeCook.available_status || "Unavailable"}
+              {safeCook.available_status === "online" ? "Online" : "Offline"}
             </p>
           </div>
         </section>
 
-        {/* {safeCook?.intro_video_url && ( */}
+        {safeCook.intro_video_url && (
           <div className="mt-6">
             <video controls className="w-full md:w-3/4 mx-auto rounded-lg shadow-lg">
               <source src={`${videoBaseUrl}${safeCook.intro_video_url}`} type="video/mp4" />
             </video>
           </div>
-        {/* ) */}
+        )}
 
         <div className="mt-6">
           <CookTabs activeTab={activeTab} setActiveTab={setActiveTab} reviewCount={cook.reviews?.length} />
@@ -90,12 +94,12 @@ export const CookProfile = () => {
           {activeTab === "categories" && (
             <>
               <h2 className="text-xl font-bold text-gray-800 mb-4">Food Categories</h2>
-              <CookCategories cookId={safeCook.id}  cook={safeCook} onAddToCart={handleAddToCart} />
+              <CookCategories cookId={safeCook.id} cook={safeCook} onAddToCart={handleAddToCart} />
             </>
           )}
           {activeTab === "reviews" && (
             <CookReviews
-            id={safeCook.id}
+              id={safeCook.id}
               reviews={safeCook.reviews}
               reviewCount={safeCook.reviewCount || 0}
               cookId={safeCook.id}

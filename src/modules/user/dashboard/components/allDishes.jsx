@@ -11,7 +11,7 @@ export const AllDishes = () => {
   const { mutateAsync: addToCart } = useAddCartItem();
   const imageUrl = "https://khajabox-bucket.s3.ap-south-1.amazonaws.com/";
 
-  const [visibleItems, setVisibleItems] = useState(8);
+  const [visibleItems, setVisibleItems] = useState(18);
   const [loadingItemId, setLoadingItemId] = useState(null); // individual item loading state
 
   const handleAddToCart = async (dish, e) => {

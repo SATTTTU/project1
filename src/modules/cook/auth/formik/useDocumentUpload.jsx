@@ -65,10 +65,11 @@ export const useCookDocumentFormik = (config = {}) => {
         }
         
         // Append certificates if any
+        console.log("certificates", values.certificates);
         if (values.certificates && values.certificates.length > 0) {
 					// values.certificates.forEach((file, index) => {
 					// formData.append(`certificates[${index}]`, file);
-					 formData.append(`certificates`, values.certificates);
+					 formData.append(`cooking_certificate`, values.certificates[0]);
 
 					// });
 				}
@@ -77,11 +78,11 @@ export const useCookDocumentFormik = (config = {}) => {
 				if (values.experienceLetters) {
 					// values.experienceLetters.forEach((file, index) => {
 					// formData.append(`experience_letters[${index}]`, file);
-					formData.append(`experienceLetters`, values.experienceLetters);
+					formData.append(`past_experience`, values.experienceLetters);
 					// });
 				}
         
-        formData.append("terms_accepted", values.termsAccepted);
+        // formData.append("terms_accepted", values.termsAccepted);
         
         // Send the form data to the server
         const result = await mutateAsync(formData);
