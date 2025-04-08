@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { Calendar } from "lucide-react"
-import { useState } from "react"
+import { Calendar } from "lucide-react";
+import { useState } from "react";
 import {
   CheckCircle,
   AlertCircle,
@@ -18,21 +18,21 @@ import {
   Eye,
   Video,
   ExternalLink,
-} from "react-feather"
-import { useGetSingleCook } from "../api/get-single-cook"
-import { useVerifyCook } from "../api/verify-cook"
-import { useDeleteCook } from "../api/deleteCook"
-import { toast } from "react-toastify"
-import { usegetPerformance } from "../api/get-cook_performance"
+} from "react-feather";
+import { useGetSingleCook } from "../api/get-single-cook";
+import { useVerifyCook } from "../api/verify-cook";
+import { useDeleteCook } from "../api/deleteCook";
+import { toast } from "react-toastify";
+import { usegetPerformance } from "../api/get-cook_performance";
 
 const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
-  const [showConfirmDelete, setShowConfirmDelete] = useState(false)
-  const [showDocumentModal, setShowDocumentModal] = useState(null)
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [showDocumentModal, setShowDocumentModal] = useState(null);
 
-  const { isError, isLoading, data: cookData } = useGetSingleCook(cookId)
-  const { data: performanceData } = usegetPerformance(cookId)
+  const { isError, isLoading, data: cookData } = useGetSingleCook(cookId);
+  const { data: performanceData } = usegetPerformance(cookId);
 
-  console.log("cookdataa:", cookData)
+  console.log("cookdataa:", cookData);
   const {
     mutateAsync: verifyCook,
     isLoading: isVerifying,
@@ -40,16 +40,16 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
   } = useVerifyCook(cookId, {
     mutationConfig: {
       onSuccess: (data) => {
-        console.log("Cook verified successfully:", data)
+        console.log("Cook verified successfully:", data);
         // Refetch cook data to update the UI
         // Call the parent component's status change handler if provided
-        onStatusChange?.(cookId, "Verified")
+        onStatusChange?.(cookId, "Verified");
       },
       onError: (error) => {
-        console.error("Failed to verify cook:", error)
+        console.error("Failed to verify cook:", error);
       },
     },
-  })
+  });
 
   // Initialize delete cook API hook
   const {
@@ -59,31 +59,31 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
   } = useDeleteCook(cookId, {
     mutationConfig: {
       onSuccess: (data) => {
-        console.log("Cook deleted successfully:", data)
-        setShowConfirmDelete(false)
+        console.log("Cook deleted successfully:", data);
+        setShowConfirmDelete(false);
         // Navigate back to the cook list after successful deletion
-        navigate("/admin/cookDetails")
+        navigate("/admin/cookDetails");
       },
       onError: (error) => {
-        console.error("Failed to delete cook:", error)
+        console.error("Failed to delete cook:", error);
       },
     },
-  })
+  });
 
-  console.log("Cook Data:", cookData)
+  console.log("Cook Data:", cookData);
 
   // Base URL for images
-  const baseUrl = import.meta.env.VITE_BUCKET_URL // Get from env or adjust as needed
-  console.log("first", baseUrl)
+  const baseUrl = import.meta.env.VITE_BUCKET_URL; // Get from env or adjust as needed
+  console.log("first", baseUrl);
 
   // Function to get full image URL
   const getFullImageUrl = (path) => {
-    if (!path) return null
+    if (!path) return null;
     if (path.startsWith("http://") || path.startsWith("https://")) {
-      return path
+      return path;
     }
-    return `${baseUrl}${path}`
-  }
+    return `${baseUrl}${path}`;
+  };
 
   const cook = cookData
     ? {
@@ -94,40 +94,54 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
         image:
           getFullImageUrl(cookData?.image_url) ||
           "https://i.pinimg.com/236x/2a/80/ea/2a80ea63bdda2062c36f951f0c8dcc13.jpg",
-        status: cookData?.approval_status ? mapApprovalStatusToDisplay(cookData.approval_status) : "Unknown",
+        status: cookData?.approval_status
+          ? mapApprovalStatusToDisplay(cookData.approval_status)
+          : "Unknown",
         averageRating: cookData?.average_rating || 0,
         totalReviews: cookData?.total_reviews || 0,
         joinedDate: cookData?.joined_date || new Date().toISOString(),
         address: cookData?.address || "Address not provided",
-        experience: cookData?.experience || "Experience not provided",
+        experience: cookData?.cook_documents.past_experience || "Experience not provided",
         specialties: cookData?.specialties || [],
-        certifications: cookData?.certifications || [],
         earnings: cookData?.earnings || { total: 0, monthly: 0 },
+        // past_experience:cookData
         productsSold: cookData?.products_sold || 0,
         documents: {
-          passportPhoto: getFullImageUrl(cookData?.cook_documents?.passport_photo_url),
-          citizenshipFront: getFullImageUrl(cookData?.cook_documents?.citizenship_front),
-          citizenshipBack: getFullImageUrl(cookData?.cook_documents?.citizenship_back),
-          cookingCertificate: getFullImageUrl(cookData?.cook_documents?.cooking_certificate),
-          pastExperience: getFullImageUrl(cookData?.cook_documents?.past_experience),
+          passportPhoto: getFullImageUrl(
+            cookData?.cook_documents?.passport_photo_url
+          ),
+          citizenshipFront: getFullImageUrl(
+            cookData?.cook_documents?.citizenship_front
+          ),
+          citizenshipBack: getFullImageUrl(
+            cookData?.cook_documents?.citizenship_back
+          ),
+          cookingCertificate: getFullImageUrl(
+            cookData?.cook_documents?.cooking_certificate
+          ),
+
+
+          // pastExperience: getFullImageUrl(cookData?.cook_documents?.past_experience),
         },
         video: getFullImageUrl(cookData?.intro_video_url),
       }
-    : null
-
-  console.log("val", getFullImageUrl(cookData?.cook_documents?.passport_photo_url))
-  console.log("Mapped Cook Object:", cook)
+    : null;
+  console.log(
+    "val",
+    getFullImageUrl(cookData?.cook_documents?.passport_photo_url)
+  );
+  console.log("Mapped Cook Object:", cook);
 
   function mapApprovalStatusToDisplay(status) {
     switch (status) {
       case "approved":
-        return "Verified"
+        return "Verified";
       case "under-review":
-        return "Pending"
+        return "Pending";
       case "rejected":
-        return "Unverified"
+        return "Unverified";
       default:
-        return "Pending"
+        return "Pending";
     }
   }
 
@@ -137,7 +151,7 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
       <div className="p-4 bg-blue-100 rounded flex items-center">
         <span>Loading cook details...</span>
       </div>
-    )
+    );
   }
 
   // Show error state
@@ -147,7 +161,7 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
         <AlertCircle size={18} className="mr-2 text-red-600" />
         <span>Error loading cook data: {isError.message}</span>
       </div>
-    )
+    );
   }
 
   // Show empty state
@@ -157,60 +171,63 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
         <AlertCircle size={18} className="mr-2 text-red-600" />
         <span>No cook data provided</span>
       </div>
-    )
+    );
   }
 
   const handleDeleteCook = async () => {
-    console.log("Deleting cook:", cook.id)
+    console.log("Deleting cook:", cook.id);
     try {
-      await deleteCook()
+      await deleteCook();
     } catch (error) {
-      console.error("Error in handleDeleteCook:", error)
-      setShowConfirmDelete(false)
+      console.error("Error in handleDeleteCook:", error);
+      setShowConfirmDelete(false);
     }
-  }
+  };
 
   const handleProvideMoney = () => {
-    toast.success("Money provided to cook successfully!")
-  }
+    toast.success("Money provided to cook successfully!");
+  };
 
   const handleVerifyStatus = async (newStatus) => {
-    toast.info(`Changing status to ${newStatus}...`)
+    toast.info(`Changing status to ${newStatus}...`);
 
     try {
       if (newStatus === "Verified") {
         // Pass the required params here
-        await verifyCook({ approval_status: "approved" })
+        await verifyCook({ approval_status: "approved" });
         // Status update and refetching is handled in the onSuccess callback
       } else if (newStatus === "Unverified") {
         // Pass rejected status
-        await verifyCook({ approval_status: "rejected" })
+        await verifyCook({ approval_status: "rejected" });
         // After rejection, update the UI
-        onStatusChange?.(cook.id, newStatus)
+        onStatusChange?.(cook.id, newStatus);
       }
     } catch (error) {
-      console.error(`Error changing status to ${newStatus}:`, error)
+      console.error(`Error changing status to ${newStatus}:`, error);
     }
-  }
+  };
 
   const formatDate = (dateString) => {
-    const date = new Date(dateString)
+    const date = new Date(dateString);
     return new Intl.DateTimeFormat("en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
-    }).format(date)
-  }
+    }).format(date);
+  };
 
   const statusColor = {
     Verified: "green",
     Pending: "yellow",
     Unverified: "red",
-  }
+  };
 
   return (
     <div className="max-w-4xl mx-auto">
-      <button onClick={() => navigate(-1)} className="flex items-center text-gray-600 hover:text-gray-800 mb-4">
+      <button
+        onClick={() => navigate(-1)}
+        className="flex items-center text-gray-600 hover:text-gray-800 mb-4"
+      >
         <ArrowLeft size={18} className="mr-2" /> Back to Cooks details
       </button>
 
@@ -225,7 +242,9 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
                 className="w-20 h-20 rounded-full object-cover mr-4 border-2 border-gray-200"
               />
               <div>
-                <h2 className="font-bold text-xl text-gray-800">{cook?.name}</h2>
+                <h2 className="font-bold text-xl text-gray-800">
+                  {cook?.name}
+                </h2>
                 <div className="flex items-center mt-1">
                   <span
                     className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-${
@@ -243,8 +262,12 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
                   {cook.averageRating > 0 && (
                     <div className="flex items-center text-yellow-500 ml-3">
                       <Star size={14} className="mr-1" />
-                      <span className="text-sm font-medium">{cook.averageRating}</span>
-                      <span className="text-xs text-gray-500 ml-1">({cook.totalReviews} reviews)</span>
+                      <span className="text-sm font-medium">
+                        {cook.averageRating}
+                      </span>
+                      <span className="text-xs text-gray-500 ml-1">
+                        ({cook.totalReviews} reviews)
+                      </span>
                     </div>
                   )}
                 </div>
@@ -260,7 +283,8 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
           {/* Action Buttons */}
           <div className="mt-6 border-t pt-6">
             <h3 className="text-lg font-semibold text-gray-800 flex items-center mb-4">
-              <ExternalLink size={18} className="mr-2 text-blue-500" /> Quick Actions
+              <ExternalLink size={18} className="mr-2 text-blue-500" /> Quick
+              Actions
             </h3>
 
             <div className="flex flex-wrap gap-3">
@@ -334,7 +358,10 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
                 <span>{cook.phone}</span>
               </div>
               <div className="flex items-start text-sm text-gray-600">
-                <MapPin size={16} className="mr-2 mt-0.5 text-gray-400 flex-shrink-0" />
+                <MapPin
+                  size={16}
+                  className="mr-2 mt-0.5 text-gray-400 flex-shrink-0"
+                />
                 <span>{cook.address}</span>
               </div>
             </div>
@@ -350,7 +377,12 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
               </div>
               <div className="flex items-center text-sm text-gray-600">
                 <FileText size={16} className="mr-2 text-gray-400" />
-                <span>Certifications: {cook.certifications?.length ? cook.certifications.join(", ") : "None"}</span>
+                <span>
+                  Certifications:{" "}
+                  {cook.certifications?.length
+                    ? cook.certifications.join(", ")
+                    : "None"}
+                </span>
               </div>
             </div>
           </div>
@@ -358,125 +390,158 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
       </div>
 
       {/* Earnings Section */}
-    {/* Earnings Section */}
-<div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 mb-6">
+      {/* Earnings Section */}
+      <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 mb-6">
+        <div className="p-6">
+          <h3 className="text-lg font-semibold text-gray-800 flex items-center mb-4">
+            <DollarSign size={18} className="mr-2 text-blue-500" /> Earnings &
+            Performance
+          </h3>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="p-4 bg-blue-50 rounded-lg">
+              <p className="text-xs text-gray-500">Total Earnings</p>
+              <p className="text-lg font-semibold text-gray-800">
+                Rs{" "}
+                {performanceData?.data?.totalEarnings ||
+                  cook.earnings?.total ||
+                  0}
+              </p>
+            </div>
+            <div className="p-4 bg-green-50 rounded-lg">
+              <p className="text-xs text-gray-500">Weekly Earnings</p>
+              <p className="text-lg font-semibold text-gray-800">
+                Rs {performanceData?.data?.weeklyEarnings || 0}
+              </p>
+            </div>
+            <div className="p-4 bg-purple-50 rounded-lg">
+              <p className="text-xs text-gray-500">Completed Orders</p>
+              <p className="text-lg font-semibold text-gray-800">
+                {performanceData?.data?.totalCompletedOrders || 0}
+              </p>
+            </div>
+            <div className="p-4 bg-yellow-50 rounded-lg">
+              <p className="text-xs text-gray-500">Pending PayOuts</p>
+              <p className="text-lg font-semibold text-gray-800">
+                {performanceData?.data?.pendingPayouts || 0}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Documents Section */}
+      <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 mb-6">
   <div className="p-6">
     <h3 className="text-lg font-semibold text-gray-800 flex items-center mb-4">
-      <DollarSign size={18} className="mr-2 text-blue-500" /> Earnings & Performance
+      <FileText size={18} className="mr-2 text-blue-500" /> Verification Documents
     </h3>
 
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div className="p-4 bg-blue-50 rounded-lg">
-        <p className="text-xs text-gray-500">Total Earnings</p>
-        <p className="text-lg font-semibold text-gray-800">
-          Rs {performanceData?.data?.totalEarnings || cook.earnings?.total || 0}
-        </p>
-      </div>
-      <div className="p-4 bg-green-50 rounded-lg">
-        <p className="text-xs text-gray-500">Weekly Earnings</p>
-        <p className="text-lg font-semibold text-gray-800">
-          Rs {performanceData?.data?.weeklyEarnings || 0}
-        </p>
-      </div>
-      <div className="p-4 bg-purple-50 rounded-lg">
-        <p className="text-xs text-gray-500">Completed Orders</p>
-        <p className="text-lg font-semibold text-gray-800">
-          {performanceData?.data?.totalCompletedOrders || 0}
-        </p>
-      </div>
-      <div className="p-4 bg-yellow-50 rounded-lg">
-        <p className="text-xs text-gray-500">Pending PayOuts</p>
-        <p className="text-lg font-semibold text-gray-800">
-          {performanceData?.data?.pendingPayouts || 0}
-        </p>
-      </div>
+    <div className="grid grid-flow-col auto-cols-max gap-4 overflow-x-auto">
+      {cook.documents?.passportPhoto && (
+        <div className="border rounded-lg overflow-hidden w-48 flex-shrink-0">
+          <div className="p-2 bg-gray-50 border-b">
+            <p className="text-xs text-gray-500">Passport Size Photo</p>
+          </div>
+          <div className="relative group">
+            <img
+              src={cook.documents.passportPhoto || "/placeholder.svg"}
+              alt="Passport"
+              className="w-full h-32 object-cover"
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
+              <button
+                onClick={() => setShowDocumentModal("passportPhoto")}
+                className="p-2 bg-white rounded-full"
+              >
+                <Eye size={18} className="text-gray-800" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {cook.documents?.citizenshipFront && (
+        <div className="border rounded-lg overflow-hidden w-48 flex-shrink-0">
+          <div className="p-2 bg-gray-50 border-b">
+            <p className="text-xs text-gray-500">Citizenship Front</p>
+          </div>
+          <div className="relative group">
+            <img
+              src={cook.documents.citizenshipFront || "/placeholder.svg"}
+              alt="Citizenship Front"
+              className="w-full h-32 object-cover"
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
+              <button
+                onClick={() => setShowDocumentModal("citizenshipFront")}
+                className="p-2 bg-white rounded-full"
+              >
+                <Eye size={18} className="text-gray-800" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+  
+
+      {cook.documents?.citizenshipBack && (
+        <div className="border rounded-lg overflow-hidden w-48 flex-shrink-0">
+          <div className="p-2 bg-gray-50 border-b">
+            <p className="text-xs text-gray-500">Citizenship Back</p>
+          </div>
+          <div className="relative group">
+            <img
+              src={cook.documents.citizenshipBack || "/placeholder.svg"}
+              alt="Citizenship Back"
+              className="w-full h-32 object-cover"
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
+              <button
+                onClick={() => setShowDocumentModal("citizenshipBack")}
+                className="p-2 bg-white rounded-full"
+              >
+                <Eye size={18} className="text-gray-800" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+          {cook.documents?.cookingCertificate && (
+        <div className="border rounded-lg overflow-hidden w-48 flex-shrink-0">
+          <div className="p-2 bg-gray-50 border-b">
+            <p className="text-xs text-gray-500">Certificates</p>
+          </div>
+          <div className="relative group">
+            <img
+              src={cook.documents.cookingCertificate || "/placeholder.svg"}
+              alt="Cooking Certificate"
+              className="w-full h-32 object-cover"
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
+              <button
+                onClick={() => setShowDocumentModal("cookingCertificate")}
+                className="p-2 bg-white rounded-full"
+              >
+                <Eye size={18} className="text-gray-800" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   </div>
 </div>
 
-      {/* Documents Section */}
-      <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 mb-6">
-        <div className="p-6">
-          <h3 className="text-lg font-semibold text-gray-800 flex items-center mb-4">
-            <FileText size={18} className="mr-2 text-blue-500" /> Verification Documents
-          </h3>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 ">
-            {cook.documents?.passportPhoto && (
-              <div className="border rounded-lg overflow-hidden">
-                <div className="p-2 bg-gray-50 border-b">
-                  <p className="text-xs text-gray-500">Passport Size Photo</p>
-                </div>
-                <div className="relative group">
-                  <img
-                    src={cook.documents.passportPhoto || "/placeholder.svg"}
-                    alt="Passport"
-                    className="w-full h-32 object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                    <button onClick={() => setShowDocumentModal("passportPhoto")} className="p-2 bg-white rounded-full">
-                      <Eye size={18} className="text-gray-800" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {cook.documents?.citizenshipFront && (
-              <div className="border rounded-lg overflow-hidden">
-                <div className="p-2 bg-gray-50 border-b">
-                  <p className="text-xs text-gray-500">Citizenship Front</p>
-                </div>
-                <div className="relative group">
-                  <img
-                    src={cook.documents.citizenshipFront || "/placeholder.svg"}
-                    alt="Citizenship Front"
-                    className="w-full h-32 object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                    <button
-                      onClick={() => setShowDocumentModal("citizenshipFront")}
-                      className="p-2 bg-white rounded-full"
-                    >
-                      <Eye size={18} className="text-gray-800" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {cook.documents?.citizenshipBack && (
-              <div className="border rounded-lg overflow-hidden">
-                <div className="p-2 bg-gray-50 border-b">
-                  <p className="text-xs text-gray-500">Citizenship Back</p>
-                </div>
-                <div className="relative group">
-                  <img
-                    src={cook.documents.citizenshipBack || "/placeholder.svg"}
-                    alt="Citizenship Back"
-                    className="w-full h-32 object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                    <button
-                      onClick={() => setShowDocumentModal("citizenshipBack")}
-                      className="p-2 bg-white rounded-full"
-                    >
-                      <Eye size={18} className="text-gray-800" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
 
       {/* Video Section */}
       {cook.video && (
         <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 mb-6">
           <div className="p-6">
             <h3 className="text-lg font-semibold text-gray-800 flex items-center mb-4">
-              <Video size={18} className="mr-2 text-blue-500" /> Introduction Video
+              <Video size={18} className="mr-2 text-blue-500" /> Introduction
+              Video
             </h3>
             <div className="aspect-w-16 aspect-h-9">
               <video controls className="w-full rounded-lg">
@@ -492,12 +557,17 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
       {showConfirmDelete && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Confirm Delete</h3>
+            <h3 className="text-lg font-bold text-gray-900 mb-4">
+              Confirm Delete
+            </h3>
             <p className="text-gray-600 mb-6">
-              Are you sure you want to delete this cook? This action cannot be undone.
+              Are you sure you want to delete this cook? This action cannot be
+              undone.
             </p>
             {deleteError && (
-              <div className="mb-4 p-2 bg-red-100 text-red-600 rounded-md text-sm">Error: {deleteError.message}</div>
+              <div className="mb-4 p-2 bg-red-100 text-red-600 rounded-md text-sm">
+                Error: {deleteError.message}
+              </div>
             )}
             <div className="flex justify-end space-x-3">
               <button
@@ -522,17 +592,33 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
 
       {/* Document Modal */}
       {showDocumentModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex item-center justify-center z-50">
           <div className="bg-white rounded-lg p-4 max-w-3xl w-full">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-bold text-gray-900">
                 {showDocumentModal === "passportPhoto" && "Passport Size Photo"}
-                {showDocumentModal === "citizenshipFront" && "Citizenship Front"}
+                {showDocumentModal === "citizenshipFront" &&
+                  "Citizenship Front"}
                 {showDocumentModal === "citizenshipBack" && "Citizenship Back"}
+                {showDocumentModal === "cookingCertificate" &&
+                  "Cooking Certificate"}
               </h3>
-              <button onClick={() => setShowDocumentModal(null)} className="text-gray-400 hover:text-gray-500">
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <button
+                onClick={() => setShowDocumentModal(null)}
+                className="text-gray-400 hover:text-gray-500"
+              >
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             </div>
@@ -547,8 +633,7 @@ const CookProfileDetails = ({ cookId, navigate, onStatusChange }) => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default CookProfileDetails
-
+export default CookProfileDetails;

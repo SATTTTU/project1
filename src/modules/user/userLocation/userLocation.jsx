@@ -202,7 +202,7 @@ export const UserLocation = ({ orderId }) => {
           {/* Text content */}
           <div className="w-full md:w-1/2 text-center md:text-left">
             <h1 className="text-2xl font-bold text-yellow-600 mb-4">
-              Your order is currently being prepared
+              Your order is placed Suceesfully
             </h1>
             <p className="text-gray-600 mb-6">
               {error ||
