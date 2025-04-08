@@ -87,7 +87,7 @@ const CertificatesStep = ({ formik }) => {
 						Experience <span className="text-gray-400">(Optional)</span>
 					</label>
 					<textarea
-						name="experienceLetters"
+						name="past_experience"
 						className="w-full border rounded-md px-3 py-2 text-sm"
 						placeholder="Write about your work experience..."
 						rows={4}
